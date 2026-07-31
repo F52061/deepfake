@@ -87,27 +87,26 @@ vit_module\run_stage3.bat   ← 设置 CUDA_VISIBLE_DEVICES=1,2,3 后调用 run_
 | `--dataloader_num_workers` | 0 | Windows spawn 兼容 |
 
 ### GPU 使用
-- **`CUDA_VISIBLE_DEVICES=1,2,3`**（物理 GPU 1,2,3；**GPU 0 留空**）
-- torch 内部逻辑索引 0,1,2 映射物理 1,2,3
+- **`CUDA_VISIBLE_DEVICES=0,2,3`**（物理 GPU 0,2,3；GPU 1 有残留进程占用故跳过）
+- torch 内部逻辑索引 0,1,2 映射物理 0,2,3
 - fp16 7B ≈ 14GB，3 卡分担 ~4.7GB/卡
 
 ---
 
-## 5. 训练进度（截至 2026-07-31 17:4x）
+## 5. 训练进度（截至 2026-07-31 18:35）
 
 | 指标 | 值 |
 |------|-----|
-| 状态 | 🔄 **运行中**（PID 35624 主进程 + 子进程） |
-| 已走步数 | ~10 步（DBG-LOSS 计数） |
-| 进度条 | 0/1734（进度条因日志 bug 不更新，以 DBG-LOSS 为准） |
-| 真实 loss | 2.4~4.3 波动，正常（2.85→3.50→3.70→3.06→4.33→2.44→3.68→2.81→2.85→3.80） |
-| 速度 | ~3 分钟/步 |
-| 预计总时长 | ~90 小时/epoch（硬件限制） |
+| 状态 | 🔄 **运行中**（修复后 3 卡 GPU 0,2,3） |
+| 进度条 | 6/1734（真实 step；进度条因日志 bug 更新慢，以 DBG-LOSS 为准） |
+| 真实 loss | 2.58~3.77 波动，**无 nan**（105 个 micro-step 全正常） |
+| 速度 | ~71s/真实 step（≈ 4.4s/micro-step） |
+| 预计总时长 | ~34 小时/epoch |
 | checkpoint | 未保存（`save_steps=100`，未到 100 步） |
 
-### 训练日志位置
+### 训练日志位置（本次修复后训练）
 ```
-C:\Users\Supor2\AppData\Local\Temp\claude\...\bc12dk2w1.output   ← 本次 3 卡训练
+C:\Users\Supor2\AppData\Local\Temp\claude\...\bnco4gboh.output
 ```
 监控: `grep "DBG-LOSS" <输出文件>` 看真实 loss 趋势
 
@@ -150,7 +149,17 @@ C:\Users\Supor2\AppData\Local\Temp\claude\...\bc12dk2w1.output   ← 本次 3 �
 | fp32 3卡 | ❌ OOM（28GB/3 > 11.8GB） |
 | fp32 4卡 | ❌ dtype 不一致（vision_tower 硬编码 fp16） |
 | fp16 2卡 | ✅ 能跑（5min/步） |
-| **fp16 3卡** | ✅ **当前方案**（3min/步，GPU 0 留空） |
+| fp16 3卡 + no-op scaler | ⚠️ 能跑但 16 步后 loss=nan |
+| **fp16 3卡 + 真实 GradScaler + 可训练参数 fp32** | ✅ **当前方案**（无 nan，~71s/step） |
+
+### 7.5 loss=nan 根因（已解决，重要）
+- **现象**：第一个真实 step（16 micro-step）后 loss 变 nan
+- **根因**：`--fp16 True` 把所有参数（含 LoRA + projector）转 fp16 → 配合 no-op GradScaler（跳过缩放）→ fp16 梯度直接 backward → overflow → nan
+- **解决**（`llava/train/train_deepfake.py`）：
+  1. LoRA 注入后转 fp32
+  2. trainer 创建前所有 `requires_grad=True` 参数统一转 fp32
+  3. 移除 no-op GradScaler，用真实 GradScaler
+- **原理**：冻结主模型 fp16 + 可训练参数 fp32 = LLaVA 标准做法
 
 ---
 
