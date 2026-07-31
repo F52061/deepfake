@@ -1,0 +1,2 @@
+vit_m2f2_phase1_v1.0.pth：这是初始训练模型权重，在FFIW上auc：76.60%
+对应日志：training_20260612_180426.log

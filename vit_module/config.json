@@ -1,0 +1,7 @@
+{
+	"_name_or_path": "llava-1.5-7b-vit-deepfake",
+       	"deepfake_model_name": "vit",
+        "deepfake_model_path": "E:\\Cross-domain_authentication_verification\\Next_work\\M2F2_Det-main-hyy/checkpoints/stage_1/bridge_v2_phase1.pth",
+	"mm_vision_select_feature": "cls_patch",
+        "mm_vision_tower": "openai/clip-vit-large-patch14-336
+}
