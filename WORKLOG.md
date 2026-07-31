@@ -106,9 +106,10 @@ vit_module\run_stage3.bat   ← 设置 CUDA_VISIBLE_DEVICES=1,2,3 后调用 run_
 
 ### 训练日志位置（本次修复后训练）
 ```
-C:\Users\Supor2\AppData\Local\Temp\claude\...\bnco4gboh.output
+C:\Users\Supor2\AppData\Local\Temp\claude\...\bf0bv4t2x.output   ← 当前（checkpoint 修复后重启）
+C:\Users\Supor2\AppData\Local\Temp\claude\...\bnco4gboh.output  ← 之前（100 步崩溃）
 ```
-监控: `grep "DBG-LOSS" <输出文件>` 看真实 loss 趋势
+监控: `python vit_module/watch_stage3.py` 或 `grep "DBG-LOSS" <输出文件>`
 
 ---
 
@@ -152,7 +153,12 @@ C:\Users\Supor2\AppData\Local\Temp\claude\...\bnco4gboh.output
 | fp16 3卡 + no-op scaler | ⚠️ 能跑但 16 步后 loss=nan |
 | **fp16 3卡 + 真实 GradScaler + 可训练参数 fp32** | ✅ **当前方案**（无 nan，~71s/step） |
 
-### 7.5 loss=nan 根因（已解决，重要）
+### 7.5 checkpoint 保存崩溃（已解决）
+- **现象**：第 100 步保存 checkpoint 时 `ModuleNotFoundError: No module named 'deepspeed'`
+- **根因**：`llava_trainer.py` 的 `maybe_zero_3` 无条件 `from deepspeed import zero`（ZeRO-3 专用），而本机无 deepspeed
+- **解决**：`maybe_zero_3` 加 try/except ImportError，无 deepspeed 时直接 detach 到 CPU
+
+### 7.6 loss=nan 根因（已解决，重要）
 - **现象**：第一个真实 step（16 micro-step）后 loss 变 nan
 - **根因**：`--fp16 True` 把所有参数（含 LoRA + projector）转 fp16 → 配合 no-op GradScaler（跳过缩放）→ fp16 梯度直接 backward → overflow → nan
 - **解决**（`llava/train/train_deepfake.py`）：
