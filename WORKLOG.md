@@ -7,11 +7,12 @@
 
 ## 当前状态
 
-### 训练运行情况
-- **能跑** ✅ Stage-3 LoRA 微调在 GPU 2,3 双卡 fp16 上正常运行
-- **已验证**：`compute_loss` 返回真实非零 loss（DBG-LOSS: 2.85 → 3.50），梯度正常
-- **速度**：~5 分钟/步 × 1734 步 = ~145 小时/epoch（硬件限制）
-- **日志 bug**：trainer 日志显示 `{'loss': 0.0}`，但实际 loss 非零（多卡 dispatch 下 tr_loss 聚合异常）
+### 训练运行情况 (2026-07-31 更新)
+- **能跑** ✅ Stage-3 LoRA 微调在 **GPU 1,2,3 三卡 fp16** 上正常运行
+- **已验证**：`compute_loss` 返回真实非零 loss（DBG-LOSS 正常波动 2.4-4.3），梯度正常
+- **速度**：~3 分钟/步 × 1734 步 = ~90 小时/epoch（硬件限制）
+- **日志 bug**：trainer 日志显示 `{'loss': 0.0}`，但实际 loss 非零（多卡 dispatch 下 tr_loss 聚合异常）；用 DBG-LOSS 判断真实训练进度
+- **GPU 0 留空**：`CUDA_VISIBLE_DEVICES=1,2,3`
 
 ### 关键配置文件
 - `vit_module/run_stage3.py` — Stage-3 启动脚本
