@@ -37,20 +37,12 @@ else:
     print(f'WARNING: CLIP local not found: {clip_local}')
 
 # ═══════════════════════════════════════════════════════════
-# fp16 training with NO-OP GradScaler monkeypatch.
-# Checkpoint weights are natively fp16. transformers' GradScaler
-# assumes fp32 weights and crashes on fp16. Monkeypatch methods
-# so the EXISTING trainer.scaler instance uses no-op behavior.
+# fp16 training with REAL GradScaler (not monkeypatched).
+# The fix in train_deepfake.py casts all TRAINABLE params (LoRA +
+# projectors) to fp32, so GradScaler can properly scale gradients.
+# Frozen LLaMA backbone stays fp16. This prevents the gradient
+# overflow/nan that occurred with the no-op scaler.
 # ═══════════════════════════════════════════════════════════
-from torch.cuda.amp import grad_scaler as _gs
-_gs.GradScaler.scale = lambda self, outputs, *a, **k: outputs
-def _noop_ug(self, optimizer, *a, **k):
-    return {i: torch.tensor(0.0, device='cuda') for i in range(torch.cuda.device_count())}
-_gs.GradScaler._unscale_grads_ = _noop_ug
-_gs.GradScaler.unscale_ = lambda self, optimizer, *a, **k: None
-_gs.GradScaler.step = lambda self, optimizer, *a, **k: optimizer.step(*a, **k)
-_gs.GradScaler.update = lambda self, *a, **k: None
-_gs.GradScaler.is_enabled = lambda self: True
 
 sys.argv = [
     "train_deepfake.py",

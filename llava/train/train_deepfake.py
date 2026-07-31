@@ -1195,6 +1195,12 @@ def train(attn_implementation=None):
                 model.to(torch.float16)
         rank0_print("Adding LoRA adapters...")
         model = get_peft_model(model, lora_config)
+        # Force LoRA layers to fp32 (GradScaler needs fp32 trainable params;
+        # fp16 LoRA + GradScaler triggers "Attempting to unscale FP16 gradients")
+        for name, module in model.named_modules():
+            if 'lora_' in name and hasattr(module, 'weight'):
+                module.to(torch.float32)
+        rank0_print("LoRA layers cast to fp32")
         
     if 'mpt' in model_args.model_name_or_path:
         tokenizer = transformers.AutoTokenizer.from_pretrained(
@@ -1313,6 +1319,15 @@ def train(attn_implementation=None):
 
     # [新增] 提取分类数据集，不传给 Trainer（避免冲突）
     classification_dataset = data_module.pop('classification_dataset', None)
+
+    # ── 将所有可训练参数统一为 fp32 ──────────────────────────────
+    # 冻结的 LLaMA 主模型保持 fp16；可训练的 LoRA + projector 转 fp32，
+    # 使 GradScaler 能正常工作（fp16 可训练参数会触发
+    # "Attempting to unscale FP16 gradients" 并导致梯度爆炸/nan）
+    for name, p in model.named_parameters():
+        if p.requires_grad and p.dtype != torch.float32:
+            p.data = p.data.float()
+    rank0_print('Trainable params cast to fp32 for GradScaler compatibility')
 
     trainer = LLaVATrainer(model=model,
                     tokenizer=tokenizer,
