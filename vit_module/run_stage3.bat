@@ -10,7 +10,7 @@ REM mapping to physical 1,2,3. dispatch_model uses logical indices.
 set CUDA_VISIBLE_DEVICES=1,2,3
 
 echo ============================================================
-echo Stage-3 LoRA Fine-tuning (2-GPU fp16, %CUDA_VISIBLE_DEVICES%)
+echo Stage-3 LoRA Fine-tuning (3-GPU fp16, %CUDA_VISIBLE_DEVICES%)
 echo ============================================================
 
 C:\Users\Supor2\.conda\envs\M2F2_Det\python.exe -u vit_module/run_stage3.py
