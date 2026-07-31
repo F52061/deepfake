@@ -1151,7 +1151,8 @@ def train(attn_implementation=None):
         model = dispatch_model(model, device_map=device_map)
         print('Model dispatched.')
         # Move vision tower to GPU1 to free GPU0 for training activations
-        if num_gpus > 1:
+        # (only valid for 2-GPU setups; for 3+ GPUs keep dispatch placement)
+        if num_gpus == 2:
             vt = model.get_vision_tower()
             vt.to(device='cuda:1', dtype=compute_dtype)
     else:
