@@ -6,9 +6,18 @@ Starts from the rand-proj skeleton (contains bridge_v2 detector + LLaVA base).
 Usage:
     python vit_module/run_stage3.py   (run via run_stage3.bat)
 """
-import os, sys
+import os, sys, glob, shutil
 
 # NOTE: CUDA_VISIBLE_DEVICES must be set via the bat launcher (run_stage3.bat).
+
+# Clean stale checkpoint dirs from previous runs (causes resume error)
+_output_dir = './checkpoints/llava-v1.5-7b-deepfake_stage-3-delta'
+for _d in glob.glob(f'{_output_dir}/checkpoint-*'):
+    shutil.rmtree(_d)
+    print(f'[cleanup] removed stale {_d}', flush=True)
+for _f in glob.glob(f'{_output_dir}/trainer_state.json'):
+    os.remove(_f)
+    print(f'[cleanup] removed stale {_f}', flush=True)
 print(f"CUDA_VISIBLE_DEVICES={os.environ.get('CUDA_VISIBLE_DEVICES', '<unset>')}", flush=True)
 
 import torch
