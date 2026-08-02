@@ -4,10 +4,10 @@ REM Stage-3: LoRA Fine-tuning (2-GPU fp16, native dispatch)
 REM ============================================================
 cd /d "E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy"
 
-REM Use 3 cards GPU 0,2,3 (GPU 1 has a residual process holding memory).
-REM Note: CUDA_VISIBLE_DEVICES=0,2,3 means torch sees logical 0,1,2
-REM mapping to physical 0,2,3. dispatch_model uses logical indices.
-set CUDA_VISIBLE_DEVICES=0,2,3
+REM Use 3 cards GPU 0,1,2 (leave GPU 3 free).
+REM Note: CUDA_VISIBLE_DEVICES=0,1,2 means torch sees logical 0,1,2
+REM mapping to physical 0,1,2. dispatch_model uses logical indices.
+set CUDA_VISIBLE_DEVICES=0,1,2
 
 echo ============================================================
 echo Stage-3 LoRA Fine-tuning (3-GPU fp16, %CUDA_VISIBLE_DEVICES%)
