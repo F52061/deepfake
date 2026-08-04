@@ -10,7 +10,7 @@
 """
 import os, sys, glob, time, re
 
-OUTPUT_FILE = r"C:\Users\Supor2\AppData\Local\Temp\claude\E--Cross-domain-authentication-verification-Next-work-M2F2-Det-main-hyy\8cb51d32-84e6-4db6-9897-425c07d7fe57\tasks\bf0bv4t2x.output"
+OUTPUT_FILE = r"C:\Users\Supor2\AppData\Local\Temp\claude\E--Cross-domain-authentication-verification-Next-work-M2F2-Det-main-hyy\8cb51d32-84e6-4db6-9897-425c07d7fe57\tasks\bsu980e3l.output"
 OUTPUT_DIR = "./checkpoints/llava-v1.5-7b-deepfake_stage-3-delta"
 
 def print_status():
