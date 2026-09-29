@@ -177,3 +177,26 @@ utils/weights/
 vit_module/backup_weights/
 checkpoints/stage_1/backup/
 dataset/
+
+# ---- Experiment artifacts: feature tensors, weights, images, datasets ----
+# The repository tracks code only. Everything below stays on disk but out of git.
+*.npz
+*.npy
+*.pt
+*.pkl
+*.png
+*.jpg
+*.jpeg
+*.pdf
+*.zip
+*.7z
+*.tar
+*.gz
+*.jsonl
+*.mp4
+*.avi
+*.csv
+# DDVQA dataset (images + annotations + eval data)
+utils/DDVQA_images/
+utils/DDVQA_split/
+utils/DDVQA_eval/
