@@ -3115,3 +3115,61 @@ FFPP_all    ...  AUC% = 98.81   N=21000
 2. CLIP 文本分支死代码是**有意设计还是移植遗漏**，未查（§D.40.2）。
 3. `fix` 组一贯偏慢 10–25%，原因未定（§D.41.4）——**不影响任何已有结论**。
 4. G19c（端到端 bridge 集成）在 G22 之后**已无必要**。
+
+---
+
+## §D.47 git 仓库清理：只留代码，历史重写（2026-09-29）
+
+**用户指令**：「请将本地的那些权重等非代码类文件管理起来，在 .gitignore 中忽略这些文件，仅 git 上传代码文件」。
+
+**动手前的仓库状态**：跟踪 **1814 个文件 / 1.17 GB**，其中 99.7% 是实验产物（特征张量、LoRA 权重、DDVQA 图片与标注、一篇下载的论文 PDF）。真正的代码与文本只有 **236 个文件 / 3.18 MB**。
+`.git` 目录 **1.1 GB**，且 `git count-objects` 显示 `in-pack: 0` —— 2022 个对象从未打包，体积有很大一块只是"没压缩"。
+远程配置为 `git@github.com:F52061/deepfake.git`（**本机 SSH 连不上**，`Host key verification failed`，无法确认是否已推送过）。
+
+**用户的两个决定**：① 严格只留代码（连论文 PDF 和 `asset/teaser.png` 也移出）；② **连历史一起重写清掉**。
+
+### D.47.1 清理边界
+
+移出 git 跟踪 **1578 个文件 / 1195.78 MB**：
+
+| 类别 | 体积 | 文件数 |
+|---|---|---|
+| `*.npz` 特征张量 | 1073.81 MB | 61 |
+| `*.pt` LoRA 权重 | 81.53 MB | 22 |
+| DDVQA 数据（`utils/DDVQA_images` / `_split` / `_eval`） | 37.69 MB | 1489 |
+| 论文 PDF | 1.73 MB | 1 |
+| `*.png`（`_tsne/*.png`、`asset/teaser.png`） | 1.02 MB | 5 |
+
+历史里另有工作区已不可见的 **320 MB**：`file_temp/outputs_old/checkpoint-500/optimizer.pt` 与 `checkpoint-1000/optimizer.pt`，各 160 MB，由 `*.pt` 规则一并清除。
+未跟踪且本来就未进 git 的 `checkpoints/`、`dataset/`、`_archive/` 一律未动；三个嵌套仓库（`checkpoints/llava-v1.5-7b/.git`、`dataset/.git`、`dataset/Research-DD-VQA/.git`）未动。
+
+### D.47.2 为什么用 `filter-branch` 而不是 `filter-repo`
+
+**这是本次最关键的安全判断。** `vit_module/_g16/layer_feats.npz`（94 MB）、`_g19/lora_*.pt` 等是项目真实实验数据，从磁盘消失即灾难。
+
+* `git filter-repo` **本机未安装**，且它结束时会对工作区做强制同步，**有把被清除的文件从磁盘上删掉的风险** → 弃用。
+* `git filter-branch` 是 Git 自带命令，**只重写提交引用，从不 checkout / reset / 删除工作区任何文件** → 采用。仅 19 个提交，实际耗时 43 秒。
+
+两道保险：动手前做全量镜像备份；动手后逐项核对磁盘文件数。
+
+### D.47.3 执行与验证结果
+
+| 检查项 | 清理前 | 清理后 |
+|---|---|---|
+| 跟踪文件数 | 1814 | **236** ✅ |
+| `.git` 体积 | 1.1 GB | **1.1 MB** ✅ |
+| 打包对象 | `in-pack: 0` | 1 pack / 978 KiB ✅ |
+| 历史最大 blob | 160 MB（optimizer.pt） | **0.26 MB（WORKLOG.md，文本）** ✅ |
+| 历史中的残留数据 blob | — | **0** ✅ |
+
+磁盘文件**逐一核对无丢失**（清理前后完全一致）：`*.npz` 62、`*.pt` 26、`*.png` 26、`*.pdf` 1、`*.jpg` 1483、`*.zip` 2、`*.jsonl` 6；`utils/DDVQA_images` 1485。`git status` 干净（0 行），`git fsck` 无输出（健康），抽样 `np.load('vit_module/_g16/layer_feats.npz')` 正常读出 `cls_final/cls_b3/cls_b6/cls_b9`，形状 `(4500, 768)`。
+
+**备份**：`E:/Cross-domain_authentication_verification/Next_work/_git_backup_M2F2_Det_20260929.git`（1.1 GB 镜像，18 个提交，master 原指向 `1990a5d`）。这是唯一的回退途径。
+
+### D.47.4 未完成 / 需用户自己决定的事
+
+1. **强制推送未执行**。本机 SSH 连不上远程，且强制推送会覆盖 GitHub 上的历史 —— 应在确认远程状态（是否为共享仓库、是否已有旧历史）后由用户自行执行：
+   `git push --force origin master`。
+2. **所有提交哈希值已改变**，不可逆，用户已确认接受。
+3. 若日后要回退：从上述镜像备份恢复。
+
