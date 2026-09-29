@@ -1,0 +1,14 @@
+embed sil_domain sil_real/fake  meanCentDom  maxCentDom
+    V    -0.1045        0.2848       9.5683     20.1336
+    C     0.1990        0.0118      41.7541     68.6257
+    F    -0.1427        0.3352      13.5061     30.2877
+
+Per-domain real/fake silhouette in V t-SNE:
+   ffpp: 0.5989
+    cd1: 0.2072
+    cd2: 0.2135
+  dfdcp: 0.1684
+   ffiw: 0.1465
+   wild: 0.1504
+
+[emb saved] E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_tsne\tsne_emb.npz

@@ -1,0 +1,71 @@
+[gpu] query=[(0, 4686, 11264, 3), (1, 0, 11264, 0), (2, 54, 11264, 0)] pick=(1, 0, 11264, 0) mode=gpu device=NVIDIA GeForce GTX 1080 Ti CUDA_VISIBLE_DEVICES=1
+[torch] version=2.2.2+cu118
+[weight] densenet121 : weights-enum cache hit (densenet121-a639ec97.pth)
+[weight] efficientnet_b4: weights-enum cache hit (efficientnet_b4_rwightman-23ab8bcd.pth)
+[weight] resnet18   : weights-enum cache hit (resnet18-f37072fd.pth)
+[validate] te_order(800 probe-test vs layer_feats[2200:3000]) = True
+[validate] probe-test 10 order-preserving exact path match: 10/10
+   [0] probe_idx=2200 match=1 read_ok=1 F:/zhj/data/FaceForensic++_raw/manipulated_sequences/Deepfakes/c23/faces23/376_381/435.png
+   [1] probe_idx=2201 match=1 read_ok=1 F:/zhj/data/FaceForensic++_raw/manipulated_sequences/NeuralTextures/c23/faces23/102_114/295.png
+   [2] probe_idx=2202 match=1 read_ok=1 F:/zhj/data/FaceForensic++_raw/manipulated_sequences/FaceSwap/c23/faces23/154_386/286.png
+   [3] probe_idx=2203 match=1 read_ok=1 F:/zhj/data/FaceForensic++_raw/manipulated_sequences/Deepfakes/c23/faces23/683_607/138.png
+   [4] probe_idx=2204 match=1 read_ok=1 F:/zhj/data/FaceForensic++_raw/manipulated_sequences/FaceSwap/c23/faces23/358_380/390.png
+   [5] probe_idx=2205 match=1 read_ok=1 F:/zhj/data/FaceForensic++_raw/manipulated_sequences/Face2Face/c23/faces23/352_319/377.png
+   [6] probe_idx=2206 match=1 read_ok=1 F:/zhj/data/FaceForensic++_raw/manipulated_sequences/FaceSwap/c23/faces23/579_701/257.png
+   [7] probe_idx=2207 match=1 read_ok=1 F:/zhj/data/FaceForensic++_raw/manipulated_sequences/FaceSwap/c23/faces23/683_607/60.png
+   [8] probe_idx=2208 match=1 read_ok=1 F:/zhj/data/FaceForensic++_raw/manipulated_sequences/Deepfakes/c23/faces23/389_480/96.png
+   [9] probe_idx=2209 match=1 read_ok=1 F:/zhj/data/FaceForensic++_raw/manipulated_sequences/Deepfakes/c23/faces23/462_467/185.png
+[validate] coverage vs layer_feats.npz: probe 3000/3000, multi 1707/2300 (expect 3000/1500; multi 'ffpp' 800 absent from G16)
+  [extract] 16/5300  imgs_fwd=16 wall=4s
+  [extract] 336/5300  imgs_fwd=336 wall=7s
+  [extract] 656/5300  imgs_fwd=656 wall=10s
+  [extract] 976/5300  imgs_fwd=976 wall=14s
+  [extract] 1296/5300  imgs_fwd=1296 wall=18s
+  [extract] 1616/5300  imgs_fwd=1616 wall=21s
+  [extract] 1936/5300  imgs_fwd=1936 wall=25s
+  [extract] 2256/5300  imgs_fwd=2256 wall=28s
+  [extract] 2576/5300  imgs_fwd=2576 wall=32s
+  [extract] 2896/5300  imgs_fwd=2896 wall=35s
+  [extract] 3216/5300  imgs_fwd=3216 wall=40s
+  [extract] 3536/5300  imgs_fwd=3536 wall=46s
+  [extract] 3856/5300  imgs_fwd=3856 wall=51s
+  [extract] 4176/5300  imgs_fwd=4176 wall=54s
+  [extract] 4496/5300  imgs_fwd=4496 wall=57s
+  [extract] 4816/5300  imgs_fwd=4816 wall=60s
+  [extract] 5136/5300  imgs_fwd=5136 wall=64s
+  [extract] 5300/5300  imgs_fwd=5300 wall=66s
+[save] cnn_feats.npz -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g17\cnn_feats.npz
+==========================================================================================
+G17B MACHINE_BLOCK
+G17B_MODE=gpu
+G17B_GPU_INDEX=1
+G17B_DEVICE=NVIDIA GeForce GTX 1080 Ti
+G17B_GPU_QUERY=[(0, 4686, 11264, 3), (1, 0, 11264, 0), (2, 54, 11264, 0)]
+G17B_TORCH=2.2.2+cu118
+G17B_BATCH=16
+G17B_N_IMGS=5300
+G17B_FORWARDS=5300
+G17B_BATCH_CALLS=332
+G17B_READ_FAIL=0
+G17B_PEAK_TORCH_MIB=462
+G17B_PEAK_SMI_MIB=2338
+G17B_WALL_S=68.5
+G17B_WALL_EXT_S=65.6
+G17B_VAL_PATH_MATCH=10/10
+G17B_TE_ORDER=True
+G17B_PROBE_COVERAGE=3000/3000
+G17B_MULTI_COVERAGE=1707/2300
+G17B_FEATURES:
+  dense121_db2: dim=512 pooling=GAP
+  dense121_db3: dim=1024 pooling=GAP
+  dense121_final: dim=1024 pooling=GAP
+  effnet_b4_blk5: dim=160 pooling=GAP
+  effnet_b4_blk6: dim=272 pooling=GAP
+  effnet_b4_final: dim=1792 pooling=GAP
+  resnet18_layer3: dim=256 pooling=GAP
+  resnet18_layer4: dim=512 pooling=GAP
+G17B_WEIGHT_SRC={'densenet121': 'weights-enum cache hit (densenet121-a639ec97.pth)', 'efficientnet_b4': 'weights-enum cache hit (efficientnet_b4_rwightman-23ab8bcd.pth)', 'resnet18': 'weights-enum cache hit (resnet18-f37072fd.pth)'}
+G17B_PIPELINE=cv2.imread->BGR2RGB->resize336->cv2.resize224(INTER_LINEAR)->ImageNet_norm
+G17B_ALL_5300_OK=YES
+==========================================================================================
+[done] wall=68.5s forwards=5300 batches=332 read_fail=0 peak_torch=462MiB

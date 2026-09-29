@@ -1,0 +1,425 @@
+[gpu] nvidia-smi query (index, mem_used MiB, util%)=[(0, 4821, 1), (1, 0, 0), (2, 4767, 100)]  [BEFORE]
+[gpu] CUDA_VISIBLE_DEVICES=1 (target physical GPU index 1)
+[gpu] physical GPU 1 mem.used=0MiB -> IDLE (<=100MiB)
+[torch] 2.2.2+cu118 ; device=NVIDIA GeForce GTX 1080 Ti ; current_device=0 ; num_threads=4 ; cudnn.benchmark=True
+[cpu] OMP=4 MKL=4 OPENBLAS=4 NUMEXPR=4 VECLIB=4 BLIS=4 ; cv2 threads=1 ; num_workers=0 ; torch.set_num_threads=4
+[align] 5300-row paths byte-equal to _g17/cnn_feats.npz: True (assert passed)
+[align] probe rows 0..2999 (train 0..2199, test 2200..2999) ; multi rows 3000..5299
+[probe] probe folder directory-chain keys = 670 (from all 3000 probe rows)
+[ffpp] train.json videos: real=718 fake=3590 total=4308 (missing_dirs=12 excluded_by_probe_dirchain=0)
+[target] candidate training-domain videos: 483 (cd2=173 ffiw=10 wild=300)
+[leak] held-out domain dfdcp folders present in training (dir-chain): 0
+[leak] held-out domain cd1   folders present in training (dir-chain): 0
+[leak] probe folder dir-chain keys present in FF++ training: 0
+[leak] CONTAMINATION (expected, MULTI arms only) cd2   eval folders also in training pool: 173/173
+[leak] CONTAMINATION (expected, MULTI arms only) ffiw  eval folders also in training pool: 10/10
+[leak] CONTAMINATION (expected, MULTI arms only) wild  eval folders also in training pool: 300/300
+
+[model] building ViT_M2F2Det_Bridge + loading bridge_v2_phase1.pth
+[model] load_state_dict strict=False -> missing=0 unexpected=0
+[model] model.vit = VisionTransformer ; params=91.4M ; blocks=12 ; attn has qkv/proj
+[preload] decoded all 5093 eval images in 16.9s
+
+==========================================================================================
+ARM R0 -- frozen ViT feature extraction (pipeline sanity gate)
+==========================================================================================
+  [extract R0] 32/5300 wall=4s
+  [extract R0] 832/5300 wall=10s
+  [extract R0] 1632/5300 wall=16s
+  [extract R0] 2432/5300 wall=21s
+  [extract R0] 3232/5300 wall=27s
+  [extract R0] 4032/5300 wall=32s
+  [extract R0] 4832/5300 wall=38s
+[R0] feat shape=(5300, 768) wall=41s (extracted 5300 rows)
+[R0] maxabs deviation vs probe_feats.npz['V'] (3000 rows) = 0.000e+00
+[R0] maxabs deviation vs feats_multi.npz['V'] (2300 rows) = 3.159e-05
+[R0] in-domain FF++ probe-test AUC=0.9852 (anchor 0.9852, |dev|=0.0000)
+[R0] target cd1   AUC=0.8286 (frozen anchor 0.8286, |dev|=0.0000) n=300
+[R0] target cd2   AUC=0.8633 (frozen anchor 0.8633, |dev|=0.0000) n=300
+[R0] target dfdcp AUC=0.8261 (frozen anchor 0.8261, |dev|=0.0000) n=300
+[R0] target ffiw  AUC=0.8244 (frozen anchor 0.8244, |dev|=0.0000) n=300
+[R0] target wild  AUC=0.8090 (frozen anchor 0.8090, |dev|=0.0000) n=300
+[R0] max anchor deviation over 5 domains = 0.0000 (gate 0.005) -> PASS
+[R0] G12 s=1.5097 class_gap=40.2122 ratio=0.1983 (G17c anchor ratio_V=0.1983, |dev|=0.0000)
+      ratio[cd1]=0.2113
+      ratio[cd2]=0.1861
+      ratio[dfdcp]=0.1609
+      ratio[ffiw]=0.1995
+      ratio[wild]=0.2336
+[GATE] PIPELINE SANITY GATE PASSED
+[R0] saved E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\feats_g19b_dfdcp_R0.npz
+
+[split] FF++-ONLY, video-disjoint val for EVERY arm: val videos=431 (real 72 / fake 359) ; FF++ train videos=3877 ; held-out fold=dfdcp ; NO dfdcp/cd1/probe video is used for training or selection
+[data] raw per-(domain,class) frame counts: {'cd2/0': 2080, 'cd2/1': 4840, 'ffiw/0': 173, 'ffiw/1': 173, 'ffpp/0': 9693, 'ffpp/1': 9690, 'wild/0': 6000, 'wild/1': 6000}
+[data] capped per-cell counts (ffpp cap=4000, target cap=4000): {'cd2/0': 2080, 'cd2/1': 4000, 'ffiw/0': 173, 'ffiw/1': 173, 'ffpp/0': 4000, 'ffpp/1': 4000, 'wild/0': 4000, 'wild/1': 4000}
+[data] total shared training pool = 22426 frames
+[split] val frames=576 (real 288 / fake 288), video-held-out
+[preload] cache total = 27509 images (~9.32 GB uint8 336x336x3)
+
+==========================================================================================
+TRAIN ARM O1multi_s0   (objective=CE, sources=ffpp+cd2+ffiw+wild, seed=0, LoRA r=16 alpha=32)
+==========================================================================================
+[arm O1multi_s0] train samples=22426 over 8 (domain,class) cells
+   cell cd2   lab=0 id=3 n=2080
+   cell cd2   lab=1 id=2 n=4000
+   cell ffiw  lab=0 id=5 n=173
+   cell ffiw  lab=1 id=4 n=173
+   cell ffpp  lab=0 id=1 n=4000
+   cell ffpp  lab=1 id=0 n=4000
+   cell wild  lab=0 id=7 n=4000
+   cell wild  lab=1 id=6 n=4000
+[arm O1multi_s0] balanced batch sampler: 8 cells x 4 / batch of 32 ; batches/epoch=250 (iters/epoch cap=250) ; smallest cell=173 -> ~5.8x draws/epoch) ; sampler seed=0
+[arm O1multi_s0] trainable params=886274 / 92273426  (0.9605%)
+[arm O1multi_s0] INIT HASHES (seed=0): lora_A=098e2e02de87 lora_B=c8f98b5a2dd9 head=23979c852784
+[arm O1multi_s0] lora trainable=884736  head trainable=1538
+[arm O1multi_s0 epoch 01/12] loss=0.3224 acc=0.8636 val_auc=0.9927 lr=9.83e-05 (134s) *BEST*
+[arm O1multi_s0 epoch 02/12] loss=0.1558 acc=0.9426 val_auc=0.9985 lr=9.34e-05 (134s) *BEST*
+[arm O1multi_s0 epoch 03/12] loss=0.1097 acc=0.9615 val_auc=0.9979 lr=8.55e-05 (134s)
+[arm O1multi_s0 epoch 04/12] loss=0.0783 acc=0.9712 val_auc=0.9968 lr=7.52e-05 (135s)
+[arm O1multi_s0 epoch 05/12] loss=0.0757 acc=0.9758 val_auc=0.9974 lr=6.33e-05 (134s)
+[arm O1multi_s0 epoch 06/12] loss=0.0462 acc=0.9846 val_auc=0.9994 lr=5.05e-05 (134s) *BEST*
+[arm O1multi_s0 epoch 07/12] loss=0.0468 acc=0.9846 val_auc=0.9998 lr=3.77e-05 (134s) *BEST*
+[arm O1multi_s0 epoch 08/12] loss=0.0332 acc=0.9886 val_auc=0.9999 lr=2.58e-05 (133s) *BEST*
+[arm O1multi_s0 epoch 09/12] loss=0.0254 acc=0.9912 val_auc=0.9998 lr=1.55e-05 (135s)
+[arm O1multi_s0 epoch 10/12] loss=0.0266 acc=0.9910 val_auc=0.9995 lr=7.63e-06 (134s)
+[arm O1multi_s0 epoch 11/12] loss=0.0188 acc=0.9950 val_auc=0.9999 lr=2.69e-06 (134s)
+[arm O1multi_s0 epoch 12/12] loss=0.0171 acc=0.9946 val_auc=0.9998 lr=1.00e-06 (134s)
+[arm O1multi_s0 early-stop] no val_auc improvement for 4 epochs at epoch 12
+[arm O1multi_s0 done] best_val_auc=0.9999 (epoch 8) wall=1607s
+[arm O1multi_s0 save] E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\lora_g19b_dfdcp_O1multi_s0.pt
+  [extract O1multi_s0] 32/5300 wall=0s
+  [extract O1multi_s0] 832/5300 wall=7s
+  [extract O1multi_s0] 1632/5300 wall=14s
+  [extract O1multi_s0] 2432/5300 wall=20s
+  [extract O1multi_s0] 3232/5300 wall=27s
+  [extract O1multi_s0] 4032/5300 wall=34s
+  [extract O1multi_s0] 4832/5300 wall=41s
+[arm O1multi_s0] feats saved E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\feats_g19b_dfdcp_O1multi_s0.npz shape=(5300, 768)
+
+==========================================================================================
+TRAIN ARM O1multi_s1   (objective=CE, sources=ffpp+cd2+ffiw+wild, seed=1, LoRA r=16 alpha=32)
+==========================================================================================
+[arm O1multi_s1] train samples=22426 over 8 (domain,class) cells
+   cell cd2   lab=0 id=3 n=2080
+   cell cd2   lab=1 id=2 n=4000
+   cell ffiw  lab=0 id=5 n=173
+   cell ffiw  lab=1 id=4 n=173
+   cell ffpp  lab=0 id=1 n=4000
+   cell ffpp  lab=1 id=0 n=4000
+   cell wild  lab=0 id=7 n=4000
+   cell wild  lab=1 id=6 n=4000
+[arm O1multi_s1] balanced batch sampler: 8 cells x 4 / batch of 32 ; batches/epoch=250 (iters/epoch cap=250) ; smallest cell=173 -> ~5.8x draws/epoch) ; sampler seed=1
+[arm O1multi_s1] trainable params=886274 / 92273426  (0.9605%)
+[arm O1multi_s1] INIT HASHES (seed=1): lora_A=dc9906735117 lora_B=c8f98b5a2dd9 head=3a355e0fdfa3
+[arm O1multi_s1] lora trainable=884736  head trainable=1538
+[arm O1multi_s1 epoch 01/12] loss=0.3302 acc=0.8544 val_auc=0.9908 lr=9.83e-05 (134s) *BEST*
+[arm O1multi_s1 epoch 02/12] loss=0.1586 acc=0.9431 val_auc=0.9967 lr=9.34e-05 (134s) *BEST*
+[arm O1multi_s1 epoch 03/12] loss=0.0960 acc=0.9645 val_auc=0.9978 lr=8.55e-05 (133s) *BEST*
+[arm O1multi_s1 epoch 04/12] loss=0.0880 acc=0.9706 val_auc=0.9973 lr=7.52e-05 (135s)
+[arm O1multi_s1 epoch 05/12] loss=0.0658 acc=0.9780 val_auc=0.9975 lr=6.33e-05 (135s)
+[arm O1multi_s1 epoch 06/12] loss=0.0519 acc=0.9836 val_auc=0.9961 lr=5.05e-05 (134s)
+[arm O1multi_s1 epoch 07/12] loss=0.0437 acc=0.9860 val_auc=0.9958 lr=3.77e-05 (134s)
+[arm O1multi_s1 early-stop] no val_auc improvement for 4 epochs at epoch 7
+[arm O1multi_s1 done] best_val_auc=0.9978 (epoch 3) wall=938s
+[arm O1multi_s1 save] E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\lora_g19b_dfdcp_O1multi_s1.pt
+  [extract O1multi_s1] 32/5300 wall=0s
+  [extract O1multi_s1] 832/5300 wall=7s
+  [extract O1multi_s1] 1632/5300 wall=14s
+  [extract O1multi_s1] 2432/5300 wall=20s
+  [extract O1multi_s1] 3232/5300 wall=27s
+  [extract O1multi_s1] 4032/5300 wall=34s
+  [extract O1multi_s1] 4832/5300 wall=41s
+[arm O1multi_s1] feats saved E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\feats_g19b_dfdcp_O1multi_s1.npz shape=(5300, 768)
+
+==========================================================================================
+TRAIN ARM O1multi_s2   (objective=CE, sources=ffpp+cd2+ffiw+wild, seed=2, LoRA r=16 alpha=32)
+==========================================================================================
+[arm O1multi_s2] train samples=22426 over 8 (domain,class) cells
+   cell cd2   lab=0 id=3 n=2080
+   cell cd2   lab=1 id=2 n=4000
+   cell ffiw  lab=0 id=5 n=173
+   cell ffiw  lab=1 id=4 n=173
+   cell ffpp  lab=0 id=1 n=4000
+   cell ffpp  lab=1 id=0 n=4000
+   cell wild  lab=0 id=7 n=4000
+   cell wild  lab=1 id=6 n=4000
+[arm O1multi_s2] balanced batch sampler: 8 cells x 4 / batch of 32 ; batches/epoch=250 (iters/epoch cap=250) ; smallest cell=173 -> ~5.8x draws/epoch) ; sampler seed=2
+[arm O1multi_s2] trainable params=886274 / 92273426  (0.9605%)
+[arm O1multi_s2] INIT HASHES (seed=2): lora_A=a4fc5c65d0de lora_B=c8f98b5a2dd9 head=6a9f6799513d
+[arm O1multi_s2] lora trainable=884736  head trainable=1538
+[arm O1multi_s2 epoch 01/12] loss=0.3424 acc=0.8548 val_auc=0.9886 lr=9.83e-05 (134s) *BEST*
+[arm O1multi_s2 epoch 02/12] loss=0.1731 acc=0.9355 val_auc=0.9967 lr=9.34e-05 (134s) *BEST*
+[arm O1multi_s2 epoch 03/12] loss=0.0995 acc=0.9650 val_auc=0.9991 lr=8.55e-05 (134s) *BEST*
+[arm O1multi_s2 epoch 04/12] loss=0.0895 acc=0.9688 val_auc=0.9988 lr=7.52e-05 (133s)
+[arm O1multi_s2 epoch 05/12] loss=0.0699 acc=0.9766 val_auc=0.9992 lr=6.33e-05 (134s) *BEST*
+[arm O1multi_s2 epoch 06/12] loss=0.0429 acc=0.9842 val_auc=0.9990 lr=5.05e-05 (133s)
+[arm O1multi_s2 epoch 07/12] loss=0.0446 acc=0.9855 val_auc=0.9987 lr=3.77e-05 (135s)
+[arm O1multi_s2 epoch 08/12] loss=0.0312 acc=0.9894 val_auc=0.9990 lr=2.58e-05 (134s)
+[arm O1multi_s2 epoch 09/12] loss=0.0286 acc=0.9904 val_auc=0.9984 lr=1.55e-05 (133s)
+[arm O1multi_s2 early-stop] no val_auc improvement for 4 epochs at epoch 9
+[arm O1multi_s2 done] best_val_auc=0.9992 (epoch 5) wall=1204s
+[arm O1multi_s2 save] E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\lora_g19b_dfdcp_O1multi_s2.pt
+  [extract O1multi_s2] 32/5300 wall=0s
+  [extract O1multi_s2] 832/5300 wall=7s
+  [extract O1multi_s2] 1632/5300 wall=14s
+  [extract O1multi_s2] 2432/5300 wall=21s
+  [extract O1multi_s2] 3232/5300 wall=28s
+  [extract O1multi_s2] 4032/5300 wall=35s
+  [extract O1multi_s2] 4832/5300 wall=42s
+[arm O1multi_s2] feats saved E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\feats_g19b_dfdcp_O1multi_s2.npz shape=(5300, 768)
+
+==========================================================================================
+TRAIN ARM O1ffonly_s0   (objective=CE, sources=ffpp, seed=0, LoRA r=16 alpha=32)
+==========================================================================================
+[arm O1ffonly_s0] train samples=8000 over 2 (domain,class) cells
+   cell ffpp  lab=0 id=1 n=4000
+   cell ffpp  lab=1 id=0 n=4000
+[arm O1ffonly_s0] balanced batch sampler: 2 cells x 16 / batch of 32 ; batches/epoch=250 (iters/epoch cap=250) ; smallest cell=4000 -> ~1.0x draws/epoch) ; sampler seed=0
+[arm O1ffonly_s0] trainable params=886274 / 92273426  (0.9605%)
+[arm O1ffonly_s0] INIT HASHES (seed=0): lora_A=098e2e02de87 lora_B=c8f98b5a2dd9 head=23979c852784
+[arm O1ffonly_s0] lora trainable=884736  head trainable=1538
+[arm O1ffonly_s0 epoch 01/12] loss=0.1458 acc=0.9524 val_auc=0.9987 lr=9.83e-05 (134s) *BEST*
+[arm O1ffonly_s0 epoch 02/12] loss=0.0564 acc=0.9815 val_auc=0.9995 lr=9.34e-05 (133s) *BEST*
+[arm O1ffonly_s0 epoch 03/12] loss=0.0540 acc=0.9821 val_auc=0.9988 lr=8.55e-05 (135s)
+[arm O1ffonly_s0 epoch 04/12] loss=0.0278 acc=0.9902 val_auc=0.9994 lr=7.52e-05 (133s)
+[arm O1ffonly_s0 epoch 05/12] loss=0.0391 acc=0.9874 val_auc=0.9988 lr=6.33e-05 (134s)
+[arm O1ffonly_s0 epoch 06/12] loss=0.0263 acc=0.9914 val_auc=0.9994 lr=5.05e-05 (134s)
+[arm O1ffonly_s0 early-stop] no val_auc improvement for 4 epochs at epoch 6
+[arm O1ffonly_s0 done] best_val_auc=0.9995 (epoch 2) wall=803s
+[arm O1ffonly_s0 save] E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\lora_g19b_dfdcp_O1ffonly_s0.pt
+  [extract O1ffonly_s0] 32/5300 wall=0s
+  [extract O1ffonly_s0] 832/5300 wall=7s
+  [extract O1ffonly_s0] 1632/5300 wall=14s
+  [extract O1ffonly_s0] 2432/5300 wall=21s
+  [extract O1ffonly_s0] 3232/5300 wall=28s
+  [extract O1ffonly_s0] 4032/5300 wall=34s
+  [extract O1ffonly_s0] 4832/5300 wall=41s
+[arm O1ffonly_s0] feats saved E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\feats_g19b_dfdcp_O1ffonly_s0.npz shape=(5300, 768)
+
+==========================================================================================
+TRAIN ARM O1ffonly_s1   (objective=CE, sources=ffpp, seed=1, LoRA r=16 alpha=32)
+==========================================================================================
+[arm O1ffonly_s1] train samples=8000 over 2 (domain,class) cells
+   cell ffpp  lab=0 id=1 n=4000
+   cell ffpp  lab=1 id=0 n=4000
+[arm O1ffonly_s1] balanced batch sampler: 2 cells x 16 / batch of 32 ; batches/epoch=250 (iters/epoch cap=250) ; smallest cell=4000 -> ~1.0x draws/epoch) ; sampler seed=1
+[arm O1ffonly_s1] trainable params=886274 / 92273426  (0.9605%)
+[arm O1ffonly_s1] INIT HASHES (seed=1): lora_A=dc9906735117 lora_B=c8f98b5a2dd9 head=3a355e0fdfa3
+[arm O1ffonly_s1] lora trainable=884736  head trainable=1538
+[arm O1ffonly_s1 epoch 01/12] loss=0.1599 acc=0.9475 val_auc=0.9987 lr=9.83e-05 (134s) *BEST*
+[arm O1ffonly_s1 epoch 02/12] loss=0.0625 acc=0.9800 val_auc=0.9992 lr=9.34e-05 (134s) *BEST*
+[arm O1ffonly_s1 epoch 03/12] loss=0.0502 acc=0.9836 val_auc=0.9995 lr=8.55e-05 (134s) *BEST*
+[arm O1ffonly_s1 epoch 04/12] loss=0.0380 acc=0.9874 val_auc=0.9990 lr=7.52e-05 (134s)
+[arm O1ffonly_s1 epoch 05/12] loss=0.0339 acc=0.9890 val_auc=0.9997 lr=6.33e-05 (134s) *BEST*
+[arm O1ffonly_s1 epoch 06/12] loss=0.0270 acc=0.9915 val_auc=0.9988 lr=5.05e-05 (134s)
+[arm O1ffonly_s1 epoch 07/12] loss=0.0196 acc=0.9932 val_auc=0.9994 lr=3.77e-05 (134s)
+[arm O1ffonly_s1 epoch 08/12] loss=0.0197 acc=0.9939 val_auc=0.9996 lr=2.58e-05 (133s)
+[arm O1ffonly_s1 epoch 09/12] loss=0.0191 acc=0.9935 val_auc=0.9996 lr=1.55e-05 (132s)
+[arm O1ffonly_s1 early-stop] no val_auc improvement for 4 epochs at epoch 9
+[arm O1ffonly_s1 done] best_val_auc=0.9997 (epoch 5) wall=1203s
+[arm O1ffonly_s1 save] E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\lora_g19b_dfdcp_O1ffonly_s1.pt
+  [extract O1ffonly_s1] 32/5300 wall=0s
+  [extract O1ffonly_s1] 832/5300 wall=7s
+  [extract O1ffonly_s1] 1632/5300 wall=14s
+  [extract O1ffonly_s1] 2432/5300 wall=20s
+  [extract O1ffonly_s1] 3232/5300 wall=27s
+  [extract O1ffonly_s1] 4032/5300 wall=33s
+  [extract O1ffonly_s1] 4832/5300 wall=40s
+[arm O1ffonly_s1] feats saved E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\feats_g19b_dfdcp_O1ffonly_s1.npz shape=(5300, 768)
+
+==========================================================================================
+TRAIN ARM O1ffonly_s2   (objective=CE, sources=ffpp, seed=2, LoRA r=16 alpha=32)
+==========================================================================================
+[arm O1ffonly_s2] train samples=8000 over 2 (domain,class) cells
+   cell ffpp  lab=0 id=1 n=4000
+   cell ffpp  lab=1 id=0 n=4000
+[arm O1ffonly_s2] balanced batch sampler: 2 cells x 16 / batch of 32 ; batches/epoch=250 (iters/epoch cap=250) ; smallest cell=4000 -> ~1.0x draws/epoch) ; sampler seed=2
+[arm O1ffonly_s2] trainable params=886274 / 92273426  (0.9605%)
+[arm O1ffonly_s2] INIT HASHES (seed=2): lora_A=a4fc5c65d0de lora_B=c8f98b5a2dd9 head=6a9f6799513d
+[arm O1ffonly_s2] lora trainable=884736  head trainable=1538
+[arm O1ffonly_s2 epoch 01/12] loss=0.1537 acc=0.9496 val_auc=0.9990 lr=9.83e-05 (132s) *BEST*
+[arm O1ffonly_s2 epoch 02/12] loss=0.0638 acc=0.9801 val_auc=0.9989 lr=9.34e-05 (132s)
+[arm O1ffonly_s2 epoch 03/12] loss=0.0426 acc=0.9879 val_auc=0.9990 lr=8.55e-05 (131s) *BEST*
+[arm O1ffonly_s2 epoch 04/12] loss=0.0419 acc=0.9876 val_auc=0.9987 lr=7.52e-05 (133s)
+[arm O1ffonly_s2 epoch 05/12] loss=0.0313 acc=0.9902 val_auc=0.9988 lr=6.33e-05 (131s)
+[arm O1ffonly_s2 epoch 06/12] loss=0.0269 acc=0.9916 val_auc=0.9995 lr=5.05e-05 (133s) *BEST*
+[arm O1ffonly_s2 epoch 07/12] loss=0.0212 acc=0.9928 val_auc=0.9999 lr=3.77e-05 (131s) *BEST*
+[arm O1ffonly_s2 epoch 08/12] loss=0.0183 acc=0.9946 val_auc=0.9996 lr=2.58e-05 (131s)
+[arm O1ffonly_s2 epoch 09/12] loss=0.0201 acc=0.9926 val_auc=0.9996 lr=1.55e-05 (132s)
+[arm O1ffonly_s2 epoch 10/12] loss=0.0120 acc=0.9969 val_auc=0.9996 lr=7.63e-06 (131s)
+[arm O1ffonly_s2 epoch 11/12] loss=0.0111 acc=0.9962 val_auc=0.9996 lr=2.69e-06 (133s)
+[arm O1ffonly_s2 early-stop] no val_auc improvement for 4 epochs at epoch 11
+[arm O1ffonly_s2 done] best_val_auc=0.9999 (epoch 7) wall=1450s
+[arm O1ffonly_s2 save] E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\lora_g19b_dfdcp_O1ffonly_s2.pt
+  [extract O1ffonly_s2] 32/5300 wall=0s
+  [extract O1ffonly_s2] 832/5300 wall=7s
+  [extract O1ffonly_s2] 1632/5300 wall=14s
+  [extract O1ffonly_s2] 2432/5300 wall=21s
+  [extract O1ffonly_s2] 3232/5300 wall=27s
+  [extract O1ffonly_s2] 4032/5300 wall=34s
+  [extract O1ffonly_s2] 4832/5300 wall=41s
+[arm O1ffonly_s2] feats saved E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\feats_g19b_dfdcp_O1ffonly_s2.npz shape=(5300, 768)
+
+==========================================================================================
+TRAIN ARM R2multi_s0   (objective=CE, sources=ffpp+cd2+ffiw+wild, seed=0, LoRA r=32 alpha=64)
+==========================================================================================
+[arm R2multi_s0] train samples=22426 over 8 (domain,class) cells
+   cell cd2   lab=0 id=3 n=2080
+   cell cd2   lab=1 id=2 n=4000
+   cell ffiw  lab=0 id=5 n=173
+   cell ffiw  lab=1 id=4 n=173
+   cell ffpp  lab=0 id=1 n=4000
+   cell ffpp  lab=1 id=0 n=4000
+   cell wild  lab=0 id=7 n=4000
+   cell wild  lab=1 id=6 n=4000
+[arm R2multi_s0] balanced batch sampler: 8 cells x 4 / batch of 32 ; batches/epoch=250 (iters/epoch cap=250) ; smallest cell=173 -> ~5.8x draws/epoch) ; sampler seed=0
+[arm R2multi_s0] trainable params=1771010 / 93158162  (1.9011%)
+[arm R2multi_s0] INIT HASHES (seed=0): lora_A=e0c756ab9ffc lora_B=821937f946b0 head=8e34008f27a5
+[arm R2multi_s0] lora trainable=1769472  head trainable=1538
+[arm R2multi_s0 epoch 01/12] loss=0.2748 acc=0.8842 val_auc=0.9941 lr=9.83e-05 (131s) *BEST*
+[arm R2multi_s0 epoch 02/12] loss=0.1458 acc=0.9483 val_auc=0.9993 lr=9.34e-05 (132s) *BEST*
+[arm R2multi_s0 epoch 03/12] loss=0.0984 acc=0.9654 val_auc=0.9967 lr=8.55e-05 (133s)
+[arm R2multi_s0 epoch 04/12] loss=0.0640 acc=0.9765 val_auc=0.9979 lr=7.52e-05 (130s)
+[arm R2multi_s0 epoch 05/12] loss=0.0525 acc=0.9819 val_auc=0.9976 lr=6.33e-05 (132s)
+[arm R2multi_s0 epoch 06/12] loss=0.0360 acc=0.9880 val_auc=0.9993 lr=5.05e-05 (133s)
+[arm R2multi_s0 early-stop] no val_auc improvement for 4 epochs at epoch 6
+[arm R2multi_s0 done] best_val_auc=0.9993 (epoch 2) wall=791s
+[arm R2multi_s0 save] E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\lora_g19b_dfdcp_R2multi_s0.pt
+  [extract R2multi_s0] 32/5300 wall=0s
+  [extract R2multi_s0] 832/5300 wall=7s
+  [extract R2multi_s0] 1632/5300 wall=14s
+  [extract R2multi_s0] 2432/5300 wall=20s
+  [extract R2multi_s0] 3232/5300 wall=27s
+  [extract R2multi_s0] 4032/5300 wall=34s
+  [extract R2multi_s0] 4832/5300 wall=41s
+[arm R2multi_s0] feats saved E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\feats_g19b_dfdcp_R2multi_s0.npz shape=(5300, 768)
+
+==========================================================================================
+G19b RESULTS -- held-out fold = dfdcp   (DECISIVE: O1multi vs O1ffonly)
+==========================================================================================
+
+PRIMARY TABLE -- cross-domain AUC (probe: StandardScaler(probe-train)+LR C=1e-3)
+run            |   in-dom |       cd1       cd2     dfdcp      ffiw      wild |     mean5
+-----------------------------------------------------------------------------------------
+R0             |   0.9852 |    0.8286    0.8633    0.8261    0.8244    0.8090 |    0.8303
+O1multi_s0     |   0.9807 |    0.9996    0.9992    0.9298    1.0000    0.9897 |    0.9837
+O1multi_s1     |   0.9774 |    0.9916    0.9972    0.9212    1.0000    0.9832 |    0.9786
+O1multi_s2     |   0.9754 |    0.9995    0.9992    0.9156    1.0000    0.9922 |    0.9813
+O1ffonly_s0    |   0.9786 |    0.7774    0.8552    0.8263    0.8240    0.8009 |    0.8168
+O1ffonly_s1    |   0.9804 |    0.7688    0.8328    0.8005    0.8556    0.8024 |    0.8120
+O1ffonly_s2    |   0.9812 |    0.7419    0.8319    0.8076    0.8665    0.8009 |    0.8098
+R2multi_s0     |   0.9803 |    0.9891    0.9969    0.9251    1.0000    0.9759 |    0.9774
+-----------------------------------------------------------------------------------------
+ANCHOR_G19a    |   0.9852 |    0.8286    0.8633    0.8261    0.8244    0.8090 |    0.8303   (prior frozen-ViT anchors, same protocol)
+
+CONTAMINATION FLAGS for fold=dfdcp: MULTI training sources = ['ffpp', 'cd2', 'ffiw', 'wild'] ; FFONLY training source = ['ffpp'] ; held-out = dfdcp
+  columns marked CONTAMINATED (excluded from aggregates): cd2, ffiw, wild
+  VALID transfer column: dfdcp
+
+IN-DOMAIN GUARD (FF++ probe-test 800 rows, train_mask False; frozen baseline 0.9852)
+  R0             in-domain AUC=0.9852   (baseline 0.9852, delta=+0.0000)
+  O1multi_s0     in-domain AUC=0.9807   (baseline 0.9852, delta=-0.0045)
+  O1multi_s1     in-domain AUC=0.9774   (baseline 0.9852, delta=-0.0078)
+  O1multi_s2     in-domain AUC=0.9754   (baseline 0.9852, delta=-0.0098)
+  O1ffonly_s0    in-domain AUC=0.9786   (baseline 0.9852, delta=-0.0066)
+  O1ffonly_s1    in-domain AUC=0.9804   (baseline 0.9852, delta=-0.0048)
+  O1ffonly_s2    in-domain AUC=0.9812   (baseline 0.9852, delta=-0.0040)
+  R2multi_s0     in-domain AUC=0.9803   (baseline 0.9852, delta=-0.0049)
+
+G12 DOMAIN-SENSITIVITY RATIO (s / class_gap printed for cross-check)
+run                     s  class_gap |       cd1       cd2     dfdcp      ffiw      wild |       mean
+R0                 1.5097    40.2122 |    0.2113    0.1861    0.1609    0.1995    0.2336 |     0.1983
+O1multi_s0         1.2914    38.6590 |    0.1669    0.1440    0.1731    0.1568    0.1878 |     0.1657
+O1multi_s1         1.2748    38.0261 |    0.1587    0.1429    0.1769    0.1344    0.1522 |     0.1530
+O1multi_s2         1.2625    37.5324 |    0.1645    0.1431    0.2076    0.1505    0.1653 |     0.1662
+O1ffonly_s0        1.3252    38.3272 |    0.1733    0.1810    0.1547    0.2862    0.1783 |     0.1947
+O1ffonly_s1        1.1967    39.8966 |    0.1978    0.2044    0.1664    0.2691    0.1765 |     0.2028
+O1ffonly_s2        1.2428    39.5662 |    0.1819    0.1865    0.1501    0.2101    0.1988 |     0.1855
+R2multi_s0         1.3724    38.4840 |    0.1919    0.1831    0.1599    0.1332    0.2274 |     0.1791
+  (G17c frozen-ViT anchor: ratio_V=0.1983)
+
+ORACLE (own-label, video-dir-identity class-stratified 70/30 split INSIDE the target domain; StandardScaler+LR(C=1e-3) fit on the 70%%, tested on the 30%%)
+  split seed=12345 (per-domain offset +1000*idx) ; oracle AUC moves with the representation
+run            | dfdcp (oracle)         | wild (oracle)         
+R0             | AUC=0.9054 tr=212/te= 88 (dirs  49/ 21, fake 107/ 43) | AUC=0.8336 tr=210/te= 90 (dirs 210/ 90, fake 105/ 45)
+O1multi_s0     | AUC=0.9463 tr=212/te= 88 (dirs  49/ 21, fake 107/ 43) | AUC=0.9965 tr=210/te= 90 (dirs 210/ 90, fake 105/ 45)
+O1multi_s1     | AUC=0.9649 tr=212/te= 88 (dirs  49/ 21, fake 107/ 43) | AUC=0.9901 tr=210/te= 90 (dirs 210/ 90, fake 105/ 45)
+O1multi_s2     | AUC=0.9742 tr=212/te= 88 (dirs  49/ 21, fake 107/ 43) | AUC=0.9906 tr=210/te= 90 (dirs 210/ 90, fake 105/ 45)
+O1ffonly_s0    | AUC=0.8842 tr=212/te= 88 (dirs  49/ 21, fake 107/ 43) | AUC=0.8286 tr=210/te= 90 (dirs 210/ 90, fake 105/ 45)
+O1ffonly_s1    | AUC=0.9370 tr=212/te= 88 (dirs  49/ 21, fake 107/ 43) | AUC=0.8242 tr=210/te= 90 (dirs 210/ 90, fake 105/ 45)
+O1ffonly_s2    | AUC=0.9049 tr=212/te= 88 (dirs  49/ 21, fake 107/ 43) | AUC=0.8365 tr=210/te= 90 (dirs 210/ 90, fake 105/ 45)
+R2multi_s0     | AUC=0.9747 tr=212/te= 88 (dirs  49/ 21, fake 107/ 43) | AUC=0.9862 tr=210/te= 90 (dirs 210/ 90, fake 105/ 45)
+
+ALIGNMENT RATIO = (source-label AUC on domain) / (oracle AUC on domain)
+  high = source-trained direction aligns with the target's own discriminative direction ; low = representation is discriminable but misaligned
+run            |     src_d     orc_d   ratio_d |     src_w     orc_w   ratio_w
+R0             |    0.8261    0.9054    0.9124 |    0.8090    0.8336    0.9705
+O1multi_s0     |    0.9298    0.9463    0.9826 |    0.9897    0.9965    0.9931
+O1multi_s1     |    0.9212    0.9649    0.9547 |    0.9832    0.9901    0.9930
+O1multi_s2     |    0.9156    0.9742    0.9399 |    0.9922    0.9906    1.0016
+O1ffonly_s0    |    0.8263    0.8842    0.9345 |    0.8009    0.8286    0.9665
+O1ffonly_s1    |    0.8005    0.9370    0.8544 |    0.8024    0.8242    0.9736
+O1ffonly_s2    |    0.8076    0.9049    0.8925 |    0.8009    0.8365    0.9574
+R2multi_s0     |    0.9251    0.9747    0.9491 |    0.9759    0.9862    0.9895
+
+PER-SEED SUMMARY on the VALID transfer column (dfdcp)
+  R0 (frozen)                = 0.8261   (G19a R0 = 0.8261)
+  O1multi_s0                 = 0.9298   (delta vs R0 = +0.1037)
+  O1multi_s1                 = 0.9212   (delta vs R0 = +0.0951)
+  O1multi_s2                 = 0.9156   (delta vs R0 = +0.0895)
+  O1multi   mean+-std        = 0.9222 +- 0.0058
+  O1ffonly_s0                = 0.8263   (delta vs R0 = +0.0002)
+  O1ffonly_s1                = 0.8005   (delta vs R0 = -0.0256)
+  O1ffonly_s2                = 0.8076   (delta vs R0 = -0.0184)
+  O1ffonly  mean+-std        = 0.8115 +- 0.0109
+  R2multi_s0 (r=32, alpha=64)= 0.9251   (delta vs R0 = +0.0990)
+
+PAIRED COMPARISON  O1multi - O1ffonly (same seed):
+  seed 0 : 0.9298 - 0.8263 = +0.1035
+  seed 1 : 0.9212 - 0.8005 = +0.1206
+  seed 2 : 0.9156 - 0.8076 = +0.1080
+  MEAN   : 0.9222 - 0.8115 = +0.1107
+  (G19a reference: O1 seed 20260910 = 0.9320, different seed + multi-domain val)
+
+BEST TRAINED ARM by dfdcp = O1multi_s0 (0.9298)
+  [detail] O1multi all 3 seeds > R0: True (deltas ['+0.1037', '+0.0951', '+0.0895'])
+  [detail] O1ffonly mean - R0 = -0.0146 (<= +0.0100 -> True) ; O1multi mean - O1ffonly mean = +0.1107 (>= +0.0500 -> True)
+  [no-forgetting detail] threshold 0.9752 (frozen in-domain 0.9852 - 0.01)
+    arm O1multi_s0     in-domain=0.9807 -> OK
+    arm O1multi_s1     in-domain=0.9774 -> OK
+    arm O1multi_s2     in-domain=0.9754 -> OK
+    arm O1ffonly_s0    in-domain=0.9786 -> OK
+    arm O1ffonly_s1    in-domain=0.9804 -> OK
+    arm O1ffonly_s2    in-domain=0.9812 -> OK
+    arm R2multi_s0     in-domain=0.9803 -> OK
+  [detail] alignment ratio on dfdcp: best arm O1multi_s0 = 0.9826 ; R0 = 0.9124 ; shift = +0.0702
+
+GATE VERDICTS (mechanical)
+  G19B_UNFREEZE_REPLICATES     value=+0.0961  ->  PASS
+  G19B_NEEDS_MULTISOURCE       value=+0.1107  ->  PASS
+  G19B_VS_CAPACITY             value=-0.0029  ->  FAIL
+  G19B_NO_FORGETTING           value=+0.9807  ->  PASS
+  G19B_ALIGNMENT_SHIFT         value=+0.0702  ->  PASS
+
+WALL / RESOURCE
+  R0 frozen extraction wall=41s
+  arm O1multi_s0     wall=1607s best_val_auc=0.9999 best_epoch=8 trainable=886274 (lora=884736 head=1538) r=16 alpha=32 seed=0 sources=ffpp+cd2+ffiw+wild
+  arm O1multi_s1     wall=938s best_val_auc=0.9978 best_epoch=3 trainable=886274 (lora=884736 head=1538) r=16 alpha=32 seed=1 sources=ffpp+cd2+ffiw+wild
+  arm O1multi_s2     wall=1204s best_val_auc=0.9992 best_epoch=5 trainable=886274 (lora=884736 head=1538) r=16 alpha=32 seed=2 sources=ffpp+cd2+ffiw+wild
+  arm O1ffonly_s0    wall=803s best_val_auc=0.9995 best_epoch=2 trainable=886274 (lora=884736 head=1538) r=16 alpha=32 seed=0 sources=ffpp
+  arm O1ffonly_s1    wall=1203s best_val_auc=0.9997 best_epoch=5 trainable=886274 (lora=884736 head=1538) r=16 alpha=32 seed=1 sources=ffpp
+  arm O1ffonly_s2    wall=1450s best_val_auc=0.9999 best_epoch=7 trainable=886274 (lora=884736 head=1538) r=16 alpha=32 seed=2 sources=ffpp
+  arm R2multi_s0     wall=791s best_val_auc=0.9993 best_epoch=2 trainable=1771010 (lora=1769472 head=1538) r=32 alpha=64 seed=0 sources=ffpp+cd2+ffiw+wild
+  init hashes (proves per-seed LoRA init):
+    O1multi_s0     lora_A=098e2e02de87 lora_B=c8f98b5a2dd9 head=23979c852784
+    O1multi_s1     lora_A=dc9906735117 lora_B=c8f98b5a2dd9 head=3a355e0fdfa3
+    O1multi_s2     lora_A=a4fc5c65d0de lora_B=c8f98b5a2dd9 head=6a9f6799513d
+    O1ffonly_s0    lora_A=098e2e02de87 lora_B=c8f98b5a2dd9 head=23979c852784
+    O1ffonly_s1    lora_A=dc9906735117 lora_B=c8f98b5a2dd9 head=3a355e0fdfa3
+    O1ffonly_s2    lora_A=a4fc5c65d0de lora_B=c8f98b5a2dd9 head=6a9f6799513d
+    R2multi_s0     lora_A=e0c756ab9ffc lora_B=821937f946b0 head=8e34008f27a5
+  threads: torch=4 OMP=4 MKL=4 OPENBLAS=4 NUMEXPR=4 ; cv2=1 ; num_workers=0
+[wall] total = 8527.8 s (2.37 h)
+[save] stats -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\g19b_dfdcp_stats.npz
+[gpu] nvidia-smi query (index, mem_used MiB, util%)=[(0, 4822, 1), (1, 1343, 0), (2, 64, 0)]  [AFTER]
+[save] report -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\g19b_dfdcp_report.txt

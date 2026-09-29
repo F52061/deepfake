@@ -1,0 +1,83 @@
+==============================================================================
+PHASE A  —  E0: in-domain fusion case discrimination (FF++ video split)
+==============================================================================
+  video-split AUC  V_proj                   = 0.9850
+  video-split AUC  C_proj                   = 0.8528
+  video-split AUC  concat(V_proj,C_proj)    = 0.9874
+  video-split AUC  concat(V,C)_raw          = 0.9878
+  (V_proj concat C_proj = 1536-d head-input analog; V,C raw concat = 1792-d)
+  video-split AUC  MLP_V_proj               = 0.9803
+  video-split AUC  MLP_concat(V_proj,C_proj) = 0.9838
+  CASE: linear concat vs linear V_proj   -> II (fusion helps in-domain; transfer overfit)
+  CASE: MLP concat vs MLP V_proj         -> capacity exists (nonlinear fusion could exploit complementarity)
+
+==============================================================================
+PHASE A  —  E1: cross-domain transfer + label-free predictors
+==============================================================================
+  transfer AUC   V -> cd1    = 0.8286
+  transfer AUC   V -> cd2    = 0.8633
+  transfer AUC   V -> dfdcp  = 0.8261
+  transfer AUC   V -> ffiw   = 0.8244
+  transfer AUC   V -> wild   = 0.8090
+  transfer AUC   C -> cd1    = 0.6559
+  transfer AUC   C -> cd2    = 0.7227
+  transfer AUC   C -> dfdcp  = 0.7068
+  transfer AUC   C -> ffiw   = 0.8344
+  transfer AUC   C -> wild   = 0.7170
+
+  per-domain predictors (label-free except oracle) + measured transfer AUC(V):
+  dom      AUC_V   AUC_C |   ovl_V_10   ovl_V_20   ovl_C_10   ovl_C_20    align_V    align_C   oracle_V   oracle_C
+  ----------------------------------------------------------------------------------------------------------------
+  cd1     0.8286  0.6559 |      0.771      0.553      0.171      0.214      0.247      0.006      0.051      0.096 
+  cd2     0.8633  0.7227 |      0.856      0.643      0.231      0.236      0.233      0.005      0.006      0.181 
+  dfdcp   0.8261  0.7068 |      0.703      0.507      0.172      0.198      0.255      0.002      0.006      0.109 
+  ffiw    0.8244  0.8344 |      0.602      0.483      0.140      0.176      0.231      0.002      0.031      0.060 
+  wild    0.8090  0.7170 |      0.809      0.605      0.189      0.203      0.247      0.003      0.010      0.116 
+
+  Spearman rho(predictor, transfer AUC) across 5 target domains:
+    align_C                vs AUC_V rho=+0.920   vs AUC_C rho=+0.680
+    align_V                vs AUC_V rho=+0.760   vs AUC_C rho=+0.660
+    oracle_C               vs AUC_V rho=+0.860   vs AUC_C rho=+0.800
+    oracle_V               vs AUC_V rho=+0.740   vs AUC_C rho=+0.740
+    ovl_C_10               vs AUC_V rho=+0.860   vs AUC_C rho=+0.800
+    ovl_C_20               vs AUC_V rho=+0.940   vs AUC_C rho=+0.740
+    ovl_C_5                vs AUC_V rho=+0.940   vs AUC_C rho=+0.740
+    ovl_C_50               vs AUC_V rho=+0.940   vs AUC_C rho=+0.740
+    ovl_V_10               vs AUC_V rho=+0.880   vs AUC_C rho=+0.780
+    ovl_V_20               vs AUC_V rho=+0.880   vs AUC_C rho=+0.780
+    ovl_V_5                vs AUC_V rho=+0.940   vs AUC_C rho=+0.740
+    ovl_V_50               vs AUC_V rho=+0.880   vs AUC_C rho=+0.780
+
+==============================================================================
+PHASE A  —  E2: regime search  (is there a far-regime where C leads?)
+==============================================================================
+
+  distance scale: Mahalanobis^2 in source-V top-5 subspace
+  within-domain near/far halves, pooled across 5 domains (n=750 each):
+    near   AUC(V)=0.8031  AUC(C)=0.6745   C-V=-0.1286
+    far    AUC(V)=0.7901  AUC(C)=0.6770   C-V=-0.1131
+  per-domain (k=5) near/far AUC(V), AUC(C):
+    cd1    n:V=0.886 C=0.647 f:V=0.747 C=0.661
+    cd2    n:V=0.870 C=0.743 f:V=0.833 C=0.709
+    dfdcp  n:V=0.773 C=0.522 f:V=0.830 C=0.825
+    ffiw   n:V=0.817 C=0.882 f:V=0.848 C=0.784
+    wild   n:V=0.778 C=0.656 f:V=0.763 C=0.726
+
+  distance scale: Mahalanobis^2 in source-V top-10 subspace
+  within-domain near/far halves, pooled across 5 domains (n=750 each):
+    near   AUC(V)=0.8718  AUC(C)=0.7217   C-V=-0.1501
+    far    AUC(V)=0.7430  AUC(C)=0.6447   C-V=-0.0982
+  per-domain (k=10) near/far AUC(V), AUC(C):
+    cd1    n:V=0.892 C=0.785 f:V=0.776 C=0.485
+    cd2    n:V=0.893 C=0.759 f:V=0.838 C=0.687
+    dfdcp  n:V=0.882 C=0.675 f:V=0.768 C=0.740
+    ffiw   n:V=0.863 C=0.937 f:V=0.784 C=0.697
+    wild   n:V=0.867 C=0.752 f:V=0.746 C=0.676
+
+  global-tercile pooled (absolute source-V distance, all 5 targets n=1500):
+    near  n= 500   AUC(V)=0.9211   AUC(C)=0.7355   C-V=-0.1856
+    mid   n= 500   AUC(V)=0.7586   AUC(C)=0.6778   C-V=-0.0808
+    far   n= 500   AUC(V)=0.7199   AUC(C)=0.6253   C-V=-0.0946
+
+  NOTE: E2 verdict (regime exists iff a distance-defined subset has AUC(C) > AUC(V)).
+  Also report whether AUC(V) itself degrades with distance (V-fragility).

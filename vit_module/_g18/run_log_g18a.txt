@@ -1,0 +1,162 @@
+[gpu] GPU 1 free (used=0 MiB), selected. CUDA_VISIBLE_DEVICES=1
+==========================================================================================
+[machine] device=NVIDIA GeForce GTX 1080 Ti  torch=2.2.2+cu118  CUDA_VISIBLE_DEVICES=1
+[machine] GPU_QUERY=[(0, 4262, 11264, 3), (1, 0, 11264, 0), (2, 64, 11264, 0)]
+[leak] probe-test folder set size = 84
+[leak] train.json real folders  720, intersect with probe-test = 0
+[leak] train.json fake folders  720, intersect with probe-test = 0
+[leak] TOTAL intersect = 0 (MUST be 0)
+[data] samples: total=21540 real=10770 fake=10770 (balanced)
+[data] excluded (leak) videos=0, missing real=2, missing fake-method=10
+[data] prep wall=6.1s
+[save] train_samples.npz -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g18\train_samples.npz
+[split] videos=718 val=72  train_samples=19380 val_samples=2160
+[load] pre-decoding 21540 training images to 336x336 ...
+[load] done, decode_fail=0, wall=288.3s
+[weight] densenet121 : weights-enum cache hit (densenet121-a639ec97.pth)
+[epoch 01/20] lr=1.0e-04 loss=0.2928 acc=0.8700 val_auc=0.9547 *BEST*  wall=162s
+[epoch 02/20] lr=1.0e-04 loss=0.1352 acc=0.9481 val_auc=0.9735 *BEST*  wall=164s
+[epoch 03/20] lr=1.0e-04 loss=0.1019 acc=0.9609 val_auc=0.9786 *BEST*  wall=161s
+[epoch 04/20] lr=1.0e-04 loss=0.0817 acc=0.9707 val_auc=0.9811 *BEST*  wall=160s
+[epoch 05/20] lr=1.0e-04 loss=0.0650 acc=0.9759 val_auc=0.9864 *BEST*  wall=162s
+[epoch 06/20] lr=1.0e-04 loss=0.0608 acc=0.9764 val_auc=0.9882 *BEST*  wall=159s
+[epoch 07/20] lr=1.0e-04 loss=0.0494 acc=0.9828 val_auc=0.9903 *BEST*  wall=168s
+[epoch 08/20] lr=1.0e-04 loss=0.0532 acc=0.9804 val_auc=0.9874   wall=164s
+[epoch 09/20] lr=1.0e-04 loss=0.0389 acc=0.9859 val_auc=0.9877   wall=161s
+[epoch 10/20] lr=1.0e-04 loss=0.0373 acc=0.9869 val_auc=0.9888   wall=164s
+[epoch 11/20] lr=1.0e-04 loss=0.0350 acc=0.9868 val_auc=0.9869   wall=160s
+[epoch 12/20] lr=1.0e-04 loss=0.0339 acc=0.9880 val_auc=0.9872   wall=168s
+[epoch 13/20] lr=1.0e-04 loss=0.0269 acc=0.9899 val_auc=0.9887   wall=162s
+[train] early stop: no val-AUC improvement for 6 epochs
+[train] BEST val_auc=0.9903 @ epoch 7 (curve=0.9547,0.9735,0.9786,0.9811,0.9864,0.9882,0.9903,0.9874,0.9877,0.9888,0.9869,0.9872,0.9887)
+[train] saved best -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g18\densenet_ffpp_best.pth
+[train] saved last -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g18\densenet_ffpp_last.pth
+[probe-test] in-domain AUC (n=800, positive=fake) = 0.9583
+[verify] row-order vs _g17/cnn_feats.npz paths: True (n=5300)
+  [extract] 32/5300 wall=1s
+  [extract] 832/5300 wall=14s
+  [extract] 1632/5300 wall=27s
+  [extract] 2432/5300 wall=36s
+  [extract] 3232/5300 wall=42s
+  [extract] 4032/5300 wall=52s
+  [extract] 4832/5300 wall=59s
+[save] df_ffpp_feats.npz -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g18\df_ffpp_feats.npz
+[feat] dims db2=512 db3=1024 final=1024 read_fail=0 wall=64s
+==========================================================================================
+G18A MACHINE_BLOCK
+G18A_MODE=gpu
+G18A_GPU_INDEX=1
+G18A_DEVICE=NVIDIA GeForce GTX 1080 Ti
+G18A_GPU_QUERY=[(0, 4262, 11264, 3), (1, 0, 11264, 0), (2, 64, 11264, 0)]
+G18A_TORCH=2.2.2+cu118
+G18A_BATCH=32
+G18A_LR=1.0e-04
+G18A_MAX_EPOCHS=20 PATIENCE=6
+G18A_REAL_FRAMES=15 FAKE_FRAMES=3
+G18A_best_epoch=7.0000
+G18A_best_val_auc=0.9903
+G18A_excluded_videos=0.0000
+G18A_extract_read_fail=0.0000
+G18A_extract_wall_s=64.1333
+G18A_feat_dims={'db2': 512, 'db3': 1024, 'final': 1024}
+G18A_last_val_auc=0.9887
+G18A_leak_intersect_fake=0.0000
+G18A_leak_intersect_real=0.0000
+G18A_leak_intersect_total=0.0000
+G18A_missing_fake_method_videos=10.0000
+G18A_missing_real_videos=2.0000
+G18A_n_epochs_run=13.0000
+G18A_n_fake=10770.0000
+G18A_n_real=10770.0000
+G18A_n_samples_total=21540.0000
+G18A_n_val_videos=72.0000
+G18A_n_videos=718.0000
+G18A_preload_fail=0.0000
+G18A_prep_wall_s=6.1391
+G18A_probe_test_auc=0.9583
+G18A_probe_test_folder_set_size=84.0000
+G18A_probe_test_n=800.0000
+G18A_probe_train_n=2200.0000
+G18A_row_order_match=1.0000
+G18A_train_fake_method_folder_pairs=3600.0000
+G18A_train_fake_unique_folders=720.0000
+G18A_train_json_pairs=360.0000
+G18A_train_real_folder_ids=720.0000
+G18A_train_wall_s=2407.0568
+G18A_val_curve=0.9547,0.9735,0.9786,0.9811,0.9864,0.9882,0.9903,0.9874,0.9877,0.9888,0.9869,0.9872,0.9887
+G18A_PEAK_TORCH_MIB=4116
+G18A_WALL_S=2494.0
+G18A_AUG=train:light_random_crop(0.89-1.0)+hflip0.5; eval:336->224(no aug)
+G18A_PIPELINE=cv2.imread->BGR2RGB->resize336->resize224(INTER_LINEAR)->ImageNet_norm
+G18A_LABEL=1:real,0:fake; AUC positive=fake
+==========================================================================================
+[done] wall=2494.0s
+
+################################################################################
+# REGENERATED SECTION: probe-test AUC + feature extraction using VAL-OPTIMAL (best) weights
+# (the model.load_state_dict(best) fix was applied after the initial run)
+################################################################################
+[gpu] GPU 1 free (used=0 MiB), selected. CUDA_VISIBLE_DEVICES=1
+==========================================================================================
+[machine] device=NVIDIA GeForce GTX 1080 Ti  torch=2.2.2+cu118  CUDA_VISIBLE_DEVICES=1
+[machine] GPU_QUERY=[(0, 4252, 11264, 3), (1, 0, 11264, 0), (2, 5695, 11264, 77)]
+[leak] probe-test folder set size = 84
+[leak] train.json real folders  720, intersect with probe-test = 0
+[leak] train.json fake folders  720, intersect with probe-test = 0
+[leak] TOTAL intersect = 0 (MUST be 0)
+[data] samples: total=21540 real=10770 fake=10770 (balanced)
+[data] excluded (leak) videos=0, missing real=2, missing fake-method=10
+[data] prep wall=7.0s
+[save] train_samples.npz -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g18\train_samples.npz
+[skip-train] loaded best weights from E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g18\densenet_ffpp_best.pth
+[probe-test] in-domain AUC (n=800, positive=fake) = 0.9672
+[verify] row-order vs _g17/cnn_feats.npz paths: True (n=5300)
+  [extract] 32/5300 wall=0s
+  [extract] 832/5300 wall=5s
+  [extract] 1632/5300 wall=10s
+  [extract] 2432/5300 wall=15s
+  [extract] 3232/5300 wall=20s
+  [extract] 4032/5300 wall=25s
+  [extract] 4832/5300 wall=29s
+[save] df_ffpp_feats.npz -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g18\df_ffpp_feats.npz
+[feat] dims db2=512 db3=1024 final=1024 read_fail=0 wall=32s
+==========================================================================================
+G18A MACHINE_BLOCK
+G18A_MODE=gpu
+G18A_GPU_INDEX=1
+G18A_DEVICE=NVIDIA GeForce GTX 1080 Ti
+G18A_GPU_QUERY=[(0, 4252, 11264, 3), (1, 0, 11264, 0), (2, 5695, 11264, 77)]
+G18A_TORCH=2.2.2+cu118
+G18A_BATCH=32
+G18A_LR=1.0e-04
+G18A_MAX_EPOCHS=20 PATIENCE=6
+G18A_REAL_FRAMES=15 FAKE_FRAMES=3
+G18A_excluded_videos=0.0000
+G18A_extract_read_fail=0.0000
+G18A_extract_wall_s=31.8293
+G18A_feat_dims={'db2': 512, 'db3': 1024, 'final': 1024}
+G18A_leak_intersect_fake=0.0000
+G18A_leak_intersect_real=0.0000
+G18A_leak_intersect_total=0.0000
+G18A_missing_fake_method_videos=10.0000
+G18A_missing_real_videos=2.0000
+G18A_n_fake=10770.0000
+G18A_n_real=10770.0000
+G18A_n_samples_total=21540.0000
+G18A_prep_wall_s=6.9981
+G18A_probe_test_auc=0.9672
+G18A_probe_test_folder_set_size=84.0000
+G18A_probe_test_n=800.0000
+G18A_probe_train_n=2200.0000
+G18A_row_order_match=1.0000
+G18A_train_fake_method_folder_pairs=3600.0000
+G18A_train_fake_unique_folders=720.0000
+G18A_train_json_pairs=360.0000
+G18A_train_real_folder_ids=720.0000
+G18A_PEAK_TORCH_MIB=468
+G18A_WALL_S=50.0
+G18A_AUG=train:light_random_crop(0.89-1.0)+hflip0.5; eval:336->224(no aug)
+G18A_PIPELINE=cv2.imread->BGR2RGB->resize336->resize224(INTER_LINEAR)->ImageNet_norm
+G18A_LABEL=1:real,0:fake; AUC positive=fake
+==========================================================================================
+[done] wall=50.0s

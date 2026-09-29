@@ -1,0 +1,12 @@
+[G14] anchors: e0AUC_cd1=0.8576 (dev 1.11e-16) srcLR_cd1=0.8286 (dev 2.22e-05) varfrac=0.6229
+[G14] align cd1: gapRatio=0.4268 dReal=+25.8687 dFake=-8.9057 zdimFrac=0.6357 absCos=0.9870
+[G14] block R done
+[G14] block A done
+[G14] block B done; valid_domains=['cd1', 'cd2', 'dfdcp', 'wild']
+[G14] block C done
+[G14] block D done
+[G14] block E done
+[G14] verdicts: DOMAIN_CONSIST=SUPPORT LIMITED=PARTIAL ATTENUATION=ATTENUATION_ONLY BOTTLENECK=BOTTLENECK_SHARED (wall=25.1s)
+[done] report -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g14\g14_report.txt
+[done] stats  -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g14\g14_stats.npz
+[done] verdicts: DOMAIN_CONSIST=SUPPORT LIMITED=PARTIAL ATTENUATION=ATTENUATION_ONLY BOTTLENECK=BOTTLENECK_SHARED

@@ -766,9 +766,15 @@ class LlavaLlamaForCausalLMDeepfake(LlamaForCausalLM, LlavaMetaForCausalLM):
         attention_mask = kwargs.pop("attention_mask", None)
         if "inputs_embeds" in kwargs:
             raise NotImplementedError("`inputs_embeds` is not supported")
-        
+
+        # 推理路径 from_pretrained 不会初始化 self.processors（训练时才通过
+        # initialize_vision_modules 设置）。generate() 直接访问
+        # self.processors['clip_processor'/'deepfake_processor'] 会拿到 None，
+        # 这里先惰性初始化（前提是 vision tower 已 load_model）。
+        self._ensure_processors()
         if images is not None or deepfake_inputs is not None:
             image_tensor = None
+            deepfake_processed_inputs = None   # forward() 有此初始化, generate() 之前漏了 → 有图无 deepfake 时 UnboundLocalError
             if images is not None:
                 image_tensor = process_images(images, self.processors['clip_processor'], self.config)
                 if isinstance(image_tensor, list):

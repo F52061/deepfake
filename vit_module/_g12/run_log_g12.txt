@@ -1,0 +1,101 @@
+[G12] data + checkpoint ok; anchors: e0AUC_cd1=0.8576 srcLR_cd1=0.8286 varfrac=0.6229
+[G12] proj cos: V_proj min=1.00000000 C_proj min=1.00000000 ; F layout best_C=0 best_V=896
+[G12] block B done
+[G12] block C done
+[G12] block D done
+[G12] block E done
+
+#### MACHINE_BLOCK #############################################################################################################
+G12_TASK=H6_branch_level_FFPP_specificity
+G12_DATA=probe_feats.npz(V/C/V_proj/C_proj n=3000:train2200/test800); feats_multi.npz(F/V/C n=2300:ffpp800+5x300)
+G12_BRANCHES=V=768; C=1024; F=1536(V_proj|C_proj join, no bridge128); V_proj=768; C_proj=768
+G12_ANCHOR_e0AUC_cd1=0.8576
+G12_ANCHOR_e0AUC_cd1_EXP=0.8576
+G12_ANCHOR_srcLR_cd1=0.8286
+G12_ANCHOR_srcLR_cd1_EXP=0.8286
+G12_ANCHOR_PC0_varfrac_srcV=0.6229
+G12_ANCHOR_MAXDEV=0.000022
+G12_ANCHOR_PASS=1
+G12_PROJCHECK_Vproj_cos_min=1.000000
+G12_PROJCHECK_Vproj_cos_mean=1.000000
+G12_PROJCHECK_Cproj_cos_min=1.000000
+G12_PROJCHECK_Cproj_cos_mean=1.000000
+G12_PROJCHECK_LN_eps=1e-05
+G12_PROJCHECK_PASS=1
+G12_F_LAYOUT=seg0[0:768]=clip_vision_alpha*C_proj(cos_min=1.000000);seg1[768:896]=bridge_adapter_embed(128-d,离线不可得);seg2[896:1664]=V_proj(cos_min=1.000000)
+G12_F_LAYOUT_bestwin_C=0
+G12_F_LAYOUT_bestwin_V=896
+G12_F_LAYOUT_cos_seg0_vs_alphaCproj=1.000000
+G12_F_LAYOUT_cos_seg2_vs_Vproj=1.000000
+G12_F_LAYOUT_crosscheck_seg0_vs_Vproj=0.022112
+G12_F_LAYOUT_crosscheck_seg2_vs_alphaCproj=0.022112
+G12_F_LAYOUT_PASS=1
+G12_F_BRANCH_USED=[F[:,0:768]|F[:,896:1664]] concat -> 1536-d (bridge 128-d offline-unavailable)
+G12_F_RECON_CHECK_cos_min=1.000000
+G12_ALPHA_v=0.306288
+G12_ALPHA_t=1.779604
+G12_DECISION_GATES=H6VIT:dratio>=+1.0 or dauc>=+0.05 in >=4/5; H6SHARED:both below in >=4/5; FW:rF>=0.8rV or aF>=0.8aV->INHERITS; rF<=min(1.2rC,0.8rV)->MITIGATES; COND:mean|ar-af|<0.05&both>=0.90->REGION_LEVEL; ar<0.75&af>=ar+0.10->FAKE_SUBCLASS_ONLY
+G12_VALID_DOMAINS_ratio=cd1,cd2,dfdcp,ffiw,wild
+G12_VALID_DOMAINS_auc=cd1,cd2,dfdcp,wild (ffiw leak=True excluded)
+G12_GAP_CLASSGAP_BY_BRANCH=V=40.2122;C=6.5508;F=66.7601;V_proj=49.4870;C_proj=13.6498
+G12_GAP_SCALE_s_BY_BRANCH=V=1.510;C=0.270;F=0.339;V_proj=0.456;C_proj=0.489
+G12_RATIO_V=cd1=0.2113;cd2=0.1861;dfdcp=0.1609;ffiw=0.1995;wild=0.2336
+G12_RATIO_C=cd1=2.4252;cd2=2.5436;dfdcp=3.2183;ffiw=2.8577;wild=2.5350
+G12_RATIO_F=cd1=0.1777;cd2=0.1739;dfdcp=0.1249;ffiw=0.2256;wild=0.1960
+G12_RATIO_V_proj=cd1=0.1455;cd2=0.1386;dfdcp=0.0894;ffiw=0.2081;wild=0.1649
+G12_RATIO_C_proj=cd1=1.1395;cd2=1.1715;dfdcp=0.9701;ffiw=0.9859;wild=1.1850
+G12_DOMGAP_V=cd1=8.4953;cd2=7.4846;dfdcp=6.4720;ffiw=8.0233;wild=9.3930
+G12_DOMGAP_C=cd1=15.8871;cd2=16.6624;dfdcp=21.0823;ffiw=18.7200;wild=16.6064
+G12_DOMGAP_F=cd1=11.8653;cd2=11.6095;dfdcp=8.3383;ffiw=15.0586;wild=13.0858
+G12_DOMGAP_V_proj=cd1=7.2020;cd2=6.8599;dfdcp=4.4252;ffiw=10.2991;wild=8.1617
+G12_DOMGAP_C_proj=cd1=15.5546;cd2=15.9902;dfdcp=13.2421;ffiw=13.4569;wild=16.1748
+G12_RATIO_MEAN_BY_BRANCH=V=0.1983;C=2.7160;F=0.1796;V_proj=0.1493;C_proj=1.0904
+G12_AUC_V=real:cd1=0.7951;cd2=0.8464;dfdcp=0.8895;ffiw=0.9422;wild=0.9111|fake:cd1=0.7925;cd2=0.8454;dfdcp=0.9400;ffiw=0.8859;wild=0.8741|all:cd1=0.9028;cd2=0.8999;dfdcp=0.9972;ffiw=0.9920;wild=0.9265
+G12_AUC_C=real:cd1=0.9965;cd2=1.0000;dfdcp=0.9991;ffiw=1.0000;wild=1.0000|fake:cd1=0.9894;cd2=1.0000;dfdcp=1.0000;ffiw=1.0000;wild=0.9995|all:cd1=1.0000;cd2=0.9952;dfdcp=1.0000;ffiw=1.0000;wild=1.0000
+G12_AUC_F=real:cd1=0.8859;cd2=0.9472;dfdcp=0.9959;ffiw=0.9852;wild=0.9807|fake:cd1=0.9431;cd2=0.9536;dfdcp=0.9948;ffiw=0.9580;wild=0.9343|all:cd1=0.9776;cd2=0.9769;dfdcp=0.9982;ffiw=0.9990;wild=0.9932
+G12_AUC_V_proj=real:cd1=0.8047;cd2=0.8662;dfdcp=0.7777;ffiw=0.7496;wild=0.8904|fake:cd1=0.7445;cd2=0.7398;dfdcp=0.8582;ffiw=0.8672;wild=0.7165|all:cd1=0.7980;cd2=0.8380;dfdcp=0.8994;ffiw=0.8552;wild=0.7972
+G12_AUC_C_proj=real:cd1=0.9631;cd2=0.9798;dfdcp=0.9982;ffiw=0.9867;wild=0.9975|fake:cd1=0.9582;cd2=0.9832;dfdcp=0.9839;ffiw=0.9862;wild=0.9432|all:cd1=0.9739;cd2=0.9702;dfdcp=0.9948;ffiw=0.9978;wild=0.9927
+G12_AUC_LEAK_DOMAINS=ffiw
+G12_AUC_MEAN_REAL_BY_BRANCH_5dom=V=0.8769;C=0.9991;F=0.9590;V_proj=0.8177;C_proj=0.9850
+G12_AUC_MEAN_REAL_BY_BRANCH_VALID=V=0.8606;C=0.9989;F=0.9524;V_proj=0.8347;C_proj=0.9846
+G12_AUC_MEAN_FAKE_BY_BRANCH_VALID=V=0.8630;C=0.9972;F=0.9564;V_proj=0.7648;C_proj=0.9671
+G12_AUC_MEAN_ALL_BY_BRANCH_VALID=V=0.9316;C=0.9988;F=0.9865;V_proj=0.8332;C_proj=0.9829
+G12_RESID_V=src:K1=0.3771,K5=0.0682,K50=0.0122|fftest:K1=0.3778,K5=0.0699,K50=0.0174|delta:cd1=K1=+0.0204,K5=+0.0583,K50=+0.0257;cd2=K1=+0.0455,K5=+0.0490,K50=+0.0235;dfdcp=K1=+0.0153,K5=+0.1050,K50=+0.0428;ffiw=K1=-0.0598,K5=+0.0721,K50=+0.0365;wild=K1=+0.0066,K5=+0.0779,K50=+0.0414
+G12_RESID_C=src:K1=0.8831,K5=0.7121,K50=0.2580|fftest:K1=0.8842,K5=0.7385,K50=0.4505|delta:cd1=K1=+0.0959,K5=+0.1690,K50=+0.2228;cd2=K1=+0.0982,K5=+0.1739,K50=+0.2385;dfdcp=K1=+0.0227,K5=+0.0564,K50=+0.0648;ffiw=K1=+0.0990,K5=+0.1212,K50=+0.1329;wild=K1=+0.0974,K5=+0.1552,K50=+0.2272
+G12_RESID_F=src:K1=0.1470,K5=0.0405,K50=0.0022|fftest:K1=0.1497,K5=0.0428,K50=0.0040|delta:cd1=K1=+0.1883,K5=+0.0865,K50=+0.0093;cd2=K1=+0.1883,K5=+0.0963,K50=+0.0127;dfdcp=K1=+0.0846,K5=+0.0459,K50=+0.0076;ffiw=K1=+0.0419,K5=+0.0414,K50=+0.0077;wild=K1=+0.1445,K5=+0.0612,K50=+0.0105
+G12_RESID_V_proj=src:K1=0.0613,K5=0.0014,K50=0.0001|fftest:K1=0.0616,K5=0.0015,K50=0.0001|delta:cd1=K1=+0.0589,K5=+0.0002,K50=+0.0001;cd2=K1=+0.0611,K5=+0.0005,K50=+0.0001;dfdcp=K1=+0.0257,K5=+0.0005,K50=+0.0002;ffiw=K1=+0.0021,K5=+0.0000,K50=+0.0002;wild=K1=+0.0337,K5=+0.0006,K50=+0.0002
+G12_RESID_C_proj=src:K1=0.6335,K5=0.2343,K50=0.0180|fftest:K1=0.6453,K5=0.2524,K50=0.0343|delta:cd1=K1=-0.0180,K5=+0.0488,K50=+0.0129;cd2=K1=+0.0562,K5=+0.0919,K50=+0.0267;dfdcp=K1=+0.0828,K5=+0.1032,K50=+0.0275;ffiw=K1=+0.1257,K5=+0.1063,K50=+0.0377;wild=K1=-0.0179,K5=+0.0194,K50=+0.0259
+G12_AXIS_V=src_zdim=0.6229 fftest_abs_cos=0.9993 fftest_zdim=0.6232 | dom_abs_cos:cd1=0.9870;cd2=0.9890;dfdcp=0.9790;ffiw=0.9796;wild=0.9793|dom_zdim_srcaxis:cd1=0.6357;cd2=0.5986;dfdcp=0.6581;ffiw=0.6852;wild=0.6122|dom_zdim_domaxis:cd1=0.6517;cd2=0.6111;dfdcp=0.6854;ffiw=0.7115;wild=0.6358
+G12_AXIS_C=src_zdim=0.1169 fftest_abs_cos=0.9124 fftest_zdim=0.1171 | dom_abs_cos:cd1=0.0930;cd2=0.3327;dfdcp=0.1431;ffiw=0.1470;wild=0.1225|dom_zdim_srcaxis:cd1=0.0237;cd2=0.0201;dfdcp=0.0154;ffiw=0.0156;wild=0.0138|dom_zdim_domaxis:cd1=0.0910;cd2=0.0621;dfdcp=0.1382;ffiw=0.2385;wild=0.0810
+G12_AXIS_F=src_zdim=0.8530 fftest_abs_cos=0.9998 fftest_zdim=0.8524 | dom_abs_cos:cd1=0.9967;cd2=0.9957;dfdcp=0.9920;ffiw=0.9893;wild=0.9978|dom_zdim_srcaxis:cd1=0.7369;cd2=0.7427;dfdcp=0.8308;ffiw=0.8138;wild=0.7671|dom_zdim_domaxis:cd1=0.7417;cd2=0.7488;dfdcp=0.8440;ffiw=0.8312;wild=0.7704
+G12_AXIS_V_proj=src_zdim=0.9387 fftest_abs_cos=1.0000 fftest_zdim=0.9385 | dom_abs_cos:cd1=0.9980;cd2=0.9969;dfdcp=0.9936;ffiw=0.9951;wild=0.9990|dom_zdim_srcaxis:cd1=0.9558;cd2=0.9495;dfdcp=0.9579;ffiw=0.9457;wild=0.9511|dom_zdim_domaxis:cd1=0.9596;cd2=0.9553;dfdcp=0.9700;ffiw=0.9550;wild=0.9530
+G12_AXIS_C_proj=src_zdim=0.3665 fftest_abs_cos=0.9933 fftest_zdim=0.3499 | dom_abs_cos:cd1=0.9835;cd2=0.9587;dfdcp=0.8888;ffiw=0.3337;wild=0.9525|dom_zdim_srcaxis:cd1=0.4817;cd2=0.3884;dfdcp=0.3483;ffiw=0.1973;wild=0.4055|dom_zdim_domaxis:cd1=0.4965;cd2=0.4159;dfdcp=0.4160;ffiw=0.3754;wild=0.4401
+G12_DELTA_RATIO_V_MINUS_C=cd1=-2.2140;cd2=-2.3574;dfdcp=-3.0573;ffiw=-2.6582;wild=-2.3014
+G12_DELTA_AUCREAL_V_MINUS_C=cd1=-0.2014;cd2=-0.1536;dfdcp=-0.1096;ffiw=-0.0578;wild=-0.0889
+G12_DELTA_RATIO_MEAN_V_MINUS_C=-2.5177
+G12_DELTA_AUCREAL_MEAN_V_MINUS_C=-0.1384
+G12_H6_COUNT_dratio_ge_1_0=0/5
+G12_H6_COUNT_dauc_ge_0_05=0/4
+G12_H6_COUNT_dauc_ge_0_05_all5=0/5
+G12_H6_VIT_ONLY=NOT-SUPPORT
+G12_H6_SHARED=SUPPORT
+G12_FRAMEWORK=INHERITS
+G12_FRAMEWORK_perdomain_INHERITS=5/5 (cd1,cd2,dfdcp,ffiw,wild)
+G12_FRAMEWORK_perdomain_MITIGATES=1/5 (dfdcp)
+G12_FRAMEWORK_perdomain_MITIGATES_auc=0/5 ()
+G12_CONDITION=CONDITIONAL_MIXED (branch=V, valid-domains mean)
+G12_CONDITION_C=REGION_LEVEL
+G12_CONDITION_F=REGION_LEVEL
+G12_CONDITION_mean_absdiff_ar_af=V=0.0228;C=0.0021;F=0.0278
+G12_CONDITION_auc_real_fake=V=0.8606/0.8630;C=0.9989/0.9972;F=0.9524/0.9564
+G12_VERDICT_SUMMARY=H6VIT=NOT-SUPPORT;H6SHARED=SUPPORT;FRAMEWORK=INHERITS;CONDITION=CONDITIONAL_MIXED
+G12_WALL_S=26.4
+G12_IMGS_READ=0
+G12_GPU=0
+G12_FORWARDS=0
+G12_THREADS=1
+G12_PROCESSES=1
+G12_NPZ_READ=2
+G12_CKPT_READ=1 (map_location=cpu; only deepfake_proj/vision_proj/clip_*_alpha)
+[done] report -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g12\g12_report.txt
+[done] stats  -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g12\g12_stats.npz

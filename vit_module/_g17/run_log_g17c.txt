@@ -1,0 +1,78 @@
+[G17c] anchor cross-domain V C=1e-3: cd1=0.8286(exp 0.8286) cd2=0.8633(exp 0.8633) dfdcp=0.8261(exp 0.8261) ffiw=0.8244(exp 0.8244) wild=0.8090(exp 0.809) maxdev=3.33e-05
+[G17c] ratio_V=0.1983(exp 0.1983) ratio_C=2.7160(exp 2.716)
+[G17c] hygiene: cd1(nvid=41,ov_ptr=0,ov_cd1=41,img_ov_ptr=0,img_ov_cd1=300) | cd2(nvid=124,ov_ptr=0,ov_cd1=41,img_ov_ptr=0,img_ov_cd1=84) | dfdcp(nvid=47,ov_ptr=0,ov_cd1=0,img_ov_ptr=0,img_ov_cd1=0) | ffiw(nvid=1,ov_ptr=0,ov_cd1=0,img_ov_ptr=0,img_ov_cd1=0) | wild(nvid=239,ov_ptr=8,ov_cd1=0,img_ov_ptr=9,img_ov_cd1=0)
+[G17c] arm V                      dim=  768 b1=0.9852 b2=cd1=0.8286;cd2=0.8633;dfdcp=0.8261;ffiw=0.8244;wild=0.8090
+[G17c] arm C_proj                 dim=  768 b1=0.8528 b2=cd1=0.5221;cd2=0.6054;dfdcp=0.6990;ffiw=0.7635;wild=0.6385
+[G17c] arm V|C_proj               dim= 1536 b1=0.9857 b2=cd1=0.7915;cd2=0.8505;dfdcp=0.8350;ffiw=0.8476;wild=0.8047
+[G17c] arm F1                     dim=   40 b1=0.5361 b2=cd1=0.5344;cd2=0.6892;dfdcp=0.5496;ffiw=0.5883;wild=0.4435
+[G17c] arm F1_radial              dim=   32 b1=0.5300 b2=cd1=0.5358;cd2=0.6982;dfdcp=0.5508;ffiw=0.5788;wild=0.4462
+[G17c] arm F2                     dim=    4 b1=0.4936 b2=cd1=0.5383;cd2=0.5912;dfdcp=0.6091;ffiw=0.5997;wild=0.4971
+[G17c] arm F3                     dim=   20 b1=0.5814 b2=cd1=0.6025;cd2=0.4812;dfdcp=0.5419;ffiw=0.5086;wild=0.5341
+[G17c] arm F3_hist                dim=   56 b1=0.6141 b2=cd1=0.5474;cd2=0.5984;dfdcp=0.5967;ffiw=0.6380;wild=0.5597
+[G17c] arm F4                     dim=   23 b1=0.5536 b2=cd1=0.5540;cd2=0.6404;dfdcp=0.4550;ffiw=0.5265;wild=0.4222
+[G17c] arm F5                     dim=    4 b1=0.5569 b2=cd1=0.3393;cd2=0.5912;dfdcp=0.4900;ffiw=0.5655;wild=0.5350
+[G17c] arm F_all                  dim=  123 b1=0.5921 b2=cd1=0.5719;cd2=0.6764;dfdcp=0.5740;ffiw=0.5544;wild=0.4830
+[G17c] arm dense121_db2           dim=  512 b1=0.7653 b2=cd1=0.4837;cd2=0.5467;dfdcp=0.6170;ffiw=0.7090;wild=0.5237
+[G17c] arm dense121_db3           dim= 1024 b1=0.7667 b2=cd1=0.5279;cd2=0.5739;dfdcp=0.6988;ffiw=0.6138;wild=0.5478
+[G17c] arm dense121_final         dim= 1024 b1=0.7103 b2=cd1=0.5253;cd2=0.6064;dfdcp=0.6073;ffiw=0.6169;wild=0.5496
+[G17c] arm effnet_b4_blk5         dim=  160 b1=0.7149 b2=cd1=0.5304;cd2=0.6175;dfdcp=0.6548;ffiw=0.7324;wild=0.5568
+[G17c] arm effnet_b4_blk6         dim=  272 b1=0.6628 b2=cd1=0.6327;cd2=0.6723;dfdcp=0.7502;ffiw=0.6365;wild=0.5727
+[G17c] arm effnet_b4_final        dim= 1792 b1=0.6552 b2=cd1=0.7328;cd2=0.6382;dfdcp=0.5595;ffiw=0.5481;wild=0.5792
+[G17c] arm resnet18_layer3        dim=  256 b1=0.6800 b2=cd1=0.5194;cd2=0.5917;dfdcp=0.7244;ffiw=0.6529;wild=0.4774
+[G17c] arm resnet18_layer4        dim=  512 b1=0.5604 b2=cd1=0.6583;cd2=0.6172;dfdcp=0.6225;ffiw=0.6199;wild=0.5864
+[G17c] arm V|F1                   dim=  808 b1=0.9867 b2=cd1=0.8395;cd2=0.8656;dfdcp=0.8331;ffiw=0.8238;wild=0.8048
+[G17c] arm V|F1_radial            dim=  800 b1=0.9868 b2=cd1=0.8396;cd2=0.8657;dfdcp=0.8333;ffiw=0.8240;wild=0.8052
+[G17c] arm V|F2                   dim=  772 b1=0.9851 b2=cd1=0.8287;cd2=0.8631;dfdcp=0.8258;ffiw=0.8236;wild=0.8092
+[G17c] arm V|F3                   dim=  788 b1=0.9855 b2=cd1=0.8306;cd2=0.8638;dfdcp=0.8259;ffiw=0.8256;wild=0.8093
+[G17c] arm V|F3_hist              dim=  824 b1=0.9862 b2=cd1=0.8178;cd2=0.8596;dfdcp=0.8301;ffiw=0.8191;wild=0.8017
+[G17c] arm V|F4                   dim=  791 b1=0.9858 b2=cd1=0.8277;cd2=0.8627;dfdcp=0.8257;ffiw=0.8227;wild=0.8089
+[G17c] arm V|F5                   dim=  772 b1=0.9851 b2=cd1=0.8297;cd2=0.8639;dfdcp=0.8265;ffiw=0.8249;wild=0.8093
+[G17c] arm V|F_all                dim=  891 b1=0.9882 b2=cd1=0.8452;cd2=0.8656;dfdcp=0.8352;ffiw=0.8188;wild=0.8061
+[G17c] arm V|dense121_db2         dim= 1280 b1=0.9893 b2=cd1=0.8403;cd2=0.8649;dfdcp=0.8186;ffiw=0.7966;wild=0.8066
+[G17c] arm V|dense121_db3         dim= 1792 b1=0.9872 b2=cd1=0.8723;cd2=0.8744;dfdcp=0.8188;ffiw=0.8058;wild=0.8174
+[G17c] arm V|dense121_final       dim= 1792 b1=0.9842 b2=cd1=0.8475;cd2=0.8615;dfdcp=0.8095;ffiw=0.8167;wild=0.8146
+[G17c] arm V|effnet_b4_blk5       dim=  928 b1=0.9871 b2=cd1=0.8438;cd2=0.8672;dfdcp=0.8164;ffiw=0.7999;wild=0.8132
+[G17c] arm V|effnet_b4_blk6       dim= 1040 b1=0.9865 b2=cd1=0.8402;cd2=0.8649;dfdcp=0.8201;ffiw=0.7991;wild=0.8210
+[G17c] arm V|effnet_b4_final      dim= 2560 b1=0.9840 b2=cd1=0.8448;cd2=0.8575;dfdcp=0.8113;ffiw=0.8008;wild=0.8048
+[G17c] arm V|resnet18_layer3      dim= 1024 b1=0.9867 b2=cd1=0.8515;cd2=0.8677;dfdcp=0.8160;ffiw=0.8024;wild=0.8196
+[G17c] arm V|resnet18_layer4      dim= 1280 b1=0.9858 b2=cd1=0.8252;cd2=0.8592;dfdcp=0.8228;ffiw=0.8007;wild=0.8126
+[G17c] arm V|C_proj|F1            dim= 1576 b1=0.9864 b2=cd1=0.7971;cd2=0.8533;dfdcp=0.8355;ffiw=0.8472;wild=0.8013
+[G17c] arm V|C_proj|F1_radial     dim= 1568 b1=0.9864 b2=cd1=0.7973;cd2=0.8536;dfdcp=0.8356;ffiw=0.8477;wild=0.8012
+[G17c] arm V|C_proj|F2            dim= 1540 b1=0.9857 b2=cd1=0.7907;cd2=0.8504;dfdcp=0.8348;ffiw=0.8473;wild=0.8047
+[G17c] arm V|C_proj|F3            dim= 1556 b1=0.9858 b2=cd1=0.7915;cd2=0.8507;dfdcp=0.8348;ffiw=0.8473;wild=0.8052
+[G17c] arm V|C_proj|F3_hist       dim= 1592 b1=0.9865 b2=cd1=0.7863;cd2=0.8499;dfdcp=0.8368;ffiw=0.8427;wild=0.8000
+[G17c] arm V|C_proj|F4            dim= 1559 b1=0.9864 b2=cd1=0.7911;cd2=0.8511;dfdcp=0.8357;ffiw=0.8443;wild=0.8041
+[G17c] arm V|C_proj|F5            dim= 1540 b1=0.9857 b2=cd1=0.7916;cd2=0.8506;dfdcp=0.8356;ffiw=0.8487;wild=0.8051
+[G17c] arm V|C_proj|F_all         dim= 1659 b1=0.9872 b2=cd1=0.8004;cd2=0.8523;dfdcp=0.8376;ffiw=0.8406;wild=0.8016
+[G17c] arm V|C_proj|dense121_db2  dim= 2048 b1=0.9886 b2=cd1=0.8046;cd2=0.8521;dfdcp=0.8328;ffiw=0.8384;wild=0.7963
+[G17c] arm V|C_proj|dense121_db3  dim= 2560 b1=0.9869 b2=cd1=0.8365;cd2=0.8628;dfdcp=0.8335;ffiw=0.8352;wild=0.8058
+[G17c] arm V|C_proj|dense121_final dim= 2560 b1=0.9851 b2=cd1=0.8132;cd2=0.8489;dfdcp=0.8281;ffiw=0.8510;wild=0.8076
+[G17c] arm V|C_proj|effnet_b4_blk5 dim= 1696 b1=0.9870 b2=cd1=0.8048;cd2=0.8554;dfdcp=0.8315;ffiw=0.8342;wild=0.8046
+[G17c] arm V|C_proj|effnet_b4_blk6 dim= 1808 b1=0.9867 b2=cd1=0.8041;cd2=0.8540;dfdcp=0.8396;ffiw=0.8354;wild=0.8120
+[G17c] arm V|C_proj|effnet_b4_final dim= 3328 b1=0.9843 b2=cd1=0.8110;cd2=0.8492;dfdcp=0.8212;ffiw=0.8519;wild=0.7954
+[G17c] arm V|C_proj|resnet18_layer3 dim= 1792 b1=0.9867 b2=cd1=0.8109;cd2=0.8551;dfdcp=0.8303;ffiw=0.8347;wild=0.8090
+[G17c] arm V|C_proj|resnet18_layer4 dim= 2048 b1=0.9854 b2=cd1=0.7950;cd2=0.8489;dfdcp=0.8302;ffiw=0.8455;wild=0.8085
+[G17c] oracle_V per-domain=cd1=0.9550;cd2=0.8956;dfdcp=0.9223;ffiw=0.9991;wild=0.8717 mean4=0.9111 (ref 0.9111)
+[G17c] computing capacity controls ...
+[G17c]   ctrl F1               K=40 done
+[G17c]   ctrl F1_radial        K=32 done
+[G17c]   ctrl F2               K=4 done
+[G17c]   ctrl F3               K=20 done
+[G17c]   ctrl F3_hist          K=56 done
+[G17c]   ctrl F4               K=23 done
+[G17c]   ctrl F5               K=4 done
+[G17c]   ctrl F_all            K=123 done
+[G17c]   ctrl dense121_db2     K=512 done
+[G17c]   ctrl dense121_db3     K=1024 done
+[G17c]   ctrl dense121_final   K=1024 done
+[G17c]   ctrl effnet_b4_blk5   K=160 done
+[G17c]   ctrl effnet_b4_blk6   K=272 done
+[G17c]   ctrl effnet_b4_final  K=1792 done
+[G17c]   ctrl resnet18_layer3  K=256 done
+[G17c]   ctrl resnet18_layer4  K=512 done
+[G17c] C1/C2/C3 done; e0 gap retention V: cd1=0.4268 cd2=0.4669 dfdcp=0.4644 ffiw=0.4296 wild=0.3833
+[G17c] C4 done
+[G17c] verdicts done; best_feat=dense121_db3 cheapest_effective=none
+[done] report -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g17\g17_report.txt
+[done] stats  -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g17\g17_stats.npz
+[done] anchor_pass=1 maxdev=3.33e-05 oracle_V_mean4=0.9111 best_feat=dense121_db3 wall=750.8s

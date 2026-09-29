@@ -1,0 +1,91 @@
+========================================================================================
+G8B REPORT - 跨域: FF++ 低级捷径在目标域漂移, 定量解释 V 跨域崩? (纯 CPU, 单线程)
+========================================================================================
+MACHINE_BLOCK
+G8B_SOURCE=probe  G8B_SRC_N=(196,196)  G8B_DOMAINS=cd1,cd2,dfdcp,ffiw,wild  G8B_TRANSFER_AUC_cd1=0.4904 G8B_TRANSFER_AUC_cd2=0.6187 G8B_TRANSFER_AUC_dfdcp=0.5814 G8B_TRANSFER_AUC_ffiw=0.5916 G8B_TRANSFER_AUC_wild=0.3845 G8B_V_AUC_cd1=0.8286 G8B_V_AUC_cd2=0.8633 G8B_V_AUC_dfdcp=0.8261 G8B_V_AUC_ffiw=0.8244 G8B_V_AUC_wild=0.8090 G8B_SPEARMAN_TRANSFER_VS_VAUC=0.6000 G8B_SPEARMAN_VERDICT=PARTIAL  G8B_VERDICT=PARTIAL
+
+Verification anchors (full-V LR cross-domain, fit FF++-train 2200, eval target 300):
+  expected V: cd1=0.8286 cd2=0.8633 dfdcp=0.8261 ffiw=0.8244 wild=0.8090
+  expected C: cd1=0.6559 cd2=0.7227 dfdcp=0.7068 ffiw=0.8344 wild=0.7170
+  recomputed V: cd1=0.8286 cd2=0.8633 dfdcp=0.8261 ffiw=0.8244 wild=0.8090
+  recomputed C: cd1=0.6559 cd2=0.7227 dfdcp=0.7068 ffiw=0.8344 wild=0.7170
+
+B1. 源池 (Source pool) —— 从 probe train (FF++) 按 path 分层采样, 每视频<=2 帧:
+  G8B_SOURCE = probe-train  real n=196 (videos=98), fake n=196 (videos=104)
+  fake 子方法覆盖: {'Face2Face': 51, 'Deepfakes': 51, 'NeuralTextures': 37, 'FaceSwap': 57}
+  源池内低级捷径 in-sample LR AUC (san sanity, 14-stat C=1e-3) = 0.6116
+
+B2. 源捷径签名 (FF++ 低级捷径判别方向): 14 统计按 |u| 降序
+  stat            Cohen d_src  u (std-coef)     |u|
+  spec_slope          -0.3385       -0.0264  0.0264
+  hi_en               -0.3151       -0.0228  0.0228
+  g_entropy           -0.2420       -0.0172  0.0172
+  ch_diff              0.1370        0.0108  0.0108
+  sat_mean            -0.1569       -0.0100  0.0100
+  g_mean              -0.1421       -0.0092  0.0092
+  colorfulness         0.1399        0.0092  0.0092
+  g_std               -0.1345       -0.0085  0.0085
+  lapl_var             0.0839        0.0067  0.0067
+  edge_density        -0.1364       -0.0067  0.0067
+  grad_mean            0.0766        0.0066  0.0066
+  blockiness          -0.0823       -0.0037  0.0037
+  sat_std              0.0119        0.0028  0.0028
+  noise_est           -0.0400        0.0018  0.0018
+  d_src 方向 = (fake-real)/pooled_sd; u 为 StandardScaler(fit 源) + LR(C=1e-3) 系数 (positive class=fake).
+
+B3. 跨 5 域相关 (n=5 域; Spearman; 判定门: |rho|>=0.7 SUPPORT, 0.4-0.7 PARTIAL):
+  correlation pair                         rho       p  expected
+  shortcut-transfer-AUC vs V-AUC        0.6000   0.285  positive
+  e0-axis-AUC vs V-AUC                  1.0000   0.000  positive
+  |top-stat drift| vs V-AUC             0.2000   0.747  negative
+  L2 drift-norm vs V-AUC                0.0000   1.000  negative
+  d_dom(strongest src stat) vs V-AUC   -0.5000   0.391  positive
+  域序 (按 V-AUC 降序) | transfer-AUC | e0-AUC | |top-drift| | V-AUC
+    cd2    | 0.6187 | 0.8604 |  0.557 | 0.8633
+    cd1    | 0.4904 | 0.8576 |  0.922 | 0.8286
+    dfdcp  | 0.5814 | 0.8322 |  0.503 | 0.8261
+    ffiw   | 0.5916 | 0.8103 |  0.386 | 0.8244
+    wild   | 0.3845 | 0.8060 |  0.768 | 0.8090
+  最强证据: transfer_vs_vauc 证据强度=0.6000
+
+B4. 逐域数值 (对照=复算 full-V / full-C 跨域 LR AUC; e0轴=单轴塌缩基线):
+  dom    n_real n_fake  transAUC   e0_AUC   V_full   C_full      top-drift stat  driftL2
+  cd1       150    150    0.4904   0.8576   0.8286   0.6559           noise_est    2.286
+  cd2       150    150    0.6187   0.8604   0.8633   0.7227             ch_diff    0.877
+  dfdcp     150    150    0.5814   0.8322   0.8261   0.7068              g_mean    1.047
+  ffiw      150    150    0.5916   0.8103   0.8244   0.8344        edge_density    0.607
+  wild      150    150    0.3845   0.8060   0.8090   0.7170            sat_mean    1.484
+  (V_full 与已知锚点一致到 ±0.0005; transAUC = 源 StandardScaler+u 对目标域低级统计打分的 fake-vs-real AUC)
+
+B5. 错误样本捷径签名 (Phase F 接续): V 判错的 fake 的源捷径得分 t 是否更靠 real 侧 (t 更小)?
+  'V判错fake'=V判成real的fake数; delta = t_mis - t_corr; 预期 delta<0 (mis 更靠 real 侧).
+  dom    n_fake    判错fake    t_mis   t_corr   t_real     delta
+  cd1       150        22    0.060    0.037    0.047          0.023
+  cd2       150        19    0.063    0.070    0.049         -0.007
+  dfdcp     150        33    0.067    0.086    0.054         -0.019
+  ffiw      150        73    0.148    0.094    0.107          0.054
+  wild      150        22    0.083    0.065    0.104          0.018
+  t = 源低级捷径判别得分 (higher = more fake-like). 预期: V判错fake 更近 real => t_mis < t_corr.
+
+B6. 审计:
+  source FF++ native h,w 中位数 = 161 x 156  (n=392)
+  cd1    native h,w 中位数 = 171 x 167  读图失败=0
+  cd2    native h,w 中位数 = 162 x 160  读图失败=0
+  dfdcp  native h,w 中位数 = 173 x 171  读图失败=0
+  ffiw   native h,w 中位数 = 123 x 118  读图失败=0
+  wild   native h,w 中位数 = 224 x 224  读图失败=0
+  总体读图失败数 = 0 / 1892
+
+VERDICT logic:
+  primary rho(transfer-AUC, V-AUC) = 0.6000 (p=0.285); e0 baseline rho=1.0000; topdrift rho=0.2000; driftL2 rho=0.0000; strongstat rho=-0.5000
+  最强支持证据 = transfer_vs_vauc (0.6000) -> G8B_VERDICT = PARTIAL
+
+Caveats (honest):
+  * n=5 域 Spearman 只有序数意义, p 值不可靠; 一个域即可翻盘.
+  * 图像原生多为 ~150px 量级, 上采样到 224 再算统计; hi_en/spec_slope 等高频量被轻微平滑,对源捷径估计只造成保守偏差 (低估分离).
+  * u 维度=14, LR(C=1e-3) 强正则, 系数稳定; 但源池每视频<=2帧, real 封顶 196. Cohen d / u是 FF++ train 子样本上的经验量, 非全 FF++ 的无偏估计.
+  * full-V LR 在 2200 个 FF++ train 上拟合, 决策在 768 维; 控制值与已知锚点一致到 4 位小数,排除了协议实现差异.
+  * B5 用 0.5 决策阈值定义 V 判错, 只比较各域内相对均值; 若某域几乎无判错 fake, 样本量小,均值噪声大.
+  * Spearman 相关不构成因果; 即使捷径迁移与 V 崩相关, 也不能证明 ViT '使用' 了这些统计,只能证明两类跨域失效模式同向共变.
+
+wall time = 1.2s

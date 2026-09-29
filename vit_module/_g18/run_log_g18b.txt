@@ -1,0 +1,139 @@
+[gpu] nvidia-smi query=[(0, 4262, 3), (1, 5447, 70), (2, 64, 0)]
+[gpu] CUDA_VISIBLE_DEVICES=2 ; target physical GPU index 2
+[gpu] physical GPU 2 mem.used=64MiB -> IDLE (<=100MiB)
+[torch] 2.2.2+cu118 ; device=NVIDIA GeForce GTX 1080 Ti ; threads=4
+[probe] probe-test folders = 84
+[ffpp] train videos: real=718 fake=3590 total=4308 missing=12 excluded_by_probe_test=0
+[leak] ffpp train folders (basename) intersect probe-test: 0
+[audit] cd1 folder names subset of cd2 folder names: True (cd1=49 cd2=173 inter=49)
+[leak dfdcp] held-out folders in training (full-path): 0
+[split dfdcp] train videos=4356 (real 929/fake 3427) ; val videos=484 (real 103/fake 381) train domains=['cd1', 'cd2', 'ffiw', 'wild']
+==========================================================================================
+TRAIN model df_lodo_dfdcp
+==========================================================================================
+[train] videos real=929 fake=3427 ; frames before balance=38638 after=35160
+[preload] decoded 39032 unique images (train+val) in 323.0s
+[epoch 01/20] loss=0.2736 acc=0.8784 val_auc=0.9458 val_acc=0.8675 *BEST* (299s)
+[epoch 02/20] loss=0.1215 acc=0.9540 val_auc=0.9610 val_acc=0.8851 *BEST* (291s)
+[epoch 03/20] loss=0.0859 acc=0.9679 val_auc=0.9532 val_acc=0.9044 (290s)
+[epoch 04/20] loss=0.0713 acc=0.9733 val_auc=0.9700 val_acc=0.9225 *BEST* (292s)
+[epoch 05/20] loss=0.0563 acc=0.9795 val_auc=0.9702 val_acc=0.9272 *BEST* (287s)
+[epoch 06/20] loss=0.0490 acc=0.9824 val_auc=0.9642 val_acc=0.9267 (287s)
+[epoch 07/20] loss=0.0455 acc=0.9838 val_auc=0.9671 val_acc=0.9207 (290s)
+[epoch 08/20] loss=0.0395 acc=0.9862 val_auc=0.9561 val_acc=0.8988 (284s)
+[epoch 09/20] loss=0.0349 acc=0.9874 val_auc=0.9721 val_acc=0.9292 *BEST* (283s)
+[epoch 10/20] loss=0.0302 acc=0.9897 val_auc=0.9704 val_acc=0.9220 (284s)
+[epoch 11/20] loss=0.0329 acc=0.9883 val_auc=0.9560 val_acc=0.9158 (284s)
+[epoch 12/20] loss=0.0286 acc=0.9902 val_auc=0.9590 val_acc=0.9013 (287s)
+[epoch 13/20] loss=0.0279 acc=0.9898 val_auc=0.9648 val_acc=0.9135 (285s)
+[epoch 14/20] loss=0.0262 acc=0.9909 val_auc=0.9663 val_acc=0.9163 (283s)
+[epoch 15/20] loss=0.0229 acc=0.9919 val_auc=0.9701 val_acc=0.9295 (284s)
+[early-stop] no val_auc improvement for 6 epochs at epoch 15
+[done] best val_auc=0.9721 (epoch 9)  weight_src=
+[held-out dfdcp] base-300 AUC=0.7343 (n=300) ; expanded AUC=0.7272 (n=2257)
+[save] E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g18\df_lodo_dfdcp.pth
+  [extract dfdcp] 32/5300 wall=0s
+  [extract dfdcp] 832/5300 wall=5s
+  [extract dfdcp] 1632/5300 wall=10s
+  [extract dfdcp] 2432/5300 wall=15s
+  [extract dfdcp] 3232/5300 wall=21s
+  [extract dfdcp] 4032/5300 wall=26s
+  [extract dfdcp] 4832/5300 wall=31s
+[align dfdcp] feats paths == _g17/cnn_feats.npz paths: True
+
+[ratio dfdcp] source=probe-train n=2200 ; targets=cd1,cd2,dfdcp,ffiw,wild
+  arm        dim     s     class_gap |       cd1       cd2     dfdcp      ffiw      wild   (ratio=dom_gap/class_gap)
+  dense121_db2  512   0.046   2.3505  |    3.9155    4.3082    4.4097    6.8491    4.9884   | mean=4.8942
+  dense121_db3 1024   0.025  11.6035  |    2.2123    2.3263    1.8084    2.7284    2.0538   | mean=2.2259
+  dense121_final 1024   0.666  38.0752  |    1.0814    1.0123    0.3322    0.3913    0.5393   | mean=0.6713
+[leak cd2] held-out folders in training (full-path): 0
+[leak cd2] cd1 folders in training (full-path): 0
+[split cd2] train videos=4219 (real 811/fake 3408) ; val videos=469 (real 90/fake 379) train domains=['dfdcp', 'ffiw', 'wild']
+==========================================================================================
+TRAIN model df_lodo_cd2
+==========================================================================================
+[train] videos real=811 fake=3408 ; frames before balance=32480 after=31966
+[preload] decoded 35718 unique images (train+val) in 176.6s
+[epoch 01/20] loss=0.2790 acc=0.8779 val_auc=0.9285 val_acc=0.8689 *BEST* (304s)
+[epoch 02/20] loss=0.1243 acc=0.9516 val_auc=0.9570 val_acc=0.9118 *BEST* (299s)
+[epoch 03/20] loss=0.0873 acc=0.9670 val_auc=0.9550 val_acc=0.9107 (298s)
+[epoch 04/20] loss=0.0726 acc=0.9732 val_auc=0.9548 val_acc=0.9240 (299s)
+[epoch 05/20] loss=0.0599 acc=0.9774 val_auc=0.9594 val_acc=0.9067 *BEST* (297s)
+[epoch 06/20] loss=0.0543 acc=0.9806 val_auc=0.9709 val_acc=0.9291 *BEST* (304s)
+[epoch 07/20] loss=0.0459 acc=0.9836 val_auc=0.9610 val_acc=0.9171 (298s)
+[epoch 08/20] loss=0.0440 acc=0.9844 val_auc=0.9655 val_acc=0.9224 (298s)
+[epoch 09/20] loss=0.0388 acc=0.9861 val_auc=0.9673 val_acc=0.9278 (298s)
+[epoch 10/20] loss=0.0319 acc=0.9886 val_auc=0.9617 val_acc=0.9174 (298s)
+[epoch 11/20] loss=0.0318 acc=0.9894 val_auc=0.9578 val_acc=0.9198 (303s)
+[epoch 12/20] loss=0.0278 acc=0.9899 val_auc=0.9644 val_acc=0.9174 (299s)
+[early-stop] no val_auc improvement for 6 epochs at epoch 12
+[done] best val_auc=0.9709 (epoch 6)  weight_src=
+[held-out cd2] base-300 AUC=0.6707 (n=300) ; expanded AUC=0.6966 (n=8000)
+[save] E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g18\df_lodo_cd2.pth
+  [extract cd2] 32/5300 wall=0s
+  [extract cd2] 832/5300 wall=5s
+  [extract cd2] 1632/5300 wall=11s
+  [extract cd2] 2432/5300 wall=16s
+  [extract cd2] 3232/5300 wall=21s
+  [extract cd2] 4032/5300 wall=26s
+  [extract cd2] 4832/5300 wall=31s
+[align cd2] feats paths == _g17/cnn_feats.npz paths: True
+
+[ratio cd2] source=probe-train n=2200 ; targets=cd1,cd2,dfdcp,ffiw,wild
+  arm        dim     s     class_gap |       cd1       cd2     dfdcp      ffiw      wild   (ratio=dom_gap/class_gap)
+  dense121_db2  512   0.048   2.2540  |    3.9336    4.2529    4.1219    6.7346    4.5658   | mean=4.7218
+  dense121_db3 1024   0.023  13.9980  |    1.4609    1.5117    1.4682    1.8048    1.3632   | mean=1.5218
+  dense121_final 1024   0.728  40.5379  |    0.2880    0.2910    0.2863    0.2606    0.2859   | mean=0.2824
+[leak wild] held-out folders in training (full-path): 0
+[split wild] train videos=4149 (real 819/fake 3330) ; val videos=461 (real 91/fake 370) train domains=['cd1', 'cd2', 'dfdcp', 'ffiw']
+==========================================================================================
+TRAIN model df_lodo_wild
+==========================================================================================
+[train] videos real=819 fake=3330 ; frames before balance=29714 after=26572
+[preload] decoded 30260 unique images (train+val) in 120.7s
+[epoch 01/20] loss=0.2832 acc=0.8765 val_auc=0.9563 val_acc=0.9124 *BEST* (237s)
+[epoch 02/20] loss=0.1323 acc=0.9492 val_auc=0.9554 val_acc=0.8831 (236s)
+[epoch 03/20] loss=0.0918 acc=0.9654 val_auc=0.9560 val_acc=0.9078 (233s)
+[epoch 04/20] loss=0.0746 acc=0.9721 val_auc=0.9660 val_acc=0.9233 *BEST* (237s)
+[epoch 05/20] loss=0.0620 acc=0.9772 val_auc=0.9685 val_acc=0.9322 *BEST* (236s)
+[epoch 06/20] loss=0.0565 acc=0.9802 val_auc=0.9634 val_acc=0.9330 (233s)
+[epoch 07/20] loss=0.0487 acc=0.9822 val_auc=0.9676 val_acc=0.9027 (236s)
+[epoch 08/20] loss=0.0432 acc=0.9843 val_auc=0.9657 val_acc=0.9276 (235s)
+[epoch 09/20] loss=0.0381 acc=0.9863 val_auc=0.9727 val_acc=0.9349 *BEST* (234s)
+[epoch 10/20] loss=0.0391 acc=0.9847 val_auc=0.9709 val_acc=0.9357 (237s)
+[epoch 11/20] loss=0.0319 acc=0.9892 val_auc=0.9699 val_acc=0.9406 (236s)
+[epoch 12/20] loss=0.0320 acc=0.9889 val_auc=0.9590 val_acc=0.8921 (233s)
+[epoch 13/20] loss=0.0302 acc=0.9895 val_auc=0.9787 val_acc=0.9366 *BEST* (236s)
+[epoch 14/20] loss=0.0293 acc=0.9893 val_auc=0.9766 val_acc=0.9433 (237s)
+[epoch 15/20] loss=0.0263 acc=0.9908 val_auc=0.9761 val_acc=0.9189 (233s)
+[epoch 16/20] loss=0.0253 acc=0.9908 val_auc=0.9683 val_acc=0.9208 (235s)
+[epoch 17/20] loss=0.0237 acc=0.9916 val_auc=0.9695 val_acc=0.9357 (238s)
+[epoch 18/20] loss=0.0248 acc=0.9910 val_auc=0.9798 val_acc=0.9458 *BEST* (232s)
+[epoch 19/20] loss=0.0175 acc=0.9941 val_auc=0.9596 val_acc=0.9249 (238s)
+[epoch 20/20] loss=0.0249 acc=0.9910 val_auc=0.9693 val_acc=0.9300 (235s)
+[done] best val_auc=0.9798 (epoch 18)  weight_src=
+[held-out wild] base-300 AUC=0.7722 (n=300) ; expanded AUC=0.7172 (n=8000)
+[save] E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g18\df_lodo_wild.pth
+  [extract wild] 32/5300 wall=0s
+  [extract wild] 832/5300 wall=6s
+  [extract wild] 1632/5300 wall=11s
+  [extract wild] 2432/5300 wall=16s
+  [extract wild] 3232/5300 wall=22s
+  [extract wild] 4032/5300 wall=27s
+  [extract wild] 4832/5300 wall=31s
+[align wild] feats paths == _g17/cnn_feats.npz paths: True
+
+[ratio wild] source=probe-train n=2200 ; targets=cd1,cd2,dfdcp,ffiw,wild
+  arm        dim     s     class_gap |       cd1       cd2     dfdcp      ffiw      wild   (ratio=dom_gap/class_gap)
+  dense121_db2  512   0.048   2.4656  |    4.0075    4.3448    4.1729    6.7800    4.7964   | mean=4.8203
+  dense121_db3 1024   0.026  12.6901  |    1.8980    1.9697    1.8978    2.2370    1.7388   | mean=1.9483
+  dense121_final 1024   0.776  41.4704  |    0.4817    0.4542    0.2722    0.2647    0.2147   | mean=0.3375
+
+==========================================================================================
+G18B SUMMARY
+==========================================================================================
+[dfdcp] best_val_auc=0.9721 (epoch 9)  held-out base-300 AUC=0.7343  expanded AUC=0.7272  n_train=35160 n_val=3872  align=True
+[cd2] best_val_auc=0.9709 (epoch 6)  held-out base-300 AUC=0.6707  expanded AUC=0.6966  n_train=31966 n_val=3752  align=True
+[wild] best_val_auc=0.9798 (epoch 18)  held-out base-300 AUC=0.7722  expanded AUC=0.7172  n_train=26572 n_val=3688  align=True
+
+[wall] total = 13596.2 s

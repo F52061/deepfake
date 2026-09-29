@@ -1,0 +1,151 @@
+==============================================================================
+[GPU] BEFORE RUN -- gpu0: used=4961MiB/11264MiB util=0%; gpu1: used=0MiB/11264MiB util=0%; gpu2: used=85MiB/11264MiB util=0%
+[GPU] gate (physical index 1 must be <=100 MiB): PASS
+==============================================================================
+[GPU] torch sees 1 device(s): NVIDIA GeForce GTX 1080 Ti  (physical index pinned to 1)
+==============================================================================
+G22 PHASE-1 VERIFICATION
+==============================================================================
+[preprocess] EXACTLY the training-script pipeline:
+  cv2.imread(IMREAD_COLOR) -> cvtColor BGR2RGB -> cv2.resize((336,336))
+  -> albumentations Compose([Normalize(mean=[0.48145466, 0.4578275, 0.40821073], std=[0.26862954, 0.26130258, 0.27577711]), ToTensorV2()])
+  (this is FFPPDataset.__getitem__ / train_bridge_phase1.IMG_TO_TENSOR verbatim)
+[preprocess] ViT branch then gets: denormalize->[0,1] -> bilinear 224 -> (x-0.5)/0.5  (model._preprocess_for_vit)
+Freezing CLIP vision encoder.
+[build] model constructed in 5.5s
+[ViT_M2F2Det_Bridge] Loaded 162 ViT backbone keys, skipped 2 classification head keys.
+  Missing keys (BridgeAdapter etc, expected): 662
+  Unexpected keys: 0
+[build] shipped ckpt: 824 keys, missing=0 unexpected=0
+[build] ViT ckpt=E:\Cross-domain_authentication_verification\PDI\results\Ama1_aps1_1\net_050.pth
+[build] CLIP=E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\checkpoints\clip-vit-large-patch14-336
+[build] shipped=E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\checkpoints\stage_1\bridge_v2_phase1.pth
+[build] wall=15.4s  gpu_mem=1988 MiB
+[model] bridge_adapter_proj.bridge_adapter_proj = Sequential(
+  (0): View()
+  (1): Linear(in_features=64, out_features=1, bias=True)
+  (2): LayerNorm((1,), eps=1e-05, elementwise_affine=True)
+)
+[model] LayerNorm(1) eps=1e-05 weight=[0.999358057975769] bias=[0.018901443108916283]
+[data] train split E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\dataset\data_2023\ffpp_train_split.txt: 107700 lines, real(exist)=21540 fake(exist)=86160
+[task2] batch = 8 REAL FF++ training images, target=0 (real) for all, shape=(8, 3, 336, 336)
+
+==============================================================================
+TASK 2 -- prove the bug, prove the fix
+==============================================================================
+C:\Users\Supor2\.conda\envs\M2F2_Det\lib\site-packages\flash_attn\modules\mha.py:89: UserWarning: 1Torch was not compiled with flash attention. (Triggered internally at ..\aten\src\ATen\native\transformers\cuda\sdp_utils.cpp:263.)
+  out = F.scaled_dot_product_attention(
+[2a] UNMODIFIED model: loss=6.651219
+      grad_norm  linear_vit_lst[0].weight                                   = 0.0
+      grad_norm  linear_vit_lst[2].weight                                   = 0.0
+      grad_norm  clip_reduction.weight                                      = 0.0
+      grad_norm  bridge_adapter[0].attn.Wqkv.weight                         = 0.0
+      grad_norm  bridge_adapter_proj.bridge_adapter_reduction[0].weight     = 0.02702440321445465
+      grad_norm  clip_text_alpha                                            = 0.01865025982260704
+      grad_norm  bridge_adapter_proj.bridge_adapter_proj.1.weight(pre-LN Linear) = 0.0
+      grad_norm  bridge_adapter_proj.bridge_adapter_reduction.1.weight(LN tail) = 0.014145426452159882
+      grad_norm  output.weight                                              = 32.741519927978516
+      grad_norm  deepfake_proj[0].weight                                    = 4.498588562011719
+      grad_norm  vision_proj[0].weight                                      = 6.772491931915283
+      grad_norm  text_proj[0].weight                                        = None
+      grad_norm  clip_vision_alpha                                          = 4.4715399742126465
+      grad_norm  clip_text_encoder.prompt_tokens                            = None
+      grad_norm  vit.blocks[0].attn.qkv.weight (frozen)                     = None
+
+[2c] UNMODIFIED clip_adapt_embed (after clip_text_alpha), 4 images:
+      row0 [0:8] = [0.008284060284495354, 0.009123420342803001, 0.006879869848489761, 0.005117409862577915, 0.0031707300804555416, 0.35541263222694397, 0.005056899972259998, 0.00715275015681982]  norm=12.16277790
+      row1 [0:8] = [0.008284060284495354, 0.009123420342803001, 0.006879869848489761, 0.005117409862577915, 0.0031707300804555416, 0.35541263222694397, 0.005056899972259998, 0.00715275015681982]  norm=12.16277790
+      row2 [0:8] = [0.008284060284495354, 0.009123420342803001, 0.006879869848489761, 0.005117409862577915, 0.0031707300804555416, 0.35541263222694397, 0.005056899972259998, 0.00715275015681982]  norm=12.16277790
+      row3 [0:8] = [0.008284060284495354, 0.009123420342803001, 0.006879869848489761, 0.005117409862577915, 0.0031707300804555416, 0.35541263222694397, 0.005056899972259998, 0.00715275015681982]  norm=12.16277790
+[2c] UNMODIFIED max |row_i - row_j| over all 6 pairs = 0.000e+00  (bitwise identical? True)
+
+==============================================================================
+TASK 3 -- R0 baseline AUC (unmodified shipped checkpoint)
+==============================================================================
+[task3] rows=4500  missing_image_files=0
+    [R0-unmodified] 960/4500  72.3s  (13.3 img/s)
+    [R0-unmodified] 1920/4500  144.9s  (13.3 img/s)
+    [R0-unmodified] 2880/4500  217.3s  (13.3 img/s)
+    [R0-unmodified] 3840/4500  286.5s  (13.4 img/s)
+[task3] R0-unmodified: scored 4500 images in 334.4s
+[task3] R0 UNMODIFIED shipped checkpoint:
+      AUC ffpp_test   = 0.9880
+      AUC cd1         = 0.8042
+      AUC cd2         = 0.8429
+      AUC dfdcp       = 0.8379
+      AUC ffiw        = 0.8594
+      AUC wild        = 0.7913
+      AUC mean4dom    = 0.8191   (cd1,cd2,dfdcp,wild -- ffiw EXCLUDED)
+[gpu] after R0 eval: allocated=2058 MiB  peak=5476 MiB
+
+==============================================================================
+APPLY FIX-A  (monkeypatch: (View, Linear, LayerNorm(1)) -> (View, Linear))
+==============================================================================
+[FIX-A] replaced bridge_adapter_proj.bridge_adapter_proj (View,Linear,LayerNorm(1)) -> (View,Linear)
+[FIX-A] linear weight max|diff| vs ckpt = 0.000e+00  bias max|diff| = 0.000e+00
+[2d] replacement Linear weight/bias vs shipped checkpoint copy: max|diff| = 0.000e+00 / 0.000e+00   (exact? True)
+[model] new bridge_adapter_proj.bridge_adapter_proj = Sequential(
+  (0): View()
+  (1): Linear(in_features=64, out_features=1, bias=True)
+)
+[2b] FIXED model: loss=6.643604  (unmodified loss was 6.651219)
+      grad_norm  linear_vit_lst[0].weight                                   = 0.012583598494529724
+      grad_norm  linear_vit_lst[2].weight                                   = 0.00964437797665596
+      grad_norm  clip_reduction.weight                                      = 0.08660027384757996
+      grad_norm  bridge_adapter[0].attn.Wqkv.weight                         = 0.0033111572265625
+      grad_norm  bridge_adapter_proj.bridge_adapter_reduction[0].weight     = 0.040759894996881485
+      grad_norm  clip_text_alpha                                            = 0.014370923861861229
+      grad_norm  bridge_adapter_proj.bridge_adapter_proj.1.weight(pre-LN Linear) = 0.12088893353939056
+      grad_norm  bridge_adapter_proj.bridge_adapter_reduction.1.weight(LN tail) = 0.010796518996357918
+      grad_norm  output.weight                                              = 30.683002471923828
+      grad_norm  deepfake_proj[0].weight                                    = 4.498579502105713
+      grad_norm  vision_proj[0].weight                                      = 6.77247953414917
+      grad_norm  text_proj[0].weight                                        = None
+      grad_norm  clip_vision_alpha                                          = 4.471548080444336
+      grad_norm  clip_text_encoder.prompt_tokens                            = None
+      grad_norm  vit.blocks[0].attn.qkv.weight (frozen)                     = None
+
+[2c] FIXED clip_adapt_embed (after clip_text_alpha), same 4 images:
+      row0 [0:8] = [-0.00011711000115610659, 0.013812759891152382, 0.008928620256483555, -0.013807199895381927, 0.0009215099853463471, 0.3398858308792114, 0.006618780083954334, -0.002280479995533824]  norm=12.16323471
+      row1 [0:8] = [0.005703980103135109, 0.0022567100822925568, 0.0009310499881394207, 0.0007734399987384677, 0.003798319958150387, 0.35147324204444885, -0.001270639942958951, 0.014967760071158409]  norm=12.16268730
+      row2 [0:8] = [-0.0037023199256509542, -0.0008493600180372596, -0.00677104014903307, -0.0034432399552315474, -0.005804960150271654, 0.3389473557472229, 0.009339500218629837, 0.01735619083046913]  norm=12.16293430
+      row3 [0:8] = [0.04119338095188141, 0.04359466955065727, 0.017592620104551315, 0.014333199709653854, -0.017085619270801544, 0.3784158527851105, 0.011763730086386204, 0.05271359905600548]  norm=12.16125298
+[2c] FIXED max |row_i - row_j| over all 6 pairs = 6.932921e-02  (rows differ? True)
+
+[GATE] 2a all-zero-except-alpha : FAIL
+[GATE] 2b all-nonzero           : PASS
+[GATE] 2c identical -> differ   : PASS  (0.000e+00 -> 6.932921e-02)
+[GATE] 2d weight copy exact     : PASS
+
+==============================================================================
+TASK 3b -- same shipped weights, FIX-A applied, no training
+==============================================================================
+    [R0-fixed] 960/4500  64.8s  (14.8 img/s)
+    [R0-fixed] 1920/4500  129.9s  (14.8 img/s)
+    [R0-fixed] 2880/4500  195.3s  (14.7 img/s)
+    [R0-fixed] 3840/4500  259.8s  (14.8 img/s)
+[task3] R0-fixed: scored 4500 images in 304.0s
+[task3] R0 FIXED (no training):
+      AUC ffpp_test   = 0.9880
+      AUC cd1         = 0.8043
+      AUC cd2         = 0.8428
+      AUC dfdcp       = 0.8379
+      AUC ffiw        = 0.8594
+      AUC wild        = 0.7913
+      AUC mean4dom    = 0.8191   (cd1,cd2,dfdcp,wild -- ffiw EXCLUDED)
+[task3] mean|score_fixed - score_unmodified| = 0.0005   max=0.0817
+[gpu] after fixed eval: allocated=2058 MiB  peak=5476 MiB
+
+==============================================================================
+TASK 4 -- throughput (forward+backward, batch 32, ~200 images)
+==============================================================================
+[task4] loaded+preprocessed 224 images (+H2D) in 1.34s = 6.0 ms/img
+[task4] 7 batches x 32 = 224 imgs
+[task4] fwd=13.74s  bwd=0.11s  total(compute)=16.35s
+[task4] epochs per ... : model was on device already (weights resident)
+[task4] compute only   : 73.01 ms/img -> 2.18 h / 107,700 imgs
+[task4] load+compute   : 78.99 ms/img -> 2.36 h / 107,700 imgs
+
+[done] report -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g22\phase1_report.txt
+[done] stats  -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g22\phase1_stats.json / E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g22\phase1_stats.npz
+[GATE] TASK2=FAIL R0 mean4dom=0.8191 FIXED mean4dom=0.8191

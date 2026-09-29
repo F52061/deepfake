@@ -1,0 +1,231 @@
+[gpu] nvidia-smi (index,mem.used,util)=[(0, 5050, 1), (1, 1543, 0), (2, 64, 0)]
+[gpu] CUDA_VISIBLE_DEVICES=2 (target physical GPU index 2)
+[gpu] physical GPU 2 mem.used=64 MiB -> IDLE (<=100 MiB)
+[threads] OMP=4 MKL=4 OPENBLAS=4 NUMEXPR=4 ; torch.set_num_threads -> 4 ; cv2.setNumThreads(0) ; DataLoader num_workers=2
+[torch] 2.2.2+cu118 ; device=NVIDIA GeForce GTX 1080 Ti ; fp32 ; threads=4
+[preproc] using detector's own ViT_M2F2Det_Bridge._preprocess_for_vit
+[eval] 5300 rows ; probe=3000 (train_mask 2200) ; multi=2300 ; alignment vs _g17/cnn_feats.npz = True
+[probe] distinct FF++ video-folder identities in the 3000 probe rows = 670
+[probe] identity positive-control: vid_id_of_folder(x)==x for 200/670 probe chains -> OK
+[ffpp] train videos: real=718 fake=3590 total=4308 missing=12 excluded_by_probe_dirchain=0
+[probe] exclusion POSITIVE CONTROL: 40/40 constructed FF++ folders for probe source ids would be caught by the directory-chain filter (0 miss)
+[target] cd2   training videos=173 (real 121 / fake 52)
+[target] dfdcp training videos=70 (real 28 / fake 42)
+[target] ffiw  training videos=10 (real 5 / fake 5)
+[leak wild] held-out video folders=300 ; intersection with training folders=0
+[leak cd1] cd1 video folders=49 ; intersection with training folders=0
+[leak probe] 3000 probe rows -> 670 video folders ; intersection with training folders=0
+[audit] cd1 basenames subset of cd2 basenames: True (cd1=49 cd2=173 inter=49) -> cd1 excluded always
+[split] train videos=4105 (real 785 / fake 3320) ; val videos=456 (real 87 / fake 369) ; NO frame of `wild` is present in either
+[pool] frames before balance=27666 after=25550
+[leak frame-level] FF++ training frames from the 5300 eval set: 0 (must be 0) ; target-domain training frames that ARE eval rows: 7458 (expected: cd2/dfdcp/ffiw are CONTAMINATED training domains)
+[val] samples=648 over 8 cells: cd2/fake=120, cd2/real=120, dfdcp/fake=120, dfdcp/real=120, ffiw/fake=24, ffiw/real=24, ffpp/fake=384, ffpp/real=384
+[ckpt] ViT state keys=162 (91.4M params, num_classes=0)
+
+============================================================================================
+ARM R0 -- frozen ViT (no training)
+============================================================================================
+    [extract R0] 32/5300 wall=25s
+    [extract R0] 832/5300 wall=30s
+    [extract R0] 1632/5300 wall=34s
+    [extract R0] 2432/5300 wall=38s
+    [extract R0] 3232/5300 wall=43s
+    [extract R0] 4032/5300 wall=47s
+    [extract R0] 4832/5300 wall=51s
+[R0] in-domain FF++800 AUC = 0.9852 (anchor 0.9852)
+  [R0] cd1    AUC = 0.8286 (anchor 0.8286, dev +0.0000)
+  [R0] cd2    AUC = 0.8633 (anchor 0.8633, dev +0.0000)
+  [R0] dfdcp  AUC = 0.8261 (anchor 0.8261, dev -0.0000)
+  [R0] ffiw   AUC = 0.8244 (anchor 0.8244, dev -0.0000)
+  [R0] wild   AUC = 0.8090 (anchor 0.8090, dev +0.0000)
+[R0] max|feat - probe_feats.npz V| = 0.000e+00 ; max|feat - feats_multi.npz V| = 3.159e-05
+[R0 GATE] max|dev| over 5 domains=0.0000 ; |dev| in-domain=0.0000 ; tol=0.005 -> PASS (extraction reproduces the frozen anchor)
+
+============================================================================================
+ARM R1  (held-out=wild)
+============================================================================================
+[R1] TRAINING LABELS SHUFFLED (random permutation of the real label vector)
+[pool] n=25550 ; cells: cd2/fake=2818, cd2/real=2860, dfdcp/fake=772, dfdcp/real=777, ffiw/fake=114, ffiw/real=117, ffpp/fake=9071, ffpp/real=9021
+[lora] target modules=24 (blocks[*].attn.qkv + blocks[*].attn.proj) r=16 alpha=32 dropout=0.0
+[lora] LoRA trainable params=884736 (0.8847M) ; head trainable params=1538
+[obj] lambda=0.0 -> objective = CE ; balanced sampler: 8 cells x 4 = batch 32, 250 steps/epoch
+[R1 epoch 01/12] loss=0.7025 ce=0.7025 acc=0.5385 val_auc=0.3245 | cd2=0.4444 dfdcp=0.3711 ffiw=0.8828 ffpp=0.2593  *BEST* (141s)
+[R1 epoch 02/12] loss=0.6493 ce=0.6493 acc=0.5931 val_auc=0.3248 | cd2=0.3941 dfdcp=0.4342 ffiw=0.8125 ffpp=0.2434  *BEST* (129s)
+[R1 epoch 03/12] loss=0.5806 ce=0.5806 acc=0.6501 val_auc=0.2858 | cd2=0.2850 dfdcp=0.3563 ffiw=0.7109 ffpp=0.2335 (129s)
+[R1 epoch 04/12] loss=0.5156 ce=0.5156 acc=0.6899 val_auc=0.2424 | cd2=0.3969 dfdcp=0.3320 ffiw=0.2266 ffpp=0.1599 (131s)
+[R1 epoch 05/12] loss=0.4751 ce=0.4751 acc=0.7140 val_auc=0.3645 | cd2=0.4759 dfdcp=0.3954 ffiw=0.3438 ffpp=0.3038  *BEST* (132s)
+[R1 epoch 06/12] loss=0.4519 ce=0.4519 acc=0.7290 val_auc=0.6327 | cd2=0.4844 dfdcp=0.4992 ffiw=0.2500 ffpp=0.7548  *BEST* (130s)
+[R1 epoch 07/12] loss=0.4146 ce=0.4146 acc=0.7519 val_auc=0.3082 | cd2=0.4041 dfdcp=0.4289 ffiw=0.2266 ffpp=0.2243 (130s)
+[R1 epoch 08/12] loss=0.3931 ce=0.3931 acc=0.7630 val_auc=0.5071 | cd2=0.4644 dfdcp=0.4732 ffiw=0.3125 ffpp=0.5686 (131s)
+[R1 epoch 09/12] loss=0.3790 ce=0.3790 acc=0.7699 val_auc=0.3496 | cd2=0.3975 dfdcp=0.4090 ffiw=0.2656 ffpp=0.3098 (131s)
+[R1 epoch 10/12] loss=0.3593 ce=0.3593 acc=0.7879 val_auc=0.5970 | cd2=0.5244 dfdcp=0.4484 ffiw=0.2578 ffpp=0.7486 (128s)
+[R1 early-stop] no val_auc improvement for 4 epochs at epoch 10
+[R1 done] best val_auc=0.6327 at epoch 6 ; penalty applied 0 / skipped 0 ; wall=1314.7s
+[R1 save] E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\lora_g19a_wild_R1.pt
+    [extract R1] 32/5300 wall=22s
+    [extract R1] 832/5300 wall=27s
+    [extract R1] 1632/5300 wall=31s
+    [extract R1] 2432/5300 wall=36s
+    [extract R1] 3232/5300 wall=41s
+    [extract R1] 4032/5300 wall=46s
+    [extract R1] 4832/5300 wall=51s
+[R1] in-domain FF++800 AUC = 0.9834
+  [R1] cd1    AUC = 0.7758   [CONTAMINATED]
+  [R1] cd2    AUC = 0.7371   [CONTAMINATED]
+  [R1] dfdcp  AUC = 0.7388   [CONTAMINATED]
+  [R1] ffiw   AUC = 0.6068   [CONTAMINATED]
+  [R1] wild   AUC = 0.7130   <-- HELD-OUT (valid transfer)
+[R1] ratio: s=1.002 class_gap=32.6961 mean_ratio=0.5981
+
+============================================================================================
+ARM O1  (held-out=wild)
+============================================================================================
+[pool] n=25550 ; cells: cd2/fake=1880, cd2/real=3798, dfdcp/fake=1057, dfdcp/real=492, ffiw/fake=136, ffiw/real=95, ffpp/fake=9702, ffpp/real=8390
+[lora] target modules=24 (blocks[*].attn.qkv + blocks[*].attn.proj) r=16 alpha=32 dropout=0.0
+[lora] LoRA trainable params=884736 (0.8847M) ; head trainable params=1538
+[obj] lambda=0.0 -> objective = CE ; balanced sampler: 8 cells x 4 = batch 32, 250 steps/epoch
+[O1 epoch 01/12] loss=0.2425 ce=0.2425 acc=0.9096 val_auc=0.9469 | cd2=0.9712 dfdcp=0.9799 ffiw=0.4766 ffpp=0.9870  *BEST* (130s)
+[O1 epoch 02/12] loss=0.0795 ce=0.0795 acc=0.9731 val_auc=0.9573 | cd2=0.9656 dfdcp=0.9774 ffiw=0.4844 ffpp=0.9890  *BEST* (131s)
+[O1 epoch 03/12] loss=0.0432 ce=0.0432 acc=0.9851 val_auc=0.9695 | cd2=0.9684 dfdcp=0.9727 ffiw=0.4531 ffpp=0.9979  *BEST* (130s)
+[O1 epoch 04/12] loss=0.0314 ce=0.0314 acc=0.9919 val_auc=0.9511 | cd2=0.9750 dfdcp=0.9727 ffiw=0.4375 ffpp=0.9890 (128s)
+[O1 epoch 05/12] loss=0.0249 ce=0.0249 acc=0.9928 val_auc=0.9546 | cd2=0.9569 dfdcp=0.9746 ffiw=0.4453 ffpp=0.9950 (129s)
+[O1 epoch 06/12] loss=0.0176 ce=0.0176 acc=0.9948 val_auc=0.9619 | cd2=0.9619 dfdcp=0.9810 ffiw=0.4961 ffpp=0.9988 (132s)
+[O1 epoch 07/12] loss=0.0214 ce=0.0214 acc=0.9939 val_auc=0.9537 | cd2=0.9659 dfdcp=0.9704 ffiw=0.4219 ffpp=0.9972 (128s)
+[O1 early-stop] no val_auc improvement for 4 epochs at epoch 7
+[O1 done] best val_auc=0.9695 at epoch 3 ; penalty applied 0 / skipped 0 ; wall=911.2s
+[O1 save] E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\lora_g19a_wild_O1.pt
+    [extract O1] 32/5300 wall=21s
+    [extract O1] 832/5300 wall=26s
+    [extract O1] 1632/5300 wall=30s
+    [extract O1] 2432/5300 wall=35s
+    [extract O1] 3232/5300 wall=40s
+    [extract O1] 4032/5300 wall=45s
+    [extract O1] 4832/5300 wall=50s
+[O1] in-domain FF++800 AUC = 0.9757
+  [O1] cd1    AUC = 0.9891   [CONTAMINATED]
+  [O1] cd2    AUC = 0.9900   [CONTAMINATED]
+  [O1] dfdcp  AUC = 0.9915   [CONTAMINATED]
+  [O1] ffiw   AUC = 0.9596   [CONTAMINATED]
+  [O1] wild   AUC = 0.8384   <-- HELD-OUT (valid transfer)
+[O1] ratio: s=1.385 class_gap=37.4674 mean_ratio=0.1833
+
+============================================================================================
+ARM O3a  (held-out=wild)
+============================================================================================
+[pool] n=25550 ; cells: cd2/fake=1880, cd2/real=3798, dfdcp/fake=1057, dfdcp/real=492, ffiw/fake=136, ffiw/real=95, ffpp/fake=9702, ffpp/real=8390
+[lora] target modules=24 (blocks[*].attn.qkv + blocks[*].attn.proj) r=16 alpha=32 dropout=0.0
+[lora] LoRA trainable params=884736 (0.8847M) ; head trainable params=1538
+[obj] lambda=0.3 -> objective = CE + lambda*domain-invariance ; balanced sampler: 8 cells x 4 = batch 32, 250 steps/epoch
+[O3a epoch 01/12] loss=8.7728 ce=0.4508 acc=0.8284 val_auc=0.9011 | cd2=0.9125 dfdcp=0.8976 ffiw=0.6328 ffpp=0.9326  *BEST* (132s)
+[O3a epoch 02/12] loss=0.6393 ce=0.3962 acc=0.8591 val_auc=0.9053 | cd2=0.9347 dfdcp=0.9272 ffiw=0.5625 ffpp=0.9326  *BEST* (134s)
+[O3a epoch 03/12] loss=0.4735 ce=0.3323 acc=0.8780 val_auc=0.9108 | cd2=0.9475 dfdcp=0.9537 ffiw=0.5078 ffpp=0.9365  *BEST* (132s)
+[O3a epoch 04/12] loss=0.3807 ce=0.2714 acc=0.8994 val_auc=0.9182 | cd2=0.9366 dfdcp=0.9528 ffiw=0.4922 ffpp=0.9494  *BEST* (131s)
+[O3a epoch 05/12] loss=0.2892 ce=0.2075 acc=0.9264 val_auc=0.9258 | cd2=0.9344 dfdcp=0.9551 ffiw=0.4922 ffpp=0.9619  *BEST* (132s)
+[O3a epoch 06/12] loss=0.2266 ce=0.1591 acc=0.9465 val_auc=0.9343 | cd2=0.9222 dfdcp=0.9495 ffiw=0.4688 ffpp=0.9761  *BEST* (133s)
+[O3a epoch 07/12] loss=0.1690 ce=0.1136 acc=0.9657 val_auc=0.9449 | cd2=0.9275 dfdcp=0.9559 ffiw=0.4688 ffpp=0.9843  *BEST* (131s)
+[O3a epoch 08/12] loss=0.1449 ce=0.0965 acc=0.9684 val_auc=0.9494 | cd2=0.9437 dfdcp=0.9545 ffiw=0.4609 ffpp=0.9867  *BEST* (132s)
+[O3a epoch 09/12] loss=0.1204 ce=0.0765 acc=0.9772 val_auc=0.9527 | cd2=0.9456 dfdcp=0.9626 ffiw=0.4609 ffpp=0.9877  *BEST* (133s)
+[O3a epoch 10/12] loss=0.1189 ce=0.0768 acc=0.9762 val_auc=0.9567 | cd2=0.9531 dfdcp=0.9640 ffiw=0.4766 ffpp=0.9894  *BEST* (133s)
+[O3a epoch 11/12] loss=0.1030 ce=0.0632 acc=0.9800 val_auc=0.9576 | cd2=0.9544 dfdcp=0.9657 ffiw=0.4766 ffpp=0.9891  *BEST* (132s)
+[O3a epoch 12/12] loss=0.1050 ce=0.0658 acc=0.9818 val_auc=0.9573 | cd2=0.9525 dfdcp=0.9648 ffiw=0.4766 ffpp=0.9888 (132s)
+[O3a done] best val_auc=0.9576 at epoch 11 ; penalty applied 3000 / skipped 0 ; wall=1589.4s
+[O3a save] E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\lora_g19a_wild_O3a.pt
+    [extract O3a] 32/5300 wall=23s
+    [extract O3a] 832/5300 wall=28s
+    [extract O3a] 1632/5300 wall=33s
+    [extract O3a] 2432/5300 wall=38s
+    [extract O3a] 3232/5300 wall=43s
+    [extract O3a] 4032/5300 wall=47s
+    [extract O3a] 4832/5300 wall=52s
+[O3a] in-domain FF++800 AUC = 0.9722
+  [O3a] cd1    AUC = 0.9831   [CONTAMINATED]
+  [O3a] cd2    AUC = 0.9924   [CONTAMINATED]
+  [O3a] dfdcp  AUC = 0.9817   [CONTAMINATED]
+  [O3a] ffiw   AUC = 0.9208   [CONTAMINATED]
+  [O3a] wild   AUC = 0.8090   <-- HELD-OUT (valid transfer)
+[O3a] ratio: s=0.061 class_gap=44.9277 mean_ratio=0.0919
+
+============================================================================================
+ARM O3b  (held-out=wild)
+============================================================================================
+[pool] n=25550 ; cells: cd2/fake=1880, cd2/real=3798, dfdcp/fake=1057, dfdcp/real=492, ffiw/fake=136, ffiw/real=95, ffpp/fake=9702, ffpp/real=8390
+[lora] target modules=24 (blocks[*].attn.qkv + blocks[*].attn.proj) r=16 alpha=32 dropout=0.0
+[lora] LoRA trainable params=884736 (0.8847M) ; head trainable params=1538
+[obj] lambda=1.0 -> objective = CE + lambda*domain-invariance ; balanced sampler: 8 cells x 4 = batch 32, 250 steps/epoch
+[O3b epoch 01/12] loss=26.5244 ce=0.4598 acc=0.8240 val_auc=0.8973 | cd2=0.8937 dfdcp=0.8711 ffiw=0.5859 ffpp=0.9293  *BEST* (133s)
+[O3b epoch 02/12] loss=1.0907 ce=0.4835 acc=0.8246 val_auc=0.8963 | cd2=0.8988 dfdcp=0.8876 ffiw=0.5312 ffpp=0.9259 (132s)
+[O3b epoch 03/12] loss=0.7618 ce=0.4731 acc=0.8329 val_auc=0.8977 | cd2=0.9053 dfdcp=0.9035 ffiw=0.5469 ffpp=0.9240  *BEST* (133s)
+[O3b epoch 04/12] loss=0.6287 ce=0.4225 acc=0.8506 val_auc=0.9002 | cd2=0.9203 dfdcp=0.9185 ffiw=0.5312 ffpp=0.9233  *BEST* (133s)
+[O3b epoch 05/12] loss=0.5534 ce=0.3814 acc=0.8582 val_auc=0.9027 | cd2=0.9331 dfdcp=0.9314 ffiw=0.5156 ffpp=0.9244  *BEST* (132s)
+[O3b epoch 06/12] loss=0.4900 ce=0.3410 acc=0.8812 val_auc=0.9039 | cd2=0.9359 dfdcp=0.9364 ffiw=0.5078 ffpp=0.9269  *BEST* (133s)
+[O3b epoch 07/12] loss=0.4296 ce=0.3001 acc=0.8992 val_auc=0.9064 | cd2=0.9381 dfdcp=0.9439 ffiw=0.4922 ffpp=0.9306  *BEST* (132s)
+[O3b epoch 08/12] loss=0.4079 ce=0.2874 acc=0.9009 val_auc=0.9074 | cd2=0.9387 dfdcp=0.9498 ffiw=0.4844 ffpp=0.9333  *BEST* (132s)
+[O3b epoch 09/12] loss=0.3814 ce=0.2688 acc=0.9077 val_auc=0.9089 | cd2=0.9347 dfdcp=0.9512 ffiw=0.4844 ffpp=0.9366  *BEST* (133s)
+[O3b epoch 10/12] loss=0.3670 ce=0.2609 acc=0.9089 val_auc=0.9092 | cd2=0.9334 dfdcp=0.9515 ffiw=0.4844 ffpp=0.9373  *BEST* (133s)
+[O3b epoch 11/12] loss=0.3571 ce=0.2527 acc=0.9169 val_auc=0.9095 | cd2=0.9328 dfdcp=0.9509 ffiw=0.4844 ffpp=0.9377  *BEST* (132s)
+[O3b epoch 12/12] loss=0.3556 ce=0.2522 acc=0.9153 val_auc=0.9096 | cd2=0.9328 dfdcp=0.9509 ffiw=0.4844 ffpp=0.9378  *BEST* (133s)
+[O3b done] best val_auc=0.9096 at epoch 12 ; penalty applied 3000 / skipped 0 ; wall=1592.7s
+[O3b save] E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\lora_g19a_wild_O3b.pt
+    [extract O3b] 32/5300 wall=23s
+    [extract O3b] 832/5300 wall=28s
+    [extract O3b] 1632/5300 wall=33s
+    [extract O3b] 2432/5300 wall=38s
+    [extract O3b] 3232/5300 wall=42s
+    [extract O3b] 4032/5300 wall=47s
+    [extract O3b] 4832/5300 wall=52s
+[O3b] in-domain FF++800 AUC = 0.9800
+  [O3b] cd1    AUC = 0.9062   [CONTAMINATED]
+  [O3b] cd2    AUC = 0.9372   [CONTAMINATED]
+  [O3b] dfdcp  AUC = 0.9512   [CONTAMINATED]
+  [O3b] ffiw   AUC = 0.8846   [CONTAMINATED]
+  [O3b] wild   AUC = 0.7797   <-- HELD-OUT (valid transfer)
+[O3b] ratio: s=0.036 class_gap=39.9035 mean_ratio=0.1619
+
+============================================================================================
+G19a  (held-out fold = wild, physical GPU 2)  SUMMARY
+============================================================================================
+
+TABLE 1  standard probe AUC (StandardScaler fit on probe-train 2200 + LR C=1e-3 lbfgs 3000)
+  arm            cd1     cd2     dfdcp   ffiw    wild    indom800  valid(=wild)  
+  R0             0.8286  0.8633  0.8261  0.8244  0.8090  0.9852    0.8090        
+  R1             0.7758  0.7371  0.7388  0.6068  0.7130  0.9834    0.7130        
+  O1             0.9891  0.9900  0.9915  0.9596  0.8384  0.9757    0.8384        
+  O3a            0.9831  0.9924  0.9817  0.9208  0.8090  0.9722    0.8090        
+  O3b            0.9062  0.9372  0.9512  0.8846  0.7797  0.9800    0.7797        
+  frozen-anchor  0.8286  0.8633  0.8261  0.8244  0.8090  0.9852    0.8090        
+  CONTAMINATION: cd1/cd2/dfdcp/ffiw are TRAINING domains for fold=wild -> those columns are
+    CONTAMINATED and are EXCLUDED from every aggregate; ONLY the wild column is a valid
+    cross-domain transfer measurement.  'valid(=wild)' repeats that column.
+  cd1 is a duplicate of cd2 (cd1 basenames subset of cd2 basenames) and is excluded from
+    training AND from held-out selection at all times.
+  References: frozen ViT mean 0.8303 ; source-label cross-domain anchor 0.8318 ; target ORACLE 0.9111
+
+TABLE 2  domain-sensitivity ratio (G12 formula), source = probe-train 2200
+  arm  dim  s      class_gap  cd1     cd2     dfdcp   ffiw    wild    mean_ratio  
+  R0   768  1.510  40.2122    0.2113  0.1861  0.1609  0.1995  0.2336  0.1983      
+  R1   768  1.002  32.6961    0.2924  0.2899  0.6571  1.1993  0.5517  0.5981      
+  O1   768  1.385  37.4674    0.1485  0.1317  0.2604  0.1989  0.1771  0.1833      
+  O3a  768  0.061  44.9277    0.0713  0.0770  0.0832  0.1260  0.1019  0.0919      
+  O3b  768  0.036  39.9035    0.1303  0.1341  0.1540  0.1846  0.2065  0.1619      
+
+TABLE 3  LoRA trainable params / schedule / wall time
+  arm  lora_params  lambda  best_val_auc  best_epoch  train_wall_s  total_wall_s  
+  R0   -            -       nan           -           0.0           56.7          
+  R1   884736       0.0     0.6327        6           1314.7        1369.2        
+  O1   884736       0.0     0.9695        3           911.2         964.8         
+  O3a  884736       0.3     0.9576        11          1589.4        1645.3        
+  O3b  884736       1.0     0.9096        12          1592.7        1648.4        
+
+GATES (mechanical; raw verdicts, no interpretation)
+  held-out(wild) AUC: R0=0.8090 R1=0.7130 O1=0.8384 O3a=0.8090 O3b=0.7797
+  best of {O1,O3a,O3b} = O1 (0.8384)
+  G19_UNFREEZE_HELPS   : O1 - R0 = +0.0294  (>= +0.0100) -> PASS
+  G19_INVARIANCE_HELPS : best - O1 = +0.0000 (>= +0.0200) -> FAIL
+  G19_VS_RANDLABEL     : best - R1 = +0.1254 (>= +0.0200) -> PASS   [HARD]
+  G19_NO_FORGETTING    : in-domain(best)=0.9757 (>= 0.9752) -> PASS
+  G19_CEILING_RECOVERY : (best-0.8318)/(0.9111-0.8318) = 0.0832 (>= 0.30) -> FAIL
+  KILL SIGNAL          : |O1-R0|=0.0294 |R1-R0|=0.0960 -> not triggered
+  best arm for the gates = O1
+
+[gpu final] [(0, 4822, 1), (1, 5095, 14), (2, 1427, 0)]
+[wall] total = 5699.5 s

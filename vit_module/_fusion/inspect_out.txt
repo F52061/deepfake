@@ -1,0 +1,36 @@
+=== PROBE npz: E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_fusion\..\_probe\probe_feats.npz ===
+  key V            shape=(3000, 768) dtype=float32
+  key C            shape=(3000, 1024) dtype=float32
+  key R            shape=(3000, 768) dtype=float64
+  key y            shape=(3000,) dtype=int64
+  key paths        shape=(3000,) dtype=<U95
+  key vids         shape=(3000,) dtype=<U3
+  key train_mask   shape=(3000,) dtype=bool
+  key V_proj       shape=(3000, 768) dtype=float32
+  key C_proj       shape=(3000, 768) dtype=float32
+  key feature_dims shape=(3,) dtype=int32
+  key auc_R        shape=() dtype=float64
+  key seed         shape=() dtype=int32
+  train_mask: True=2200 False=800 (total 3000)
+  y: total=3000  y==1: train=1100 test=400 ; y==0: train=1100 test=400
+  vids[train]: n=2200 unique=98  duplicate-video groups=98  max samples per vid=33  unique==n -> False
+  vids[test]: n=800 unique=42  duplicate-video groups=42  max samples per vid=28  unique==n -> False
+  train/test vid overlap: 0 (0 => video-disjoint split)
+=== MULTI npz: E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_fusion\..\_tsne\feats_multi.npz ===
+  key F            shape=(2300, 1664) dtype=float32
+  key V            shape=(2300, 768) dtype=float32
+  key C            shape=(2300, 1024) dtype=float32
+  key y            shape=(2300,) dtype=int64
+  key domain       shape=(2300,) dtype=<U5
+  key vid          shape=(2300,) dtype=<U7
+  key path         shape=(2300,) dtype=<U90
+  key domains      shape=(6,) dtype=<U5
+  domains: ['cd1', 'cd2', 'dfdcp', 'ffiw', 'ffpp', 'wild'] (n=6)
+    cd1    n=300  y==1:150 y==0:150  unique vid=41
+    cd2    n=300  y==1:150 y==0:150  unique vid=124
+    dfdcp  n=300  y==1:150 y==0:150  unique vid=47
+    ffiw   n=300  y==1:150 y==0:150  unique vid=1
+    ffpp   n=800  y==1:400 y==0:400  unique vid=140
+    wild   n=300  y==1:150 y==0:150  unique vid=239
+  V dims: probe=768 multi=768 ; C dims: probe=1024 multi=1024 ; F dims: multi=1664
+[inspect] done.

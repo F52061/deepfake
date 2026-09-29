@@ -1,0 +1,41 @@
+[gpu] query=[(0, 8838, 11264, 1), (1, 4155, 11264, 18), (2, 54, 11264, 0)] pick=(2, 54, 11264, 0) mode=gpu device=NVIDIA GeForce GTX 1080 Ti CUDA_VISIBLE_DEVICES=2
+Freezing CLIP vision encoder.
+[model] missing=0 unexpected=0
+[A] repro cos(V_fresh, npz V) min=1.000000 mean=1.000000
+[A] hook b_1 (blocks[1]) shape=(10, 197, 768) dtype=torch.float32
+[A] hook b_2 (blocks[2]) shape=(10, 197, 768) dtype=torch.float32
+[A] hook b_3 (blocks[3]) shape=(10, 197, 768) dtype=torch.float32
+  [extract] 16/4500  imgs_fwd=26 wall=0s
+  [extract] 336/4500  imgs_fwd=346 wall=4s
+  [extract] 656/4500  imgs_fwd=666 wall=8s
+  [extract] 976/4500  imgs_fwd=986 wall=11s
+  [extract] 1296/4500  imgs_fwd=1306 wall=15s
+  [extract] 1616/4500  imgs_fwd=1626 wall=19s
+  [extract] 1936/4500  imgs_fwd=1946 wall=23s
+  [extract] 2256/4500  imgs_fwd=2266 wall=26s
+  [extract] 2576/4500  imgs_fwd=2586 wall=30s
+  [extract] 2896/4500  imgs_fwd=2906 wall=34s
+  [extract] 3216/4500  imgs_fwd=3226 wall=38s
+  [extract] 3536/4500  imgs_fwd=3546 wall=41s
+  [extract] 3856/4500  imgs_fwd=3866 wall=44s
+  [extract] 4176/4500  imgs_fwd=4186 wall=47s
+  [extract] 4496/4500  imgs_fwd=4506 wall=51s
+  [extract] 4500/4500  imgs_fwd=4510 wall=51s
+[B] extraction done: 4500 imgs in 283 batches, wall=50.9s read_fail=0
+[save] layer_feats.npz -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g16\layer_feats.npz
+[C] anchor cross-domain cls_final C=1e-3: cd1=0.8286(exp 0.8286) cd2=0.8633(exp 0.8633) dfdcp=0.8261(exp 0.8261) ffiw=0.8244(exp 0.8244) wild=0.8090(exp 0.809) maxdev=0.000033
+  [oracle] cls_final        cd1=0.9550 cd2=0.8953 dfdcp=0.9223 ffiw=0.9991 wild=0.8717
+  [oracle] cls_b3           cd1=0.9442 cd2=0.7479 dfdcp=0.6760 ffiw=0.9920 wild=0.7530
+  [oracle] cls_b6           cd1=0.9507 cd2=0.8751 dfdcp=0.7586 ffiw=0.9904 wild=0.8368
+  [oracle] cls_b9           cd1=0.9100 cd2=0.8999 dfdcp=0.9072 ffiw=1.0000 wild=0.8520
+  [oracle] mp_b3            cd1=0.9670 cd2=0.8265 dfdcp=0.7485 ffiw=0.9927 wild=0.8031
+  [oracle] mp_b6            cd1=0.9577 cd2=0.9061 dfdcp=0.8117 ffiw=0.9996 wild=0.8670
+  [oracle] mp_b9            cd1=0.9523 cd2=0.9191 dfdcp=0.9303 ffiw=0.9967 wild=0.8633
+  [oracle] cat_cls369       cd1=0.9452 cd2=0.9244 dfdcp=0.9042 ffiw=1.0000 wild=0.8581
+  [oracle] cat_b6_final     cd1=0.9454 cd2=0.9218 dfdcp=0.9167 ffiw=0.9998 wild=0.8737
+  [oracle] cat_mp369_final  cd1=0.9708 cd2=0.9453 dfdcp=0.9149 ffiw=1.0000 wild=0.8901
+[save] report -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g16\g16_report.txt
+[save] stats  -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g16\g16_stats.npz
+[done] ANCHOR_PASS=1 maxdev=0.000033
+[done] LAYER_TRANSFER=PARTIAL LAYER_ORACLE=PARTIAL BEST_SOURCE_CD=cat_b6_final BEST_SOURCE_ORACLE=cat_mp369_final
+[done] wall=104.2s forwards=4510 batches=283 peak_smi=4070MiB read_fail=0

@@ -1,0 +1,89 @@
+============================================================================================
+G9 REPORT - 低级统计区域化能否解释 V 判别 (H4局部伪影变体) + 定位 PC0 内容  (纯 CPU, 单线程)
+============================================================================================
+MACHINE_BLOCK
+G9_GRID_A_AUC=0.6257 G9_GRID_B_AUC=0.6252 G9_ADJR2_V_GRIDA=0.1434 G9_ADJR2_V_GRIDB=0.2499 G9_V_FULL_AUC=0.9852 G9_C_FULL_AUC=0.9108 G9_TOPBLOCK=(2,2,lapl_var,0.6219) G9_VERDICT=NOT-SUPPORTED
+
+Verification anchors: V_full_AUC = 0.9852 (expect 0.9852), C_full_AUC = 0.9108 (expect 0.9108)
+
+G0. 特征侧/区域特征说明:
+  PC0 varfrac (train V) = 0.6229; e0=E[:,0]; z_train=(V_train-mu)@e0.
+  s_V/s_C = train in-sample decision_function of anchor LR (StandardScaler(fit train) + LR(C=1e-3,lbfgs,2000)).
+  Grid A: 4x4 每块 56px, 5统计 ['grad_mean', 'lapl_var', 'hi_en', 'edge_density', 'blockiness'] -> 80 维/图; Grid B: 8x8 每块 28px, 4统计 ['grad_mean', 'lapl_var', 'hi_en', 'blockiness'] -> 256 维/图. 全部在 224x224 LANCZOS 灰度图. hi_en = 块FFT径向>0.25*nyq 能量占比; blockiness = 块内 8px 垂直网格超额.
+  读图失败数: 0  (期望0)   NaN 元素数: A=0  B=5
+  native h,w 分布(全部3000张): h min/med/max = 70/167/920, w min/med/max = 70/161/834
+
+G1. Grid A 全 80 维 stat-only test AUC (主门数字) = 0.6257
+    对照: G8A 整图 14 统计 stat-only test AUC = 0.5580 ; V_full = 0.9852
+
+G2. Grid B 全 256 维 stat-only test AUC = 0.6252  (交叉验证/精定位参考)
+
+G3. OLS (LinearRegression, intercept) on train: s_V ~ GridA/GridB :
+  adjR2(s_V ~ GridA(80)) = 0.1434   (R2=0.1745, n=2200, p=80)
+  adjR2(s_V ~ GridB(256)) = 0.2499   (R2=0.3373, n=2200, p=256)
+  对照: G8A adjR2(s_V ~ 整图14统计) = 0.0426
+
+G4. Grid A 逐块判别定位. 每格 = 该块 5 统计中单特征 fake-vs-real AUC (train, real=positive) 的最大者 及其统计名; 数值 = real-positive AUC. |auc-0.5| 越大越判别.
+  row(top->bottom) 0.532(grad_me) | 0.595(grad_me) | 0.563(lapl_va) | 0.532(blockin)
+  row(top->bottom) 0.528(grad_me) | 0.574(lapl_va) | 0.583(lapl_va) | 0.522(grad_me)
+  row(top->bottom) 0.525(grad_me) | 0.593(lapl_va) | 0.622(lapl_va) | 0.468(hi_en)
+  row(top->bottom) 0.522(lapl_va) | 0.525(lapl_va) | 0.510(lapl_va) | 0.527(lapl_va)
+
+  Grid A 逐块 hi_en AUC (train, real=positive):
+  0.471 | 0.556 | 0.520 | 0.488
+  0.487 | 0.551 | 0.566 | 0.499
+  0.500 | 0.544 | 0.513 | 0.468
+  0.520 | 0.525 | 0.496 | 0.513
+
+  Grid A 逐块 grad_mean AUC (train, real=positive):
+  0.532 | 0.595 | 0.550 | 0.529
+  0.528 | 0.572 | 0.581 | 0.522
+  0.525 | 0.567 | 0.595 | 0.505
+  0.513 | 0.514 | 0.504 | 0.526
+
+  Grid A 最强单块单统计 (|auc-0.5| max, train): 块(2,2) stat=lapl_var real-positive-AUC=0.6219 (若<0.5 => fake 该统计更大)
+
+G5. Grid A 每块特征 vs z_train / s_V 的 |Pearson| 最大者定位 (train):
+  vs z_train: argmax 块(2,2) stat=grad_mean  r=0.2342  (feature col 50)
+  vs s_V:     argmax 块(2,2) stat=grad_mean  r=0.2071  (feature col 50)
+
+G6. 对齐/尺度混淆审计. 信号最强 top-3 判别块特征 (rank by max(2*|auc-0.5|,|r_z|,|r_sV|), train) 与 native h / w / 人脸尺度代理(h*w) 的 Pearson:
+  块(bi,bj) | stat        |  r(h)    r(w)    r(h*w)  | |r|>0.5 混淆?
+  (2,2)     | lapl_var    |    0.384    0.363    0.347 | no
+  (2,2)     | grad_mean   |    0.105    0.084    0.108 | no
+  (1,1)     | grad_mean   |    0.244    0.241    0.252 | no
+  判据: 若任一 |r|>0.5 -> '区域信号可能与对齐/尺度伪影混淆' (标注 YES-混淆)
+
+G7. (可选) V 判错 fakes 的 Grid A 逐块差. V判错 = 全V LR(logit>0) 把 fake 判成 real.
+  train+test 合并 fakes: n_fake=1500, 判错=43, 判对=1457
+  按 |标准化差| 前 10: (cmean=V判对fake均值, wmean=V判错fake均值, rmean=real均值)
+  块(bi,bj) | stat        | cmean      wmean      rmean      | z-diff(w-c)
+  (0,3)     | hi_en       |     0.0720     0.1267     0.0734 |     1.004
+  (0,0)     | hi_en       |     0.0640     0.0956     0.0652 |     0.691
+  (1,2)     | hi_en       |     0.0686     0.0879     0.0778 |     0.618
+  (0,3)     | grad_mean   |    39.0413    49.8401    40.9949 |     0.613
+  (2,2)     | edge_density |     0.3143     0.3965     0.3472 |     0.562
+  (0,3)     | blockiness  |     0.0145    -0.0880     0.0329 |    -0.558
+  (2,2)     | grad_mean   |    28.3371    34.1823    32.5014 |     0.507
+  (2,1)     | edge_density |     0.3592     0.2962     0.3790 |    -0.476
+  (0,2)     | lapl_var    |    42.4474    72.5436    58.0070 |     0.461
+  (1,1)     | grad_mean   |    34.5283    38.8823    37.6057 |     0.454
+  判错 fake 与判对 fake 差异最大块: (0,3) stat=hi_en. 若 wmean 更靠近 rmean => '判错 fakes 在该块像 real'.
+
+VERDICT logic (预注册, 机械):
+  Grid A stat-only test AUC = 0.6257 ; gates: >=0.75 SUPPORT, 0.65-0.75 PARTIAL, <0.65 NOT-SUPPORTED
+  对照 G8A 整图全局 stat-only test AUC = 0.5580
+  G9_VERDICT = NOT-SUPPORTED
+
+Caveats (honest):
+  * 判定基于 Grid A (80维) stat-only test AUC (video-disjoint out-of-sample). 单块单特征 AUC 与 Pearson 均在 train 上(in-sample 定位诊断), 乐观, 只用于定位信号在哪, 不作泛化声明.
+  * 原生分辨率 ~70-920px 宽 crop 全部重采样到 224; 上/下采样会平滑/改变高频, 分块高/中频统计 (hi_en/grad) 与 native h,w 尺度耦合 (见 G6 混淆审计), 相关 != 因果.
+  * 分块边界与对齐 (face crop 内人脸位置/尺度) 耦合是主要混淆源; 无原始人脸框, 用 crop h*w 作尺度代理.
+  * blockiness 为块内 (region 独立) 8px 垂直网格超额比; 每块相位固定于块原点, 且不含跨块最外边界, 与整图 _blockiness 略有差异; 该统计全局信号本就极弱.
+  * hi_en 逐块 FFT 无窗, 块边界泄漏 + 小尺寸(28px)频率分辨率低; 结果保守解读.
+  * in-sample R^2 / adjR^2 (G3) 与 in-sample Pearson (G5/G6) 乐观, 是上界.
+  * G7 用 0.5(logit>0) 阈值定义 'V判错'; 若判错样本少则均值噪声大.
+  * G8 (可选) 定性目检: Read 工具对 FF++ 标准 RGB PNG 返回 [Unsupported Image] (本会话视觉不可用);
+    转存标准 RGB PNG 后仍不可显示 -> 视觉不可用, 跳过 qualitative. 候选索引见 g9_visual_candidates.txt.
+
+wall time = 2.1s

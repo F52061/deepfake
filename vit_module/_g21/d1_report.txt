@@ -1,0 +1,476 @@
+====================================================================================================
+G21-D1 REPORT -- frozen NATIVE-CLIP semantic-alignment probe (diagnostic; no training)
+====================================================================================================
+Question : the bridge detector computes CLIP text features and never uses them; text_proj is
+           random/untrained.  The original M2F2Det used a per-patch text-image cosine map
+           (llava/model/deepfake/M2F2Det/model.py L186-193).  Does a FROZEN native-CLIP
+           alignment signal carry ANY cross-domain real/fake information?
+Gate     : pre-registered as ratio<0.30 AND mean4dom>0.8429 on cs_alpha.
+
+Hard constraints honoured: native visual_projection/text_projection ONLY (detector text_proj
+NEVER used); every CLIP component frozen + eval(); torch.no_grad(); fp32; batch<=16; no training.
+
+#### MACHINE_BLOCK ##########################################################################################
+G21D1_TASK=G21-D1 frozen native-CLIP semantic-alignment probe (diagnostic, no training)
+G21D1_GPU_QUERY=[(0, 5176, 5943), (1, 0, 11120), (2, 64, 11055)]
+G21D1_GPU_USED_AT_START=0
+G21D1_GPU_ASSIGNED=1
+G21D1_DEVICE=NVIDIA GeForce GTX 1080 Ti
+G21D1_CLIP_PATH=E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\checkpoints\clip-vit-large-patch14-336 (local)
+G21D1_CLIP_PROJ=NATIVE clip_model.visual_projection / clip_model.text_projection; detector text_proj NEVER used
+G21D1_CLIP_DET_VISION_MATCH=same_keys=True max_abs_dev=0.000e+00
+G21D1_PATCH_LAYER=hidden_states[-2] (LLaVA-1.5 select_layer=-2, the layer the detector's CLIPVisionEncoder emits as final); robustness variant cs_alpha_last uses hs[-1]
+G21D1_BATCH=16
+G21D1_FP32=1
+G21D1_N_IMGS=4500
+G21D1_SEED=20260910
+G21D1_WALL_S=308.3
+G21D1_WALL_EXTRACT_S=281.8
+G21D1_WALL_ANALYSIS_S=1.4
+G21D1_PEAK_MIB=8740
+G21D1_PEAK_TORCH_MIB=6398
+G21D1_FORWARDS=4500
+G21D1_BATCH_CALLS=282
+G21D1_READ_FAIL=0
+G21D1_A_PIPE_COS_min=1.000000
+G21D1_A_PIPE_COS_mean=1.000000
+G21D1_A_E6_ANCHOR_V_s=1.5097 EXP=1.5097
+G21D1_A_E6_ANCHOR_V_classgap=40.2122 EXP=40.2122
+G21D1_A_E6_ANCHOR_V_ratio=0.1983 EXP=0.1983
+G21D1_A_E6_ANCHOR_V_PASS=1
+G21D1_A_CD_ANCHOR_V=cd1=0.8286(exp 0.8286);cd2=0.8633(exp 0.8633);dfdcp=0.8261(exp 0.8261);ffiw=0.8244(exp 0.8244);wild=0.8090(exp 0.809)
+G21D1_A_CD_ANCHOR_V_MAXDEV=0.000033
+G21D1_A_V_MEAN4DOM=0.8318 (cited 0.8318)
+G21D1_TEXT_ANCHORS=cos(t_real,t_fake)=0.8553;cos(t_real,t_null)=0.7531;cos(t_fake,t_null)=0.6544
+G21D1_PROMPTS_REAL=a photo of a real human face | a genuine photograph of a person | an authentic image of a human face
+G21D1_PROMPTS_FAKE=a photo of a deepfake face | a digitally manipulated face | an AI-generated synthetic face
+G21D1_PROMPTS_NULL=a photo of a chair
+G21D1_AUC_POSITIVE_CLASS=fake (y==0)
+G21D1_EVAL_PROTOCOL=StandardScaler().fit(X[train]) + LogisticRegression(C=1e-3, lbfgs, max_iter=3000, random_state=0) fit on FF++ train n=2200; AUC per target domain on its 300 rows; mean4dom = mean(cd1,cd2,dfdcp,wild) [ffiw EXCLUDED]
+G21D1_DIM_cs_alpha=576
+G21D1_RATIO_cs_alpha=1.2644
+G21D1_S_cs_alpha=0.0213
+G21D1_CLASSGAP_cs_alpha=4.5420
+G21D1_DOMGAP_cs_alpha=cd1=3.6873;cd2=3.3021;dfdcp=6.9870;ffiw=6.9430;wild=7.7944
+G21D1_RATIO_PERDOM_cs_alpha=cd1=0.8118;cd2=0.7270;dfdcp=1.5383;ffiw=1.5286;wild=1.7161
+G21D1_FFPP_AUC_cs_alpha=0.7327
+G21D1_CD_cs_alpha=cd1=0.6430;cd2=0.6220;dfdcp=0.6003;ffiw=0.5889;wild=0.6333
+G21D1_MEAN4DOM_cs_alpha=0.6246
+G21D1_DIM_cs_mean=1
+G21D1_RATIO_cs_mean=0.5977
+G21D1_S_cs_mean=0.0069
+G21D1_CLASSGAP_cs_mean=0.4066
+G21D1_DOMGAP_cs_mean=cd1=0.1488;cd2=0.1034;dfdcp=0.5027;ffiw=0.0133;wild=0.4468
+G21D1_RATIO_PERDOM_cs_mean=cd1=0.3660;cd2=0.2543;dfdcp=1.2363;ffiw=0.0327;wild=1.0989
+G21D1_FFPP_AUC_cs_mean=0.6172
+G21D1_CD_cs_mean=cd1=0.8122;cd2=0.7239;dfdcp=0.5691;ffiw=0.5212;wild=0.6093
+G21D1_MEAN4DOM_cs_mean=0.6786
+G21D1_DIM_cs_cat=4
+G21D1_RATIO_cs_cat=1.1044
+G21D1_S_cs_cat=0.0105
+G21D1_CLASSGAP_cs_cat=0.9606
+G21D1_DOMGAP_cs_cat=cd1=0.7502;cd2=0.7603;dfdcp=1.9275;ffiw=0.6987;wild=1.1676
+G21D1_RATIO_PERDOM_cs_cat=cd1=0.7809;cd2=0.7914;dfdcp=2.0066;ffiw=0.7274;wild=1.2155
+G21D1_FFPP_AUC_cs_cat=0.6936
+G21D1_CD_cs_cat=cd1=0.7390;cd2=0.6311;dfdcp=0.5588;ffiw=0.5712;wild=0.6918
+G21D1_MEAN4DOM_cs_cat=0.6552
+G21D1_DIM_cs_pool=2
+G21D1_RATIO_cs_pool=0.9563
+G21D1_S_cs_pool=0.0164
+G21D1_CLASSGAP_cs_pool=0.9638
+G21D1_DOMGAP_cs_pool=cd1=1.0150;cd2=0.8453;dfdcp=1.3020;ffiw=0.6522;wild=0.7937
+G21D1_RATIO_PERDOM_cs_pool=cd1=1.0531;cd2=0.8770;dfdcp=1.3509;ffiw=0.6767;wild=0.8235
+G21D1_FFPP_AUC_cs_pool=0.7350
+G21D1_CD_cs_pool=cd1=0.6160;cd2=0.6021;dfdcp=0.5466;ffiw=0.5820;wild=0.6773
+G21D1_MEAN4DOM_cs_pool=0.6105
+G21D1_DIM_cs_modelvis=576
+G21D1_RATIO_cs_modelvis=3.7154
+G21D1_S_cs_modelvis=0.0170
+G21D1_CLASSGAP_cs_modelvis=1.4540
+G21D1_DOMGAP_cs_modelvis=cd1=4.1271;cd2=4.1513;dfdcp=8.7081;ffiw=5.6425;wild=4.3828
+G21D1_RATIO_PERDOM_cs_modelvis=cd1=2.8384;cd2=2.8550;dfdcp=5.9889;ffiw=3.8806;wild=3.0142
+G21D1_FFPP_AUC_cs_modelvis=0.5585
+G21D1_CD_cs_modelvis=cd1=0.5255;cd2=0.5396;dfdcp=0.4107;ffiw=0.4901;wild=0.4690
+G21D1_MEAN4DOM_cs_modelvis=0.4862
+G21D1_DIM_cs_alpha_last=576
+G21D1_RATIO_cs_alpha_last=2.3410
+G21D1_S_cs_alpha_last=0.0170
+G21D1_CLASSGAP_cs_alpha_last=3.4901
+G21D1_DOMGAP_cs_alpha_last=cd1=6.9322;cd2=6.5017;dfdcp=12.4646;ffiw=7.4313;wild=7.5220
+G21D1_RATIO_PERDOM_cs_alpha_last=cd1=1.9862;cd2=1.8629;dfdcp=3.5714;ffiw=2.1293;wild=2.1552
+G21D1_FFPP_AUC_cs_alpha_last=0.7204
+G21D1_CD_cs_alpha_last=cd1=0.4504;cd2=0.4895;dfdcp=0.5659;ffiw=0.4920;wild=0.5988
+G21D1_MEAN4DOM_cs_alpha_last=0.5262
+G21D1_DIM_cs_alpha_nullA=576
+G21D1_RATIO_cs_alpha_nullA=2.3367
+G21D1_S_cs_alpha_nullA=0.0435
+G21D1_CLASSGAP_cs_alpha_nullA=2.6167
+G21D1_DOMGAP_cs_alpha_nullA=cd1=4.6515;cd2=4.1810;dfdcp=4.7465;ffiw=8.1533;wild=8.8396
+G21D1_RATIO_PERDOM_cs_alpha_nullA=cd1=1.7776;cd2=1.5978;dfdcp=1.8140;ffiw=3.1159;wild=3.3782
+G21D1_FFPP_AUC_cs_alpha_nullA=0.6633
+G21D1_CD_cs_alpha_nullA=cd1=0.4824;cd2=0.5233;dfdcp=0.4912;ffiw=0.5932;wild=0.5570
+G21D1_MEAN4DOM_cs_alpha_nullA=0.5135
+G21D1_DIM_cs_mean_nullA=1
+G21D1_RATIO_cs_mean_nullA=1.3857
+G21D1_S_cs_mean_nullA=0.0097
+G21D1_CLASSGAP_cs_mean_nullA=0.2534
+G21D1_DOMGAP_cs_mean_nullA=cd1=0.2216;cd2=0.2317;dfdcp=0.0127;ffiw=0.5120;wild=0.7774
+G21D1_RATIO_PERDOM_cs_mean_nullA=cd1=0.8747;cd2=0.9145;dfdcp=0.0501;ffiw=2.0208;wild=3.0684
+G21D1_FFPP_AUC_cs_mean_nullA=0.5655
+G21D1_CD_cs_mean_nullA=cd1=0.6225;cd2=0.5409;dfdcp=0.5842;ffiw=0.5383;wild=0.5885
+G21D1_MEAN4DOM_cs_mean_nullA=0.5840
+G21D1_DIM_cs_cat_nullA=4
+G21D1_RATIO_cs_cat_nullA=1.9393
+G21D1_S_cs_cat_nullA=0.0109
+G21D1_CLASSGAP_cs_cat_nullA=0.5733
+G21D1_DOMGAP_cs_cat_nullA=cd1=0.7102;cd2=0.6938;dfdcp=1.9752;ffiw=0.7917;wild=1.3883
+G21D1_RATIO_PERDOM_cs_cat_nullA=cd1=1.2387;cd2=1.2102;dfdcp=3.4451;ffiw=1.3809;wild=2.4214
+G21D1_FFPP_AUC_cs_cat_nullA=0.6605
+G21D1_CD_cs_cat_nullA=cd1=0.6413;cd2=0.5592;dfdcp=0.5104;ffiw=0.5856;wild=0.5395
+G21D1_MEAN4DOM_cs_cat_nullA=0.5626
+G21D1_DIM_cs_alpha_nullB=576
+G21D1_RATIO_cs_alpha_nullB=3.4336
+G21D1_S_cs_alpha_nullB=0.0316
+G21D1_CLASSGAP_cs_alpha_nullB=1.9156
+G21D1_DOMGAP_cs_alpha_nullB=cd1=5.2626;cd2=4.8864;dfdcp=5.5765;ffiw=8.7495;wild=8.4122
+G21D1_RATIO_PERDOM_cs_alpha_nullB=cd1=2.7472;cd2=2.5509;dfdcp=2.9111;ffiw=4.5675;wild=4.3914
+G21D1_FFPP_AUC_cs_alpha_nullB=0.6366
+G21D1_CD_cs_alpha_nullB=cd1=0.4944;cd2=0.5529;dfdcp=0.4513;ffiw=0.6209;wild=0.5299
+G21D1_MEAN4DOM_cs_alpha_nullB=0.5071
+G21D1_DIM_cs_mean_nullB=1
+G21D1_RATIO_cs_mean_nullB=9.1029
+G21D1_S_cs_mean_nullB=0.0080
+G21D1_CLASSGAP_cs_mean_nullB=0.0431
+G21D1_DOMGAP_cs_mean_nullB=cd1=0.1396;cd2=0.1907;dfdcp=0.4462;ffiw=0.6287;wild=0.5543
+G21D1_RATIO_PERDOM_cs_mean_nullB=cd1=3.2428;cd2=4.4301;dfdcp=10.3636;ffiw=14.6031;wild=12.8749
+G21D1_FFPP_AUC_cs_mean_nullB=0.5319
+G21D1_CD_cs_mean_nullB=cd1=0.6174;cd2=0.6272;dfdcp=0.4759;ffiw=0.4522;wild=0.4917
+G21D1_MEAN4DOM_cs_mean_nullB=0.5531
+G21D1_DIM_cs_cat_nullB=4
+G21D1_RATIO_cs_cat_nullB=15.2265
+G21D1_S_cs_cat_nullB=0.0108
+G21D1_CLASSGAP_cs_cat_nullB=0.0686
+G21D1_DOMGAP_cs_cat_nullB=cd1=0.6346;cd2=0.6598;dfdcp=1.7987;ffiw=1.2662;wild=0.8640
+G21D1_RATIO_PERDOM_cs_cat_nullB=cd1=9.2501;cd2=9.6174;dfdcp=26.2166;ffiw=18.4557;wild=12.5927
+G21D1_FFPP_AUC_cs_cat_nullB=0.5555
+G21D1_CD_cs_cat_nullB=cd1=0.5291;cd2=0.5025;dfdcp=0.4911;ffiw=0.4748;wild=0.4978
+G21D1_MEAN4DOM_cs_cat_nullB=0.5051
+G21D1_DIM_cs_alpha_swap=576
+G21D1_RATIO_cs_alpha_swap=1.2644
+G21D1_S_cs_alpha_swap=0.0213
+G21D1_CLASSGAP_cs_alpha_swap=4.5420
+G21D1_DOMGAP_cs_alpha_swap=cd1=3.6873;cd2=3.3021;dfdcp=6.9870;ffiw=6.9430;wild=7.7944
+G21D1_RATIO_PERDOM_cs_alpha_swap=cd1=0.8118;cd2=0.7270;dfdcp=1.5383;ffiw=1.5286;wild=1.7161
+G21D1_FFPP_AUC_cs_alpha_swap=0.7327
+G21D1_CD_cs_alpha_swap=cd1=0.6430;cd2=0.6220;dfdcp=0.6003;ffiw=0.5889;wild=0.6333
+G21D1_MEAN4DOM_cs_alpha_swap=0.6246
+G21D1_DIM_cs_mean_swap=1
+G21D1_RATIO_cs_mean_swap=0.5977
+G21D1_S_cs_mean_swap=0.0069
+G21D1_CLASSGAP_cs_mean_swap=0.4066
+G21D1_DOMGAP_cs_mean_swap=cd1=0.1488;cd2=0.1034;dfdcp=0.5027;ffiw=0.0133;wild=0.4468
+G21D1_RATIO_PERDOM_cs_mean_swap=cd1=0.3660;cd2=0.2543;dfdcp=1.2363;ffiw=0.0327;wild=1.0989
+G21D1_FFPP_AUC_cs_mean_swap=0.6172
+G21D1_CD_cs_mean_swap=cd1=0.8122;cd2=0.7239;dfdcp=0.5691;ffiw=0.5212;wild=0.6093
+G21D1_MEAN4DOM_cs_mean_swap=0.6786
+G21D1_DIM_cs_cat_swap=4
+G21D1_RATIO_cs_cat_swap=0.9141
+G21D1_S_cs_cat_swap=0.0110
+G21D1_CLASSGAP_cs_cat_swap=1.1414
+G21D1_DOMGAP_cs_cat_swap=cd1=0.8334;cd2=0.7526;dfdcp=1.7889;ffiw=0.7139;wild=1.1275
+G21D1_RATIO_PERDOM_cs_cat_swap=cd1=0.7302;cd2=0.6594;dfdcp=1.5673;ffiw=0.6255;wild=0.9879
+G21D1_FFPP_AUC_cs_cat_swap=0.7239
+G21D1_CD_cs_cat_swap=cd1=0.7588;cd2=0.6968;dfdcp=0.6328;ffiw=0.6155;wild=0.6624
+G21D1_MEAN4DOM_cs_cat_swap=0.6877
+G21D1_DIM_cs_pool_null=1
+G21D1_RATIO_cs_pool_null=1.0990
+G21D1_S_cs_pool_null=0.0175
+G21D1_CLASSGAP_cs_pool_null=0.1298
+G21D1_DOMGAP_cs_pool_null=cd1=0.0591;cd2=0.0454;dfdcp=0.3116;ffiw=0.2718;wild=0.0253
+G21D1_RATIO_PERDOM_cs_pool_null=cd1=0.4557;cd2=0.3501;dfdcp=2.4007;ffiw=2.0937;wild=0.1946
+G21D1_FFPP_AUC_cs_pool_null=0.5289
+G21D1_CD_cs_pool_null=cd1=0.5345;cd2=0.5600;dfdcp=0.4030;ffiw=0.5734;wild=0.5582
+G21D1_MEAN4DOM_cs_pool_null=0.5139
+G21D1_DIM_cs_alpha_rand1=576
+G21D1_RATIO_cs_alpha_rand1=3.8871
+G21D1_S_cs_alpha_rand1=0.0448
+G21D1_CLASSGAP_cs_alpha_rand1=2.1476
+G21D1_DOMGAP_cs_alpha_rand1=cd1=6.0630;cd2=6.4258;dfdcp=7.4514;ffiw=10.0551;wild=11.7446
+G21D1_RATIO_PERDOM_cs_alpha_rand1=cd1=2.8231;cd2=2.9921;dfdcp=3.4696;ffiw=4.6820;wild=5.4686
+G21D1_FFPP_AUC_cs_alpha_rand1=0.6139
+G21D1_CD_cs_alpha_rand1=cd1=0.5147;cd2=0.5316;dfdcp=0.4985;ffiw=0.3726;wild=0.4552
+G21D1_MEAN4DOM_cs_alpha_rand1=0.5000
+G21D1_DIM_cs_mean_rand1=1
+G21D1_RATIO_cs_mean_rand1=5.6689
+G21D1_S_cs_mean_rand1=0.0134
+G21D1_CLASSGAP_cs_mean_rand1=0.1640
+G21D1_DOMGAP_cs_mean_rand1=cd1=0.6829;cd2=0.7592;dfdcp=0.8473;ffiw=0.9464;wild=1.4115
+G21D1_RATIO_PERDOM_cs_mean_rand1=cd1=4.1649;cd2=4.6304;dfdcp=5.1678;ffiw=5.7724;wild=8.6090
+G21D1_FFPP_AUC_cs_mean_rand1=0.5414
+G21D1_CD_cs_mean_rand1=cd1=0.5179;cd2=0.4615;dfdcp=0.4887;ffiw=0.4603;wild=0.4271
+G21D1_MEAN4DOM_cs_mean_rand1=0.4738
+G21D1_DIM_cs_cat_rand1=4
+G21D1_RATIO_cs_cat_rand1=5.0160
+G21D1_S_cs_cat_rand1=0.0144
+G21D1_CLASSGAP_cs_cat_rand1=0.2819
+G21D1_DOMGAP_cs_cat_rand1=cd1=1.0798;cd2=1.2865;dfdcp=1.4459;ffiw=1.1926;wild=2.0640
+G21D1_RATIO_PERDOM_cs_cat_rand1=cd1=3.8312;cd2=4.5646;dfdcp=5.1301;ffiw=4.2314;wild=7.3229
+G21D1_FFPP_AUC_cs_cat_rand1=0.5508
+G21D1_CD_cs_cat_rand1=cd1=0.6013;cd2=0.5453;dfdcp=0.5704;ffiw=0.4280;wild=0.4319
+G21D1_MEAN4DOM_cs_cat_rand1=0.5372
+G21D1_DIM_cs_alpha_rand2=576
+G21D1_RATIO_cs_alpha_rand2=3.9320
+G21D1_S_cs_alpha_rand2=0.0426
+G21D1_CLASSGAP_cs_alpha_rand2=1.7061
+G21D1_DOMGAP_cs_alpha_rand2=cd1=4.2822;cd2=3.5664;dfdcp=13.7974;ffiw=6.3476;wild=5.5476
+G21D1_RATIO_PERDOM_cs_alpha_rand2=cd1=2.5100;cd2=2.0904;dfdcp=8.0873;ffiw=3.7206;wild=3.2517
+G21D1_FFPP_AUC_cs_alpha_rand2=0.5918
+G21D1_CD_cs_alpha_rand2=cd1=0.5536;cd2=0.5662;dfdcp=0.5070;ffiw=0.6781;wild=0.5242
+G21D1_MEAN4DOM_cs_alpha_rand2=0.5378
+G21D1_DIM_cs_mean_rand2=1
+G21D1_RATIO_cs_mean_rand2=57.9039
+G21D1_S_cs_mean_rand2=0.0200
+G21D1_CLASSGAP_cs_mean_rand2=0.0059
+G21D1_DOMGAP_cs_mean_rand2=cd1=0.1788;cd2=0.0255;dfdcp=1.1329;ffiw=0.2918;wild=0.0807
+G21D1_RATIO_PERDOM_cs_mean_rand2=cd1=30.2749;cd2=4.3155;dfdcp=191.8551;ffiw=49.4091;wild=13.6648
+G21D1_FFPP_AUC_cs_mean_rand2=0.4873
+G21D1_CD_cs_mean_rand2=cd1=0.3566;cd2=0.4754;dfdcp=0.5057;ffiw=0.4909;wild=0.5612
+G21D1_MEAN4DOM_cs_mean_rand2=0.4747
+G21D1_DIM_cs_cat_rand2=4
+G21D1_RATIO_cs_cat_rand2=9.0245
+G21D1_S_cs_cat_rand2=0.0178
+G21D1_CLASSGAP_cs_cat_rand2=0.0624
+G21D1_DOMGAP_cs_cat_rand2=cd1=0.2548;cd2=0.2134;dfdcp=1.7671;ffiw=0.4468;wild=0.1336
+G21D1_RATIO_PERDOM_cs_cat_rand2=cd1=4.0839;cd2=3.4194;dfdcp=28.3186;ffiw=7.1596;wild=2.1409
+G21D1_FFPP_AUC_cs_cat_rand2=0.4705
+G21D1_CD_cs_cat_rand2=cd1=0.5805;cd2=0.5680;dfdcp=0.5996;ffiw=0.3545;wild=0.5202
+G21D1_MEAN4DOM_cs_cat_rand2=0.5671
+G21D1_DIM_cs_alpha_rand3=576
+G21D1_RATIO_cs_alpha_rand3=4.2091
+G21D1_S_cs_alpha_rand3=0.0351
+G21D1_CLASSGAP_cs_alpha_rand3=2.1945
+G21D1_DOMGAP_cs_alpha_rand3=cd1=8.6262;cd2=8.3750;dfdcp=12.8012;ffiw=8.7904;wild=7.5925
+G21D1_RATIO_PERDOM_cs_alpha_rand3=cd1=3.9308;cd2=3.8163;dfdcp=5.8332;ffiw=4.0056;wild=3.4597
+G21D1_FFPP_AUC_cs_alpha_rand3=0.6093
+G21D1_CD_cs_alpha_rand3=cd1=0.5825;cd2=0.6114;dfdcp=0.4906;ffiw=0.6269;wild=0.4530
+G21D1_MEAN4DOM_cs_alpha_rand3=0.5344
+G21D1_DIM_cs_mean_rand3=1
+G21D1_RATIO_cs_mean_rand3=5.1463
+G21D1_S_cs_mean_rand3=0.0129
+G21D1_CLASSGAP_cs_mean_rand3=0.1612
+G21D1_DOMGAP_cs_mean_rand3=cd1=0.8645;cd2=0.8395;dfdcp=1.2521;ffiw=0.6022;wild=0.5894
+G21D1_RATIO_PERDOM_cs_mean_rand3=cd1=5.3631;cd2=5.2083;dfdcp=7.7676;ffiw=3.7357;wild=3.6566
+G21D1_FFPP_AUC_cs_mean_rand3=0.5699
+G21D1_CD_cs_mean_rand3=cd1=0.7225;cd2=0.6328;dfdcp=0.4512;ffiw=0.6040;wild=0.4771
+G21D1_MEAN4DOM_cs_mean_rand3=0.5709
+G21D1_DIM_cs_cat_rand3=4
+G21D1_RATIO_cs_cat_rand3=6.6646
+G21D1_S_cs_cat_rand3=0.0153
+G21D1_CLASSGAP_cs_cat_rand3=0.1733
+G21D1_DOMGAP_cs_cat_rand3=cd1=1.0068;cd2=1.0603;dfdcp=1.7541;ffiw=1.1648;wild=0.7880
+G21D1_RATIO_PERDOM_cs_cat_rand3=cd1=5.8104;cd2=6.1191;dfdcp=10.1233;ffiw=6.7223;wild=4.5478
+G21D1_FFPP_AUC_cs_cat_rand3=0.5750
+G21D1_CD_cs_cat_rand3=cd1=0.6979;cd2=0.6209;dfdcp=0.4536;ffiw=0.6156;wild=0.4795
+G21D1_MEAN4DOM_cs_cat_rand3=0.5630
+G21D1_VALID_DOMAINS=cd1,cd2,dfdcp,wild (ffiw leak excluded)
+G21D1_FFIW_WARNING=ffiw has a single video identity -> leaked/upward-biased, reported but NOT aggregated
+G21D1_REF_V_MEAN4DOM=0.8318
+G21D1_REF_BEST_CONCAT_MEAN4DOM=0.8429
+G21D1_GATE_RULE=ratio<0.3 AND mean4dom>0.8429 (feature = cs_alpha)
+G21D1_GATE_RATIO_OK=0
+G21D1_GATE_AUC_OK=0
+G21D1_GATE_PASS=0
+G21D1_GATE_OUTCOME=ROUTE_CLOSED
+G21D1_SWAP_SC_ANTISYM_DEV=0.0e+00
+G21D1_SWAP_COEF_ANTISYM_DEV=0.0e+00
+G21D1_SWAP_INTERCEPT_MAIN=0.057575
+G21D1_SWAP_INTERCEPT_SWAP=0.057575
+G21D1_SWAP_AUC_EQUAL=1
+G21D1_SWAP_NOTE=cs_alpha_swap = -cs_alpha -> global reflection; AUC is reflection-invariant so the swapped AUC EQUALS the main AUC instead of 1-AUC (pre-registered expectation NOT met). Control confirms the construction is exactly antisymmetric (no slot artefact); it does NOT test sign/direction. The informative semantic controls are NULL and RANDOM.
+G21D1_BEST_MAIN_FEATURE_BY_MEAN4DOM=cs_mean=0.6786
+G21D1_GAP_TO_V_BASELINE=+0.2072 (cs_alpha minus V)
+G21D1_CTRL_RAND_MEAN4DOM_RANGE=0.4738..0.5709
+G21D1_CTRL_NULL_MEAN4DOM_RANGE=0.5051..0.5840
+G21D1_THREADS=OMP/MKL/OPENBLAS/NUMEXPR/VECLIB/JOBLIB=1, torch.set_num_threads(1), cv2.setNumThreads(0), num_workers=0
+
+----------------------------------------------------------------------------------------------------
+A. SETUP / PIPELINE / PROTOCOL SELF-CHECKS
+----------------------------------------------------------------------------------------------------
+  gpu query : [(0, 5176, 5943), (1, 0, 11120), (2, 64, 11055)]   assigned=1 used_at_start=0 MiB
+  device    : NVIDIA GeForce GTX 1080 Ti
+  clip path : E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\checkpoints\clip-vit-large-patch14-336  (source=local; E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\checkpoints\clip-vit-large-patch14-336 exists=True)
+  detector CLIP vision tower vs standalone CLIP vision tower (both loaded from CLIP_PATH): same_keys=True, n_common=391, max abs weight diff=0.000e+00
+  model     : ViT_M2F2Det_Bridge (bridge_v2_phase1.pth, strict=False) missing=0 unexpected=0
+  pipeline  : cv2.imread -> BGR2RGB -> cv2.resize(336) -> albumentations Normalize(CLIP) ->
+              ToTensorV2 -> detector CLIP vision tower (pixel_values, output_hidden_states=True)
+  repro     : cos(cls_fresh, layer_feats.npz cls_final) over 8 imgs min=1.000000 mean=1.000000  (gate 0.999)
+  E6 anchor : layer_feats cls_final == probe V.  recomputed s=1.5097 (exp 1.5097); class_gap=40.2122 (exp 40.2122); ratio=0.1983 (exp 0.1983) -> PASS
+  CD anchor : V cross-domain cd1=0.8286(exp 0.8286) cd2=0.8633(exp 0.8633) dfdcp=0.8261(exp 0.8261) ffiw=0.8244(exp 0.8244) wild=0.8090(exp 0.809)
+              maxdev=0.000033; V mean4dom=0.8318 (cited 0.8318)
+  patch lyr : hidden_states[-2] (LLaVA-1.5 select_layer=-2 = the detector CLIP vision encoder
+              emits this as its final feature).  Robustness variant cs_alpha_last uses hs[-1].
+  text anch : unit-normalised; cos(t_real,t_fake)=0.8553; cos(t_real,t_null)=0.7531; cos(t_fake,t_null)=0.6544
+  eval      : StandardScaler().fit(X[train]) + LogisticRegression(C=1e-3, lbfgs, max_iter=3000, random_state=0) fit on FF++ train n=2200; AUC per target domain on its 300 rows; mean4dom = mean(cd1,cd2,dfdcp,wild) [ffiw EXCLUDED]
+  y         : 1=real, 0=fake; AUC positive class = FAKE
+
+----------------------------------------------------------------------------------------------------
+B. MAIN FEATURES  (E6 ratio from _g12 block B; AUC = FF++-train linear head -> target domain)
+----------------------------------------------------------------------------------------------------
+  feature                 dim         s   class_gap    ratio    ffpp      cd1      cd2    dfdcp     ffiw     wild  mean4dom
+  cs_alpha                576    0.0213      4.5420   1.2644  0.7327   0.6430   0.6220   0.6003   0.5889   0.6333    0.6246
+  cs_mean                   1    0.0069      0.4066   0.5977  0.6172   0.8122   0.7239   0.5691   0.5212   0.6093    0.6786
+  cs_cat                    4    0.0105      0.9606   1.1044  0.6936   0.7390   0.6311   0.5588   0.5712   0.6918    0.6552
+  cs_pool                   2    0.0164      0.9638   0.9563  0.7350   0.6160   0.6021   0.5466   0.5820   0.6773    0.6105
+  cs_modelvis             576    0.0170      1.4540   3.7154  0.5585   0.5255   0.5396   0.4107   0.4901   0.4690    0.4862
+  cs_alpha_last           576    0.0170      3.4901   2.3410  0.7204   0.4504   0.4895   0.5659   0.4920   0.5988    0.5262
+
+  reference: frozen ViT V mean4dom=0.8318; best-known concat variant mean4dom=0.8429; gate threshold=0.8429
+  NOTE ffiw is reported but EXCLUDED from mean4dom (single video identity -> leaked/upward-biased).
+
+----------------------------------------------------------------------------------------------------
+C. CONTROLS (all required)
+----------------------------------------------------------------------------------------------------
+  NULL control: only ONE null prompt is pre-registered, so t_null in the fake slot (nullA) and
+  t_null in the real slot (nullB) are the two non-degenerate readings of build-the-same-features-
+  using-t_null; both are reported, plus a 1-d near-chance reference cos(pooled_image, t_null).
+
+  control                 dim         s   class_gap    ratio    ffpp      cd1      cd2    dfdcp     ffiw     wild  mean4dom
+  cs_alpha_nullA          576    0.0435      2.6167   2.3367  0.6633   0.4824   0.5233   0.4912   0.5932   0.5570    0.5135
+  cs_mean_nullA             1    0.0097      0.2534   1.3857  0.5655   0.6225   0.5409   0.5842   0.5383   0.5885    0.5840
+  cs_cat_nullA              4    0.0109      0.5733   1.9393  0.6605   0.6413   0.5592   0.5104   0.5856   0.5395    0.5626
+  cs_alpha_nullB          576    0.0316      1.9156   3.4336  0.6366   0.4944   0.5529   0.4513   0.6209   0.5299    0.5071
+  cs_mean_nullB             1    0.0080      0.0431   9.1029  0.5319   0.6174   0.6272   0.4759   0.4522   0.4917    0.5531
+  cs_cat_nullB              4    0.0108      0.0686  15.2265  0.5555   0.5291   0.5025   0.4911   0.4748   0.4978    0.5051
+  cs_alpha_swap           576    0.0213      4.5420   1.2644  0.7327   0.6430   0.6220   0.6003   0.5889   0.6333    0.6246
+  cs_mean_swap              1    0.0069      0.4066   0.5977  0.6172   0.8122   0.7239   0.5691   0.5212   0.6093    0.6786
+  cs_cat_swap               4    0.0110      1.1414   0.9141  0.7239   0.7588   0.6968   0.6328   0.6155   0.6624    0.6877
+  cs_pool_null              1    0.0175      0.1298   1.0990  0.5289   0.5345   0.5600   0.4030   0.5734   0.5582    0.5139
+  cs_alpha_rand1          576    0.0448      2.1476   3.8871  0.6139   0.5147   0.5316   0.4985   0.3726   0.4552    0.5000
+  cs_mean_rand1             1    0.0134      0.1640   5.6689  0.5414   0.5179   0.4615   0.4887   0.4603   0.4271    0.4738
+  cs_cat_rand1              4    0.0144      0.2819   5.0160  0.5508   0.6013   0.5453   0.5704   0.4280   0.4319    0.5372
+  cs_alpha_rand2          576    0.0426      1.7061   3.9320  0.5918   0.5536   0.5662   0.5070   0.6781   0.5242    0.5378
+  cs_mean_rand2             1    0.0200      0.0059  57.9039  0.4873   0.3566   0.4754   0.5057   0.4909   0.5612    0.4747
+  cs_cat_rand2              4    0.0178      0.0624   9.0245  0.4705   0.5805   0.5680   0.5996   0.3545   0.5202    0.5671
+  cs_alpha_rand3          576    0.0351      2.1945   4.2091  0.6093   0.5825   0.6114   0.4906   0.6269   0.4530    0.5344
+  cs_mean_rand3             1    0.0129      0.1612   5.1463  0.5699   0.7225   0.6328   0.4512   0.6040   0.4771    0.5709
+  cs_cat_rand3              4    0.0153      0.1733   6.6646  0.5750   0.6979   0.6209   0.4536   0.6156   0.4795    0.5630
+
+  LABEL-SWAP RESULT -- DEVIATES FROM THE PRE-REGISTERED EXPECTATION; REPORTED AS MEASURED
+    measured: mean4dom(cs_alpha)=0.6246 vs mean4dom(cs_alpha_swap)=0.6246
+    per-domain: cd1:0.6430 vs 0.6430 cd2:0.6220 vs 0.6220 dfdcp:0.6003 vs 0.6003 ffiw:0.5889 vs 0.5889 wild:0.6333 vs 0.6333
+    The pre-registered expectation was mirror ~ (1 - AUC).  What was actually measured is that the
+    swapped AUC is EXACTLY EQUAL to the main AUC (not 1-AUC), for cs_alpha and cs_mean alike.
+    This is mathematically forced, not a bug, and it was verified explicitly:
+      StandardScaler().fit_transform(-X) == -StandardScaler().fit_transform(X): max dev = 0.0e+00
+      refitted LR coefficients: coef(swap) + coef(main) max abs dev = 0.0e+00;
+      intercepts main=0.057575 swap=0.057575  ->  df_swap(-x) == df_main(x) exactly
+    Why: cs_alpha_swap = -cs_alpha, i.e. the swap is a global reflection of the feature space applied
+    to BOTH classes.  For any score function s, P(s(-x_fake) > s(-x_real)) = P(s(x_fake) > s(x_real)),
+    so the separating power of the class-conditional distributions is reflection-invariant.  The
+    scaler flips sign exactly, the L2-regularised logistic optimum flips its coefficient vector
+    exactly (the intercept is unchanged), hence df_swap(x') = df_main(x) pointwise and the AUC is
+    preserved to machine precision rather than mirrored.
+    CONSEQUENCE FOR THE CONTROL'S STATED PURPOSE: this arm does NOT discriminate sign/direction.
+    What it does establish is that the feature construction is exactly antisymmetric, so no result
+    here can be an artefact of which prompt was placed in the 'real' vs 'fake' slot.  Note the control
+    does have teeth when the construction is NOT a pure negation: cs_cat is not antisymmetric
+    (mean4dom 0.6552 vs 0.6877 swapped), and there the numbers do move.
+    The controls that genuinely probe whether the signal is SEMANTIC are the NULL and RANDOM arms;
+    both collapse to ~chance (table above), which is the informative negative result.
+
+----------------------------------------------------------------------------------------------------
+D. PRE-REGISTERED GATE (fixed before any result was seen; gated feature = cs_alpha)
+----------------------------------------------------------------------------------------------------
+  rule        : ratio < 0.3  AND  mean4dom > 0.8429
+  measured    : ratio = 1.2644 (s=0.0213, class_gap=4.5420)
+                mean4dom = 0.6246
+  G21D1_GATE_RATIO_OK = 0
+  G21D1_GATE_AUC_OK   = 0
+  G21D1_GATE_PASS     = 0   -> ROUTE CLOSED
+  (secondary cs_modelvis: ratio=3.7154, mean4dom=0.4862 -- NOT the gated feature, reported for completeness)
+
+----------------------------------------------------------------------------------------------------
+D2. WHAT THE NUMBERS ACTUALLY SAY
+----------------------------------------------------------------------------------------------------
+  * cs_alpha (PRIMARY): ratio=1.2644 (threshold <0.3), mean4dom=0.6246 (threshold >0.8429).  BOTH gate conditions FAIL, and not marginally: the ratio is
+    4.2x ABOVE the ceiling and the AUC is 0.2183 BELOW the floor.
+  * The failure is a SCALE problem as much as a signal problem: for cs_alpha the class_gap is only
+    4.5420 (vs 40.2122 for the frozen ViT V feature), while the
+    domain gap reaches 7.7944 s-units.  Across domains the
+    alignment feature moves far more than real/fake moves within the source domain.
+  * Best MAIN feature by mean4dom is cs_mean at 0.6786, still below the frozen ViT V
+    baseline of 0.8318 and well below the best-known concat variant (0.8429).
+  * Even IN-DOMAIN (FF++ train -> test) the alignment features are weak (context: frozen ViT V
+    reaches ~0.9852 on the same split, per G16):
+      FFPP in-domain AUC cs_pool      = 0.7350
+      FFPP in-domain AUC cs_alpha     = 0.7327
+      FFPP in-domain AUC cs_cat       = 0.6936
+      FFPP in-domain AUC cs_mean      = 0.6172
+  * SECONDARY cs_modelvis (the detector's TRAINED vision_proj space): mean4dom=0.4862, ratio=3.7154, FF++ in-domain=0.5585.
+    Routing the same patches through the trained projection makes things WORSE than native CLIP space,
+    consistent with vision_proj (trained for the bridge fusion) not preserving CLIP's semantic metric.
+  * ROBUSTNESS cs_alpha_last (hidden_states[-1] instead of [-2]): mean4dom=0.5262, ratio=2.3410. The layer choice does not rescue the signal.
+  * CONTROLS are at chance: NULL arms 0.5051..0.5840, RANDOM arms 0.4738..0.5709.
+    The measured cs_alpha mean4dom (0.6246) is NOT meaningfully above these controls.
+
+  BOTTOM LINE: a frozen, native-CLIP per-patch semantic-alignment signal, built exactly the way the
+  original M2F2Det used it, does NOT carry useful cross-domain (or even in-domain) real/fake linear
+  signal on this probe.  The pre-registered gate fails on BOTH conditions -> this route is CLOSED.
+
+----------------------------------------------------------------------------------------------------
+E. AUDIT
+----------------------------------------------------------------------------------------------------
+  forwards  : 4500 images in 282 batch calls (batch=16, fp32, no_grad, num_workers=0, single process)
+  read_fail : 0
+  peak mem  : nvidia-smi 8740 MiB / torch max_alloc 6398 MiB
+  wall      : total 308.3s (extraction 281.8s, analysis 1.4s)
+  threads   : OMP/MKL/OPENBLAS/NUMEXPR/VECLIB/JOBLIB=1, torch.set_num_threads(1), cv2.setNumThreads(0), num_workers=0
+  saved     : d1_feats.npz (paths kept identical to the source order), d1_stats.npz
+
+----------------------------------------------------------------------------------------------------
+CAVEATS (honest)
+----------------------------------------------------------------------------------------------------
+  1. LINEAR-REACHABILITY LOWER BOUND.  The cross-domain AUC is a StandardScaler + LogisticRegression
+     (C=1e-3) head fitted on FF++ train only and applied unchanged to each target domain.  It
+     measures how much real/fake signal is LINEARLY AVAILABLE in the frozen feature.  A non-linear
+     head, a recalibrated head, or any fine-tuning could extract more.  A low number does NOT prove
+     the signal is absent, only that it is not linearly reachable by this protocol.
+  2. 300 IMAGES PER TARGET DOMAIN IS SMALL.  At AUC ~0.85 with n=300 the per-domain standard error
+     is roughly 0.02-0.03, and the within-domain class balance constrains it further.  Per-domain
+     differences below ~0.05 should not be over-read.  mean4dom averages 4 domains, which helps
+     but does not remove this.
+  3. THIS DOES NOT PROVE AN END-TO-END DETECTOR WOULD EXPLOIT THE SIGNAL.  Correlation is not
+     causation: a frozen feature carrying alignment information says nothing about whether a
+     trained detector routes it into the decision.  The defect under study (text features computed,
+     projected, then discarded) is an ARCHITECTURAL fact, independent of this probe.
+  4. THE PROMPTS ARE FIXED AND PRE-REGISTERED (3 real / 3 fake / 1 null), chosen before any result
+     was seen, so no prompt search was performed; conversely, prompt engineering could plausibly
+     change the numbers, and a single prompt set cannot characterise CLIP semantics as a whole.
+  5. THE PATCH LAYER IS A CHOICE.  hidden_states[-2] is what the project CLIPVisionEncoder emits
+     (LLaVA-1.5 select_layer=-2); hidden_states[-1] is the true last encoder layer, reported as
+     cs_alpha_last.  CLIP visual_projection was contrastively trained on the pooled CLS of the full
+     tower, NOT on patch tokens, so applying it to patches is a defensible but unsupervised use of
+     the projection: native here means web-scale pretrained, not used exactly as CLIP intended.
+  6. ffiw IS EXCLUDED FROM ALL AGGREGATES.  It has a single video identity, so a per-domain linear
+     head can latch onto identity/background rather than manipulation; its AUC is upward-biased and
+     is reported only for completeness.
+  7. THE NULL CONTROL IS NOT UNIQUE.  With a single pre-registered null prompt there are two
+     non-degenerate ways to slot it in; both (nullA / nullB) are reported.  Neither is a perfect
+     semantic-content-matched control -- an ideal one would use topic-matched prompts.
+  8. y CONVENTION: 1=real, 0=fake.  All reported AUCs use positive = FAKE, matching _g16/run_g16.py
+     and reproducing the recorded V anchors, so the numbers are directly comparable to the
+     already-recorded ratio table.
+  9. NO TRAINING OCCURRED.  This is a diagnostic probe: zero training budget consumed, no checkpoint
+     changed, and no file outside vit_module/_g21/ touched.
+ 10. THE LABEL-SWAP CONTROL DID NOT MEET ITS PRE-REGISTERED EXPECTATION and this is reported as
+     measured, not softened: it produced an AUC exactly EQUAL to the main arm rather than 1-AUC,
+     because the swap is an exact global reflection to which AUC is invariant (see section C for the
+     explicit numerical verification).  Treat that arm as an antisymmetry check, NOT as a test of
+     sign/direction.  The NULL and RANDOM arms carry the semantic-control weight in this design.
+ 11. THE GATE IS A LITERAL PRE-REGISTERED RULE, NOT A GRADED VERDICT.  cs_alpha fails BOTH clauses,
+     so the route is closed on this evidence.  That is a statement about this probe, not a proof that
+     no text-conditioned architecture could ever help -- see caveats 1 and 3.
+
+====================================================================================================
+END OF REPORT   (wall 308.3s)
+====================================================================================================

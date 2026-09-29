@@ -1,0 +1,61 @@
+==============================================================================
+[GPU] BEFORE CALIB -- gpu0: used=5391MiB/11264MiB util=0%; gpu1: used=0MiB/11264MiB util=0%; gpu2: used=85MiB/11264MiB util=0%
+[GPU] gate (physical card 1 <= 100 MiB): PASS
+==============================================================================
+  calib pool original_sequences   420
+  calib pool Deepfakes            420
+  calib pool Face2Face            420
+  calib pool FaceSwap             420
+  calib pool NeuralTextures       420
+[calib] --batch-size=32 -> per_class=6 effective_batch=30 batches=70 => 2100 images per calibration epoch
+
+==============================================================================
+CALIB GROUP = fix
+==============================================================================
+  [build] 16.2s  fix_a=True bridge_seed=None  trainable=52 tensors
+  [optim] 50t@lr=0.0005, 2t@lr=0.00025
+  [MICRO-BATCH] first batch real micro-batch size = 30   (sampler.effective_batch = 30, sampler.per_class = 6)
+  step     50  loss=0.0020  acc=99.93%  129s  11.7 img/s
+  [CALIB] fix: 2100 imgs, 70 batches, wall=179.23s (train-only 179.23s)
+  [CALIB] fix: micro=[30]  85.35 ms/img   11.72 img/s
+  [CALIB] fix: GPU peak so far 5251 MiB
+
+==============================================================================
+CALIB GROUP = randbridge
+==============================================================================
+  [build] 9.3s  fix_a=True bridge_seed=7777  trainable=2 tensors
+  [optim] 2t@lr=0.00025
+  [MICRO-BATCH] first batch real micro-batch size = 30   (sampler.effective_batch = 30, sampler.per_class = 6)
+  step     50  loss=0.0020  acc=99.93%  103s  14.5 img/s
+  [CALIB] randbridge: 2100 imgs, 70 batches, wall=144.73s (train-only 144.73s)
+  [CALIB] randbridge: micro=[30]  68.92 ms/img   14.51 img/s
+  [CALIB] randbridge: GPU peak so far 5251 MiB
+
+==============================================================================
+CALIB GROUP = nofix
+==============================================================================
+  [build] 10.6s  fix_a=False bridge_seed=None  trainable=54 tensors
+  [optim] 52t@lr=0.0005, 2t@lr=0.00025
+  [MICRO-BATCH] first batch real micro-batch size = 30   (sampler.effective_batch = 30, sampler.per_class = 6)
+  step     50  loss=0.0013  acc=99.93%  120s  12.5 img/s
+  [CALIB] nofix: 2100 imgs, 70 batches, wall=167.37s (train-only 167.37s)
+  [CALIB] nofix: micro=[30]  79.70 ms/img   12.55 img/s
+  [CALIB] nofix: GPU peak so far 7295 MiB
+
+==============================================================================
+ETA EXTRAPOLATION
+==============================================================================
+  fix          85.35 ms/img -> epoch 2.553 h -> per run (epoch + 2 evals + build + saves) 2.746 h
+  randbridge   68.92 ms/img -> epoch 2.062 h -> per run (epoch + 2 evals + build + saves) 2.253 h
+  nofix        79.70 ms/img -> epoch 2.384 h -> per run (epoch + 2 evals + build + saves) 2.576 h
+
+  eval cost: 4500 imgs @ 74.3 ms/img = 5.6 min each, 2 per run (50% + 100%)
+  MEAN over groups: 77.99 ms/img, 2.525 h/run
+  >>> 9 runs  = 22.73 h
+  >>> worst case (max ms/img) = 24.72 h
+  >>> best case  (min ms/img) = 20.28 h
+  user-approved budget = 21.2 h -> EXCEEDS by 1.53 h
+
+  epoch share  = 92.4%
+  GPU peak mem = 7295 MiB
+  [GPU] AFTER CALIB -- gpu0=5393MiB; gpu1=4407MiB; gpu2=85MiB

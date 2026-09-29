@@ -1,0 +1,58 @@
+[gpu] query=[(0, 5176, 5943), (1, 0, 11120), (2, 64, 11055)] assigned=1 used_at_start=0 device=NVIDIA GeForce GTX 1080 Ti
+[clip] path=E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\checkpoints\clip-vit-large-patch14-336 (local)
+Freezing CLIP vision encoder.
+[model] missing=0 unexpected=0
+[clip] detector vision tower == standalone CLIP vision tower: same_keys=True n_common=391 n_only_a=0 n_only_b=0 max_abs_dev=0.000e+00
+[text] |t_real-t_fake|=9.2754  cos(t_real,t_fake)=0.8553  |t_null|=15.5777  cos(t_real,t_null)=0.7531  cos(t_fake,t_null)=0.6544
+[A] pipeline repro cos(cls_fresh, layer_feats.cls_final) over 8 imgs: min=1.000000 mean=1.000000
+[A] E6 anchor on layer_feats cls_final(V): s=1.5097 (exp 1.5097) class_gap=40.2122 (exp 40.2122) ratio=0.1983 (exp 0.1983) -> PASS
+[A] cross-domain anchor on V: cd1=0.8286(exp 0.8286) cd2=0.8633(exp 0.8633) dfdcp=0.8261(exp 0.8261) ffiw=0.8244(exp 0.8244) wild=0.8090(exp 0.809) maxdev=0.000033
+[A] V mean4dom=0.8318 (expect 0.8318)
+  [extract] 16/4500  wall=1s
+  [extract] 336/4500  wall=21s
+  [extract] 656/4500  wall=41s
+  [extract] 976/4500  wall=61s
+  [extract] 1296/4500  wall=81s
+  [extract] 1616/4500  wall=101s
+  [extract] 1936/4500  wall=121s
+  [extract] 2256/4500  wall=142s
+  [extract] 2576/4500  wall=163s
+  [extract] 2896/4500  wall=183s
+  [extract] 3216/4500  wall=203s
+  [extract] 3536/4500  wall=223s
+  [extract] 3856/4500  wall=242s
+  [extract] 4176/4500  wall=262s
+  [extract] 4496/4500  wall=282s
+  [extract] 4500/4500  wall=282s
+[B] extraction done: 4500 imgs in 282 batches, wall=281.8s read_fail=0
+[save] d1_feats.npz -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g21\d1_feats.npz
+  [eval] cs_alpha             dim=576  s=0.0213 class_gap=  4.5420 ratio=1.2644 ffpp=0.7327 mean4dom=0.6246
+  [eval] cs_mean              dim=1    s=0.0069 class_gap=  0.4066 ratio=0.5977 ffpp=0.6172 mean4dom=0.6786
+  [eval] cs_cat               dim=4    s=0.0105 class_gap=  0.9606 ratio=1.1044 ffpp=0.6936 mean4dom=0.6552
+  [eval] cs_pool              dim=2    s=0.0164 class_gap=  0.9638 ratio=0.9563 ffpp=0.7350 mean4dom=0.6105
+  [eval] cs_modelvis          dim=576  s=0.0170 class_gap=  1.4540 ratio=3.7154 ffpp=0.5585 mean4dom=0.4862
+  [eval] cs_alpha_last        dim=576  s=0.0170 class_gap=  3.4901 ratio=2.3410 ffpp=0.7204 mean4dom=0.5262
+  [eval] cs_alpha_nullA       dim=576  s=0.0435 class_gap=  2.6167 ratio=2.3367 ffpp=0.6633 mean4dom=0.5135
+  [eval] cs_mean_nullA        dim=1    s=0.0097 class_gap=  0.2534 ratio=1.3857 ffpp=0.5655 mean4dom=0.5840
+  [eval] cs_cat_nullA         dim=4    s=0.0109 class_gap=  0.5733 ratio=1.9393 ffpp=0.6605 mean4dom=0.5626
+  [eval] cs_alpha_nullB       dim=576  s=0.0316 class_gap=  1.9156 ratio=3.4336 ffpp=0.6366 mean4dom=0.5071
+  [eval] cs_mean_nullB        dim=1    s=0.0080 class_gap=  0.0431 ratio=9.1029 ffpp=0.5319 mean4dom=0.5531
+  [eval] cs_cat_nullB         dim=4    s=0.0108 class_gap=  0.0686 ratio=15.2265 ffpp=0.5555 mean4dom=0.5051
+  [eval] cs_alpha_swap        dim=576  s=0.0213 class_gap=  4.5420 ratio=1.2644 ffpp=0.7327 mean4dom=0.6246
+  [eval] cs_mean_swap         dim=1    s=0.0069 class_gap=  0.4066 ratio=0.5977 ffpp=0.6172 mean4dom=0.6786
+  [eval] cs_cat_swap          dim=4    s=0.0110 class_gap=  1.1414 ratio=0.9141 ffpp=0.7239 mean4dom=0.6877
+  [eval] cs_pool_null         dim=1    s=0.0175 class_gap=  0.1298 ratio=1.0990 ffpp=0.5289 mean4dom=0.5139
+  [eval] cs_alpha_rand1       dim=576  s=0.0448 class_gap=  2.1476 ratio=3.8871 ffpp=0.6139 mean4dom=0.5000
+  [eval] cs_mean_rand1        dim=1    s=0.0134 class_gap=  0.1640 ratio=5.6689 ffpp=0.5414 mean4dom=0.4738
+  [eval] cs_cat_rand1         dim=4    s=0.0144 class_gap=  0.2819 ratio=5.0160 ffpp=0.5508 mean4dom=0.5372
+  [eval] cs_alpha_rand2       dim=576  s=0.0426 class_gap=  1.7061 ratio=3.9320 ffpp=0.5918 mean4dom=0.5378
+  [eval] cs_mean_rand2        dim=1    s=0.0200 class_gap=  0.0059 ratio=57.9039 ffpp=0.4873 mean4dom=0.4747
+  [eval] cs_cat_rand2         dim=4    s=0.0178 class_gap=  0.0624 ratio=9.0245 ffpp=0.4705 mean4dom=0.5671
+  [eval] cs_alpha_rand3       dim=576  s=0.0351 class_gap=  2.1945 ratio=4.2091 ffpp=0.6093 mean4dom=0.5344
+  [eval] cs_mean_rand3        dim=1    s=0.0129 class_gap=  0.1612 ratio=5.1463 ffpp=0.5699 mean4dom=0.5709
+  [eval] cs_cat_rand3         dim=4    s=0.0153 class_gap=  0.1733 ratio=6.6646 ffpp=0.5750 mean4dom=0.5630
+[swap] StandardScaler antisym dev=0.0e+00 coef antisym dev=0.0e+00 intercepts=(0.057574535991667015, 0.057574535991667015) -> swap AUC equals main AUC exactly (reflection invariance)
+[save] report -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g21\d1_report.txt
+[save] stats  -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g21\d1_stats.npz
+[done] GATE_PASS=0 RATIO_OK=0 AUC_OK=0 ratio=1.2644 mean4dom=0.6246
+[done] wall=308.3s forwards=4500 peak_smi=8740MiB read_fail=0

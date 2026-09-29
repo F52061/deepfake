@@ -1,0 +1,33 @@
+================================================================================
+BLOCK G3 - bootstrap CI for key AUC numbers (sample-level, no new training)
+================================================================================
+[G3] probe npz: train n=2200 test n=800 y1=400 y0=400
+[G3] feats_multi: total=2300 domains in file=['ffpp', 'cd1', 'cd2', 'dfdcp', 'ffiw', 'wild']
+    domain ffpp   n=800 y1=400 y0=400
+    domain cd1    n=300 y1=150 y0=150
+    domain cd2    n=300 y1=150 y0=150
+    domain dfdcp  n=300 y1=150 y0=150
+    domain ffiw   n=300 y1=150 y0=150
+    domain wild   n=300 y1=150 y0=150
+
+[G3.1] IN-DOMAIN: probe npz test 800 (fit on train_mask 2200)
+    V-only-LR                                       800  AUC=0.9852  95% CI [0.9763, 0.9926]  (width=0.0163)
+    C-only-LR                                       800  AUC=0.9108  95% CI [0.8922, 0.9291]  (width=0.0369)
+    concat-LR (np.c_[V,C])                          800  AUC=0.9878  95% CI [0.9798, 0.9943]  (width=0.0144)
+
+[G3.2] CROSS-DOMAIN: feats_multi 5 target domains x 300 (fit on probe train 2200)
+    setting                          cd1                       cd2                     dfdcp                      ffiw                      wild
+    V-only      0.8286[0.7808,0.8733]  0.8633[0.8208,0.9018]  0.8261[0.7794,0.8690]  0.8244[0.7759,0.8692]  0.8090[0.7605,0.8547]
+    C-only      0.6559[0.5945,0.7179]  0.7227[0.6628,0.7781]  0.7068[0.6463,0.7638]  0.8344[0.7839,0.8780]  0.7170[0.6594,0.7739]
+    concat      0.8372[0.7898,0.8807]  0.8730[0.8335,0.9106]  0.8236[0.7765,0.8686]  0.8181[0.7703,0.8622]  0.8200[0.7716,0.8630]
+
+[G3.3] concat-LR cross-domain AUC + CI width (the E4 key new number)
+    concat cd1    AUC=0.8372 CI[0.7898,0.8807] width=0.0909
+    concat cd2    AUC=0.8730 CI[0.8335,0.9106] width=0.0771
+    concat dfdcp  AUC=0.8236 CI[0.7765,0.8686] width=0.0921
+    concat ffiw   AUC=0.8181 CI[0.7703,0.8622] width=0.0919
+    concat wild   AUC=0.8200 CI[0.7716,0.8630] width=0.0914
+
+[G3] SEED declaration: LR = StandardScaler + LogisticRegression(C=1e-3, lbfgs, max_iter=3000, random_state=0) fit once on probe train_mask 2200 (E0/E3d/E4 protocol); bootstrap RNG=default_rng(0); B=2000; CI = 2.5/97.5 percentile of 2000 resampled roc_auc.
+[G3] CAVEAT: sample-level bootstrap; within-video frame correlation makes these confidence intervals optimistic (anti-conservative).
+[g3_done]

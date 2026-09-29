@@ -1,0 +1,13 @@
+[G15] anchor srcLR C=1e-3: cd1=0.8286 cd2=0.8633 dfdcp=0.8261 ffiw=0.8244 wild=0.8090
+[G15] anchor e0 AUC cd1=0.8576 (dev 1.11e-16)  srcLR maxdev=3.33e-05
+[G15] L0 done
+[G15] L1 done
+[G15] L2 done; global best combo (0.25, 'pseudo_only', 2) mean=0.8455
+[G15] L3 done
+[G15] L3b done
+[G15] L4 reference written
+[G15] L5 done
+[G15] verdicts L1=INEFFECTIVE L2=PARTIAL L3=PARTIAL L3b=MARGINAL_POSITIVE best_lever=L4_oracle cheapest=L2_selftrain (wall=76.4s)
+[done] report -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g15\g15_report.txt
+[done] stats  -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g15\g15_stats.npz
+[done] verdicts: L1=INEFFECTIVE L2=PARTIAL L3=PARTIAL L3b=MARGINAL_POSITIVE best=L4_oracle cheapest=L2_selftrain

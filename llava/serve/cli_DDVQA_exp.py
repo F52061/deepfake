@@ -31,8 +31,8 @@ from PIL import Image
 # ═══════════════════════════════════════════════════════════════════════
 # Default paths (modify these to match your environment)
 # ═══════════════════════════════════════════════════════════════════════
-DEFAULT_MODEL_PATH = "./checkpoints/llava-v1.5-7b-M2F2-Det"
-DEFAULT_PHASE1_CKPT = "./vit_module/vit_m2f2_phase1.pth"
+DEFAULT_MODEL_PATH = "./checkpoints/llava-v1.5-7b-M2F2-Det-bridge"
+DEFAULT_PHASE1_CKPT = "./checkpoints/stage_1/bridge_v2_phase1.pth"
 DEFAULT_PHASE2_CKPT = "./vit_module/deepfake_projector.pth"
 
 
@@ -57,11 +57,28 @@ def main(args):
     from transformers import AutoTokenizer
 
     model_name = get_model_name_from_path(args.model_path)
+
+    # ── CLIP 离线重定向: from_pretrained('openai/clip*') → 本地 checkpoint ──
+    _clip_local = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+        '..', '..', 'checkpoints', 'clip-vit-large-patch14-336'))
+    if os.path.isdir(_clip_local):
+        from transformers import (CLIPVisionConfig, CLIPVisionModel, CLIPImageProcessor,
+            CLIPTextConfig, CLIPTextModel, AutoConfig, AutoTokenizer)
+        def _rdr(f):
+            def w(p, *a, **k):
+                if 'openai/clip' in str(p): return f(_clip_local, *a, **k)
+                return f(p, *a, **k)
+            return w
+        for _cls in [CLIPVisionConfig, CLIPVisionModel, CLIPImageProcessor, CLIPTextModel, AutoConfig, AutoTokenizer]:
+            _cls.from_pretrained = _rdr(_cls.from_pretrained)
+        print(f"CLIP offline redirect: {_clip_local}")
+
     tokenizer = AutoTokenizer.from_pretrained(args.model_path, use_fast=False)
     model = LlavaLlamaForCausalLMDeepfake.from_pretrained(
         args.model_path,
         low_cpu_mem_usage=False,
         ignore_mismatched_sizes=True,
+        torch_dtype=torch.float16,  # 合并 checkpoint 含 bf16 权重, Pascal 不支持, 统一转 fp16
     )
     model.eval()
     print("Model loaded on CPU. Loading vision tower...")
@@ -199,7 +216,7 @@ def main(args):
             outputs = tokenizer.decode(output_ids[0]).strip()
 
             answer = {
-                "image": image_fn,
+                "image": os.path.join(eccv_dataset_root, image_fn),  # 完整路径, 匹配 eval_judgement.py 的 startswith 判断
                 "question": question,
                 "text": outputs,
             }
@@ -222,7 +239,7 @@ if __name__ == "__main__":
     # ── Weight paths (with defaults) ──────────────────────────────────
     parser.add_argument("--vit-ckpt-path", type=str, default=None,
         help="ViT backbone weights from train_Ama_aps.py (net_XXX.pth)")
-    parser.add_argument("--phase1-ckpt", type=str, default=r'./vit_module/vit_m2f2_phase1.pth',
+    parser.add_argument("--phase1-ckpt", type=str, default=r'./checkpoints/stage_1/bridge_v2_phase1.pth',
         help="Phase 1 trained detector (deepfake_encoder_phase1.pth)")
     parser.add_argument("--phase2-ckpt", type=str, default=r'./vit_module/deepfake_projector.pth',
         help="Phase 2 trained bridge MLP (mm_projector.bin)")
@@ -234,7 +251,7 @@ if __name__ == "__main__":
     parser.add_argument("--image-dir", type=str,
         default=r"./utils/DDVQA_images/c40/test",
         help="Directory containing test images")
-    parser.add_argument("--output-dir", type=str, default="./outputs/DDVQA_exp",
+    parser.add_argument("--output-dir", type=str, default="./outputs/DDVQA_exp_first",
         help="Output directory for results")
 
     args = parser.parse_args()

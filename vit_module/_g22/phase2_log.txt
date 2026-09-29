@@ -1,0 +1,616 @@
+[09-19 20:18:41] ==============================================================================
+[09-19 20:18:41] G22 PHASE-2 LONG RUN START
+[09-19 20:18:41] ==============================================================================
+[09-19 20:18:41]   pid=33272  cwd=E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy
+[09-19 20:18:41]   order = INTERLEAVED: (fix,42) (randbridge,42) (nofix,42) (fix,43) (randbridge,43) (nofix,43) (fix,44) (randbridge,44) (nofix,44)
+[09-19 20:18:41]   seeds=[42, 43, 44]  randbridge bridge seeds=[7777, 7778, 7779]
+[09-19 20:18:41]   batch_size_arg=32 (real micro-batch 30)  lr bridge=0.0005 output=0.00025  wd=0.0001
+[09-19 20:18:41]   eval = g16/layer_feats.npz: split=="test"(800) + cd1/cd2/dfdcp/ffiw/wild(300 ea)
+[09-19 20:18:41]   train txt = E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\dataset\data_2023\ffpp_train_split.txt
+[09-19 20:18:41]   DRYRUN = False
+[09-19 20:18:41]   results -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g22\phase2_results.txt
+[09-19 20:18:41] [GPU] BEFORE -- gpu0: used=6766MiB/11264MiB util=3%; gpu1: used=0MiB/11264MiB util=0%; gpu2: used=88MiB/11264MiB util=0%
+[09-19 20:18:41] [GPU] gate (physical card 1 <= 100 MiB): PASS
+[09-19 20:18:41] [GPU] pinned CUDA_VISIBLE_DEVICES=1  visible=1  NVIDIA GeForce GTX 1080 Ti
+[09-19 20:18:41] ==============================================================================
+[09-19 20:18:47] [eval] 4500 rows ready; missing_files=0
+[09-19 20:18:47] [split==test] y counts = {0: 400, 1: 400}
+[09-19 20:18:47] 
+[09-19 20:18:47] ##############################################################################
+[09-19 20:18:47] ### RUN  fix_s42   (group=fix, seed=42)
+[09-19 20:18:47] ##############################################################################
+Freezing CLIP vision encoder.
+[build] model constructed in 5.4s
+[ViT_M2F2Det_Bridge] Loaded 162 ViT backbone keys, skipped 2 classification head keys.
+  Missing keys (BridgeAdapter etc, expected): 662
+  Unexpected keys: 0
+[build] shipped ckpt: 824 keys, missing=0 unexpected=0
+[FIX-A] replaced bridge_adapter_proj.bridge_adapter_proj (View,Linear,LayerNorm(1)) -> (View,Linear)
+[FIX-A] linear weight max|diff| vs ckpt = 0.000e+00  bias max|diff| = 0.000e+00
+[09-19 20:19:08]   [build] 20.4s  fix_a=True bridge_init_seed=None
+[09-19 20:19:08]   [trainable] 52 tensors / 0.5767M
+[09-19 20:19:08]   [optim] 50t@lr=0.0005, 2t@lr=0.00025
+[09-19 20:19:45]   [sampler] per_class=6 effective_batch=30 batches/epoch=3590 images/epoch=107700
+C:\Users\Supor2\.conda\envs\M2F2_Det\lib\site-packages\flash_attn\modules\mha.py:89: UserWarning: 1Torch was not compiled with flash attention. (Triggered internally at ..\aten\src\ATen\native\transformers\cuda\sdp_utils.cpp:263.)
+  out = F.scaled_dot_product_attention(
+[09-19 20:19:49]   [MICRO-BATCH] first batch real micro-batch size = 30   (sampler.effective_batch = 30, sampler.per_class = 6)
+[09-19 20:24:18]   step    100  loss=0.0060  acc=99.83%  274s  11.0 img/s
+[09-19 20:28:53]   step    200  loss=0.0063  acc=99.80%  548s  10.9 img/s
+[09-19 20:33:28]   step    300  loss=0.0057  acc=99.84%  824s  10.9 img/s
+[09-19 20:38:04]   step    400  loss=0.0055  acc=99.83%  1099s  10.9 img/s
+[09-19 20:42:39]   step    500  loss=0.0052  acc=99.83%  1375s  10.9 img/s
+[09-19 20:47:12]   step    600  loss=0.0052  acc=99.83%  1647s  10.9 img/s
+[09-19 20:51:46]   step    700  loss=0.0053  acc=99.82%  1921s  10.9 img/s
+[09-19 20:56:21]   step    800  loss=0.0053  acc=99.83%  2197s  10.9 img/s
+[09-19 21:00:54]   step    900  loss=0.0053  acc=99.83%  2469s  10.9 img/s
+[09-19 21:05:29]   step   1000  loss=0.0058  acc=99.82%  2744s  10.9 img/s
+[09-19 21:10:04]   step   1100  loss=0.0057  acc=99.83%  3020s  10.9 img/s
+[09-19 21:14:37]   step   1200  loss=0.0058  acc=99.84%  3292s  10.9 img/s
+[09-19 21:19:12]   step   1300  loss=0.0058  acc=99.84%  3568s  10.9 img/s
+[09-19 21:23:48]   step   1400  loss=0.0059  acc=99.83%  3843s  10.9 img/s
+[09-19 21:28:21]   step   1500  loss=0.0059  acc=99.84%  4116s  10.9 img/s
+[09-19 21:32:54]   step   1600  loss=0.0059  acc=99.83%  4390s  10.9 img/s
+[09-19 21:37:28]   step   1700  loss=0.0061  acc=99.83%  4664s  10.9 img/s
+[09-19 21:41:47]   [50%] reached at step 1795/3590 -- evaluating 4500 images ...
+    [fix_s42] 1280/4500  86s
+    [fix_s42] 2560/4500  174s
+    [fix_s42] 3840/4500  260s
+[09-19 21:46:52]   [50%] ffpp_test=0.9862  cd1=0.7864  cd2=0.8324  dfdcp=0.8253  ffiw=0.8623  wild=0.7792  mean4dom=0.8058
+[09-19 21:46:52]   [50%] saved 52 tensors -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g22\phase2_ckpt_fix_s42_50.pth
+[09-19 21:47:05]   step   1800  loss=0.0062  acc=99.83%  5241s  10.3 img/s
+[09-19 21:51:40]   step   1900  loss=0.0060  acc=99.83%  5516s  10.3 img/s
+[09-19 21:56:15]   step   2000  loss=0.0060  acc=99.83%  5791s  10.4 img/s
+[09-19 22:00:52]   step   2100  loss=0.0061  acc=99.83%  6067s  10.4 img/s
+[09-19 22:05:25]   step   2200  loss=0.0061  acc=99.83%  6340s  10.4 img/s
+[09-19 22:10:01]   step   2300  loss=0.0060  acc=99.84%  6616s  10.4 img/s
+[09-19 22:14:36]   step   2400  loss=0.0060  acc=99.83%  6891s  10.4 img/s
+[09-19 22:19:09]   step   2500  loss=0.0059  acc=99.83%  7164s  10.5 img/s
+[09-19 22:23:44]   step   2600  loss=0.0058  acc=99.84%  7439s  10.5 img/s
+[09-19 22:28:19]   step   2700  loss=0.0057  acc=99.84%  7714s  10.5 img/s
+[09-19 22:32:52]   step   2800  loss=0.0057  acc=99.84%  7987s  10.5 img/s
+[09-19 22:37:27]   step   2900  loss=0.0056  acc=99.84%  8263s  10.5 img/s
+[09-19 22:42:02]   step   3000  loss=0.0055  acc=99.85%  8538s  10.5 img/s
+[09-19 22:46:35]   step   3100  loss=0.0054  acc=99.85%  8811s  10.6 img/s
+[09-19 22:51:09]   step   3200  loss=0.0054  acc=99.85%  9085s  10.6 img/s
+[09-19 22:55:44]   step   3300  loss=0.0054  acc=99.85%  9360s  10.6 img/s
+[09-19 23:00:17]   step   3400  loss=0.0054  acc=99.85%  9633s  10.6 img/s
+[09-19 23:04:51]   step   3500  loss=0.0053  acc=99.85%  9907s  10.6 img/s
+[09-19 23:08:58]   [epoch] batches=3590 images=107700 micro=[30] wall=10153.3s (hook 304.7s) 94.27 ms/img
+[09-19 23:08:58]   [epoch] final loss=0.0053 train_acc=99.85%
+[09-19 23:08:58]   [100%] evaluating 4500 images ...
+    [fix_s42] 1280/4500  87s
+    [fix_s42] 2560/4500  174s
+    [fix_s42] 3840/4500  261s
+[09-19 23:14:03]   [100%] ffpp_test=0.9859  cd1=0.7824  cd2=0.8260  dfdcp=0.8236  ffiw=0.8629  wild=0.7770  mean4dom=0.8022
+[09-19 23:14:03]   [DONE] fix_s42  wall=2.921h  half_mean4dom=0.8058
+[09-19 23:14:03] 
+[09-19 23:14:03] ##############################################################################
+[09-19 23:14:03] ### RUN  randbridge_s42   (group=randbridge, seed=42)
+[09-19 23:14:03] ##############################################################################
+Freezing CLIP vision encoder.
+[build] model constructed in 5.2s
+[ViT_M2F2Det_Bridge] Loaded 162 ViT backbone keys, skipped 2 classification head keys.
+  Missing keys (BridgeAdapter etc, expected): 662
+  Unexpected keys: 0
+[randbridge] bridge re-initialised randomly with seed 7777 (58 tensors), rest of model = shipped ckpt
+[FIX-A] replaced bridge_adapter_proj.bridge_adapter_proj (View,Linear,LayerNorm(1)) -> (View,Linear)
+[FIX-A] linear weight max|diff| vs ckpt = 0.000e+00  bias max|diff| = 0.000e+00
+[09-19 23:14:14]   [build] 11.1s  fix_a=True bridge_init_seed=7777
+[09-19 23:14:14]   [trainable] 2 tensors / 0.0033M
+[09-19 23:14:14]   [optim] 2t@lr=0.00025
+[09-19 23:14:41]   [sampler] per_class=6 effective_batch=30 batches/epoch=3590 images/epoch=107700
+[09-19 23:14:43]   [MICRO-BATCH] first batch real micro-batch size = 30   (sampler.effective_batch = 30, sampler.per_class = 6)
+[09-19 23:18:09]   step    100  loss=0.0060  acc=99.83%  208s  14.4 img/s
+[09-19 23:21:38]   step    200  loss=0.0064  acc=99.80%  417s  14.4 img/s
+[09-19 23:25:07]   step    300  loss=0.0058  acc=99.84%  626s  14.4 img/s
+[09-19 23:28:37]   step    400  loss=0.0055  acc=99.83%  836s  14.3 img/s
+[09-19 23:32:07]   step    500  loss=0.0053  acc=99.83%  1046s  14.3 img/s
+[09-19 23:35:36]   step    600  loss=0.0053  acc=99.83%  1255s  14.3 img/s
+[09-19 23:39:05]   step    700  loss=0.0054  acc=99.83%  1464s  14.3 img/s
+[09-19 23:42:35]   step    800  loss=0.0053  acc=99.84%  1674s  14.3 img/s
+[09-19 23:46:04]   step    900  loss=0.0054  acc=99.83%  1883s  14.3 img/s
+[09-19 23:49:33]   step   1000  loss=0.0058  acc=99.83%  2092s  14.3 img/s
+[09-19 23:53:02]   step   1100  loss=0.0058  acc=99.84%  2301s  14.3 img/s
+[09-19 23:56:32]   step   1200  loss=0.0059  acc=99.84%  2511s  14.3 img/s
+[09-20 00:00:00]   step   1300  loss=0.0059  acc=99.84%  2720s  14.3 img/s
+[09-20 00:03:30]   step   1400  loss=0.0060  acc=99.83%  2929s  14.3 img/s
+[09-20 00:06:59]   step   1500  loss=0.0059  acc=99.84%  3138s  14.3 img/s
+[09-20 00:10:28]   step   1600  loss=0.0060  acc=99.83%  3347s  14.3 img/s
+[09-20 00:13:56]   step   1700  loss=0.0063  acc=99.83%  3555s  14.3 img/s
+[09-20 00:17:15]   [50%] reached at step 1795/3590 -- evaluating 4500 images ...
+    [randbridge_s42] 1280/4500  87s
+    [randbridge_s42] 2560/4500  174s
+    [randbridge_s42] 3840/4500  261s
+[09-20 00:22:20]   [50%] ffpp_test=0.9862  cd1=0.7877  cd2=0.8320  dfdcp=0.8244  ffiw=0.8599  wild=0.7792  mean4dom=0.8058
+[09-20 00:22:20]   [50%] saved 2 tensors -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g22\phase2_ckpt_randbridge_s42_50.pth
+[09-20 00:22:30]   step   1800  loss=0.0064  acc=99.83%  4069s  13.3 img/s
+[09-20 00:26:00]   step   1900  loss=0.0061  acc=99.83%  4279s  13.3 img/s
+[09-20 00:29:29]   step   2000  loss=0.0061  acc=99.83%  4488s  13.4 img/s
+[09-20 00:32:58]   step   2100  loss=0.0062  acc=99.83%  4697s  13.4 img/s
+[09-20 00:36:26]   step   2200  loss=0.0062  acc=99.83%  4905s  13.5 img/s
+[09-20 00:39:56]   step   2300  loss=0.0061  acc=99.84%  5115s  13.5 img/s
+[09-20 00:43:25]   step   2400  loss=0.0061  acc=99.83%  5324s  13.5 img/s
+[09-20 00:46:54]   step   2500  loss=0.0060  acc=99.83%  5533s  13.6 img/s
+[09-20 00:50:23]   step   2600  loss=0.0059  acc=99.84%  5742s  13.6 img/s
+[09-20 00:53:52]   step   2700  loss=0.0058  acc=99.84%  5951s  13.6 img/s
+[09-20 00:57:21]   step   2800  loss=0.0058  acc=99.84%  6161s  13.6 img/s
+[09-20 01:00:51]   step   2900  loss=0.0056  acc=99.84%  6370s  13.7 img/s
+[09-20 01:04:20]   step   3000  loss=0.0055  acc=99.85%  6579s  13.7 img/s
+[09-20 01:07:49]   step   3100  loss=0.0054  acc=99.85%  6788s  13.7 img/s
+[09-20 01:11:18]   step   3200  loss=0.0055  acc=99.84%  6997s  13.7 img/s
+[09-20 01:14:48]   step   3300  loss=0.0054  acc=99.85%  7207s  13.7 img/s
+[09-20 01:18:16]   step   3400  loss=0.0054  acc=99.85%  7415s  13.8 img/s
+[09-20 01:21:46]   step   3500  loss=0.0054  acc=99.85%  7625s  13.8 img/s
+[09-20 01:24:54]   [epoch] batches=3590 images=107700 micro=[30] wall=7813.3s (hook 305.1s) 72.55 ms/img
+[09-20 01:24:54]   [epoch] final loss=0.0054 train_acc=99.85%
+[09-20 01:24:54]   [100%] evaluating 4500 images ...
+    [randbridge_s42] 1280/4500  87s
+    [randbridge_s42] 2560/4500  174s
+    [randbridge_s42] 3840/4500  261s
+[09-20 01:29:59]   [100%] ffpp_test=0.9856  cd1=0.7811  cd2=0.8270  dfdcp=0.8236  ffiw=0.8622  wild=0.7769  mean4dom=0.8022
+[09-20 01:29:59]   [DONE] randbridge_s42  wall=2.266h  half_mean4dom=0.8058
+[09-20 01:30:00] 
+[09-20 01:30:00] ##############################################################################
+[09-20 01:30:00] ### RUN  nofix_s42   (group=nofix, seed=42)
+[09-20 01:30:00] ##############################################################################
+Freezing CLIP vision encoder.
+[build] model constructed in 5.2s
+[ViT_M2F2Det_Bridge] Loaded 162 ViT backbone keys, skipped 2 classification head keys.
+  Missing keys (BridgeAdapter etc, expected): 662
+  Unexpected keys: 0
+[build] shipped ckpt: 824 keys, missing=0 unexpected=0
+[09-20 01:30:13]   [build] 12.8s  fix_a=False bridge_init_seed=None
+[09-20 01:30:13]   [trainable] 54 tensors / 0.5767M
+[09-20 01:30:13]   [optim] 52t@lr=0.0005, 2t@lr=0.00025
+[09-20 01:30:40]   [sampler] per_class=6 effective_batch=30 batches/epoch=3590 images/epoch=107700
+[09-20 01:30:42]   [MICRO-BATCH] first batch real micro-batch size = 30   (sampler.effective_batch = 30, sampler.per_class = 6)
+[09-20 01:34:41]   step    100  loss=0.0060  acc=99.83%  242s  12.4 img/s
+[09-20 01:38:42]   step    200  loss=0.0063  acc=99.82%  483s  12.4 img/s
+[09-20 01:42:44]   step    300  loss=0.0057  acc=99.86%  725s  12.4 img/s
+[09-20 01:46:46]   step    400  loss=0.0055  acc=99.83%  966s  12.4 img/s
+[09-20 01:50:47]   step    500  loss=0.0052  acc=99.84%  1207s  12.4 img/s
+[09-20 01:54:48]   step    600  loss=0.0052  acc=99.84%  1448s  12.4 img/s
+[09-20 01:58:49]   step    700  loss=0.0053  acc=99.83%  1689s  12.4 img/s
+[09-20 02:02:50]   step    800  loss=0.0053  acc=99.84%  1930s  12.4 img/s
+[09-20 02:06:51]   step    900  loss=0.0053  acc=99.83%  2171s  12.4 img/s
+[09-20 02:10:52]   step   1000  loss=0.0058  acc=99.83%  2412s  12.4 img/s
+[09-20 02:14:52]   step   1100  loss=0.0057  acc=99.84%  2653s  12.4 img/s
+[09-20 02:18:54]   step   1200  loss=0.0058  acc=99.84%  2894s  12.4 img/s
+[09-20 02:22:54]   step   1300  loss=0.0058  acc=99.84%  3134s  12.4 img/s
+[09-20 02:26:56]   step   1400  loss=0.0059  acc=99.84%  3376s  12.4 img/s
+[09-20 02:30:55]   step   1500  loss=0.0058  acc=99.84%  3616s  12.4 img/s
+[09-20 02:34:56]   step   1600  loss=0.0059  acc=99.84%  3856s  12.4 img/s
+[09-20 02:38:57]   step   1700  loss=0.0061  acc=99.83%  4097s  12.4 img/s
+[09-20 02:42:46]   [50%] reached at step 1795/3590 -- evaluating 4500 images ...
+    [nofix_s42] 1280/4500  87s
+    [nofix_s42] 2560/4500  175s
+    [nofix_s42] 3840/4500  261s
+[09-20 02:47:52]   [50%] ffpp_test=0.9862  cd1=0.7866  cd2=0.8324  dfdcp=0.8254  ffiw=0.8620  wild=0.7795  mean4dom=0.8060
+[09-20 02:47:52]   [50%] saved 54 tensors -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g22\phase2_ckpt_nofix_s42_50.pth
+[09-20 02:48:04]   step   1800  loss=0.0062  acc=99.83%  4644s  11.6 img/s
+[09-20 02:52:05]   step   1900  loss=0.0060  acc=99.84%  4885s  11.7 img/s
+[09-20 02:56:06]   step   2000  loss=0.0060  acc=99.84%  5127s  11.7 img/s
+[09-20 03:00:07]   step   2100  loss=0.0061  acc=99.84%  5367s  11.7 img/s
+[09-20 03:04:08]   step   2200  loss=0.0060  acc=99.84%  5609s  11.8 img/s
+[09-20 03:08:08]   step   2300  loss=0.0060  acc=99.84%  5849s  11.8 img/s
+[09-20 03:12:09]   step   2400  loss=0.0060  acc=99.84%  6090s  11.8 img/s
+[09-20 03:16:10]   step   2500  loss=0.0059  acc=99.84%  6330s  11.8 img/s
+[09-20 03:20:11]   step   2600  loss=0.0058  acc=99.84%  6571s  11.9 img/s
+[09-20 03:24:12]   step   2700  loss=0.0057  acc=99.84%  6812s  11.9 img/s
+[09-20 03:28:14]   step   2800  loss=0.0057  acc=99.85%  7054s  11.9 img/s
+[09-20 03:32:15]   step   2900  loss=0.0056  acc=99.85%  7295s  11.9 img/s
+[09-20 03:36:16]   step   3000  loss=0.0055  acc=99.85%  7537s  11.9 img/s
+[09-20 03:40:18]   step   3100  loss=0.0053  acc=99.85%  7778s  12.0 img/s
+[09-20 03:44:20]   step   3200  loss=0.0054  acc=99.85%  8020s  12.0 img/s
+[09-20 03:48:20]   step   3300  loss=0.0053  acc=99.85%  8261s  12.0 img/s
+[09-20 03:52:22]   step   3400  loss=0.0053  acc=99.85%  8502s  12.0 img/s
+[09-20 03:56:22]   step   3500  loss=0.0053  acc=99.85%  8743s  12.0 img/s
+[09-20 03:59:59]   [epoch] batches=3590 images=107700 micro=[30] wall=8959.4s (hook 306.0s) 83.19 ms/img
+[09-20 03:59:59]   [epoch] final loss=0.0053 train_acc=99.85%
+[09-20 03:59:59]   [100%] evaluating 4500 images ...
+    [nofix_s42] 1280/4500  87s
+    [nofix_s42] 2560/4500  175s
+    [nofix_s42] 3840/4500  261s
+[09-20 04:05:05]   [100%] ffpp_test=0.9859  cd1=0.7822  cd2=0.8258  dfdcp=0.8235  ffiw=0.8629  wild=0.7768  mean4dom=0.8021
+[09-20 04:05:05]   [DONE] nofix_s42  wall=2.585h  half_mean4dom=0.8060
+[09-20 04:05:05] 
+[09-20 04:05:05] ##############################################################################
+[09-20 04:05:05] ### RUN  fix_s43   (group=fix, seed=43)
+[09-20 04:05:05] ##############################################################################
+Freezing CLIP vision encoder.
+[build] model constructed in 5.1s
+[ViT_M2F2Det_Bridge] Loaded 162 ViT backbone keys, skipped 2 classification head keys.
+  Missing keys (BridgeAdapter etc, expected): 662
+  Unexpected keys: 0
+[build] shipped ckpt: 824 keys, missing=0 unexpected=0
+[FIX-A] replaced bridge_adapter_proj.bridge_adapter_proj (View,Linear,LayerNorm(1)) -> (View,Linear)
+[FIX-A] linear weight max|diff| vs ckpt = 0.000e+00  bias max|diff| = 0.000e+00
+[09-20 04:05:17]   [build] 11.7s  fix_a=True bridge_init_seed=None
+[09-20 04:05:17]   [trainable] 52 tensors / 0.5767M
+[09-20 04:05:17]   [optim] 50t@lr=0.0005, 2t@lr=0.00025
+[09-20 04:05:45]   [sampler] per_class=6 effective_batch=30 batches/epoch=3590 images/epoch=107700
+[09-20 04:05:47]   [MICRO-BATCH] first batch real micro-batch size = 30   (sampler.effective_batch = 30, sampler.per_class = 6)
+[09-20 04:09:46]   step    100  loss=0.0060  acc=99.83%  242s  12.4 img/s
+[09-20 04:13:48]   step    200  loss=0.0060  acc=99.83%  483s  12.4 img/s
+[09-20 04:17:49]   step    300  loss=0.0075  acc=99.78%  725s  12.4 img/s
+[09-20 04:21:50]   step    400  loss=0.0065  acc=99.81%  966s  12.4 img/s
+[09-20 04:25:52]   step    500  loss=0.0056  acc=99.83%  1207s  12.4 img/s
+[09-20 04:29:52]   step    600  loss=0.0054  acc=99.83%  1448s  12.4 img/s
+[09-20 04:33:53]   step    700  loss=0.0055  acc=99.82%  1688s  12.4 img/s
+[09-20 04:37:54]   step    800  loss=0.0054  acc=99.82%  1929s  12.4 img/s
+[09-20 04:41:55]   step    900  loss=0.0057  acc=99.81%  2171s  12.4 img/s
+[09-20 04:45:57]   step   1000  loss=0.0060  acc=99.81%  2412s  12.4 img/s
+[09-20 04:49:58]   step   1100  loss=0.0058  acc=99.82%  2653s  12.4 img/s
+[09-20 04:54:00]   step   1200  loss=0.0055  acc=99.83%  2895s  12.4 img/s
+[09-20 04:58:01]   step   1300  loss=0.0054  acc=99.84%  3137s  12.4 img/s
+[09-20 05:02:02]   step   1400  loss=0.0052  acc=99.84%  3378s  12.4 img/s
+[09-20 05:06:05]   step   1500  loss=0.0053  acc=99.84%  3620s  12.4 img/s
+[09-20 05:10:06]   step   1600  loss=0.0054  acc=99.83%  3861s  12.4 img/s
+[09-20 05:14:07]   step   1700  loss=0.0053  acc=99.83%  4103s  12.4 img/s
+[09-20 05:17:56]   [50%] reached at step 1795/3590 -- evaluating 4500 images ...
+    [fix_s43] 1280/4500  87s
+    [fix_s43] 2560/4500  175s
+    [fix_s43] 3840/4500  262s
+[09-20 05:23:02]   [50%] ffpp_test=0.9864  cd1=0.7968  cd2=0.8374  dfdcp=0.8280  ffiw=0.8564  wild=0.7868  mean4dom=0.8123
+[09-20 05:23:02]   [50%] saved 52 tensors -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g22\phase2_ckpt_fix_s43_50.pth
+[09-20 05:23:15]   step   1800  loss=0.0054  acc=99.82%  4650s  11.6 img/s
+[09-20 05:27:16]   step   1900  loss=0.0055  acc=99.82%  4892s  11.7 img/s
+[09-20 05:31:17]   step   2000  loss=0.0055  acc=99.83%  5132s  11.7 img/s
+[09-20 05:35:19]   step   2100  loss=0.0054  acc=99.83%  5375s  11.7 img/s
+[09-20 05:39:21]   step   2200  loss=0.0055  acc=99.83%  5616s  11.8 img/s
+[09-20 05:43:23]   step   2300  loss=0.0054  acc=99.83%  5858s  11.8 img/s
+[09-20 05:47:24]   step   2400  loss=0.0053  acc=99.83%  6100s  11.8 img/s
+[09-20 05:51:26]   step   2500  loss=0.0051  acc=99.84%  6341s  11.8 img/s
+[09-20 05:55:27]   step   2600  loss=0.0054  acc=99.84%  6582s  11.8 img/s
+[09-20 05:59:29]   step   2700  loss=0.0054  acc=99.84%  6824s  11.9 img/s
+[09-20 06:03:30]   step   2800  loss=0.0054  acc=99.84%  7065s  11.9 img/s
+[09-20 06:07:32]   step   2900  loss=0.0052  acc=99.84%  7307s  11.9 img/s
+[09-20 06:11:33]   step   3000  loss=0.0052  acc=99.85%  7549s  11.9 img/s
+[09-20 06:15:36]   step   3100  loss=0.0051  acc=99.85%  7791s  11.9 img/s
+[09-20 06:19:37]   step   3200  loss=0.0052  acc=99.85%  8032s  12.0 img/s
+[09-20 06:23:39]   step   3300  loss=0.0052  acc=99.85%  8274s  12.0 img/s
+[09-20 06:27:40]   step   3400  loss=0.0052  acc=99.85%  8516s  12.0 img/s
+[09-20 06:31:42]   step   3500  loss=0.0053  acc=99.85%  8758s  12.0 img/s
+[09-20 06:35:19]   [epoch] batches=3590 images=107700 micro=[30] wall=8974.5s (hook 306.4s) 83.33 ms/img
+[09-20 06:35:19]   [epoch] final loss=0.0053 train_acc=99.85%
+[09-20 06:35:19]   [100%] evaluating 4500 images ...
+    [fix_s43] 1280/4500  88s
+    [fix_s43] 2560/4500  176s
+    [fix_s43] 3840/4500  263s
+[09-20 06:40:26]   [100%] ffpp_test=0.9864  cd1=0.7821  cd2=0.8300  dfdcp=0.8222  ffiw=0.8652  wild=0.7767  mean4dom=0.8027
+[09-20 06:40:26]   [DONE] fix_s43  wall=2.589h  half_mean4dom=0.8123
+[09-20 06:40:27] 
+[09-20 06:40:27] ##############################################################################
+[09-20 06:40:27] ### RUN  randbridge_s43   (group=randbridge, seed=43)
+[09-20 06:40:27] ##############################################################################
+Freezing CLIP vision encoder.
+[build] model constructed in 5.2s
+[ViT_M2F2Det_Bridge] Loaded 162 ViT backbone keys, skipped 2 classification head keys.
+  Missing keys (BridgeAdapter etc, expected): 662
+  Unexpected keys: 0
+[randbridge] bridge re-initialised randomly with seed 7778 (58 tensors), rest of model = shipped ckpt
+[FIX-A] replaced bridge_adapter_proj.bridge_adapter_proj (View,Linear,LayerNorm(1)) -> (View,Linear)
+[FIX-A] linear weight max|diff| vs ckpt = 0.000e+00  bias max|diff| = 0.000e+00
+[09-20 06:40:38]   [build] 11.0s  fix_a=True bridge_init_seed=7778
+[09-20 06:40:38]   [trainable] 2 tensors / 0.0033M
+[09-20 06:40:38]   [optim] 2t@lr=0.00025
+[09-20 06:41:05]   [sampler] per_class=6 effective_batch=30 batches/epoch=3590 images/epoch=107700
+[09-20 06:41:07]   [MICRO-BATCH] first batch real micro-batch size = 30   (sampler.effective_batch = 30, sampler.per_class = 6)
+[09-20 06:44:36]   step    100  loss=0.0060  acc=99.83%  211s  14.2 img/s
+[09-20 06:48:07]   step    200  loss=0.0060  acc=99.83%  422s  14.2 img/s
+[09-20 06:51:38]   step    300  loss=0.0075  acc=99.77%  634s  14.2 img/s
+[09-20 06:55:09]   step    400  loss=0.0065  acc=99.80%  844s  14.2 img/s
+[09-20 06:58:40]   step    500  loss=0.0056  acc=99.82%  1056s  14.2 img/s
+[09-20 07:02:11]   step    600  loss=0.0055  acc=99.82%  1266s  14.2 img/s
+[09-20 07:05:42]   step    700  loss=0.0056  acc=99.81%  1477s  14.2 img/s
+[09-20 07:09:14]   step    800  loss=0.0054  acc=99.81%  1689s  14.2 img/s
+[09-20 07:12:45]   step    900  loss=0.0058  acc=99.81%  1901s  14.2 img/s
+[09-20 07:16:18]   step   1000  loss=0.0061  acc=99.80%  2113s  14.2 img/s
+[09-20 07:19:49]   step   1100  loss=0.0058  acc=99.81%  2324s  14.2 img/s
+[09-20 07:23:21]   step   1200  loss=0.0055  acc=99.82%  2536s  14.2 img/s
+[09-20 07:26:52]   step   1300  loss=0.0054  acc=99.83%  2747s  14.2 img/s
+[09-20 07:30:23]   step   1400  loss=0.0053  acc=99.83%  2958s  14.2 img/s
+[09-20 07:33:53]   step   1500  loss=0.0054  acc=99.83%  3169s  14.2 img/s
+[09-20 07:37:25]   step   1600  loss=0.0054  acc=99.82%  3380s  14.2 img/s
+[09-20 07:40:56]   step   1700  loss=0.0053  acc=99.82%  3591s  14.2 img/s
+[09-20 07:44:17]   [50%] reached at step 1795/3590 -- evaluating 4500 images ...
+    [randbridge_s43] 1280/4500  87s
+    [randbridge_s43] 2560/4500  175s
+    [randbridge_s43] 3840/4500  263s
+[09-20 07:49:24]   [50%] ffpp_test=0.9862  cd1=0.7968  cd2=0.8365  dfdcp=0.8282  ffiw=0.8512  wild=0.7872  mean4dom=0.8122
+[09-20 07:49:24]   [50%] saved 2 tensors -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g22\phase2_ckpt_randbridge_s43_50.pth
+[09-20 07:49:35]   step   1800  loss=0.0054  acc=99.82%  4110s  13.1 img/s
+[09-20 07:53:05]   step   1900  loss=0.0056  acc=99.81%  4321s  13.2 img/s
+[09-20 07:56:37]   step   2000  loss=0.0056  acc=99.82%  4532s  13.2 img/s
+[09-20 08:00:08]   step   2100  loss=0.0054  acc=99.82%  4743s  13.3 img/s
+[09-20 08:03:39]   step   2200  loss=0.0056  acc=99.82%  4955s  13.3 img/s
+[09-20 08:07:11]   step   2300  loss=0.0055  acc=99.83%  5166s  13.4 img/s
+[09-20 08:10:42]   step   2400  loss=0.0053  acc=99.83%  5377s  13.4 img/s
+[09-20 08:14:12]   step   2500  loss=0.0051  acc=99.84%  5588s  13.4 img/s
+[09-20 08:17:43]   step   2600  loss=0.0055  acc=99.83%  5799s  13.5 img/s
+[09-20 08:21:14]   step   2700  loss=0.0055  acc=99.84%  6009s  13.5 img/s
+[09-20 08:24:46]   step   2800  loss=0.0054  acc=99.83%  6221s  13.5 img/s
+[09-20 08:28:17]   step   2900  loss=0.0053  acc=99.84%  6432s  13.5 img/s
+[09-20 08:31:48]   step   3000  loss=0.0053  acc=99.84%  6643s  13.5 img/s
+[09-20 08:35:18]   step   3100  loss=0.0052  acc=99.84%  6854s  13.6 img/s
+[09-20 08:38:50]   step   3200  loss=0.0053  acc=99.84%  7065s  13.6 img/s
+[09-20 08:42:20]   step   3300  loss=0.0053  acc=99.84%  7276s  13.6 img/s
+[09-20 08:45:51]   step   3400  loss=0.0053  acc=99.85%  7486s  13.6 img/s
+[09-20 08:49:22]   step   3500  loss=0.0053  acc=99.84%  7698s  13.6 img/s
+[09-20 08:52:32]   [epoch] batches=3590 images=107700 micro=[30] wall=7887.6s (hook 307.8s) 73.24 ms/img
+[09-20 08:52:32]   [epoch] final loss=0.0053 train_acc=99.84%
+[09-20 08:52:32]   [100%] evaluating 4500 images ...
+    [randbridge_s43] 1280/4500  88s
+    [randbridge_s43] 2560/4500  176s
+    [randbridge_s43] 3840/4500  263s
+[09-20 08:57:40]   [100%] ffpp_test=0.9861  cd1=0.7817  cd2=0.8279  dfdcp=0.8234  ffiw=0.8635  wild=0.7788  mean4dom=0.8029
+[09-20 08:57:40]   [DONE] randbridge_s43  wall=2.287h  half_mean4dom=0.8122
+[09-20 08:57:40] 
+[09-20 08:57:40] ##############################################################################
+[09-20 08:57:40] ### RUN  nofix_s43   (group=nofix, seed=43)
+[09-20 08:57:40] ##############################################################################
+Freezing CLIP vision encoder.
+[build] model constructed in 5.1s
+[ViT_M2F2Det_Bridge] Loaded 162 ViT backbone keys, skipped 2 classification head keys.
+  Missing keys (BridgeAdapter etc, expected): 662
+  Unexpected keys: 0
+[build] shipped ckpt: 824 keys, missing=0 unexpected=0
+[09-20 08:57:52]   [build] 12.1s  fix_a=False bridge_init_seed=None
+[09-20 08:57:52]   [trainable] 54 tensors / 0.5767M
+[09-20 08:57:52]   [optim] 52t@lr=0.0005, 2t@lr=0.00025
+[09-20 08:58:20]   [sampler] per_class=6 effective_batch=30 batches/epoch=3590 images/epoch=107700
+[09-20 08:58:22]   [MICRO-BATCH] first batch real micro-batch size = 30   (sampler.effective_batch = 30, sampler.per_class = 6)
+[09-20 09:02:23]   step    100  loss=0.0060  acc=99.83%  243s  12.4 img/s
+[09-20 09:06:24]   step    200  loss=0.0060  acc=99.83%  485s  12.4 img/s
+[09-20 09:10:27]   step    300  loss=0.0075  acc=99.78%  727s  12.4 img/s
+[09-20 09:14:29]   step    400  loss=0.0065  acc=99.81%  969s  12.4 img/s
+[09-20 09:18:31]   step    500  loss=0.0056  acc=99.83%  1212s  12.4 img/s
+[09-20 09:22:33]   step    600  loss=0.0055  acc=99.83%  1454s  12.4 img/s
+[09-20 09:26:36]   step    700  loss=0.0055  acc=99.82%  1696s  12.4 img/s
+[09-20 09:30:38]   step    800  loss=0.0054  acc=99.82%  1938s  12.4 img/s
+[09-20 09:34:40]   step    900  loss=0.0057  acc=99.82%  2180s  12.4 img/s
+[09-20 09:38:42]   step   1000  loss=0.0060  acc=99.82%  2422s  12.4 img/s
+[09-20 09:42:44]   step   1100  loss=0.0058  acc=99.82%  2664s  12.4 img/s
+[09-20 09:46:47]   step   1200  loss=0.0055  acc=99.83%  2907s  12.4 img/s
+[09-20 09:50:50]   step   1300  loss=0.0054  acc=99.84%  3150s  12.4 img/s
+[09-20 09:54:52]   step   1400  loss=0.0053  acc=99.84%  3392s  12.4 img/s
+[09-20 09:58:54]   step   1500  loss=0.0053  acc=99.84%  3635s  12.4 img/s
+[09-20 10:02:56]   step   1600  loss=0.0054  acc=99.83%  3877s  12.4 img/s
+[09-20 10:06:59]   step   1700  loss=0.0053  acc=99.83%  4119s  12.4 img/s
+[09-20 10:10:49]   [50%] reached at step 1795/3590 -- evaluating 4500 images ...
+    [nofix_s43] 1280/4500  88s
+    [nofix_s43] 2560/4500  176s
+    [nofix_s43] 3840/4500  263s
+[09-20 10:15:56]   [50%] ffpp_test=0.9864  cd1=0.7968  cd2=0.8369  dfdcp=0.8280  ffiw=0.8565  wild=0.7868  mean4dom=0.8121
+[09-20 10:15:56]   [50%] saved 54 tensors -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g22\phase2_ckpt_nofix_s43_50.pth
+[09-20 10:16:08]   step   1800  loss=0.0054  acc=99.83%  4669s  11.6 img/s
+[09-20 10:20:11]   step   1900  loss=0.0055  acc=99.83%  4911s  11.6 img/s
+[09-20 10:24:13]   step   2000  loss=0.0055  acc=99.83%  5153s  11.6 img/s
+[09-20 10:28:15]   step   2100  loss=0.0054  acc=99.83%  5396s  11.7 img/s
+[09-20 10:32:17]   step   2200  loss=0.0055  acc=99.83%  5638s  11.7 img/s
+[09-20 10:36:21]   step   2300  loss=0.0054  acc=99.83%  5881s  11.7 img/s
+[09-20 10:40:22]   step   2400  loss=0.0053  acc=99.84%  6122s  11.8 img/s
+[09-20 10:44:25]   step   2500  loss=0.0051  acc=99.84%  6365s  11.8 img/s
+[09-20 10:48:27]   step   2600  loss=0.0054  acc=99.84%  6607s  11.8 img/s
+[09-20 10:52:29]   step   2700  loss=0.0054  acc=99.84%  6849s  11.8 img/s
+[09-20 10:56:31]   step   2800  loss=0.0054  acc=99.84%  7092s  11.8 img/s
+[09-20 11:00:34]   step   2900  loss=0.0052  acc=99.85%  7334s  11.9 img/s
+[09-20 11:04:36]   step   3000  loss=0.0052  acc=99.85%  7576s  11.9 img/s
+[09-20 11:08:39]   step   3100  loss=0.0051  acc=99.85%  7819s  11.9 img/s
+[09-20 11:12:41]   step   3200  loss=0.0052  acc=99.85%  8061s  11.9 img/s
+[09-20 11:16:43]   step   3300  loss=0.0052  acc=99.85%  8304s  11.9 img/s
+[09-20 11:20:45]   step   3400  loss=0.0052  acc=99.85%  8545s  11.9 img/s
+[09-20 11:24:47]   step   3500  loss=0.0053  acc=99.85%  8788s  11.9 img/s
+[09-20 11:28:25]   [epoch] batches=3590 images=107700 micro=[30] wall=9005.7s (hook 307.5s) 83.62 ms/img
+[09-20 11:28:25]   [epoch] final loss=0.0053 train_acc=99.85%
+[09-20 11:28:25]   [100%] evaluating 4500 images ...
+    [nofix_s43] 1280/4500  87s
+    [nofix_s43] 2560/4500  175s
+    [nofix_s43] 3840/4500  263s
+[09-20 11:33:33]   [100%] ffpp_test=0.9864  cd1=0.7821  cd2=0.8300  dfdcp=0.8222  ffiw=0.8652  wild=0.7766  mean4dom=0.8027
+[09-20 11:33:33]   [DONE] nofix_s43  wall=2.598h  half_mean4dom=0.8121
+[09-20 11:33:33] 
+[09-20 11:33:33] ##############################################################################
+[09-20 11:33:33] ### RUN  fix_s44   (group=fix, seed=44)
+[09-20 11:33:33] ##############################################################################
+Freezing CLIP vision encoder.
+[build] model constructed in 5.8s
+[ViT_M2F2Det_Bridge] Loaded 162 ViT backbone keys, skipped 2 classification head keys.
+  Missing keys (BridgeAdapter etc, expected): 662
+  Unexpected keys: 0
+[build] shipped ckpt: 824 keys, missing=0 unexpected=0
+[FIX-A] replaced bridge_adapter_proj.bridge_adapter_proj (View,Linear,LayerNorm(1)) -> (View,Linear)
+[FIX-A] linear weight max|diff| vs ckpt = 0.000e+00  bias max|diff| = 0.000e+00
+[09-20 11:33:47]   [build] 13.8s  fix_a=True bridge_init_seed=None
+[09-20 11:33:47]   [trainable] 52 tensors / 0.5767M
+[09-20 11:33:47]   [optim] 50t@lr=0.0005, 2t@lr=0.00025
+[09-20 11:34:16]   [sampler] per_class=6 effective_batch=30 batches/epoch=3590 images/epoch=107700
+[09-20 11:34:18]   [MICRO-BATCH] first batch real micro-batch size = 30   (sampler.effective_batch = 30, sampler.per_class = 6)
+[09-20 11:38:18]   step    100  loss=0.0044  acc=99.87%  242s  12.4 img/s
+[09-20 11:42:20]   step    200  loss=0.0047  acc=99.85%  484s  12.4 img/s
+[09-20 11:46:22]   step    300  loss=0.0053  acc=99.87%  726s  12.4 img/s
+[09-20 11:50:25]   step    400  loss=0.0045  acc=99.88%  969s  12.4 img/s
+[09-20 11:54:27]   step    500  loss=0.0039  acc=99.89%  1211s  12.4 img/s
+[09-20 11:58:29]   step    600  loss=0.0041  acc=99.87%  1453s  12.4 img/s
+[09-20 12:02:31]   step    700  loss=0.0048  acc=99.85%  1695s  12.4 img/s
+[09-20 12:06:34]   step    800  loss=0.0051  acc=99.85%  1938s  12.4 img/s
+[09-20 12:10:36]   step    900  loss=0.0050  acc=99.86%  2179s  12.4 img/s
+[09-20 12:14:38]   step   1000  loss=0.0048  acc=99.86%  2422s  12.4 img/s
+[09-20 12:18:41]   step   1100  loss=0.0050  acc=99.85%  2665s  12.4 img/s
+[09-20 12:22:44]   step   1200  loss=0.0051  acc=99.84%  2908s  12.4 img/s
+[09-20 12:26:46]   step   1300  loss=0.0055  acc=99.84%  3150s  12.4 img/s
+[09-20 12:30:49]   step   1400  loss=0.0055  acc=99.83%  3393s  12.4 img/s
+[09-20 12:34:51]   step   1500  loss=0.0056  acc=99.84%  3635s  12.4 img/s
+[09-20 12:38:54]   step   1600  loss=0.0054  acc=99.84%  3878s  12.4 img/s
+[09-20 12:42:57]   step   1700  loss=0.0053  acc=99.84%  4121s  12.4 img/s
+[09-20 12:46:47]   [50%] reached at step 1795/3590 -- evaluating 4500 images ...
+    [fix_s44] 1280/4500  88s
+    [fix_s44] 2560/4500  176s
+    [fix_s44] 3840/4500  263s
+[09-20 12:51:56]   [50%] ffpp_test=0.9854  cd1=0.7821  cd2=0.8285  dfdcp=0.8250  ffiw=0.8665  wild=0.7750  mean4dom=0.8027
+[09-20 12:51:56]   [50%] saved 52 tensors -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g22\phase2_ckpt_fix_s44_50.pth
+[09-20 12:52:08]   step   1800  loss=0.0053  acc=99.84%  4672s  11.6 img/s
+[09-20 12:56:10]   step   1900  loss=0.0051  acc=99.84%  4914s  11.6 img/s
+[09-20 13:00:13]   step   2000  loss=0.0051  acc=99.84%  5157s  11.6 img/s
+[09-20 13:04:16]   step   2100  loss=0.0051  acc=99.84%  5400s  11.7 img/s
+[09-20 13:08:18]   step   2200  loss=0.0051  acc=99.84%  5642s  11.7 img/s
+[09-20 13:12:20]   step   2300  loss=0.0051  acc=99.84%  5884s  11.7 img/s
+[09-20 13:16:23]   step   2400  loss=0.0051  acc=99.84%  6127s  11.8 img/s
+[09-20 13:20:26]   step   2500  loss=0.0052  acc=99.84%  6370s  11.8 img/s
+[09-20 13:24:28]   step   2600  loss=0.0051  acc=99.84%  6612s  11.8 img/s
+[09-20 13:28:31]   step   2700  loss=0.0051  acc=99.84%  6854s  11.8 img/s
+[09-20 13:32:33]   step   2800  loss=0.0050  acc=99.84%  7097s  11.8 img/s
+[09-20 13:36:35]   step   2900  loss=0.0049  acc=99.84%  7339s  11.9 img/s
+[09-20 13:40:37]   step   3000  loss=0.0052  acc=99.84%  7581s  11.9 img/s
+[09-20 13:44:39]   step   3100  loss=0.0051  acc=99.84%  7823s  11.9 img/s
+[09-20 13:48:42]   step   3200  loss=0.0052  acc=99.85%  8065s  11.9 img/s
+[09-20 13:52:43]   step   3300  loss=0.0052  acc=99.85%  8307s  11.9 img/s
+[09-20 13:56:45]   step   3400  loss=0.0051  acc=99.85%  8549s  11.9 img/s
+[09-20 14:00:48]   step   3500  loss=0.0052  acc=99.85%  8792s  11.9 img/s
+[09-20 14:04:26]   [epoch] batches=3590 images=107700 micro=[30] wall=9009.9s (hook 308.2s) 83.66 ms/img
+[09-20 14:04:26]   [epoch] final loss=0.0053 train_acc=99.84%
+[09-20 14:04:26]   [100%] evaluating 4500 images ...
+    [fix_s44] 1280/4500  87s
+    [fix_s44] 2560/4500  175s
+    [fix_s44] 3840/4500  262s
+[09-20 14:09:34]   [100%] ffpp_test=0.9849  cd1=0.7753  cd2=0.8218  dfdcp=0.8163  ffiw=0.8623  wild=0.7712  mean4dom=0.7961
+[09-20 14:09:34]   [DONE] fix_s44  wall=2.600h  half_mean4dom=0.8027
+[09-20 14:09:34] 
+[09-20 14:09:34] ##############################################################################
+[09-20 14:09:34] ### RUN  randbridge_s44   (group=randbridge, seed=44)
+[09-20 14:09:34] ##############################################################################
+Freezing CLIP vision encoder.
+[build] model constructed in 5.6s
+[ViT_M2F2Det_Bridge] Loaded 162 ViT backbone keys, skipped 2 classification head keys.
+  Missing keys (BridgeAdapter etc, expected): 662
+  Unexpected keys: 0
+[randbridge] bridge re-initialised randomly with seed 7779 (58 tensors), rest of model = shipped ckpt
+[FIX-A] replaced bridge_adapter_proj.bridge_adapter_proj (View,Linear,LayerNorm(1)) -> (View,Linear)
+[FIX-A] linear weight max|diff| vs ckpt = 0.000e+00  bias max|diff| = 0.000e+00
+[09-20 14:09:46]   [build] 11.7s  fix_a=True bridge_init_seed=7779
+[09-20 14:09:46]   [trainable] 2 tensors / 0.0033M
+[09-20 14:09:46]   [optim] 2t@lr=0.00025
+[09-20 14:10:14]   [sampler] per_class=6 effective_batch=30 batches/epoch=3590 images/epoch=107700
+[09-20 14:10:16]   [MICRO-BATCH] first batch real micro-batch size = 30   (sampler.effective_batch = 30, sampler.per_class = 6)
+[09-20 14:13:43]   step    100  loss=0.0044  acc=99.87%  210s  14.3 img/s
+[09-20 14:17:13]   step    200  loss=0.0049  acc=99.85%  420s  14.3 img/s
+[09-20 14:20:44]   step    300  loss=0.0053  acc=99.87%  630s  14.3 img/s
+[09-20 14:24:14]   step    400  loss=0.0046  acc=99.88%  840s  14.3 img/s
+[09-20 14:27:44]   step    500  loss=0.0039  acc=99.89%  1050s  14.3 img/s
+[09-20 14:31:14]   step    600  loss=0.0041  acc=99.87%  1260s  14.3 img/s
+[09-20 14:34:45]   step    700  loss=0.0048  acc=99.85%  1471s  14.3 img/s
+[09-20 14:38:15]   step    800  loss=0.0050  acc=99.86%  1681s  14.3 img/s
+[09-20 14:41:45]   step    900  loss=0.0050  acc=99.86%  1891s  14.3 img/s
+[09-20 14:45:15]   step   1000  loss=0.0048  acc=99.86%  2101s  14.3 img/s
+[09-20 14:48:46]   step   1100  loss=0.0050  acc=99.86%  2312s  14.3 img/s
+[09-20 14:52:16]   step   1200  loss=0.0051  acc=99.85%  2522s  14.3 img/s
+[09-20 14:55:47]   step   1300  loss=0.0056  acc=99.84%  2733s  14.3 img/s
+[09-20 14:59:18]   step   1400  loss=0.0055  acc=99.84%  2944s  14.3 img/s
+[09-20 15:02:49]   step   1500  loss=0.0055  acc=99.84%  3155s  14.3 img/s
+[09-20 15:06:19]   step   1600  loss=0.0054  acc=99.84%  3365s  14.3 img/s
+[09-20 15:09:50]   step   1700  loss=0.0053  acc=99.85%  3576s  14.3 img/s
+[09-20 15:13:10]   [50%] reached at step 1795/3590 -- evaluating 4500 images ...
+    [randbridge_s44] 1280/4500  88s
+    [randbridge_s44] 2560/4500  176s
+    [randbridge_s44] 3840/4500  264s
+[09-20 15:18:19]   [50%] ffpp_test=0.9853  cd1=0.7820  cd2=0.8269  dfdcp=0.8267  ffiw=0.8658  wild=0.7747  mean4dom=0.8026
+[09-20 15:18:19]   [50%] saved 2 tensors -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g22\phase2_ckpt_randbridge_s44_50.pth
+[09-20 15:18:29]   step   1800  loss=0.0052  acc=99.85%  4096s  13.2 img/s
+[09-20 15:22:01]   step   1900  loss=0.0051  acc=99.85%  4307s  13.2 img/s
+[09-20 15:25:32]   step   2000  loss=0.0050  acc=99.85%  4518s  13.3 img/s
+[09-20 15:29:04]   step   2100  loss=0.0050  acc=99.85%  4730s  13.3 img/s
+[09-20 15:32:34]   step   2200  loss=0.0051  acc=99.85%  4940s  13.4 img/s
+[09-20 15:36:05]   step   2300  loss=0.0050  acc=99.85%  5151s  13.4 img/s
+[09-20 15:39:36]   step   2400  loss=0.0051  acc=99.85%  5362s  13.4 img/s
+[09-20 15:43:07]   step   2500  loss=0.0052  acc=99.85%  5573s  13.5 img/s
+[09-20 15:46:38]   step   2600  loss=0.0050  acc=99.85%  5784s  13.5 img/s
+[09-20 15:50:10]   step   2700  loss=0.0050  acc=99.85%  5996s  13.5 img/s
+[09-20 15:53:41]   step   2800  loss=0.0050  acc=99.85%  6207s  13.5 img/s
+[09-20 15:57:12]   step   2900  loss=0.0049  acc=99.85%  6418s  13.6 img/s
+[09-20 16:00:43]   step   3000  loss=0.0052  acc=99.85%  6629s  13.6 img/s
+[09-20 16:04:13]   step   3100  loss=0.0051  acc=99.85%  6839s  13.6 img/s
+[09-20 16:07:44]   step   3200  loss=0.0052  acc=99.85%  7050s  13.6 img/s
+[09-20 16:11:14]   step   3300  loss=0.0052  acc=99.85%  7260s  13.6 img/s
+[09-20 16:14:45]   step   3400  loss=0.0052  acc=99.85%  7471s  13.7 img/s
+[09-20 16:18:16]   step   3500  loss=0.0052  acc=99.85%  7682s  13.7 img/s
+[09-20 16:21:25]   [epoch] batches=3590 images=107700 micro=[30] wall=7871.0s (hook 308.6s) 73.08 ms/img
+[09-20 16:21:25]   [epoch] final loss=0.0053 train_acc=99.85%
+[09-20 16:21:25]   [100%] evaluating 4500 images ...
+    [randbridge_s44] 1280/4500  88s
+    [randbridge_s44] 2560/4500  176s
+    [randbridge_s44] 3840/4500  263s
+[09-20 16:26:33]   [100%] ffpp_test=0.9847  cd1=0.7721  cd2=0.8224  dfdcp=0.8206  ffiw=0.8608  wild=0.7701  mean4dom=0.7963
+[09-20 16:26:33]   [DONE] randbridge_s44  wall=2.283h  half_mean4dom=0.8026
+[09-20 16:26:33] 
+[09-20 16:26:33] ##############################################################################
+[09-20 16:26:33] ### RUN  nofix_s44   (group=nofix, seed=44)
+[09-20 16:26:33] ##############################################################################
+Freezing CLIP vision encoder.
+[build] model constructed in 5.0s
+[ViT_M2F2Det_Bridge] Loaded 162 ViT backbone keys, skipped 2 classification head keys.
+  Missing keys (BridgeAdapter etc, expected): 662
+  Unexpected keys: 0
+[build] shipped ckpt: 824 keys, missing=0 unexpected=0
+[09-20 16:26:45]   [build] 11.7s  fix_a=False bridge_init_seed=None
+[09-20 16:26:45]   [trainable] 54 tensors / 0.5767M
+[09-20 16:26:45]   [optim] 52t@lr=0.0005, 2t@lr=0.00025
+[09-20 16:27:10]   [sampler] per_class=6 effective_batch=30 batches/epoch=3590 images/epoch=107700
+[09-20 16:27:13]   [MICRO-BATCH] first batch real micro-batch size = 30   (sampler.effective_batch = 30, sampler.per_class = 6)
+[09-20 16:31:12]   step    100  loss=0.0044  acc=99.87%  242s  12.4 img/s
+[09-20 16:35:14]   step    200  loss=0.0047  acc=99.85%  484s  12.4 img/s
+[09-20 16:39:16]   step    300  loss=0.0053  acc=99.87%  725s  12.4 img/s
+[09-20 16:43:19]   step    400  loss=0.0046  acc=99.88%  969s  12.4 img/s
+[09-20 16:47:22]   step    500  loss=0.0039  acc=99.89%  1211s  12.4 img/s
+[09-20 16:51:24]   step    600  loss=0.0042  acc=99.87%  1454s  12.4 img/s
+[09-20 16:55:27]   step    700  loss=0.0048  acc=99.85%  1696s  12.4 img/s
+[09-20 16:59:29]   step    800  loss=0.0051  acc=99.85%  1939s  12.4 img/s
+[09-20 17:03:32]   step    900  loss=0.0050  acc=99.86%  2181s  12.4 img/s
+[09-20 17:07:34]   step   1000  loss=0.0048  acc=99.86%  2424s  12.4 img/s
+[09-20 17:11:37]   step   1100  loss=0.0050  acc=99.86%  2667s  12.4 img/s
+[09-20 17:15:40]   step   1200  loss=0.0051  acc=99.84%  2910s  12.4 img/s
+[09-20 17:19:43]   step   1300  loss=0.0055  acc=99.84%  3152s  12.4 img/s
+[09-20 17:23:45]   step   1400  loss=0.0055  acc=99.83%  3395s  12.4 img/s
+[09-20 17:27:48]   step   1500  loss=0.0055  acc=99.84%  3637s  12.4 img/s
+[09-20 17:31:51]   step   1600  loss=0.0054  acc=99.84%  3880s  12.4 img/s
+[09-20 17:35:53]   step   1700  loss=0.0053  acc=99.84%  4123s  12.4 img/s
+[09-20 17:39:44]   [50%] reached at step 1795/3590 -- evaluating 4500 images ...
+    [nofix_s44] 1280/4500  88s
+    [nofix_s44] 2560/4500  176s
+    [nofix_s44] 3840/4500  263s
+[09-20 17:44:53]   [50%] ffpp_test=0.9853  cd1=0.7824  cd2=0.8288  dfdcp=0.8251  ffiw=0.8668  wild=0.7744  mean4dom=0.8027
+[09-20 17:44:53]   [50%] saved 54 tensors -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g22\phase2_ckpt_nofix_s44_50.pth
+[09-20 17:45:05]   step   1800  loss=0.0052  acc=99.84%  4674s  11.6 img/s
+[09-20 17:49:08]   step   1900  loss=0.0051  acc=99.85%  4917s  11.6 img/s
+[09-20 17:53:11]   step   2000  loss=0.0051  acc=99.84%  5161s  11.6 img/s
+[09-20 17:57:14]   step   2100  loss=0.0051  acc=99.84%  5403s  11.7 img/s
+[09-20 18:01:17]   step   2200  loss=0.0051  acc=99.84%  5646s  11.7 img/s
+[09-20 18:05:19]   step   2300  loss=0.0051  acc=99.84%  5888s  11.7 img/s
+[09-20 18:09:22]   step   2400  loss=0.0051  acc=99.84%  6131s  11.7 img/s
+[09-20 18:13:24]   step   2500  loss=0.0052  acc=99.84%  6374s  11.8 img/s
+[09-20 18:17:27]   step   2600  loss=0.0051  acc=99.84%  6617s  11.8 img/s
+[09-20 18:21:29]   step   2700  loss=0.0051  acc=99.84%  6859s  11.8 img/s
+[09-20 18:25:32]   step   2800  loss=0.0050  acc=99.84%  7102s  11.8 img/s
+[09-20 18:29:34]   step   2900  loss=0.0049  acc=99.84%  7344s  11.8 img/s
+[09-20 18:33:37]   step   3000  loss=0.0051  acc=99.84%  7587s  11.9 img/s
+[09-20 18:37:40]   step   3100  loss=0.0051  acc=99.85%  7829s  11.9 img/s
+[09-20 18:41:43]   step   3200  loss=0.0052  acc=99.85%  8072s  11.9 img/s
+[09-20 18:45:45]   step   3300  loss=0.0052  acc=99.85%  8315s  11.9 img/s
+[09-20 18:49:48]   step   3400  loss=0.0051  acc=99.85%  8558s  11.9 img/s
+[09-20 18:53:52]   step   3500  loss=0.0052  acc=99.85%  8801s  11.9 img/s
+[09-20 18:57:30]   [epoch] batches=3590 images=107700 micro=[30] wall=9019.9s (hook 308.3s) 83.75 ms/img
+[09-20 18:57:30]   [epoch] final loss=0.0053 train_acc=99.85%
+[09-20 18:57:30]   [100%] evaluating 4500 images ...
+    [nofix_s44] 1280/4500  89s
+    [nofix_s44] 2560/4500  177s
+    [nofix_s44] 3840/4500  264s
+[09-20 19:02:39]   [100%] ffpp_test=0.9849  cd1=0.7754  cd2=0.8218  dfdcp=0.8164  ffiw=0.8627  wild=0.7712  mean4dom=0.7962
+[09-20 19:02:39]   [DONE] nofix_s44  wall=2.602h  half_mean4dom=0.8027
+[09-20 19:02:40] 
+[09-20 19:02:40] ==============================================================================
+[09-20 19:02:40] ALL 9 RUNS COMPLETE in 22.73 h
+[09-20 19:02:40] ==============================================================================
+[09-20 19:02:40]   fix         mean4dom = 0.8004 +- 0.0030  (runs [0.8022, 0.8027, 0.7961])   half=[0.8058, 0.8123, 0.8027]
+[09-20 19:02:40]   randbridge  mean4dom = 0.8005 +- 0.0030  (runs [0.8022, 0.8029, 0.7963])   half=[0.8058, 0.8122, 0.8026]
+[09-20 19:02:40]   nofix       mean4dom = 0.8003 +- 0.0030  (runs [0.8021, 0.8027, 0.7962])   half=[0.806, 0.8121, 0.8027]
+[09-20 19:02:40]   peak GPU mem = 7541 MiB
+[09-20 19:02:40]   [GPU] AFTER -- gpu0=7250MiB; gpu1=3697MiB; gpu2=88MiB

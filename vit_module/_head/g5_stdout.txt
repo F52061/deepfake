@@ -1,0 +1,54 @@
+==============================================================================
+BLOCK G5 - REAL bridge_v2 head attribution (spectral / contribution)
+==============================================================================
+[G5] loading checkpoint: E:/Cross-domain_authentication_verification/Next_work/M2F2_Det-main-hyy\checkpoints\stage_1\bridge_v2_phase1.pth
+[G5] state_dict entries: 824
+[G5] keys matching output/head/classifier/alpha:
+    clip_text_alpha  shape=() dtype=torch.float32
+    clip_vision_alpha  shape=() dtype=torch.float32
+    output.bias  shape=(2,) dtype=torch.float32
+    output.weight  shape=(2, 1664) dtype=torch.float32
+[G5] all weight keys with shape[0]==2:
+    output.weight  shape=(2, 1664)
+
+[A] located head key = 'output.weight'  weight shape = (2, 1664)
+[A] head.bias shape = (2,)
+[A] (2,1664) holds: True   (actual F dim = 1664)
+[A] clip_vision_alpha = 0.306288  shape=()
+[A] clip_text_alpha   = 1.779604  shape=()
+
+[B] three-block weight share table
+block                 cols           L2w_share   L2d_share   L1d_share
+----------------------------------------------------------------------
+A_Cproj(0:768)        [0:768)     59.684%     62.295%     58.521%
+bridge(768:896)       [768:896)      1.069%      0.026%      0.295%
+B_Vproj(896:1664)     [896:1664)     39.247%     37.679%     41.184%
+
+[G5] loading probe npz for PCA bases ...
+[G5] probe npz V_proj(3000,) train n=2200  C_proj train n=2200
+[G5] V_proj train top singular value = 5.742e+02 ; C_proj train top singular = 3.849e+02
+
+[C] block A / block B expansions under E_C (C_proj basis) and E_V (V_proj basis)
+case                      basis          top5_energy top50_energy  spearman
+---------------------------------------------------------------------------
+blockA_жд(0:768)           E_C(C_proj)        80.741%      95.933%    0.3890
+blockA_жд(0:768)           E_V(V_proj)         1.248%       6.388%   -0.0421
+blockB_жд(896:1664)        E_C(C_proj)         0.429%       6.345%    0.0003
+blockB_жд(896:1664)        E_V(V_proj)        93.784%      97.006%    0.2119
+[C] C_proj feature variance band: top5_eig=76.57% top50_eig=98.20% participation_ratio=5.21
+[C] V_proj feature variance band: top5_eig=99.86% top50_eig=99.99% participation_ratio=1.13
+
+[C] mechanical A/B <-> V/C judgement (by task rule: concentrated in E_V AND diffuse in E_C => V-side)
+    blockA_жд(0:768): top5 in E_V=1.25%  top5 in E_C=80.74%
+    blockB_жд(896:1664): top5 in E_V=93.78%  top5 in E_C=0.43%
+
+[C] wiring ground-truth (from vit_m2f2_detector_bridge.py forward): features = cat([clip_vision_cls(768), bridge(128), vit_features(768)])
+    => block 0:768 feeds clip_vision_cls (= probe C_proj side, CLIP)
+    => block 896:1664 feeds vit_features   (= probe V_proj side, ViT)
+
+[D] bridge 128 block
+    bridge жд-slice L2 share (norm^2): 0.0265%
+    bridge жд-slice |comp| share:       0.2949%
+    bridge жд-slice L2 norm (raw):      0.022210   delta total L2 norm: 1.364697
+
+[head_done]

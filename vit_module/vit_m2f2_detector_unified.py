@@ -37,7 +37,16 @@ from typing import Optional
 
 from llava.model.deepfake.M2F2Det.text_encoder import CLIPTextEncoder
 from llava.model.deepfake.M2F2Det.vision_encoder import CLIPVisionEncoder
-from flash_attn.modules.mha import MHA
+
+# flash_attn MHA — 本环境无 cu118 Windows 轮子时回退到纯 PyTorch shim
+# (MHA 以 use_flash_attn=False 调用, 非 flash 路径, 数学与 shim 完全一致)
+try:
+    from flash_attn.modules.mha import MHA
+except ImportError:
+    try:
+        from .flash_attn_shim.mha import MHA
+    except ImportError:
+        from vit_module.flash_attn_shim.mha import MHA
 
 try:
     from .vit_adaptive_mattn_aps import vit_base_patch16_224
@@ -92,7 +101,9 @@ class TransformerEncoderBlock(nn.Module):
 
     def forward(self, x):
         orig_dtype = x.dtype
-        attn_out = self.attn(x.to(torch.bfloat16)).to(orig_dtype)
+        # 用 attn 权重的实际 dtype (加载后可被 torch_dtype 改写), 不硬编码 bf16
+        attn_dtype = next(self.attn.parameters()).dtype
+        attn_out = self.attn(x.to(attn_dtype)).to(orig_dtype)
         x = self.norm1(x + self.dropout(attn_out))
         x = self.norm2(x + self.dropout(self.ffn(x)))
         return x
@@ -491,7 +502,9 @@ class ViT_M2F2Det_Unified(nn.Module):
 
         bridge_adapter_output = None
         for i, (vit_feat, clip_feat) in enumerate(zip(vit_feat_lst, clip_feat_lst)):
-            clip_feat = clip_feat.to(device)
+            # CLIPVisionEncoder.forward 返回前强转 .float() (vision_encoder.py:44),
+            # 中间特征恒为 fp32; checkpoint 权重是 fp16, 必须转回 vision_dtype
+            clip_feat = clip_feat.to(device).to(self.vision_dtype)
             clip_feat = self.clip_reduction(clip_feat)               # [B, 576, 64]
 
             vit_feat = vit_feat.to(device)
@@ -511,8 +524,8 @@ class ViT_M2F2Det_Unified(nn.Module):
         clip_adapt_embed = self.bridge_adapter_proj(bridge_adapter_output, B)
         clip_adapt_embed = self.clip_text_alpha * clip_adapt_embed
 
-        # Final fusion
-        clip_vision_cls = self.clip_vision_alpha * clip_vision_cls.to(self.deepfake_dtype)
+        # Final fusion — 统一到 output 权重的 dtype (fp16), 否则 fp32/fp16 cat 报错
+        clip_vision_cls = self.clip_vision_alpha * clip_vision_cls.to(self.output.weight.dtype)
 
         features = torch.cat([
             clip_vision_cls, clip_adapt_embed, vit_features,

@@ -1,0 +1,151 @@
+====================================================================================================
+PHASE F  selective / channel-routing  (started 2026-09-09 23:26:46)
+====================================================================================================
+[0] data: probe n=3000 (train=2200/test=800), y1/y0 train=1100/1100 test=400/400
+    multi cd1   n=300 y1=150 y0=150
+    multi cd2   n=300 y1=150 y0=150
+    multi dfdcp n=300 y1=150 y0=150
+    multi ffiw  n=300 y1=150 y0=150
+    multi wild  n=300 y1=150 y0=150
+    feats_multi ffpp block excluded from all scoring; only the 5 target domains used.
+
+[sel-base] V head (C=1e-3, full-2200 fit): in-domain 800-test AUC = 0.9852 (expect ~0.9852)
+[sel-base] C head (C=1e-3, full-2200 fit): in-domain 800-test AUC = 0.9108
+[sel-base] V five-domain AUC (computed):  cd1=0.8286 cd2=0.8633 dfdcp=0.8261 ffiw=0.8244 wild=0.8090
+[sel-base] V five-domain AUC (quoted ~):   cd1=0.831 cd2=0.864 dfdcp=0.827 ffiw=0.826 wild=0.808
+[sel-base] C five-domain AUC (computed):  cd1=0.6559 cd2=0.7227 dfdcp=0.7068 ffiw=0.8344 wild=0.7170
+[sel-base] C five-domain AUC (quoted ~):   cd1=0.656 cd2=0.723 dfdcp=0.707 ffiw=0.834 wild=0.717
+[sel-base] max |computed - quoted-anchor| = 0.0024  (threshold 0.005)
+[sel-base] anchor consistency OK (diff <= 0.005).
+[sel-base] done.
+[sel-dist] E2 source-distance manifold fit on FF++-train V n=2200 k=10 (muV/e0/Uk/lamk frozen).
+[sel-evals] built 7 evaluation sets:
+    E0_800    n=800 y1=400 y0=400  errV=0.0563 errC=0.1800
+    cd1       n=300 y1=150 y0=150  errV=0.2533 errC=0.3900
+    cd2       n=300 y1=150 y0=150  errV=0.2233 errC=0.3467
+    dfdcp     n=300 y1=150 y0=150  errV=0.2667 errC=0.3533
+    ffiw      n=300 y1=150 y0=150  errV=0.2967 errC=0.4033
+    wild      n=300 y1=150 y0=150  errV=0.3033 errC=0.4300
+    all5_1500 n=1500 y1=750 y0=750  errV=0.2687 errC=0.3847
+[sel-evals] done.
+
+====================================================================================================
+F1 - Q1  failure prediction: does a trust signal predict errV=1 (V wrong at pV>=0.5 rule)?
+====================================================================================================
+  errV per sample = (pV>=0.5) != (y==1).  AUROC(errV, tau): raw>0.5 => high tau => V likely wrong.
+  Reported cell = max(raw,1-raw) with sign = direction (+ high->error | - low->error).
+
+TABLE Q1-A  raw-direction AUROC  AUROC(errV, tau)  (raw values; sign below)
+  ----------------------------------------------------------------------------------------
+  signal                   E0_800  cd1     cd2     dfdcp   ffiw    wild    all5_1500  
+  tau_dist(srcdist)        0.4096  0.5471  0.5921  0.6100  0.5943  0.6318  0.6071     
+  tau_disc(|pV-pC|)        0.5861  0.5416  0.5917  0.5590  0.7181  0.5215  0.5789     
+  tau_spec(axis-support)   0.1393  0.2855  0.3068  0.2675  0.3142  0.3092  0.3055     
+  tau_ent(pV(1-pV))        0.8354  0.6932  0.7260  0.7043  0.6310  0.7218  0.6816     
+  tau_msp(1-max(pV,1-pV))  0.8354  0.6932  0.7260  0.7043  0.6310  0.7218  0.6816     
+
+TABLE Q1-B  failure-prediction AUROC (aligned; value=max(raw,1-raw), cell sign = direction)
+  ----------------------------------------------------------------------------------------------
+  signal                   E0_800   cd1      cd2      dfdcp    ffiw     wild     all5_1500  
+  tau_dist(srcdist)        -0.5904  +0.5471  +0.5921  +0.6100  +0.5943  +0.6318  +0.6071    
+  tau_disc(|pV-pC|)        +0.5861  +0.5416  +0.5917  +0.5590  +0.7181  +0.5215  +0.5789    
+  tau_spec(axis-support)   -0.8607  -0.7145  -0.6932  -0.7325  -0.6858  -0.6908  -0.6945    
+  tau_ent(pV(1-pV))        +0.8354  +0.6932  +0.7260  +0.7043  +0.6310  +0.7218  +0.6816    
+  tau_msp(1-max(pV,1-pV))  +0.8354  +0.6932  +0.7260  +0.7043  +0.6310  +0.7218  +0.6816    
+  direction key: + = high signal value -> V error-prone ; - = low signal value -> V error-prone
+  (tau_spec expected '-':  failure prediction negatively correlated with axis support.)
+
+[sel-Q1-ensemble] training-free ensemble = rank(tau_dist)+rank(tau_ent)+rank(aligned tau_spec), equal weight
+  E0_800 AUROC = 0.8599   (rank alignment computed on the 800-test distribution -> reference magnitude only,
+  NOT used as the cross-domain conclusion; cross-domain main table = single-signal AUROCs above.)
+[sel-Q1] done.
+
+====================================================================================================
+F1 - Q2  selective abstention risk@coverage  (V error rate among RETAINED samples; drop highest-tau first)
+====================================================================================================
+  coverage = kept fraction;  risk = mean(errV) over kept samples;  coverage 1.0 = no-abstention baseline.
+  retained sample count is IDENTICAL across abstention signals at the same coverage (same n, same rule);
+  retained counts per set:  E0_800@1=800 E0_800@0.95=760 E0_800@0.9=720 E0_800@0.8=640 E0_800@0.7=560 E0_800@0.6=480 E0_800@0.5=400
+
+TABLE Q2-a  risk@coverage, abstention signal = tau_dist(srcdist)
+  -------------------------------------------------------------------------
+  coverage  E0_800  cd1     cd2     dfdcp   ffiw    wild    all5_1500  
+  1.00      0.0563  0.2533  0.2233  0.2667  0.2967  0.3033  0.2687     
+  0.95      0.0539  0.2667  0.2211  0.2632  0.3088  0.2947  0.2653     
+  0.90      0.0514  0.2704  0.2111  0.2481  0.3185  0.2889  0.2733     
+  0.80      0.0578  0.2500  0.1833  0.2583  0.3250  0.2667  0.2575     
+  0.70      0.0589  0.2333  0.1714  0.2286  0.3000  0.2476  0.2324     
+  0.60      0.0604  0.2056  0.1611  0.2111  0.2722  0.2444  0.2133     
+  0.50      0.0650  0.2067  0.1733  0.1800  0.2267  0.2267  0.1947     
+
+TABLE Q2-b  risk@coverage, abstention signal = tau_msp(1-max(pV,1-pV))
+  -------------------------------------------------------------------------
+  coverage  E0_800  cd1     cd2     dfdcp   ffiw    wild    all5_1500  
+  1.00      0.0563  0.2533  0.2233  0.2667  0.2967  0.3033  0.2687     
+  0.95      0.0316  0.2351  0.2140  0.2632  0.2877  0.3018  0.2596     
+  0.90      0.0194  0.2222  0.2000  0.2481  0.2778  0.2815  0.2481     
+  0.80      0.0187  0.2042  0.1708  0.2292  0.2708  0.2458  0.2242     
+  0.70      0.0214  0.1952  0.1429  0.2000  0.2667  0.2190  0.2048     
+  0.60      0.0146  0.1833  0.1222  0.1389  0.2611  0.1833  0.1800     
+  0.50      0.0150  0.1533  0.1133  0.1333  0.2333  0.1600  0.1587     
+[sel-Q2] done.
+
+====================================================================================================
+F2 - Q3  channel routing  V-unreliable -> C  (score=pC, decision pC>=0.5)
+====================================================================================================
+
+--- routing summary on E0_800 (n=800) ---
+  errV (V rule pV>=0.5)          = 0.0563  -> accuracy(V)          = 0.9437
+  errC (C rule pC>=0.5)          = 0.1800  -> accuracy(C)          = 0.8200
+  saveable  = (errV & ~errC) count= 24  frac= 0.0300
+  oracle-switch ceiling accuracy  = 0.9738   (switch only V-wrong&C-right to C;  = accuracy(V)+save_frac)
+  saveable  dist   mean=9.8875  | all mean=9.7699
+  saveable  disc   mean=0.3992  | all mean=0.2735
+
+--- routing summary on all5_1500 (n=1500) ---
+  errV (V rule pV>=0.5)          = 0.2687  -> accuracy(V)          = 0.7313
+  errC (C rule pC>=0.5)          = 0.3847  -> accuracy(C)          = 0.6153
+  saveable  = (errV & ~errC) count= 241  frac= 0.1607
+  oracle-switch ceiling accuracy  = 0.8920   (switch only V-wrong&C-right to C;  = accuracy(V)+save_frac)
+  saveable  dist   mean=9.8768  | all mean=8.6118
+  saveable  disc   mean=0.5215  | all mean=0.3423
+
+TABLE Q3  accuracy(f) routing top-f by tau_dist to C  (V decision replaced by C for routed)
+  -----------------------------------------------------
+  f     E0_800  all5_1500  ffiw    cd1     wild    
+  0.00  0.9437  0.7313     0.7033  0.7467  0.6967  
+  0.05  0.9387  0.7267     0.6667  0.7367  0.6933  
+  0.10  0.9337  0.7120     0.6533  0.7233  0.6933  
+  0.15  0.9200  0.7100     0.6233  0.7200  0.6867  
+  0.20  0.9175  0.7120     0.6200  0.7167  0.6867  
+  0.30  0.9050  0.7147     0.6400  0.7033  0.6833  
+  0.40  0.8962  0.7140     0.6567  0.7100  0.6767  
+  0.50  0.8900  0.7040     0.6633  0.6900  0.6600  
+
+TABLE Q3  accuracy(f) routing top-f by tau_msp to C  (V decision replaced by C for routed)
+  -----------------------------------------------------
+  f     E0_800  all5_1500  ffiw    cd1     wild    
+  0.00  0.9437  0.7313     0.7033  0.7467  0.6967  
+  0.05  0.9563  0.7360     0.7167  0.7533  0.6967  
+  0.10  0.9437  0.7333     0.7167  0.7500  0.7033  
+  0.15  0.9287  0.7340     0.7200  0.7300  0.7033  
+  0.20  0.9200  0.7367     0.7300  0.7267  0.7000  
+  0.30  0.9062  0.7260     0.7367  0.7133  0.6767  
+  0.40  0.8925  0.7240     0.7300  0.7033  0.6733  
+  0.50  0.8762  0.7087     0.7333  0.7067  0.6600  
+[sel-Q3] done.
+
+====================================================================================================
+APPENDIX
+====================================================================================================
+  total wall time = 4.7 s
+  CPU-only run; env OMP/MKL/OPENBLAS/NUMEXPR/VECLIB threads=1; torch threads=1; no GPU/no .cuda().
+  Data: probe_feats.npz (V 768, C 1024, y, vids, train_mask; train=2200/test=800, video-disjoint);
+        feats_multi.npz (V/C/F, y, domain; 5 target domains x300 balanced 150/150;
+        the ffpp 800-row block in feats_multi.npz excluded from all scoring).
+  Base heads fit once on the FULL 2200 FF++ train only; scalers & LR (C=1e-3, lbfgs, max_iter=3000);
+  score=decision_function, p=sigma(score).  All AUROC/accuracy on 800-test / target domains only.
+  E2 source-distance re-implemented verbatim from vit_module/_fusion/fusion_e4.py (verified Phase-A E2 replica,
+  k=10; manifold = FULL FF++-train V n=2200; Mahalanobis^2 in top-10 PCA subspace).
+  Q2 'drop largest tau first'; Q3 'route largest tau first'; retained/routed counts = round(fraction*n).
+[sel_done].

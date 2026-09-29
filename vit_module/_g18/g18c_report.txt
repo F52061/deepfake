@@ -1,0 +1,416 @@
+==============================================================================================================================
+G18c REPORT -- decisive test: does a forgery-SPECIALIZED DenseNet121 add cross-domain
+   discriminative power that the ViT CLS representation V (768) lacks?
+==============================================================================================================================
+Pure offline CPU; zero deep-model forward / zero GPU / zero deep training (only light LR heads).
+Protocol = G17c section B4, verbatim (same scaler, same LR, same C grid, same controls, same targets).
+y: 1=real, 0=fake; all AUC positive=fake.  Baseline everywhere = V alone (768-d); arm = [V|feat].
+==============================================================================================================================
+
+#### MACHINE_BLOCK #######################################################################################################
+G18c_TASK=decisive increment: does a forgery-specialized DenseNet121 add cross-domain signal V lacks
+G18c_ARMS=V(768); ImageNet_dense121_final(1024); df_ffpp_final(1024); df_ffpp_db3(1024); df_ffpp_db2(512); df_lodo_dfdcp_final(1024); df_lodo_cd2_final(1024); df_lodo_wild_final(1024)
+G18c_ARMS_SRC=ImageNet_dense121_final<-cnn:dense121_final; df_ffpp_final<-ffpp:df_ffpp_final; df_ffpp_db3<-ffpp:df_ffpp_db3; df_ffpp_db2<-ffpp:df_ffpp_db2; df_lodo_dfdcp_final<-lodo_dfdcp:dense121_final; df_lodo_cd2_final<-lodo_cd2:dense121_final; df_lodo_wild_final<-lodo_wild:dense121_final
+G18c_PROTOCOL=G17c B4 increment, verbatim: SS(fit probe-train)+LR(C=1e-3,lbfgs,max_iter=3000); [V|feat] vs [V]
+G18c_SEEDS=head random_state seeds=[0, 1, 2, 3, 4] (arm dAUC seed-invariant: lbfgs deterministic); control seeds=[0, 1, 2, 3, 4]
+G18c_CTRL=randn(K)~N(0,1); VR=V@R.T, R=normal(K,768)/sqrt(768), rng=default_rng(20260910+s); max over both
+G18c_Y_CONV=1=real,0=fake; AUC positive=fake
+G18c_ALIGNMENT=ALL_PASS n_checks=25 (paths byte-equal g17<->g18a<->g18b; y/vids/domain byte-equal; probe+multi stack)
+G18c_ANCHOR_CD=cd1=0.8286(exp 0.8286);cd2=0.8633(exp 0.8633);dfdcp=0.8261(exp 0.8261);ffiw=0.8244(exp 0.8244);wild=0.8090(exp 0.8090)
+G18c_ANCHOR_MAXDEV=0.000033
+G18c_ANCHOR_PASS=1
+G18c_ratio_V=0.1983
+G18c_ratio_C=2.7160
+G18c_ORACLE_V_mean4=0.9111
+G18c_VALID4=cd1,cd2,dfdcp,wild
+G18c_DECISION3=dfdcp,cd2,wild
+G18c_LODO_DISCIPLINE=ImageNet_dense121_final->valid=ALL; df_ffpp_final->valid=ALL; df_ffpp_db3->valid=ALL; df_ffpp_db2->valid=ALL; df_lodo_dfdcp_final->valid=dfdcp; df_lodo_cd2_final->valid=cd2+cd1; df_lodo_wild_final->valid=wild
+G18c_BASE_V_AUC_cd1=0.8286
+G18c_BASE_V_AUC_cd2=0.8633
+G18c_BASE_V_AUC_dfdcp=0.8261
+G18c_BASE_V_AUC_ffiw=0.8244
+G18c_BASE_V_AUC_wild=0.8090
+G18c_dAUC_ImageNet_dense121_final_cd1=+0.0188
+G18c_dAUC_ImageNet_dense121_final_cd2=-0.0018
+G18c_dAUC_ImageNet_dense121_final_dfdcp=-0.0166
+G18c_dAUC_ImageNet_dense121_final_ffiw=-0.0077
+G18c_dAUC_ImageNet_dense121_final_wild=+0.0056
+G18c_dAUC_df_ffpp_final_cd1=-0.1001
+G18c_dAUC_df_ffpp_final_cd2=-0.0786
+G18c_dAUC_df_ffpp_final_dfdcp=-0.0064
+G18c_dAUC_df_ffpp_final_ffiw=+0.0218
+G18c_dAUC_df_ffpp_final_wild=-0.0019
+G18c_dAUC_df_ffpp_db3_cd1=-0.0363
+G18c_dAUC_df_ffpp_db3_cd2=-0.0544
+G18c_dAUC_df_ffpp_db3_dfdcp=-0.0360
+G18c_dAUC_df_ffpp_db3_ffiw=-0.0251
+G18c_dAUC_df_ffpp_db3_wild=+0.0043
+G18c_dAUC_df_ffpp_db2_cd1=-0.0040
+G18c_dAUC_df_ffpp_db2_cd2=-0.0070
+G18c_dAUC_df_ffpp_db2_dfdcp=-0.0211
+G18c_dAUC_df_ffpp_db2_ffiw=-0.0070
+G18c_dAUC_df_ffpp_db2_wild=-0.0284
+G18c_dAUC_df_lodo_dfdcp_final_cd1_CONTAMINATED=+0.1692
+G18c_dAUC_df_lodo_dfdcp_final_cd2_CONTAMINATED=+0.1312
+G18c_dAUC_df_lodo_dfdcp_final_dfdcp=-0.0080
+G18c_dAUC_df_lodo_dfdcp_final_ffiw_CONTAMINATED=+0.1294
+G18c_dAUC_df_lodo_dfdcp_final_wild_CONTAMINATED=+0.1677
+G18c_dAUC_df_lodo_cd2_final_cd1=-0.0203
+G18c_dAUC_df_lodo_cd2_final_cd2=-0.0484
+G18c_dAUC_df_lodo_cd2_final_dfdcp_CONTAMINATED=+0.1336
+G18c_dAUC_df_lodo_cd2_final_ffiw_CONTAMINATED=+0.1261
+G18c_dAUC_df_lodo_cd2_final_wild_CONTAMINATED=+0.1677
+G18c_dAUC_df_lodo_wild_final_cd1_CONTAMINATED=+0.1524
+G18c_dAUC_df_lodo_wild_final_cd2_CONTAMINATED=+0.1243
+G18c_dAUC_df_lodo_wild_final_dfdcp_CONTAMINATED=+0.1261
+G18c_dAUC_df_lodo_wild_final_ffiw_CONTAMINATED=+0.1328
+G18c_dAUC_df_lodo_wild_final_wild=+0.0104
+G18c_G18_INCREMENT_ImageNet_dense121_final=NO_COMPLEMENT
+G18c_G18_INCREMENT_df_ffpp_final=NO_COMPLEMENT
+G18c_G18_INCREMENT_df_ffpp_db3=NO_COMPLEMENT
+G18c_G18_INCREMENT_df_ffpp_db2=NO_COMPLEMENT
+G18c_G18_INCREMENT_df_lodo_dfdcp_final=N/A_LT4_VALID(0/1)
+G18c_G18_INCREMENT_df_lodo_cd2_final=N/A_LT4_VALID(0/2)
+G18c_G18_INCREMENT_df_lodo_wild_final=N/A_LT4_VALID(0/1)
+G18c_G18_SPECIALIZATION_EFFECT=NO_EFFECT
+G18c_G18_SPECIALIZATION_DELTA4=-0.0483
+G18c_G18_SPECIALIZATION_DELTA3=-0.0247
+G18c_G18_LODO_EFFECT_dfdcp=NO_EFFECT
+G18c_G18_LODO_DIFF_dfdcp=-0.0016
+G18c_G18_LODO_EFFECT_cd2=LODO_HELPS
+G18c_G18_LODO_DIFF_cd2=+0.0302
+G18c_G18_LODO_EFFECT_wild=NO_EFFECT
+G18c_G18_LODO_DIFF_wild=+0.0123
+G18c_G18_LODO_EFFECT=NO_EFFECT
+G18c_ratio_G18a_df_ffpp_final=0.2598
+G18c_ratio_G18b_fold_mean=0.4304
+G18c_DELOCK_ratio_over_g18a=1.6563
+G18c_G18_DELOCK=NO_EFFECT
+G18c_WALL_S=483.3
+G18c_GPU=0
+G18c_FORWARDS=0
+G18c_THREADS=4
+G18c_PROCESSES=1
+G18c_NUM_WORKERS=0
+G18c_TORCH_SET_NUM_THREADS=4
+G18c_CV2_NUM_THREADS=0
+G18c_NPZ_READ=8
+
+------------------------------------------------------------------------------------------------------------------------------
+A. ALIGNMENT + ANCHOR (hard gate)
+------------------------------------------------------------------------------------------------------------------------------
+  alignment checks: 25, all PASS
+   - df_ffpp/db2/db3, df_lodo_{dfdcp,cd2,wild} 'paths' byte-equal to _g17/cnn_feats.npz: True
+   - y / vids / domain byte-equal across all 5 arm files and to freq_feats.npz: True
+   - cnn rows == vstack(probe_feats[0:3000], feats_multi[3000:5300]) (y/vids/paths): True
+  anchor cross-domain V C=1e-3: cd1=0.8286(exp 0.8286) cd2=0.8633(exp 0.8633) dfdcp=0.8261(exp 0.8261) ffiw=0.8244(exp 0.8244) wild=0.8090(exp 0.809)  maxdev=3.33e-05 -> ANCHOR_PASS=1
+  G12 ratio: V=0.1983(exp 0.1983)  C=2.7160(exp 2.716)
+  oracle_V (best-of-4, mean4 excl ffiw) = 0.9111 (ref 0.9111)
+
+  hygiene (from G17c, unchanged):  dfdcp=CLEAN | cd2=SUB-CLEAN (28% imgs share cd1 vids) |
+  wild=SUB-CLEAN (3% share probe-train vids) | cd1=NOT-held-out reference (41/41 vid overlap with cd2) |
+  ffiw=1 video -> excluded from all aggregates.
+
+------------------------------------------------------------------------------------------------------------------------------
+B. BASELINE: V ALONE, cross-domain C=1e-3 (probe-train 2200 -> target 300) + oracle
+------------------------------------------------------------------------------------------------------------------------------
+  domain    V_auc_xdom  V_oracle  n_vid
+  cd1           0.8286    0.9550     41
+  cd2           0.8633    0.8956    124
+  dfdcp         0.8261    0.9223     47
+  ffiw          0.8244    0.9991      1
+  wild          0.8090    0.8717    239
+  V seed-std over head seeds [0, 1, 2, 3, 4]: cd1=1.2e-16 cd2=1.2e-16 dfdcp=0.0e+00 ffiw=0.0e+00 wild=0.0e+00
+
+------------------------------------------------------------------------------------------------------------------------------
+C. ARM AUCs.  [V|feat] cross-domain C=1e-3 per target domain; CONTAMINATED = df_lodo_X arm
+   on a domain that was in ITS OWN training set (memorization, excluded from every gate/aggregate)
+------------------------------------------------------------------------------------------------------------------------------
+  arm                        dim        cd1        cd2      dfdcp       ffiw       wild   meanV4  oracle_dfdcp
+  ImageNet_dense121_final   1792     0.8475     0.8615     0.8095     0.8167     0.8146   0.8333        0.9121
+  df_ffpp_final             1792     0.7285     0.7847     0.8197     0.8462     0.8072   0.7850        0.9366
+  df_ffpp_db3               1792     0.7924     0.8089     0.7901     0.7993     0.8133   0.8012        0.9333
+  df_ffpp_db2               1280     0.8247     0.8563     0.8050     0.8174     0.7806   0.8166        0.9154
+  df_lodo_dfdcp_final       1792    0.9978*    0.9945*     0.8181    0.9538*    0.9768*   0.9468        0.9477
+  df_lodo_cd2_final         1792     0.8083     0.8149    0.9597*    0.9505*    0.9768*   0.8899        0.9993
+  df_lodo_wild_final        1792    0.9811*    0.9876*    0.9522*    0.9572*     0.8194   0.9351        0.9990
+  V                          768     0.8286     0.8633     0.8261     0.8244     0.8090   0.8318        0.9223
+  (* = CONTAMINATED for that arm: the domain was in the arm's training set)
+
+  feat-alone cross-domain AUC (no V), C=1e-3 (context: does the specialized detector transfer at all?):
+  feat                            cd1        cd2      dfdcp       ffiw       wild
+  ImageNet_dense121_final      0.5253     0.6064     0.6073     0.6169     0.5496
+  df_ffpp_final                0.5153     0.5966     0.7099     0.8080     0.7429
+  df_ffpp_db3                  0.5490     0.5604     0.6433     0.7301     0.7046
+  df_ffpp_db2                  0.4604     0.5215     0.5368     0.7537     0.5521
+  df_lodo_dfdcp_final         1.0000*    0.9999*     0.6937    0.9979*    0.9927*
+  df_lodo_cd2_final            0.6377     0.6281    0.9940*    0.9955*    0.9984*
+  df_lodo_wild_final          0.9998*    0.9980*    0.9877*    0.9991*     0.7668
+
+------------------------------------------------------------------------------------------------------------------------------
+D. B4 INCREMENT (decisive).  dAUC = AUC([V|feat]) - AUC([V]), cross-domain C=1e-3, positive=fake
+   head seeds=[0, 1, 2, 3, 4] (lbfgs is deterministic -> dAUC is seed-invariant; per-seed list shows that)
+   std_boot = AUXILIARY paired row-bootstrap std over the 300 target rows (B=2000, seed 20260910) -- NOT part of the G17c protocol, variance context only
+------------------------------------------------------------------------------------------------------------------------------
+  arm                         K                     cd1                   cd2                 dfdcp                  ffiw                  wild
+  ImageNet_dense121_final  1024         +0.0188+-0.0069       -0.0018+-0.0063       -0.0166+-0.0071       -0.0077+-0.0081       +0.0056+-0.0093
+  df_ffpp_final            1024         -0.1001+-0.0195       -0.0786+-0.0172       -0.0064+-0.0155       +0.0218+-0.0116       -0.0019+-0.0148
+  df_ffpp_db3              1024         -0.0363+-0.0153       -0.0544+-0.0125       -0.0360+-0.0133       -0.0251+-0.0143       +0.0043+-0.0137
+  df_ffpp_db2               512         -0.0040+-0.0093       -0.0070+-0.0064       -0.0211+-0.0079       -0.0070+-0.0056       -0.0284+-0.0108
+  df_lodo_dfdcp_final      1024                  CONTAM                CONTAM       -0.0080+-0.0127                CONTAM                CONTAM
+  df_lodo_cd2_final        1024         -0.0203+-0.0164       -0.0484+-0.0150                CONTAM                CONTAM                CONTAM
+  df_lodo_wild_final       1024                  CONTAM                CONTAM                CONTAM                CONTAM       +0.0104+-0.0127
+
+  per-seed dAUC (SEEDS=[0, 1, 2, 3, 4]) -- identical across seeds by construction:
+    ImageNet_dense121_final  cd1:[+0.0188,+0.0188,+0.0188,+0.0188,+0.0188]  cd2:[-0.0018,-0.0018,-0.0018,-0.0018,-0.0018]  dfdcp:[-0.0166,-0.0166,-0.0166,-0.0166,-0.0166]  ffiw:[-0.0077,-0.0077,-0.0077,-0.0077,-0.0077]  wild:[+0.0056,+0.0056,+0.0056,+0.0056,+0.0056]
+    df_ffpp_final            cd1:[-0.1001,-0.1001,-0.1001,-0.1001,-0.1001]  cd2:[-0.0786,-0.0786,-0.0786,-0.0786,-0.0786]  dfdcp:[-0.0064,-0.0064,-0.0064,-0.0064,-0.0064]  ffiw:[+0.0218,+0.0218,+0.0218,+0.0218,+0.0218]  wild:[-0.0019,-0.0019,-0.0019,-0.0019,-0.0019]
+    df_ffpp_db3              cd1:[-0.0363,-0.0363,-0.0363,-0.0363,-0.0363]  cd2:[-0.0544,-0.0544,-0.0544,-0.0544,-0.0544]  dfdcp:[-0.0360,-0.0360,-0.0360,-0.0360,-0.0360]  ffiw:[-0.0251,-0.0251,-0.0251,-0.0251,-0.0251]  wild:[+0.0043,+0.0043,+0.0043,+0.0043,+0.0043]
+    df_ffpp_db2              cd1:[-0.0040,-0.0040,-0.0040,-0.0040,-0.0040]  cd2:[-0.0070,-0.0070,-0.0070,-0.0070,-0.0070]  dfdcp:[-0.0211,-0.0211,-0.0211,-0.0211,-0.0211]  ffiw:[-0.0070,-0.0070,-0.0070,-0.0070,-0.0070]  wild:[-0.0284,-0.0284,-0.0284,-0.0284,-0.0284]
+    df_lodo_dfdcp_final      dfdcp:[-0.0080,-0.0080,-0.0080,-0.0080,-0.0080]
+    df_lodo_cd2_final        cd1:[-0.0203,-0.0203,-0.0203,-0.0203,-0.0203]  cd2:[-0.0484,-0.0484,-0.0484,-0.0484,-0.0484]
+    df_lodo_wild_final       wild:[+0.0104,+0.0104,+0.0104,+0.0104,+0.0104]
+
+  V|feat vs feat-alone vs V (context), valid domains only:
+    ImageNet_dense121_final  cd1    V=0.8286  feat=0.5253  [V|feat]=0.8475  dAUC=+0.0188
+    ImageNet_dense121_final  cd2    V=0.8633  feat=0.6064  [V|feat]=0.8615  dAUC=-0.0018
+    ImageNet_dense121_final  dfdcp  V=0.8261  feat=0.6073  [V|feat]=0.8095  dAUC=-0.0166
+    ImageNet_dense121_final  ffiw   V=0.8244  feat=0.6169  [V|feat]=0.8167  dAUC=-0.0077
+    ImageNet_dense121_final  wild   V=0.8090  feat=0.5496  [V|feat]=0.8146  dAUC=+0.0056
+    df_ffpp_final            cd1    V=0.8286  feat=0.5153  [V|feat]=0.7285  dAUC=-0.1001
+    df_ffpp_final            cd2    V=0.8633  feat=0.5966  [V|feat]=0.7847  dAUC=-0.0786
+    df_ffpp_final            dfdcp  V=0.8261  feat=0.7099  [V|feat]=0.8197  dAUC=-0.0064
+    df_ffpp_final            ffiw   V=0.8244  feat=0.8080  [V|feat]=0.8462  dAUC=+0.0218
+    df_ffpp_final            wild   V=0.8090  feat=0.7429  [V|feat]=0.8072  dAUC=-0.0019
+    df_ffpp_db3              cd1    V=0.8286  feat=0.5490  [V|feat]=0.7924  dAUC=-0.0363
+    df_ffpp_db3              cd2    V=0.8633  feat=0.5604  [V|feat]=0.8089  dAUC=-0.0544
+    df_ffpp_db3              dfdcp  V=0.8261  feat=0.6433  [V|feat]=0.7901  dAUC=-0.0360
+    df_ffpp_db3              ffiw   V=0.8244  feat=0.7301  [V|feat]=0.7993  dAUC=-0.0251
+    df_ffpp_db3              wild   V=0.8090  feat=0.7046  [V|feat]=0.8133  dAUC=+0.0043
+    df_ffpp_db2              cd1    V=0.8286  feat=0.4604  [V|feat]=0.8247  dAUC=-0.0040
+    df_ffpp_db2              cd2    V=0.8633  feat=0.5215  [V|feat]=0.8563  dAUC=-0.0070
+    df_ffpp_db2              dfdcp  V=0.8261  feat=0.5368  [V|feat]=0.8050  dAUC=-0.0211
+    df_ffpp_db2              ffiw   V=0.8244  feat=0.7537  [V|feat]=0.8174  dAUC=-0.0070
+    df_ffpp_db2              wild   V=0.8090  feat=0.5521  [V|feat]=0.7806  dAUC=-0.0284
+    df_lodo_dfdcp_final      dfdcp  V=0.8261  feat=0.6937  [V|feat]=0.8181  dAUC=-0.0080
+    df_lodo_cd2_final        cd2    V=0.8633  feat=0.6281  [V|feat]=0.8149  dAUC=-0.0484
+    df_lodo_cd2_final        cd1    V=0.8286  feat=0.6377  [V|feat]=0.8083  dAUC=-0.0203
+    df_lodo_wild_final       wild   V=0.8090  feat=0.7668  [V|feat]=0.8194  dAUC=+0.0104
+
+------------------------------------------------------------------------------------------------------------------------------
+E. CAPACITY CONTROLS side by side (same K, 5 seeds each).  ctrl dAUC = AUC([V|ctrl]) - AUC([V])
+------------------------------------------------------------------------------------------------------------------------------
+  arm                         K  control  seed         cd1       cd2     dfdcp      ffiw      wild
+  ImageNet_dense121_final  1024  randn       0     +0.0071   -0.0009   +0.0002   -0.0089   +0.0066
+  ImageNet_dense121_final  1024  randn       1     -0.0042   -0.0036   -0.0044   -0.0016   -0.0027
+  ImageNet_dense121_final  1024  randn       2     -0.0005   -0.0004   -0.0020   -0.0071   -0.0061
+  ImageNet_dense121_final  1024  randn       3     -0.0072   +0.0000   +0.0049   +0.0017   -0.0002
+  ImageNet_dense121_final  1024  randn       4     +0.0028   +0.0001   -0.0010   -0.0050   -0.0062
+  ImageNet_dense121_final  1024  VR          0     -0.0128   -0.0048   -0.0056   -0.0091   -0.0070
+  ImageNet_dense121_final  1024  VR          1     -0.0078   -0.0043   -0.0033   -0.0143   -0.0057
+  ImageNet_dense121_final  1024  VR          2     -0.0166   -0.0035   -0.0019   -0.0046   -0.0043
+  ImageNet_dense121_final  1024  VR          3     -0.0175   -0.0070   -0.0028   -0.0045   -0.0106
+  ImageNet_dense121_final  1024  VR          4     -0.0120   -0.0029   -0.0018   -0.0070   -0.0049
+  ImageNet_dense121_final  1024  MAX5              +0.0071   +0.0001   +0.0049   +0.0017   +0.0066
+  ImageNet_dense121_final  1024  MAX3              +0.0071   -0.0004   +0.0002   -0.0016   +0.0066
+  df_ffpp_final            1024  randn       0     +0.0071   -0.0009   +0.0002   -0.0089   +0.0066
+  df_ffpp_final            1024  randn       1     -0.0042   -0.0036   -0.0044   -0.0016   -0.0027
+  df_ffpp_final            1024  randn       2     -0.0005   -0.0004   -0.0020   -0.0071   -0.0061
+  df_ffpp_final            1024  randn       3     -0.0072   +0.0000   +0.0049   +0.0017   -0.0002
+  df_ffpp_final            1024  randn       4     +0.0028   +0.0001   -0.0010   -0.0050   -0.0062
+  df_ffpp_final            1024  VR          0     -0.0128   -0.0048   -0.0056   -0.0091   -0.0070
+  df_ffpp_final            1024  VR          1     -0.0078   -0.0043   -0.0033   -0.0143   -0.0057
+  df_ffpp_final            1024  VR          2     -0.0166   -0.0035   -0.0019   -0.0046   -0.0043
+  df_ffpp_final            1024  VR          3     -0.0175   -0.0070   -0.0028   -0.0045   -0.0106
+  df_ffpp_final            1024  VR          4     -0.0120   -0.0029   -0.0018   -0.0070   -0.0049
+  df_ffpp_final            1024  MAX5              +0.0071   +0.0001   +0.0049   +0.0017   +0.0066
+  df_ffpp_final            1024  MAX3              +0.0071   -0.0004   +0.0002   -0.0016   +0.0066
+  df_ffpp_db3              1024  randn       0     +0.0071   -0.0009   +0.0002   -0.0089   +0.0066
+  df_ffpp_db3              1024  randn       1     -0.0042   -0.0036   -0.0044   -0.0016   -0.0027
+  df_ffpp_db3              1024  randn       2     -0.0005   -0.0004   -0.0020   -0.0071   -0.0061
+  df_ffpp_db3              1024  randn       3     -0.0072   +0.0000   +0.0049   +0.0017   -0.0002
+  df_ffpp_db3              1024  randn       4     +0.0028   +0.0001   -0.0010   -0.0050   -0.0062
+  df_ffpp_db3              1024  VR          0     -0.0128   -0.0048   -0.0056   -0.0091   -0.0070
+  df_ffpp_db3              1024  VR          1     -0.0078   -0.0043   -0.0033   -0.0143   -0.0057
+  df_ffpp_db3              1024  VR          2     -0.0166   -0.0035   -0.0019   -0.0046   -0.0043
+  df_ffpp_db3              1024  VR          3     -0.0175   -0.0070   -0.0028   -0.0045   -0.0106
+  df_ffpp_db3              1024  VR          4     -0.0120   -0.0029   -0.0018   -0.0070   -0.0049
+  df_ffpp_db3              1024  MAX5              +0.0071   +0.0001   +0.0049   +0.0017   +0.0066
+  df_ffpp_db3              1024  MAX3              +0.0071   -0.0004   +0.0002   -0.0016   +0.0066
+  df_ffpp_db2               512  randn       0     -0.0031   -0.0016   -0.0026   -0.0051   -0.0019
+  df_ffpp_db2               512  randn       1     -0.0012   -0.0043   +0.0025   +0.0026   +0.0027
+  df_ffpp_db2               512  randn       2     +0.0015   -0.0010   +0.0016   -0.0080   -0.0008
+  df_ffpp_db2               512  randn       3     +0.0003   +0.0031   +0.0018   -0.0058   -0.0041
+  df_ffpp_db2               512  randn       4     +0.0024   -0.0004   +0.0011   -0.0028   -0.0006
+  df_ffpp_db2               512  VR          0     -0.0096   -0.0040   -0.0028   -0.0104   -0.0044
+  df_ffpp_db2               512  VR          1     -0.0031   -0.0024   -0.0025   -0.0077   -0.0032
+  df_ffpp_db2               512  VR          2     -0.0072   -0.0012   -0.0001   -0.0015   -0.0030
+  df_ffpp_db2               512  VR          3     -0.0104   -0.0047   -0.0008   -0.0014   -0.0077
+  df_ffpp_db2               512  VR          4     -0.0046   -0.0016   +0.0019   -0.0008   -0.0032
+  df_ffpp_db2               512  MAX5              +0.0024   +0.0031   +0.0025   +0.0026   +0.0027
+  df_ffpp_db2               512  MAX3              +0.0015   -0.0010   +0.0025   +0.0026   +0.0027
+  df_lodo_dfdcp_final      1024  randn       0     +0.0071   -0.0009   +0.0002   -0.0089   +0.0066
+  df_lodo_dfdcp_final      1024  randn       1     -0.0042   -0.0036   -0.0044   -0.0016   -0.0027
+  df_lodo_dfdcp_final      1024  randn       2     -0.0005   -0.0004   -0.0020   -0.0071   -0.0061
+  df_lodo_dfdcp_final      1024  randn       3     -0.0072   +0.0000   +0.0049   +0.0017   -0.0002
+  df_lodo_dfdcp_final      1024  randn       4     +0.0028   +0.0001   -0.0010   -0.0050   -0.0062
+  df_lodo_dfdcp_final      1024  VR          0     -0.0128   -0.0048   -0.0056   -0.0091   -0.0070
+  df_lodo_dfdcp_final      1024  VR          1     -0.0078   -0.0043   -0.0033   -0.0143   -0.0057
+  df_lodo_dfdcp_final      1024  VR          2     -0.0166   -0.0035   -0.0019   -0.0046   -0.0043
+  df_lodo_dfdcp_final      1024  VR          3     -0.0175   -0.0070   -0.0028   -0.0045   -0.0106
+  df_lodo_dfdcp_final      1024  VR          4     -0.0120   -0.0029   -0.0018   -0.0070   -0.0049
+  df_lodo_dfdcp_final      1024  MAX5              +0.0071   +0.0001   +0.0049   +0.0017   +0.0066
+  df_lodo_dfdcp_final      1024  MAX3              +0.0071   -0.0004   +0.0002   -0.0016   +0.0066
+  df_lodo_cd2_final        1024  randn       0     +0.0071   -0.0009   +0.0002   -0.0089   +0.0066
+  df_lodo_cd2_final        1024  randn       1     -0.0042   -0.0036   -0.0044   -0.0016   -0.0027
+  df_lodo_cd2_final        1024  randn       2     -0.0005   -0.0004   -0.0020   -0.0071   -0.0061
+  df_lodo_cd2_final        1024  randn       3     -0.0072   +0.0000   +0.0049   +0.0017   -0.0002
+  df_lodo_cd2_final        1024  randn       4     +0.0028   +0.0001   -0.0010   -0.0050   -0.0062
+  df_lodo_cd2_final        1024  VR          0     -0.0128   -0.0048   -0.0056   -0.0091   -0.0070
+  df_lodo_cd2_final        1024  VR          1     -0.0078   -0.0043   -0.0033   -0.0143   -0.0057
+  df_lodo_cd2_final        1024  VR          2     -0.0166   -0.0035   -0.0019   -0.0046   -0.0043
+  df_lodo_cd2_final        1024  VR          3     -0.0175   -0.0070   -0.0028   -0.0045   -0.0106
+  df_lodo_cd2_final        1024  VR          4     -0.0120   -0.0029   -0.0018   -0.0070   -0.0049
+  df_lodo_cd2_final        1024  MAX5              +0.0071   +0.0001   +0.0049   +0.0017   +0.0066
+  df_lodo_cd2_final        1024  MAX3              +0.0071   -0.0004   +0.0002   -0.0016   +0.0066
+  df_lodo_wild_final       1024  randn       0     +0.0071   -0.0009   +0.0002   -0.0089   +0.0066
+  df_lodo_wild_final       1024  randn       1     -0.0042   -0.0036   -0.0044   -0.0016   -0.0027
+  df_lodo_wild_final       1024  randn       2     -0.0005   -0.0004   -0.0020   -0.0071   -0.0061
+  df_lodo_wild_final       1024  randn       3     -0.0072   +0.0000   +0.0049   +0.0017   -0.0002
+  df_lodo_wild_final       1024  randn       4     +0.0028   +0.0001   -0.0010   -0.0050   -0.0062
+  df_lodo_wild_final       1024  VR          0     -0.0128   -0.0048   -0.0056   -0.0091   -0.0070
+  df_lodo_wild_final       1024  VR          1     -0.0078   -0.0043   -0.0033   -0.0143   -0.0057
+  df_lodo_wild_final       1024  VR          2     -0.0166   -0.0035   -0.0019   -0.0046   -0.0043
+  df_lodo_wild_final       1024  VR          3     -0.0175   -0.0070   -0.0028   -0.0045   -0.0106
+  df_lodo_wild_final       1024  VR          4     -0.0120   -0.0029   -0.0018   -0.0070   -0.0049
+  df_lodo_wild_final       1024  MAX5              +0.0071   +0.0001   +0.0049   +0.0017   +0.0066
+  df_lodo_wild_final       1024  MAX3              +0.0071   -0.0004   +0.0002   -0.0016   +0.0066
+
+  oracle-side controls (best-of-4) MAX5:
+  arm                         K         cd1       cd2     dfdcp      ffiw      wild
+  ImageNet_dense121_final  1024     +0.0021   +0.0079   +0.0045   +0.0004   -0.0065
+  df_ffpp_final            1024     +0.0021   +0.0079   +0.0045   +0.0004   -0.0065
+  df_ffpp_db3              1024     +0.0021   +0.0079   +0.0045   +0.0004   -0.0065
+  df_ffpp_db2               512     +0.0006   +0.0093   +0.0068   +0.0004   -0.0051
+  df_lodo_dfdcp_final      1024     +0.0021   +0.0079   +0.0045   +0.0004   -0.0065
+  df_lodo_cd2_final        1024     +0.0021   +0.0079   +0.0045   +0.0004   -0.0065
+  df_lodo_wild_final       1024     +0.0021   +0.0079   +0.0045   +0.0004   -0.0065
+
+------------------------------------------------------------------------------------------------------------------------------
+F. ORACLE INCREMENT (context; best-of-4 in-domain, video-grouped 5-fold)
+------------------------------------------------------------------------------------------------------------------------------
+  arm                         K                     cd1                   cd2                 dfdcp                  ffiw                  wild
+  ImageNet_dense121_final  1024                 +0.0050               +0.0020               -0.0102               -0.0016               -0.0029
+  df_ffpp_final            1024                 -0.0034               +0.0327               +0.0143               +0.0002               +0.0033
+  df_ffpp_db3              1024                 -0.0179               +0.0368               +0.0110               +0.0009               -0.0030
+  df_ffpp_db2               512                 -0.0008               +0.0249               -0.0069               +0.0009               -0.0133
+  df_lodo_dfdcp_final      1024                  CONTAM                CONTAM               +0.0254                CONTAM                CONTAM
+  df_lodo_cd2_final        1024                 -0.0081               +0.0493                CONTAM                CONTAM                CONTAM
+  df_lodo_wild_final       1024                  CONTAM                CONTAM                CONTAM                CONTAM               +0.0035
+
+------------------------------------------------------------------------------------------------------------------------------
+G. MECHANICAL GATES (pre-registered)
+------------------------------------------------------------------------------------------------------------------------------
+  [G18_INCREMENT] dAUC>0 AND > max(both controls, 5 seeds)+0.01 in >=3/4 valid domains
+    (valid domains of an arm = its non-contaminated target domains, max 4 = cd1,cd2,dfdcp,wild)
+    ImageNet_dense121_final  valid4=4 pass5=1 -> NO_COMPLEMENT   [G17c-3seed variant: pass=1 -> NO_COMPLEMENT]   [decision3 dfdcp/cd2/wild: pass=0 -> NO_COMPLEMENT]
+        cd1    dAUC=+0.0188 ctrl_max5=+0.0071 ctrl_max3=+0.0071 pass5=1 pass3=1
+        cd2    dAUC=-0.0018 ctrl_max5=+0.0001 ctrl_max3=-0.0004 pass5=0 pass3=0
+        dfdcp  dAUC=-0.0166 ctrl_max5=+0.0049 ctrl_max3=+0.0002 pass5=0 pass3=0
+        wild   dAUC=+0.0056 ctrl_max5=+0.0066 ctrl_max3=+0.0066 pass5=0 pass3=0
+    df_ffpp_final            valid4=4 pass5=0 -> NO_COMPLEMENT   [G17c-3seed variant: pass=0 -> NO_COMPLEMENT]   [decision3 dfdcp/cd2/wild: pass=0 -> NO_COMPLEMENT]
+        cd1    dAUC=-0.1001 ctrl_max5=+0.0071 ctrl_max3=+0.0071 pass5=0 pass3=0
+        cd2    dAUC=-0.0786 ctrl_max5=+0.0001 ctrl_max3=-0.0004 pass5=0 pass3=0
+        dfdcp  dAUC=-0.0064 ctrl_max5=+0.0049 ctrl_max3=+0.0002 pass5=0 pass3=0
+        wild   dAUC=-0.0019 ctrl_max5=+0.0066 ctrl_max3=+0.0066 pass5=0 pass3=0
+    df_ffpp_db3              valid4=4 pass5=0 -> NO_COMPLEMENT   [G17c-3seed variant: pass=0 -> NO_COMPLEMENT]   [decision3 dfdcp/cd2/wild: pass=0 -> NO_COMPLEMENT]
+        cd1    dAUC=-0.0363 ctrl_max5=+0.0071 ctrl_max3=+0.0071 pass5=0 pass3=0
+        cd2    dAUC=-0.0544 ctrl_max5=+0.0001 ctrl_max3=-0.0004 pass5=0 pass3=0
+        dfdcp  dAUC=-0.0360 ctrl_max5=+0.0049 ctrl_max3=+0.0002 pass5=0 pass3=0
+        wild   dAUC=+0.0043 ctrl_max5=+0.0066 ctrl_max3=+0.0066 pass5=0 pass3=0
+    df_ffpp_db2              valid4=4 pass5=0 -> NO_COMPLEMENT   [G17c-3seed variant: pass=0 -> NO_COMPLEMENT]   [decision3 dfdcp/cd2/wild: pass=0 -> NO_COMPLEMENT]
+        cd1    dAUC=-0.0040 ctrl_max5=+0.0024 ctrl_max3=+0.0015 pass5=0 pass3=0
+        cd2    dAUC=-0.0070 ctrl_max5=+0.0031 ctrl_max3=-0.0010 pass5=0 pass3=0
+        dfdcp  dAUC=-0.0211 ctrl_max5=+0.0025 ctrl_max3=+0.0025 pass5=0 pass3=0
+        wild   dAUC=-0.0284 ctrl_max5=+0.0027 ctrl_max3=+0.0027 pass5=0 pass3=0
+    df_lodo_dfdcp_final      valid4=1 pass5=0 -> N/A_LT4_VALID(0/1)   [G17c-3seed variant: pass=0 -> N/A_LT4_VALID(0/1)]   [decision3 dfdcp/cd2/wild: pass=0 -> N/A_LT3_DECISION(0/1)]
+        dfdcp  dAUC=-0.0080 ctrl_max5=+0.0049 ctrl_max3=+0.0002 pass5=0 pass3=0
+    df_lodo_cd2_final        valid4=2 pass5=0 -> N/A_LT4_VALID(0/2)   [G17c-3seed variant: pass=0 -> N/A_LT4_VALID(0/2)]   [decision3 dfdcp/cd2/wild: pass=0 -> N/A_LT3_DECISION(0/1)]
+        cd2    dAUC=-0.0484 ctrl_max5=+0.0001 ctrl_max3=-0.0004 pass5=0 pass3=0
+        cd1    dAUC=-0.0203 ctrl_max5=+0.0071 ctrl_max3=+0.0071 pass5=0 pass3=0
+    df_lodo_wild_final       valid4=1 pass5=0 -> N/A_LT4_VALID(0/1)   [G17c-3seed variant: pass=0 -> N/A_LT4_VALID(0/1)]   [decision3 dfdcp/cd2/wild: pass=0 -> N/A_LT3_DECISION(0/1)]
+        wild   dAUC=+0.0104 ctrl_max5=+0.0066 ctrl_max3=+0.0066 pass5=0 pass3=0
+
+  [G18_SPECIALIZATION_EFFECT] mean dAUC(df_ffpp_final) - mean dAUC(ImageNet_dense121_final) >= +0.03
+    shared valid domains ['cd1', 'cd2', 'dfdcp', 'wild']: cd1(-0.1001 vs +0.0188) cd2(-0.0786 vs -0.0018) dfdcp(-0.0064 vs -0.0166) wild(-0.0019 vs +0.0056)
+    mean dAUC df_ffpp_final=-0.0467  ImageNet_dense121_final=+0.0015  delta=-0.0483 -> NO_EFFECT
+    [decision3 variant: delta=-0.0247 -> NO_EFFECT]
+
+  [G18_LODO_EFFECT] dAUC(df_lodo_X_final) - dAUC(df_ffpp_final) >= +0.03 on held-out X
+    dfdcp  dAUC(lodo)=-0.0080  dAUC(df_ffpp)=-0.0064  diff=-0.0016  ctrl_max5=+0.0049 -> NO_EFFECT
+    cd2    dAUC(lodo)=-0.0484  dAUC(df_ffpp)=-0.0786  diff=+0.0302  ctrl_max5=+0.0001 -> LODO_HELPS
+    wild   dAUC(lodo)=+0.0104  dAUC(df_ffpp)=-0.0019  diff=+0.0123  ctrl_max5=+0.0066 -> NO_EFFECT
+    overall: 1/3 held-out domains -> NO_EFFECT
+
+  [G18_DELOCK] ratio(G18b fold mean) <= 0.70 * ratio(G18a mean)
+    ratio(df_ffpp_final)  G18a mean            = 0.2598   [RECOMPUTED here]
+    ratio(df_lodo_dfdcp_final)  G18b fold     = 0.6713
+    ratio(df_lodo_cd2_final)    G18b fold     = 0.2824
+    ratio(df_lodo_wild_final)   G18b fold     = 0.3375
+    G18b fold mean = 0.4304 ; G18a mean = 0.2598 ; ratio/G18a = 1.6563 ; 0.70*G18a = 0.1819 -> NO_EFFECT
+    recomputed here (not reused from the parent):  g18a=0.2598 [parent 0.2598]  dfdcp=0.6713 [parent 0.6713]  cd2=0.2824 [parent 0.2824]  wild=0.3375 [parent 0.3375]
+
+  per-domain ratio (feat-only, source=probe-train 2200, mean over 5 target domains):
+    arm                           cd1      cd2    dfdcp     ffiw     wild     mean
+    ImageNet_dense121_final    6.1361   5.9635   7.5458   7.4188   6.8458   6.7820
+    df_ffpp_final              0.2534   0.2609   0.2597   0.2928   0.2324   0.2598
+    df_ffpp_db3                1.2784   1.4047   1.5668   2.3593   1.6516   1.6521
+    df_ffpp_db2                3.3817   3.7254   4.0478   6.8855   4.6372   4.5355
+    df_lodo_dfdcp_final        1.0814   1.0123   0.3322   0.3913   0.5393   0.6713
+    df_lodo_cd2_final          0.2880   0.2910   0.2863   0.2606   0.2859   0.2824
+    df_lodo_wild_final         0.4817   0.4542   0.2722   0.2647   0.2147   0.3375
+
+------------------------------------------------------------------------------------------------------------------------------
+H. DEVIATIONS FROM G17c
+------------------------------------------------------------------------------------------------------------------------------
+  1. ARMS: only the 7 G18 arms + V baseline are evaluated (G17c evaluated 16 freq/CNN feats).
+     The code path for each arm is byte-identical (same functions, same constants).
+  2. SEEDS: G17c used control seeds [0,1,2]; here the control seed list is extended to
+     [0,1,2,3,4] (>=5 as required) and the same list is used as the LR random_state.  Because
+     lbfgs ignores random_state the arm dAUC is EXACTLY seed-invariant (std=0, per-seed list
+     printed).  The G17c 3-seed control maximum is reported alongside (ctrl_max3) and the gate
+     verdict under the G17c-exact 3-seed controls is printed as a variant.  The 5-seed max is
+     the stricter (larger) bound, so the primary verdict uses it.
+  3. Control matrices depend only on K, so they are built once per unique K (K in {512,1024})
+     instead of per arm.  Same rng, same seed base, same construction -> identical numbers.
+  4. ADDED (not in G17c): paired row-bootstrap std of dAUC on the target rows (B=2000) to give a
+     real uncertainty scale, since the deterministic protocol yields std=0 over head seeds.
+  5. ADDED (not in G17c): feat-alone cross-domain AUC, per-seed dAUC listing, G18a/G18b ratio
+     recomputation.  None of these change the pre-registered quantities.
+  6. ffiw is never aggregated (1 video).  VALID4 = cd1,cd2,dfdcp,wild is used for the
+     G18_INCREMENT '3/4 valid domains' rule; the decision-domain variant (dfdcp,cd2,wild) is
+     reported too.  cd1 is a valid transfer target for the probe-trained head (0 video overlap
+     with probe-train) but is the same source family as cd2, so it is flagged not dropped.
+
+------------------------------------------------------------------------------------------------------------------------------
+I. AUDIT
+------------------------------------------------------------------------------------------------------------------------------
+  imgs_read=0  gpu=0  forwards=0  (no deep model instantiated, no forward, no GPU claimed)
+  threads=4 (OMP/MKL/OPENBLAS/NUMEXPR/VECLIB/BLIS=4)  torch.set_num_threads(4)=True  cv2.setNumThreads(0)=True  processes=1  num_workers=0
+  head: StandardScaler(fit train) + LogisticRegression(lbfgs, max_iter=3000, random_state=seed);
+       C=1e-3 fixed (B2/B4) + inner-CV-selected C on the train side only (B1 context).
+  oracle: best-of-4-methods (LR_C1e-3, LR_C1.0, kNN_k5, RBF_SVM), video-grouped 5-fold, seed=0.
+  wall_s=483.3
+
+CAVEATS
+  1. n=300 per target domain -> single-domain AUC differences < ~0.04 must not be over-read;
+     the bootstrap std column quantifies exactly this noise for dAUC.
+  2. dfdcp is the only fully clean held-out domain; cd2 (28% imgs share cd1 vids) and wild (3%)
+     are SUB-CLEAN; cd1 is cd2's source family; ffiw is 1 video.
+  3. A [V|feat] gain shows the feat carries LINEARLY available signal V lacks when both are
+     standardized and fed to one LR -- it is not proof the deployed detector would use it.
+  4. The df_lodo_X arms' non-X columns are training-set memorization (AUC ~0.99) and are
+     marked CONTAMINATED; they are excluded from all means and gates.
+
+==============================================================================================================================
+END OF REPORT   (wall 483.3s)
+==============================================================================================================================

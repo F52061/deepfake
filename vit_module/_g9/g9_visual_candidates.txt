@@ -1,0 +1,11 @@
+# G9 visual inspection candidates (step 8)
+# V wrong fakes n=43 correct fakes n=1457
+z_train_min_fake	911	F:/zhj/data/FaceForensic++_raw/manipulated_sequences/Face2Face/c23/faces23/135_880/203.png
+z_train_max_fake	244	F:/zhj/data/FaceForensic++_raw/manipulated_sequences/Face2Face/c23/faces23/233_995/384.png
+z_test_max_fake	2385	F:/zhj/data/FaceForensic++_raw/manipulated_sequences/NeuralTextures/c23/faces23/842_714/180.png
+z_test_min_fake	2498	F:/zhj/data/FaceForensic++_raw/manipulated_sequences/Face2Face/c23/faces23/732_691/121.png
+V_wrong_fake	370	F:/zhj/data/FaceForensic++_raw/manipulated_sequences/NeuralTextures/c23/faces23/381_376/424.png
+V_wrong_fake	2231	F:/zhj/data/FaceForensic++_raw/manipulated_sequences/FaceSwap/c23/faces23/358_380/156.png
+V_correct_fake_highlogit	432	F:/zhj/data/FaceForensic++_raw/manipulated_sequences/NeuralTextures/c23/faces23/669_682/385.png
+real_most_fakelike	1176	F:/zhj/data/FaceForensic++_raw/original_sequences/c23/faces23/257/45.png
+real_most_reallike	2666	F:/zhj/data/FaceForensic++_raw/original_sequences/c23/faces23/842/92.png

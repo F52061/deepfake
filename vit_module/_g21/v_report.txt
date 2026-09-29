@@ -1,0 +1,454 @@
+====================================================================================================
+G21-V REPORT -- is the CLIP TEXT branch of ViT_M2F2Det_Bridge dead code?
+====================================================================================================
+model   : vit_module/vit_m2f2_detector_bridge.py :: ViT_M2F2Det_Bridge
+ckpt    : checkpoints/stage_1/bridge_v2_phase1.pth
+claim   : clip_text_features (L432) -> text_proj (L435) is computed every forward and then
+          never used; final fusion L478-484 is cat([clip_vision_cls(768), clip_adapt_embed(128),
+          vit_features(768)]) -> Linear(1664, 2).
+method  : runtime falsification (V5 energy decomposition, V3 shape/constancy, V2 monkeypatch,
+          V1 gradient reachability, V1b parameter stats).
+status  : the text-branch claim is CONFIRMED; one V1 contrast expectation FAILED
+          (clip_reduction.weight grad is exactly 0) which led to a SECOND finding (V1x).
+
+#### MACHINE_BLOCK ####################################################################################
+G21V_TASK=G21-V text-branch dead-code falsification
+G21V_GPU_QUERY=[(0, 5166, 5953), (1, 0, 11120), (2, 64, 11055)]
+G21V_GPU_ASSIGNED=2
+G21V_GPU_USED_MIB_AT_START=64
+G21V_GPU_FREE_MIB_AT_START=11055
+G21V_DEVICE=NVIDIA GeForce GTX 1080 Ti (cuda:0 == physical GPU 2)
+G21V_BATCH=16
+G21V_GRAD_BATCH=8
+G21V_FP32=1
+G21V_N_IMGS=48
+G21V_SEED=20260910
+G21V_WALL_S=37.0
+G21V_PEAK_MIB=6510
+G21V_PEAK_TORCH_MIB=4118
+G21V_CKPT_MISSING=0
+G21V_CKPT_UNEXPECTED=0
+G21V_CKPT_TEXT_PROJ_KEYS=['text_proj.0.bias', 'text_proj.0.weight', 'text_proj.1.bias', 'text_proj.1.weight']
+G21V_CKPT_PROMPT_TOKENS_PRESENT=True
+G21V_READ_FAIL=0
+G21V_FORWARDS=241
+G21V_V5_OUTPUT_WEIGHT_SHAPE=(2, 1664)
+G21V_V5_D_NORM=1.36469705
+G21V_V5_D_NORM2=1.86239805
+G21V_V5_SHARE_0_768_clip_vision_cls=0.62294828
+G21V_V5_SHARE_768_896_bridge_embed=0.00026486
+G21V_V5_SHARE_896_1664_vit_features=0.37678686
+G21V_V5_TEXT_FEATURE_DIMS=0
+G21V_V5_TOTAL_DIMS=1664
+G21V_V5_NDIM_ENERGY_GT_1E3=291
+G21V_V5_NDIM_ENERGY_GT_1E3_IN_TEXT_REGION=0
+G21V_V5_EXPECT_MATCH=1
+G21V_V3_1_TEXT_SHAPE=(1, 768)
+G21V_V3_1_TEXT_DTYPE=torch.float32
+G21V_V3_1_TEXT_DEVICE=cuda:0
+G21V_V3_1_SHAPE_IS_1x768=1
+G21V_V3_2_TEXTPROJ_OUT_SHAPE=(1, 768)
+G21V_V3_2_BATCH_PAIRWISE_MAXDEV=0.0000000000
+G21V_V3_2_BATCH_PAIRWISE_VACUOUS=1
+G21V_V3_2_MAXDEV_B1_vs_B16=0.0000000000
+G21V_V3_2_MAXDEV_B8_vs_B16=0.0000000000
+G21V_V3_2_BATCH_INDEP=1
+G21V_V3_2_REPEAT_DETERMINISM_equal=1
+G21V_V3_2_REPEAT_DETERMINISM_maxabs=0.0000000000
+G21V_V3_3_LINF_DIFF=0.0000000000
+G21V_V3_3_L2_DIFF=0.0000000000
+G21V_V3_3_BITWISE_EQUAL=1
+G21V_V2_CTRL_DETERMINISM_equal=1
+G21V_V2_CTRL_DETERMINISM_maxabs=0.0000000000
+G21V_V2_a_zeros_MAXABS_DLOGIT=0.0000000000
+G21V_V2_a_zeros_TORCH_EQUAL=1
+G21V_V2_a_zeros_PROBE_ABSMAX=0.000000
+G21V_V2_a_zeros_PROBE_SHAPE=(1, 768)
+G21V_V2_b_noise_seed0_MAXABS_DLOGIT=0.0000000000
+G21V_V2_b_noise_seed0_TORCH_EQUAL=1
+G21V_V2_b_noise_seed0_PROBE_ABSMAX=3.994902
+G21V_V2_b_noise_seed0_PROBE_SHAPE=(1, 768)
+G21V_V2_b_noise_seed1_MAXABS_DLOGIT=0.0000000000
+G21V_V2_b_noise_seed1_TORCH_EQUAL=1
+G21V_V2_b_noise_seed1_PROBE_ABSMAX=3.285551
+G21V_V2_b_noise_seed1_PROBE_SHAPE=(1, 768)
+G21V_V2_b_noise_seed2_MAXABS_DLOGIT=0.0000000000
+G21V_V2_b_noise_seed2_TORCH_EQUAL=1
+G21V_V2_b_noise_seed2_PROBE_ABSMAX=3.032940
+G21V_V2_b_noise_seed2_PROBE_SHAPE=(1, 768)
+G21V_V2_c_wrong_shape_16x768_MAXABS_DLOGIT=0.0000000000
+G21V_V2_c_wrong_shape_16x768_TORCH_EQUAL=1
+G21V_V2_c_wrong_shape_16x768_PROBE_ABSMAX=7.000000
+G21V_V2_c_wrong_shape_16x768_PROBE_SHAPE=(16, 768)
+G21V_V2_c_wrong_shape_1664_RAISED=RuntimeError('mat1 and mat2 shapes cannot be multiplied (1x1664 and 768x768)')
+G21V_V2_ALL_PASS=1
+G21V_V1_text_proj_N=4
+G21V_V1_text_proj_GRAD_IS_NONE_COUNT=4
+G21V_V1_text_proj_GRAD_ABSMAX=0.0000000000
+G21V_V1_prompt_tokens_N=1
+G21V_V1_prompt_tokens_GRAD_IS_NONE_COUNT=1
+G21V_V1_prompt_tokens_GRAD_ABSMAX=0.0000000000
+G21V_V1_clip_text_model_rep_N=2
+G21V_V1_clip_text_model_rep_GRAD_IS_NONE_COUNT=2
+G21V_V1_clip_text_model_rep_GRAD_ABSMAX=0.0000000000
+G21V_V1_output_N=1
+G21V_V1_output_GRAD_IS_NONE_COUNT=0
+G21V_V1_output_GRAD_ABSMAX=96.6307601929
+G21V_V1_clip_reduction_N=1
+G21V_V1_clip_reduction_GRAD_IS_NONE_COUNT=0
+G21V_V1_clip_reduction_GRAD_ABSMAX=0.0000000000
+G21V_V1_vision_proj_N=1
+G21V_V1_vision_proj_GRAD_IS_NONE_COUNT=0
+G21V_V1_vision_proj_GRAD_ABSMAX=1.3019989729
+G21V_V1_deepfake_proj_N=1
+G21V_V1_deepfake_proj_GRAD_IS_NONE_COUNT=0
+G21V_V1_deepfake_proj_GRAD_ABSMAX=0.4823794365
+G21V_V1_TEXT_BRANCH_TOTAL_PARAMS=201
+G21V_V1_TEXT_BRANCH_GRAD_NONE=201
+G21V_V1_TEXT_BRANCH_GRAD_ABSMAX=0.0000000000
+G21V_V1_CONTRAST_GRAD_NONE=0
+G21V_V1_CONTRAST_GRAD_ABSMAX=96.6307601929
+G21V_V1_CORE_CONTRAST_GRAD_NONE=0
+G21V_V1_CORE_CONTRAST_GRAD_ABSMAX=96.6307601929
+G21V_V1_TEXT_DEAD=1
+G21V_V1_CONTRAST_LIVE=1
+G21V_V1_CLIP_REDUCTION_GRAD_EXACTLY_ZERO=1
+G21V_V1X_BRIDGE_BRANCH_CONSTANT=1
+G21V_EXPECT_V1_CONTRAST_ALL_NONZERO=0
+G21V_SECONDARY_FINDING=BRIDGE_BRANCH_CONSTANT
+G21V_V1_SEEN_FORWARD_WITH_REQUIRES_GRAD=1
+G21V_V1SWEEP_text_proj_N=4
+G21V_V1SWEEP_text_proj_GRAD_NONE=4
+G21V_V1SWEEP_text_proj_GRAD_ABSMAX=0.0000000000
+G21V_V1SWEEP_text_proj_N_REQUIRESGRAD_FALSE=0
+G21V_V1SWEEP_clip_text_encoder_N=197
+G21V_V1SWEEP_clip_text_encoder_GRAD_NONE=197
+G21V_V1SWEEP_clip_text_encoder_GRAD_ABSMAX=0.0000000000
+G21V_V1SWEEP_clip_text_encoder_N_REQUIRESGRAD_FALSE=0
+G21V_V1SWEEP_output_N=2
+G21V_V1SWEEP_output_GRAD_NONE=0
+G21V_V1SWEEP_output_GRAD_ABSMAX=96.6307601929
+G21V_V1SWEEP_output_N_REQUIRESGRAD_FALSE=0
+G21V_V1SWEEP_clip_reduction_N=2
+G21V_V1SWEEP_clip_reduction_GRAD_NONE=0
+G21V_V1SWEEP_clip_reduction_GRAD_ABSMAX=0.0000000000
+G21V_V1SWEEP_clip_reduction_N_REQUIRESGRAD_FALSE=0
+G21V_V1SWEEP_vision_proj_N=4
+G21V_V1SWEEP_vision_proj_GRAD_NONE=0
+G21V_V1SWEEP_vision_proj_GRAD_ABSMAX=1.3019989729
+G21V_V1SWEEP_vision_proj_N_REQUIRESGRAD_FALSE=0
+G21V_V1SWEEP_deepfake_proj_N=4
+G21V_V1SWEEP_deepfake_proj_GRAD_NONE=0
+G21V_V1SWEEP_deepfake_proj_GRAD_ABSMAX=1.0637387037
+G21V_V1SWEEP_deepfake_proj_N_REQUIRESGRAD_FALSE=0
+G21V_V1SWEEP_linear_vit_N=6
+G21V_V1SWEEP_linear_vit_GRAD_NONE=0
+G21V_V1SWEEP_linear_vit_GRAD_ABSMAX=0.0000000000
+G21V_V1SWEEP_linear_vit_N_REQUIRESGRAD_FALSE=0
+G21V_V1SWEEP_bridge_adapter_N=36
+G21V_V1SWEEP_bridge_adapter_GRAD_NONE=0
+G21V_V1SWEEP_bridge_adapter_GRAD_ABSMAX=0.0000000000
+G21V_V1SWEEP_bridge_adapter_N_REQUIRESGRAD_FALSE=0
+G21V_V1SWEEP_bridge_adapter_proj_N=8
+G21V_V1SWEEP_bridge_adapter_proj_GRAD_NONE=0
+G21V_V1SWEEP_bridge_adapter_proj_GRAD_ABSMAX=3.0978085995
+G21V_V1SWEEP_bridge_adapter_proj_N_REQUIRESGRAD_FALSE=0
+G21V_V1SWEEP_clip_vision_encoder_N=391
+G21V_V1SWEEP_clip_vision_encoder_GRAD_NONE=391
+G21V_V1SWEEP_clip_vision_encoder_GRAD_ABSMAX=0.0000000000
+G21V_V1SWEEP_clip_vision_encoder_N_REQUIRESGRAD_FALSE=391
+G21V_V1SWEEP_vit_N=162
+G21V_V1SWEEP_vit_GRAD_NONE=12
+G21V_V1SWEEP_vit_GRAD_ABSMAX=0.2038344294
+G21V_V1SWEEP_vit_N_REQUIRESGRAD_FALSE=0
+G21V_V1SWEEP_clip_vision_alpha_N=1
+G21V_V1SWEEP_clip_vision_alpha_GRAD_NONE=0
+G21V_V1SWEEP_clip_vision_alpha_GRAD_ABSMAX=0.5904420018
+G21V_V1SWEEP_clip_vision_alpha_N_REQUIRESGRAD_FALSE=0
+G21V_V1SWEEP_clip_text_alpha_N=1
+G21V_V1SWEEP_clip_text_alpha_GRAD_NONE=0
+G21V_V1SWEEP_clip_text_alpha_GRAD_ABSMAX=1.1684861183
+G21V_V1SWEEP_clip_text_alpha_N_REQUIRESGRAD_FALSE=0
+G21V_V1X_BRIDGE_EMBED_SHAPE=(16, 128)
+G21V_V1X_BRIDGE_BATCH_PAIRWISE_MAXDEV=0.0000000000
+G21V_V1X_BRIDGE_CROSS_BATCH_MAXABS=0.0000000000
+G21V_V1X_BRIDGE_CROSS_BATCH_L2=0.0000000000
+G21V_V1X_BRIDGE_BATCH_CONSTANT=1
+G21V_V1X_BRIDGE_INNER_TOKEN_SHAPE=(37056, 1)
+G21V_V1X_BRIDGE_INNER_TOKEN_SPREAD=0.0000000000
+G21V_V1X_LAYERNORM1_IN_SPREAD=179.760712
+G21V_V1X_LAYERNORM1_OUT_SPREAD=0.0000000000
+G21V_V1X_POOL_LINEAR_PRE_LN_SHAPE=(37056, 1)
+G21V_V1X_POOL_LINEAR_PRE_LN_SPREAD=0.35549703
+G21V_V1X_POOL_LINEAR_WEIGHT_ABSMAX=0.02687270
+G21V_V1X_POOL_LINEAR_WEIGHT_NORM=0.08084483
+G21V_V1X_MODEL_LN1_WEIGHT=[0.999358057975769]
+G21V_V1X_MODEL_LN1_BIAS=0.018901443109
+G21V_V1X_CLIP_REDUCTION_GRAD_IS_ZERO=1
+G21V_V1B_text_proj_0_weight_SHAPE=(768, 768)
+G21V_V1B_text_proj_0_weight_MEAN=-0.00001452
+G21V_V1B_text_proj_0_weight_STD=0.01000059
+G21V_V1B_text_proj_0_weight_NORM=7.68041754
+G21V_V1B_text_proj_0_weight_FIRST5=[-0.0007954378379508853, 0.010320408269762993, -0.01038298849016428, -0.007485846057534218, 0.015436990186572075]
+G21V_V1B_clip_text_encoder_prompt_tokens_SHAPE=(1, 7, 768)
+G21V_V1B_clip_text_encoder_prompt_tokens_MEAN=0.01769533
+G21V_V1B_clip_text_encoder_prompt_tokens_STD=1.01410294
+G21V_V1B_clip_text_encoder_prompt_tokens_NORM=74.35964966
+G21V_V1B_clip_text_encoder_prompt_tokens_FIRST5=[1.4597960710525513, -1.3247133493423462, 0.42138010263442993, -0.095871701836586, -0.5076168775558472]
+G21V_V1B_output_bias_SHAPE=(2,)
+G21V_V1B_output_bias_MEAN=-0.00000231
+G21V_V1B_output_bias_STD=0.00359386
+G21V_V1B_output_bias_NORM=0.00359386
+G21V_V1B_output_bias_FIRST5=[0.0025389287620782852, -0.0025435511488467455]
+G21V_VERDICT=TEXT_BRANCH_DEAD_CONFIRMED
+
+----------------------------------------------------------------------------------------------------
+SETUP
+----------------------------------------------------------------------------------------------------
+gpu query (index,used,free MiB) : [(0, 5166, 5953), (1, 0, 11120), (2, 64, 11055)]
+assigned card                   : 2  used=64 MiB free=11055 MiB at start
+device                          : cuda:0 / NVIDIA GeForce GTX 1080 Ti  (CUDA_VISIBLE_DEVICES=2)
+checkpoint load                 : strict=False missing=0 unexpected=0
+checkpoint text_proj keys       : ['text_proj.0.bias', 'text_proj.0.weight', 'text_proj.1.bias', 'text_proj.1.weight']
+checkpoint prompt_tokens present: True
+requires_grad                   : 427/818 params (left ON so V1 grads are meaningful)
+images                          : 48 from vit_module/_g16/layer_feats.npz['paths'] (batches 16/16/16); read_fail=0
+pipeline                        : cv2.imread -> BGR2RGB -> cv2.resize(336) -> albumentations Normalize(CLIP) -> ToTensorV2 -> model(images)
+seed / threads                  : seed=20260910; OMP/MKL/OPENBLAS/NUMEXPR/VECLIB/JOBLIB=1, torch.set_num_threads(1), cv2.setNumThreads(0), num_workers=0
+
+----------------------------------------------------------------------------------------------------
+V5. CHECKPOINT-ONLY ENERGY DECOMPOSITION OF THE DECISION DIRECTION
+----------------------------------------------------------------------------------------------------
+  output.weight shape = (2, 1664)   (expected (2, 1664))
+  d = weight[1] - weight[0]   (fake-direction minus real-direction)
+  ||d|| = 1.36469705   ||d||^2 = 1.86239805
+
+  segment            slice   dims          norm^2          norm    energy share
+  clip_vision_cls     [0:768]    768        1.160178      1.077115        62.2948%
+  bridge_clip_adapt_embed   [768:896]    128        0.000493      0.022210         0.0265%
+  vit_features  [896:1664]    768        0.701727      0.837692        37.6787%
+
+  TEXT FEATURES OCCUPY 0 DIMENSIONS OF THIS VECTOR.
+    The fusion concat is [clip_vision_cls(768) | clip_adapt_embed(128) | vit_features(768)], so the
+    only 1664 dimensions the classifier can read are those three segments. text_proj's 768-d output
+    is not concatenated, not added, not gated: it contributes exactly 0 of the 1664 input dims and
+    therefore 0.0000% of ||d||^2.
+  dimensions with per-dim energy share > 0.001 : 291 / 1664
+    (of which in a hypothetical text region : 0 -- the region does not exist)
+  expected approx 62.3% / 0.03% / 37.7% -> MATCHES
+
+----------------------------------------------------------------------------------------------------
+V3. SHAPE AND CONSTANCY OF THE TEXT FEATURES
+----------------------------------------------------------------------------------------------------
+  V3.1  model.clip_text_encoder() (called directly, no image input):
+          shape=(1, 768)  dtype=torch.float32  device=cuda:0
+          expected [1, 768] -> CONFIRMED
+          mechanism (source, text_encoder.py L30/L55): input_embeds defaults to
+          self.prompt_tokens of shape (1, 7, 768), so batch_size is HARD-CODED to 1 and the
+          returned pooled_output is last_hidden_state[:, -1, :] = [1, 768]. The image batch
+          dimension never enters this function.
+
+  V3.2  text_proj OUTPUT captured by a forward hook during a real batch-16 forward:
+          shape=(1, 768)
+          max pairwise ||x_i - x_j|| over the batch = 0.0000000000
+          >>> THIS NUMBER IS VACUOUS: the tensor has exactly 1 row, there are no sample
+              pairs. The real test is batch-size independence, below.
+          batch-size independence (same first image):
+            max|T(batch=1) - T(batch=16)| = 0.000e+00
+            max|T(batch=8) - T(batch=16)| = 0.000e+00
+            -> batch independent: YES (exactly 0)
+          determinism control (same batch twice, unpatched): torch.equal=True max|delta|=0.000e+00
+
+  V3.3  second, COMPLETELY DIFFERENT batch of 16 images (disjoint paths [16:32] vs [0:16]):
+          L_inf ||T_A - T_B|| = 0.000e+00
+          L2    ||T_A - T_B|| = 0.000e+00
+          torch.equal(T_A, T_B) = True
+          -> EXACTLY ZERO: text output is a constant, independent of the images
+
+----------------------------------------------------------------------------------------------------
+V2. FUNCTIONAL-PATH TEST (monkeypatched clip_text_encoder.forward)
+----------------------------------------------------------------------------------------------------
+  determinism control, unpatched, batch 16 twice: torch.equal=True max|dLogit|=0.000e+00
+  (if this were not 0/True, bitwise comparisons below would be uninterpretable)
+
+  replacement                      probe shape  probe max|x|    max|dLogit|  torch.equal
+  a_zeros                             (1, 768)      0.000000      0.000e+00         True
+  b_noise_seed0                       (1, 768)      3.994902      0.000e+00         True
+  b_noise_seed1                       (1, 768)      3.285551      0.000e+00         True
+  b_noise_seed2                       (1, 768)      3.032940      0.000e+00         True
+  c_wrong_shape_16x768               (16, 768)      7.000000      0.000e+00         True
+  c_wrong_shape_1664              RAISED RuntimeError('mat1 and mat2 shapes cannot be multiplied (1x1664 and 768x768)')
+
+  (a) exact zeros            : max|dLogit| = 0, bitwise identical
+  (b) random noise seed 0    : max|dLogit| = 0.000e+00, bitwise identical = True
+  (b) random noise seed 1    : max|dLogit| = 0.000e+00, bitwise identical = True
+  (b) random noise seed 2    : max|dLogit| = 0.000e+00, bitwise identical = True
+
+  Extra (beyond spec): replacements with the WRONG shape were also tried, to probe whether
+  ANY consumer would notice. Results are MIXED and must be read carefully:
+    c_wrong_shape_16x768       probe shape=(16, 768) max|dLogit|=0.000e+00 torch.equal=True
+    c_wrong_shape_1664         RAISED RuntimeError('mat1 and mat2 shapes cannot be multiplied (1x1664 and 768x768)')
+    [16,768]: accepted, logits bitwise identical -> a batch-shaped text tensor changes nothing.
+    [1,1664]: RAISED RuntimeError inside text_proj itself ('mat1 and mat2 shapes cannot be
+      multiplied (1x1664 and 768x768)'), i.e. the failure happens at the Linear that produces
+      the text embedding, BEFORE any downstream consumer could see it. This probe therefore
+      says NOTHING about downstream consumption and is EXCLUDED from the pass criterion.
+  -> V2 SPEC PROBES (zeros + 3 noise seeds) ALL PASS = True
+
+----------------------------------------------------------------------------------------------------
+V1. GRADIENT TEST  (out = model(images); loss = out.sum(); loss.backward())
+----------------------------------------------------------------------------------------------------
+  batch = 8, no torch.no_grad, requires_grad 427/818 params ON
+  loss = -6.407187   out.shape = (8, 2)
+
+  parameter group                               n  grad is None    grad.abs().max()
+  text_proj.*                                   4             4        0.000000e+00
+  clip_text_encoder.prompt_tokens               1             1        0.000000e+00
+  clip_text_encoder.model.* (2 representative)    2             2        0.000000e+00
+  output.weight                                 1             0        9.663076e+01
+  clip_reduction.weight                         1             0        0.000000e+00
+  vision_proj.0.weight                          1             0        1.301999e+00
+  deepfake_proj.0.weight                        1             0        4.823794e-01
+
+  !!! DEVIATION FROM EXPECTATION !!!
+  The task expected ALL 4 named contrast params nonzero. Measured:
+    output.weight        grad.abs().max() = 9.663076e+01   nonzero  OK
+    vision_proj[0].weight grad.abs().max() = 1.301999e+00   nonzero  OK
+    deepfake_proj[0].weight grad.abs().max() = 4.823794e-01   nonzero  OK
+    clip_reduction.weight grad.abs().max() = 0.000000e+00   *** EXACTLY ZERO (grad tensor exists, all entries 0.0) ***
+  A grad tensor that EXISTS but is exactly 0 means autograd DID build a path to clip_reduction,
+  but that path carries no derivative -- i.e. the bridge branch's output does not actually
+  depend on clip_reduction's parameters. This is NOT the text-branch phenomenon (None grad);
+  it is a second, independent structural finding, investigated in V1x below.
+
+  prefix                        n  grad None       max|grad|   reqGrad=F
+  text_proj.                    4          4    0.000000e+00           0
+  clip_text_encoder.          197        197    0.000000e+00           0
+  output.                       2          0    9.663076e+01           0
+  clip_reduction.               2          0    0.000000e+00           0
+  vision_proj.                  4          0    1.301999e+00           0
+  deepfake_proj.                4          0    1.063739e+00           0
+  linear_vit_                   6          0    0.000000e+00           0
+  bridge_adapter.              36          0    0.000000e+00           0
+  bridge_adapter_proj.          8          0    3.097809e+00           0
+  clip_vision_encoder.        391        391    0.000000e+00         391
+  vit.                        162         12    2.038344e-01           0
+  clip_vision_alpha             1          0    5.904420e-01           0
+  clip_text_alpha               1          0    1.168486e+00           0
+
+  TEXT BRANCH (all text_proj.* + all clip_text_encoder.*): 201 params, grad is None for 201
+    max|grad| over any non-None text param = 0.000000e+00
+  CONTRAST (output.weight/bias, clip_reduction.weight, vision_proj[0].weight, deepfake_proj[0].weight):
+    grad is None for 0 of 5; max|grad| = 9.663076e+01
+
+  >>> INTERPRETATION: every single text-branch parameter has grad = None. (Not zero --
+      None: autograd never even built a path from the loss to them, because the tensor
+      text_proj produces is discarded. If the branch were merely multiplied by a learned
+      weight that happened to be 0, grads would be exactly 0.0 tensors, not None.)
+      Meanwhile the contrast groups all have nonzero grads, so the backward pass was real
+      and the loss genuinely depends on output / clip_reduction / vision_proj / deepfake_proj.
+      Any loss built from `output` therefore cannot have trained the text branch.
+
+----------------------------------------------------------------------------------------------------
+V1x. SECONDARY FINDING -- WHY IS clip_reduction.weight GRADIENT EXACTLY ZERO?
+     (not part of the original V-spec; surfaced by the V1 contrast column)
+----------------------------------------------------------------------------------------------------
+  Hypothesis, from source: vit_m2f2_detector_bridge.py L157-161 defines
+      BridgeAdapter_Proj_ViT.bridge_adapter_proj = Sequential(View(-1,64), Linear(64,1),
+      LayerNorm(1)).
+  nn.LayerNorm(1) normalizes a 1-element vector: mean == the element, so (x - mean) == 0
+  EXACTLY, rstd*0 == 0, and the layer output reduces to its bias. Consequently the pooling
+  output is a constant that does not depend on the bridge features at all.
+
+  Micro-test, nn.LayerNorm(1) on 512 random scalars (spread 179.760712):
+    output spread = 0.000e+00   (bias = 0.018901)
+    -> CONFIRMED: output is exactly constant
+
+  Same effect inside the real model:
+    DISCRIMINATOR -- the Linear(64,1) that feeds LayerNorm(1) produces shape (37056, 1)
+      with spread 3.554970e-01 over all tokens/images, and its weight is NON-ZERO
+      (|w|max=2.687270e-02, ||w||=8.084483e-02).
+      So the input to LayerNorm(1) really does vary; the collapse happens IN LayerNorm(1).
+    the model's LayerNorm(1) has weight=[0.999358057975769] bias=1.8901443109e-02;
+      output = (x-mean)*rstd*weight + bias = 0*weight + bias = bias, a constant.
+    inner per-token output shape (37056, 1), spread over ALL 37056 entries = 0.000e+00
+      -> the per-token pooled scalar is the SAME for every token and every image.
+    bridge embedding (the 128-d clip_adapt_embed input) shape (16, 128)
+      pairwise max deviation within one batch of 16 : 0.000e+00
+      max|A - B| across two DIFFERENT batches of 16 : 0.000e+00 (L2 = 0.000e+00)
+      -> batch-constant: YES
+
+  CONSEQUENCE: the 128 fusion dims [768:896] receive a vector that is identical for every
+  image. The classifier can only use it as a constant offset (absorbed into output.bias),
+  which is consistent with the V5 measurement that those 128 dims carry 0.0265% of ||d||^2.
+  It also explains the exactly-zero gradients on clip_reduction and (per the sweep above) on
+  linear_vit_*/bridge_adapter.*: they are upstream of the LayerNorm(1) collapse.
+  NOTE: this is a measurement of THIS checkpoint's forward graph; the parameters themselves
+  may still hold values learned before/elsewhere. It is NOT a claim about training history.
+
+----------------------------------------------------------------------------------------------------
+V1b. PARAMETER STATISTICS (recorded, no judgement)
+----------------------------------------------------------------------------------------------------
+  text_proj.0.weight
+    shape=(768, 768)  numel=589824  mean=-1.45214099e-05  std=1.00005893e-02  norm=7.68041754e+00
+    first 5 flattened values = [-0.0007954378379508853, 0.010320408269762993, -0.01038298849016428, -0.007485846057534218, 0.015436990186572075]
+  clip_text_encoder.prompt_tokens
+    shape=(1, 7, 768)  numel=5376  mean=1.76953338e-02  std=1.01410294e+00  norm=7.43596497e+01
+    first 5 flattened values = [1.4597960710525513, -1.3247133493423462, 0.42138010263442993, -0.095871701836586, -0.5076168775558472]
+  output.bias
+    shape=(2,)  numel=2  mean=-2.31119338e-06  std=3.59385600e-03  norm=3.59385740e-03
+    first 5 flattened values = [0.0025389287620782852, -0.0025435511488467455]
+
+----------------------------------------------------------------------------------------------------
+AUDIT
+----------------------------------------------------------------------------------------------------
+  forwards  : 241 image-evaluations in 18 batch calls
+  read_fail : 0
+  peak mem  : nvidia-smi device used 6510 MiB / torch max_memory_allocated 4118 MiB (of 11055 MiB free at start)
+  wall      : 37.0s
+
+----------------------------------------------------------------------------------------------------
+CAVEATS
+----------------------------------------------------------------------------------------------------
+  1. This experiment tests the ARCHITECTURE CODE PATH, not every possible usage. It shows the
+     text branch's output cannot reach `output` in this forward(). Any consumer of it would
+     have to read model.clip_text_encoder()/text_proj directly outside forward() (no caller
+     does so in this repo's forward path) or a subclass/different checkpoint could change it.
+  2. Everything is done with ONE checkpoint (bridge_v2_phase1.pth). The conclusion is
+     'these weights, this code' -- a differently-built model would need its own test.
+  3. V1 used loss = out.sum() (no labels). That is a valid loss for asking 'does autograd
+     build a path from these params to the logits'; it is NOT the training loss. Any loss
+     that is a function of `output` gives the same answer, since reachability is a property
+     of the graph, not of the loss value.
+  4. V1 grad=None means 'not reached by this graph'. Because text_proj IS called in forward
+     (so it is in the graph as a dead end) the None is informative; but the experiment cannot
+     distinguish 'never trained' from 'trained in a different code path / different script'.
+     A separate history check (Stage-1/2/3 training scripts) would be needed to claim the
+     parameters were never updated by ANY training run.
+  5. V3.2's literal 'max per-sample deviation across the batch' is vacuous because the tensor
+     has exactly one row; the batch-size-independence check (batch 1 vs 8 vs 16) is the
+     substantive substitute and is reported alongside it.
+  6. Bitwise comparisons (V2, V3.3) are meaningful only because the unpatched repeat-forward
+     determinism control came back bitwise identical; that control is reported.
+  7. V1b statistics are recorded from the checkpoint as loaded; the equally-loaded identical
+     values in text_proj being initialized elsewhere in this repo (init_weights uses
+     normal_(std=0.01) / bias 0) were NOT verified against the checkpoint in this run, so no
+     claim is made about how these values arose.
+  7b. V1's contrast expectation was NOT fully met: clip_reduction.weight has an exactly-zero
+      gradient. This does not weaken the text-branch conclusion (the text branch has NO grad
+      tensor at all, which is a different and stronger signal) but it means the V-spec's stated
+      expectation for the contrast group is falsified for 1 of its 4 members.
+  7c. The V1x bridge-constancy finding rests on one forward graph of this checkpoint at fp32.
+      It is measured (not inferred) for the pooled token / 128-d embedding / LayerNorm(1) micro-
+      test, but the claim 'the bridge branch is dead' is scoped to this code path + checkpoint.
+      Whether LayerNorm(1) was intentional in the original EfficientNet BridgeAdapter_Proj was
+      not checked here.
+  8. Single GPU (physical card 2), fp32 only, batch<=16; no fp16/bf16 numerics were tested.
+  9. V5 is checkpoint-only: it characterizes the read-out direction d, not the model's
+     behaviour on data. The 0% text share is a property of the concat order + Linear input
+     width, which is structural, not weight-dependent.
+
+====================================================================================================
+VERDICT: TEXT_BRANCH_DEAD_CONFIRMED
+END OF REPORT   (wall 37.0s)
+====================================================================================================

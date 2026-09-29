@@ -1,0 +1,95 @@
+#### MACHINE_BLOCK #######################################################################################################
+G18c_TASK=decisive increment: does a forgery-specialized DenseNet121 add cross-domain signal V lacks
+G18c_ARMS=V(768); ImageNet_dense121_final(1024); df_ffpp_final(1024); df_ffpp_db3(1024); df_ffpp_db2(512); df_lodo_dfdcp_final(1024); df_lodo_cd2_final(1024); df_lodo_wild_final(1024)
+G18c_ARMS_SRC=ImageNet_dense121_final<-cnn:dense121_final; df_ffpp_final<-ffpp:df_ffpp_final; df_ffpp_db3<-ffpp:df_ffpp_db3; df_ffpp_db2<-ffpp:df_ffpp_db2; df_lodo_dfdcp_final<-lodo_dfdcp:dense121_final; df_lodo_cd2_final<-lodo_cd2:dense121_final; df_lodo_wild_final<-lodo_wild:dense121_final
+G18c_PROTOCOL=G17c B4 increment, verbatim: SS(fit probe-train)+LR(C=1e-3,lbfgs,max_iter=3000); [V|feat] vs [V]
+G18c_SEEDS=head random_state seeds=[0, 1, 2, 3, 4] (arm dAUC seed-invariant: lbfgs deterministic); control seeds=[0, 1, 2, 3, 4]
+G18c_CTRL=randn(K)~N(0,1); VR=V@R.T, R=normal(K,768)/sqrt(768), rng=default_rng(20260910+s); max over both
+G18c_Y_CONV=1=real,0=fake; AUC positive=fake
+G18c_ALIGNMENT=ALL_PASS n_checks=25 (paths byte-equal g17<->g18a<->g18b; y/vids/domain byte-equal; probe+multi stack)
+G18c_ANCHOR_CD=cd1=0.8286(exp 0.8286);cd2=0.8633(exp 0.8633);dfdcp=0.8261(exp 0.8261);ffiw=0.8244(exp 0.8244);wild=0.8090(exp 0.8090)
+G18c_ANCHOR_MAXDEV=0.000033
+G18c_ANCHOR_PASS=1
+G18c_ratio_V=0.1983
+G18c_ratio_C=2.7160
+G18c_ORACLE_V_mean4=0.9111
+G18c_VALID4=cd1,cd2,dfdcp,wild
+G18c_DECISION3=dfdcp,cd2,wild
+G18c_LODO_DISCIPLINE=ImageNet_dense121_final->valid=ALL; df_ffpp_final->valid=ALL; df_ffpp_db3->valid=ALL; df_ffpp_db2->valid=ALL; df_lodo_dfdcp_final->valid=dfdcp; df_lodo_cd2_final->valid=cd2+cd1; df_lodo_wild_final->valid=wild
+G18c_BASE_V_AUC_cd1=0.8286
+G18c_BASE_V_AUC_cd2=0.8633
+G18c_BASE_V_AUC_dfdcp=0.8261
+G18c_BASE_V_AUC_ffiw=0.8244
+G18c_BASE_V_AUC_wild=0.8090
+G18c_dAUC_ImageNet_dense121_final_cd1=+0.0188
+G18c_dAUC_ImageNet_dense121_final_cd2=-0.0018
+G18c_dAUC_ImageNet_dense121_final_dfdcp=-0.0166
+G18c_dAUC_ImageNet_dense121_final_ffiw=-0.0077
+G18c_dAUC_ImageNet_dense121_final_wild=+0.0056
+G18c_dAUC_df_ffpp_final_cd1=-0.1001
+G18c_dAUC_df_ffpp_final_cd2=-0.0786
+G18c_dAUC_df_ffpp_final_dfdcp=-0.0064
+G18c_dAUC_df_ffpp_final_ffiw=+0.0218
+G18c_dAUC_df_ffpp_final_wild=-0.0019
+G18c_dAUC_df_ffpp_db3_cd1=-0.0363
+G18c_dAUC_df_ffpp_db3_cd2=-0.0544
+G18c_dAUC_df_ffpp_db3_dfdcp=-0.0360
+G18c_dAUC_df_ffpp_db3_ffiw=-0.0251
+G18c_dAUC_df_ffpp_db3_wild=+0.0043
+G18c_dAUC_df_ffpp_db2_cd1=-0.0040
+G18c_dAUC_df_ffpp_db2_cd2=-0.0070
+G18c_dAUC_df_ffpp_db2_dfdcp=-0.0211
+G18c_dAUC_df_ffpp_db2_ffiw=-0.0070
+G18c_dAUC_df_ffpp_db2_wild=-0.0284
+G18c_dAUC_df_lodo_dfdcp_final_cd1_CONTAMINATED=+0.1692
+G18c_dAUC_df_lodo_dfdcp_final_cd2_CONTAMINATED=+0.1312
+G18c_dAUC_df_lodo_dfdcp_final_dfdcp=-0.0080
+G18c_dAUC_df_lodo_dfdcp_final_ffiw_CONTAMINATED=+0.1294
+G18c_dAUC_df_lodo_dfdcp_final_wild_CONTAMINATED=+0.1677
+G18c_dAUC_df_lodo_cd2_final_cd1=-0.0203
+G18c_dAUC_df_lodo_cd2_final_cd2=-0.0484
+G18c_dAUC_df_lodo_cd2_final_dfdcp_CONTAMINATED=+0.1336
+G18c_dAUC_df_lodo_cd2_final_ffiw_CONTAMINATED=+0.1261
+G18c_dAUC_df_lodo_cd2_final_wild_CONTAMINATED=+0.1677
+G18c_dAUC_df_lodo_wild_final_cd1_CONTAMINATED=+0.1524
+G18c_dAUC_df_lodo_wild_final_cd2_CONTAMINATED=+0.1243
+G18c_dAUC_df_lodo_wild_final_dfdcp_CONTAMINATED=+0.1261
+G18c_dAUC_df_lodo_wild_final_ffiw_CONTAMINATED=+0.1328
+G18c_dAUC_df_lodo_wild_final_wild=+0.0104
+G18c_G18_INCREMENT_ImageNet_dense121_final=NO_COMPLEMENT
+G18c_G18_INCREMENT_df_ffpp_final=NO_COMPLEMENT
+G18c_G18_INCREMENT_df_ffpp_db3=NO_COMPLEMENT
+G18c_G18_INCREMENT_df_ffpp_db2=NO_COMPLEMENT
+G18c_G18_INCREMENT_df_lodo_dfdcp_final=N/A_LT4_VALID(0/1)
+G18c_G18_INCREMENT_df_lodo_cd2_final=N/A_LT4_VALID(0/2)
+G18c_G18_INCREMENT_df_lodo_wild_final=N/A_LT4_VALID(0/1)
+G18c_G18_SPECIALIZATION_EFFECT=NO_EFFECT
+G18c_G18_SPECIALIZATION_DELTA4=-0.0483
+G18c_G18_SPECIALIZATION_DELTA3=-0.0247
+G18c_G18_LODO_EFFECT_dfdcp=NO_EFFECT
+G18c_G18_LODO_DIFF_dfdcp=-0.0016
+G18c_G18_LODO_EFFECT_cd2=LODO_HELPS
+G18c_G18_LODO_DIFF_cd2=+0.0302
+G18c_G18_LODO_EFFECT_wild=NO_EFFECT
+G18c_G18_LODO_DIFF_wild=+0.0123
+G18c_G18_LODO_EFFECT=NO_EFFECT
+G18c_ratio_G18a_df_ffpp_final=0.2598
+G18c_ratio_G18b_fold_mean=0.4304
+G18c_DELOCK_ratio_over_g18a=1.6563
+G18c_G18_DELOCK=NO_EFFECT
+G18c_WALL_S=483.3
+G18c_GPU=0
+G18c_FORWARDS=0
+G18c_THREADS=4
+G18c_PROCESSES=1
+G18c_NUM_WORKERS=0
+G18c_TORCH_SET_NUM_THREADS=4
+G18c_CV2_NUM_THREADS=0
+G18c_NPZ_READ=8
+
+GATE VERDICTS
+G18_INCREMENT: ImageNet_dense121_final=NO_COMPLEMENT; df_ffpp_final=NO_COMPLEMENT; df_ffpp_db3=NO_COMPLEMENT; df_ffpp_db2=NO_COMPLEMENT; df_lodo_dfdcp_final=N/A_LT4_VALID(0/1); df_lodo_cd2_final=N/A_LT4_VALID(0/2); df_lodo_wild_final=N/A_LT4_VALID(0/1)
+G18_SPECIALIZATION_EFFECT: NO_EFFECT (delta4=-0.0483 delta3=-0.0247)
+G18_LODO_EFFECT: NO_EFFECT (1/3)
+G18_DELOCK: NO_EFFECT (ratio=1.6563 vs 0.70*0.2598=0.1819)
+wall=483.3s

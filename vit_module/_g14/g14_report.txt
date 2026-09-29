@@ -1,0 +1,298 @@
+==============================================================================================================================
+G14 REPORT - H8 判定 (ViT 对同域内 real/fake 区分有限: 两类特征被拉近) + 瓶颈定位
+纯 CPU 单线程 (OMP/MKL/OPENBLAS/NUMEXPR/VECLIB/JOBLIB=1, torch=1, cv2=0, 单进程, CUDA_VISIBLE_DEVICES='')
+零模型前向 (不实例化模型/不读图像/不读 checkpoint), 只读 npz; 分支 V/C/F; y: 1=real, 0=fake; AUC positive=fake
+==============================================================================================================================
+
+#### MACHINE_BLOCK #########################################################################################################
+G14_TASK=H8_verdict_and_bottleneck
+G14_DATA=probe_feats.npz(V/C/V_proj/C_proj n=3000:train2200/test800); feats_multi.npz(F/V/C n=2300:ffpp800+5x300)
+G14_BRANCHES=V=768; C=1024; F=1536([F[:,0:768]|F[:,896:1664]] concat, no bridge128)
+G14_ALPHA_V=0.306288
+G14_ANCHOR_e0AUC_cd1=0.8576
+G14_ANCHOR_e0AUC_cd1_EXP=0.8576
+G14_ANCHOR_srcLR_cd1=0.8286
+G14_ANCHOR_srcLR_cd1_EXP=0.8286
+G14_ANCHOR_PC0_varfrac_srcV=0.6229
+G14_ANCHOR_MAXDEV=0.000022
+G14_ANCHOR_PASS=1
+G14_ALIGN_gapRatio_cd1=0.4268
+G14_ALIGN_gapRatio_cd1_EXP=0.4268
+G14_ALIGN_dReal_cd1=25.8687
+G14_ALIGN_dReal_cd1_EXP=25.8687
+G14_ALIGN_dFake_cd1=-8.9057
+G14_ALIGN_dFake_cd1_EXP=-8.9057
+G14_ALIGN_zdimFrac_cd1=0.6357
+G14_ALIGN_zdimFrac_cd1_EXP=0.6357
+G14_ALIGN_absCos_cd1=0.9870
+G14_ALIGN_absCos_cd1_EXP=0.9870
+G14_ALIGN_MAXDEV=0.000042
+G14_ALIGN_PASS=1
+G14_R_gapRatio=cd1=0.4268;cd2=0.4669;dfdcp=0.4644;ffiw=0.4296;wild=0.3833
+G14_R_dReal=cd1=25.8687;cd2=23.5098;dfdcp=18.7632;ffiw=7.4468;wild=29.9671
+G14_R_dFake=cd1=-8.9057;cd2=-8.8294;dfdcp=-13.7313;ffiw=-27.1553;wild=-7.4488
+G14_R_zdimFrac=cd1=0.6357;cd2=0.5986;dfdcp=0.6581;ffiw=0.6852;wild=0.6122
+G14_R_absCos=cd1=0.9870;cd2=0.9890;dfdcp=0.9790;ffiw=0.9796;wild=0.9793
+G14_R_sdRatio=cd1=1.4160;cd2=1.4212;dfdcp=1.6584;ffiw=1.6286;wild=1.5638
+G14_RATIO_V=cd1=0.2113;cd2=0.1861;dfdcp=0.1609;ffiw=0.1995;wild=0.2336
+G14_RATIO_C=cd1=2.4252;cd2=2.5436;dfdcp=3.2183;ffiw=2.8577;wild=2.5350
+G14_RATIO_F=cd1=0.1777;cd2=0.1739;dfdcp=0.1249;ffiw=0.2256;wild=0.1960
+G14_RATIO_MEAN_BY_BRANCH=V=0.1983;C=2.7160;F=0.1796
+G14_CLASSGAP_BY_BRANCH=V=40.2122;C=6.5508;F=66.7601
+G14_SCALE_s_BY_BRANCH=V=1.510;C=0.270;F=0.339
+G14_RESID_V=src:K1=0.3771,K5=0.0682,K50=0.0122|fftest:K1=0.3778,K5=0.0699,K50=0.0174|dom:cd1=K1=0.3983,K5=0.1282,K50=0.0431;cd2=K1=0.4233,K5=0.1189,K50=0.0409;dfdcp=K1=0.3932,K5=0.1749,K50=0.0602;ffiw=K1=0.3180,K5=0.1421,K50=0.0540;wild=K1=0.3844,K5=0.1478,K50=0.0588
+G14_RESID_C=src:K1=0.8831,K5=0.7121,K50=0.2580|fftest:K1=0.8842,K5=0.7385,K50=0.4505|dom:cd1=K1=0.9801,K5=0.9075,K50=0.6732;cd2=K1=0.9824,K5=0.9124,K50=0.6890;dfdcp=K1=0.9069,K5=0.7949,K50=0.5153;ffiw=K1=0.9832,K5=0.8597,K50=0.5834;wild=K1=0.9816,K5=0.8937,K50=0.6777
+G14_RESID_F=src:K1=0.1470,K5=0.0405,K50=0.0022|fftest:K1=0.1497,K5=0.0428,K50=0.0040|dom:cd1=K1=0.3380,K5=0.1293,K50=0.0133;cd2=K1=0.3381,K5=0.1391,K50=0.0167;dfdcp=K1=0.2344,K5=0.0887,K50=0.0116;ffiw=K1=0.1916,K5=0.0842,K50=0.0118;wild=K1=0.2943,K5=0.1040,K50=0.0145
+G14_ORACLE_V=cd1=0.9550;cd2=0.8956;dfdcp=0.9223;ffiw=0.9991;wild=0.8717
+G14_ORACLE_C=cd1=0.9534;cd2=0.9266;dfdcp=0.7244;ffiw=1.0000;wild=0.9083
+G14_ORACLE_F=cd1=0.9298;cd2=0.9140;dfdcp=0.8461;ffiw=0.9984;wild=0.8914
+G14_FFPP_BEST_BY_BRANCH=V=0.9881;C=0.9108;F=0.9874
+G14_FFPP_LR1e-3=V=0.9852;C=0.9108;F=0.9874
+G14_DELTA_ORACLE_V=cd1=+0.0331;cd2=+0.0925;dfdcp=+0.0658;ffiw=-0.0110;wild=+0.1164
+G14_VALID_DOMAINS=cd1,cd2,dfdcp,wild (ffiw leak=True excluded)
+G14_ORACLE_METHOD_MEANS_BY_BRANCH=V:LR_C1e-3=0.8766,LR_C1.0=0.9111,kNN_k5=0.8073,RBF_SVM=0.8656;C:LR_C1e-3=0.8582,LR_C1.0=0.8782,kNN_k5=0.7343,RBF_SVM=0.8580;F:LR_C1e-3=0.8635,LR_C1.0=0.8908,kNN_k5=0.8372,RBF_SVM=0.8599
+G14_C_gap=cd1=25.8931;cd2=28.3283;dfdcp=28.1730;ffiw=26.0654;wild=23.2517
+G14_C_d_z=cd1=1.4033;cd2=1.5296;dfdcp=1.3036;ffiw=1.2281;wild=1.1410
+G14_C_fisher=cd1=0.9846;cd2=1.1699;dfdcp=0.8497;ffiw=0.7542;wild=0.6509
+G14_C_overlap=cd1=0.1424;cd2=0.1396;dfdcp=0.1678;ffiw=0.1897;wild=0.1940
+G14_C_GAUSS_src_dz4.6555=0.9995
+G14_C_GAUSS_f1=cd1=0.8395;cd2=0.8603;dfdcp=0.8217;ffiw=0.8074;wild=0.7901
+G14_C_GAUSS_f1.5=cd1=0.9317;cd2=0.9476;dfdcp=0.9166;ffiw=0.9037;wild=0.8869
+G14_C_GAUSS_f2=cd1=0.9764;cd2=0.9847;dfdcp=0.9674;ffiw=0.9588;wild=0.9467
+G14_C_GAUSS_f3=cd1=0.9985;cd2=0.9994;dfdcp=0.9972;ffiw=0.9954;wild=0.9922
+G14_COS_DELTA_e0=cd1=+0.9790;cd2=+0.9766;dfdcp=+0.9606;ffiw=+0.9855;wild=+0.9437
+G14_DIR_AUC_full=cd1=0.8662;cd2=0.8712;dfdcp=0.8426;ffiw=0.8107;wild=0.8270
+G14_DIR_AUC_e0=cd1=0.8614;cd2=0.8592;dfdcp=0.8358;ffiw=0.8073;wild=0.8048
+G14_DIR_AUC_off=cd1=0.6858;cd2=0.6888;dfdcp=0.7519;ffiw=0.7291;wild=0.7298
+G14_DIR_DELTA_full_e0=cd1=+0.0048;cd2=+0.0120;dfdcp=+0.0068;ffiw=+0.0033;wild=+0.0222
+G14_MEAN_ORACLE_BY_BRANCH=V=0.9111;C=0.8782;F=0.8953
+G14_BOTTLENECK_DIFF=-0.0158
+G14_H8_DOMAIN_CONSIST=SUPPORT
+G14_H8_LIMITED=PARTIAL
+G14_H8_ATTENUATION=ATTENUATION_ONLY
+G14_BOTTLENECK=BOTTLENECK_SHARED
+G14_VERDICT_SUMMARY=H8_DOMAIN_CONSIST=SUPPORT;H8_LIMITED=PARTIAL;H8_ATTENUATION=ATTENUATION_ONLY;BOTTLENECK=BOTTLENECK_SHARED
+G14_ATTEN_N_DOMAINS=4/5
+G14_ROT_N_DOMAINS=0/5
+G14_MEAN_DELTA_ORACLE=0.0770
+G14_WALL_S=25.1
+G14_IMGS_READ=0
+G14_GPU=0
+G14_FORWARDS=0
+G14_THREADS=1
+G14_PROCESSES=1
+G14_NPZ_READ=2
+
+------------------------------------------------------------------------------------------------------------------------------
+PRECHECK. 前置校验 (任一不过即停, atol=1e-3)
+  1) 锚点复算 (probe train V 拟合 center-only PCA@SVD -> e0; 在 multi cd1 V 上算 z 轴 AUC)
+     e0 z-axis AUC cd1       : 复算 0.8576 / 预期 0.8576   (|dev|=0.000000)
+     srcLR(SS+LR C=1e-3) cd1 : 复算 0.8286 / 预期 0.8286   (|dev|=0.000022)
+     源 train V PC0 varfrac  : 复算 0.6229 / 预期 0.6229   (|dev|=0.000015)
+  2) 口径对齐 (复现 G11 cd1 行, z 以源 train 均值为零点)
+     gapRatio=0.4268(exp 0.4268) dReal=+25.8687(exp +25.8687) dFake=-8.9057(exp -8.9057) zdimFrac=0.6357(exp 0.6357) |cos|=0.9870(exp 0.9870)
+  -> PRECHECK PASS (ANCHOR_PASS=1 ALIGN_PASS=1)
+
+------------------------------------------------------------------------------------------------------------------------------
+R. 复核行 (复现 G11 Q1e 全 5 域; z 以源 train 均值为零点; gap=mean z_fake-mean z_real)
+    gapRatio=gap/gap_src; dReal/dFake=相对源 train 类均值位移; shift_mid=两类中点位移;
+    sdRatio=域内合并 sd/源合并 sd; zdimFrac=域内 z 方差/域内 V 各维方差和; |cos|=|域 PC0 与源 e0|
+
+  dom      nvid gapRatiogapRatio[G11]    dReal dReal[G11]    dFake dFake[G11]  shift_mid  sdRatio     d_z  zdimFrac   |cos|
+  -------------------------------------------------------------------------------------------------------------------------
+  cd1        41   0.4268       0.4268 +25.8687   +25.8687  -8.9057    -8.9057    +8.4815   1.4160  1.4033    0.6357  0.9870
+  cd2       124   0.4669       0.4669 +23.5098   +23.5098  -8.8294    -8.8294    +7.3402   1.4212  1.5296    0.5986  0.9890
+  dfdcp      47   0.4644       0.4644 +18.7632   +18.7632 -13.7313   -13.7313    +2.5159   1.6584  1.3036    0.6581  0.9790
+  ffiw        1   0.4296       0.4296  +7.4468    +7.4468 -27.1553   -27.1553    -9.8542   1.6286  1.2281    0.6852  0.9796
+  wild      239   0.3833       0.3833 +29.9671   +29.9671  -7.4488    -7.4488   +11.2591   1.5638  1.1410    0.6122  0.9793
+  (G11 列为其 report 参照值; 复算与参照一致到 <1e-3 即口径对齐通过)
+
+------------------------------------------------------------------------------------------------------------------------------
+A. 域一致性 (记录行, 不设主门; G12 B/D 口径)
+    class_gap=||mu_fake-mu_real||/s (源 train); dom_gap(d)=||mu_d-mu_src||/s; ratio=dom_gap/class_gap;
+    s=sqrt(mean_j Var_j(源全池)); residK=1-||proj_{E[:,:K]}(X-mu_src)||^2/||X-mu_src||^2 (源 train 中心化)
+
+  branch   dim      s    class_gap |       cd1       cd2     dfdcp      ffiw      wild   |  mean
+  ----------------------------------------------------------------------------------------------------
+  V         768   1.510  40.2122  |    0.2113    0.1861    0.1609    0.1995    0.2336   | 0.1983
+  C        1024   0.270   6.5508  |    2.4252    2.5436    3.2183    2.8577    2.5350   | 2.7160
+  F        1536   0.339  66.7601  |    0.1777    0.1739    0.1249    0.2256    0.1960   | 0.1796
+  ----------------------------------------------------------------------------------------------------
+  ratio 跨域均值: V=0.1983  C=2.7160  F=0.1796
+  [G12 软核对] ratio_V: cd1=0.2113 cd2=0.1861 dfdcp=0.1609 ffiw=0.1995 wild=0.2336
+  [G12 软核对] ratio_C: cd1=2.4252 cd2=2.5436 dfdcp=3.2183 ffiw=2.8577 wild=2.5350
+
+  residK (源 train 中心化, K 主成分子空间外残差能量占比):
+    branch         K=1       K=5      K=50    |  域 (K1/K5/K50)
+    ----------------------------------------------------------------------------------------------------
+    V       src     0.3771    0.0682    0.0122
+    V       ftst    0.3778    0.0699    0.0174
+    V       cd1     0.3983    0.1282    0.0431
+    V       cd2     0.4233    0.1189    0.0409
+    V       dfdcp    0.3932    0.1749    0.0602
+    V       ffiw    0.3180    0.1421    0.0540
+    V       wild    0.3844    0.1478    0.0588
+
+    C       src     0.8831    0.7121    0.2580
+    C       ftst    0.8842    0.7385    0.4505
+    C       cd1     0.9801    0.9075    0.6732
+    C       cd2     0.9824    0.9124    0.6890
+    C       dfdcp    0.9069    0.7949    0.5153
+    C       ffiw    0.9832    0.8597    0.5834
+    C       wild    0.9816    0.8937    0.6777
+
+    F       src     0.1470    0.0405    0.0022
+    F       ftst    0.1497    0.0428    0.0040
+    F       cd1     0.3380    0.1293    0.0133
+    F       cd2     0.3381    0.1391    0.0167
+    F       dfdcp    0.2344    0.0887    0.0116
+    F       ffiw    0.1916    0.0842    0.0118
+    F       wild    0.2943    0.1040    0.0145
+
+
+------------------------------------------------------------------------------------------------------------------------------
+B. 域内可分离性上限 (每域每分支, 只用该域 300 样本, video-grouped 5 折 CV; 特征 StandardScaler(fit 折内 train))
+    4 方法: (a) LR(C=1e-3) (b) LR(C=1.0) (c) kNN(k=5) (d) RBF-SVM(C=1.0,gamma=scale,balanced,decision_function)
+    ffiw 仅 1 vid -> 退化 StratifiedKFold, leak=True, 不入聚合; 表格数字为 5 折 AUC 均值 (折间 std 见括号)
+
+  branch V (dim=768, raw ViT CLS):
+    dom     LR_C1e-3     LR_C1.0      kNN_k5       RBF_SVM       oracle   leak  mode
+    cd1     0.9082(0.134)  0.9550(0.071)  0.8465(0.155)  0.8962(0.139)   0.9550   False SGKF(vid)
+    cd2     0.8860(0.060)  0.8956(0.051)  0.8116(0.059)  0.8546(0.068)   0.8956   False SGKF(vid)
+    dfdcp   0.8774(0.044)  0.9223(0.047)  0.7964(0.021)  0.8769(0.069)   0.9223   False SGKF(vid)
+    ffiw    0.8980(0.011)  0.9991(0.002)  0.9744(0.015)  0.9796(0.014)   0.9991   True  SKF(no-group)
+    wild    0.8349(0.059)  0.8717(0.033)  0.7748(0.067)  0.8347(0.036)   0.8717   False SGKF(vid)
+
+  branch C (dim=1024, raw CLIP vision CLS):
+    dom     LR_C1e-3     LR_C1.0      kNN_k5       RBF_SVM       oracle   leak  mode
+    cd1     0.9488(0.058)  0.9534(0.048)  0.8416(0.066)  0.9395(0.065)   0.9534   False SGKF(vid)
+    cd2     0.9174(0.036)  0.9266(0.024)  0.7672(0.049)  0.9116(0.045)   0.9266   False SGKF(vid)
+    dfdcp   0.7068(0.131)  0.7244(0.145)  0.5031(0.039)  0.6854(0.120)   0.7244   False SGKF(vid)
+    ffiw    0.9993(0.001)  1.0000(0.000)  0.9961(0.008)  0.9998(0.000)   1.0000   True  SKF(no-group)
+    wild    0.8597(0.032)  0.9083(0.045)  0.8252(0.039)  0.8955(0.029)   0.9083   False SGKF(vid)
+
+  branch F (dim=1536, [alpha_v*C_proj | V_proj] 1536 (无 bridge 128)):
+    dom     LR_C1e-3     LR_C1.0      kNN_k5       RBF_SVM       oracle   leak  mode
+    cd1     0.9024(0.107)  0.9298(0.047)  0.8784(0.066)  0.8999(0.087)   0.9298   False SGKF(vid)
+    cd2     0.8791(0.057)  0.9140(0.048)  0.8637(0.088)  0.8800(0.072)   0.9140   False SGKF(vid)
+    dfdcp   0.8461(0.025)  0.8281(0.087)  0.8207(0.081)  0.8347(0.066)   0.8461   False SGKF(vid)
+    ffiw    0.9509(0.025)  0.9984(0.002)  0.9844(0.010)  0.9822(0.015)   0.9984   True  SKF(no-group)
+    wild    0.8265(0.049)  0.8914(0.046)  0.7862(0.076)  0.8252(0.055)   0.8914   False SGKF(vid)
+
+  FF++ 域内对照 (probe train 2200 训练 / test 800 评估, 同族方法; V 分支 LR(C=1e-3) 应为 ~0.985):
+    branch  LR_C1e-3     LR_C1.0      kNN_k5       RBF_SVM       oracle(best)
+    V           0.9852      0.9881      0.9817      0.9756   0.9881  
+    C           0.9108      0.8781      0.6904      0.9026   0.9108  
+    F           0.9874      0.9857      0.9787      0.9836   0.9874  
+
+  Delta_oracle(d) = AUC_FFPP_V(best) - oracle_V(d)  (positive=fake):
+    cd1=+0.0331  cd2=+0.0925  dfdcp=+0.0658  ffiw=-0.0110  wild=+0.1164   |  有效域均值(剔 ffiw) +0.0770
+
+------------------------------------------------------------------------------------------------------------------------------
+C. 拉近量化 (V 分支, 沿源轴 z=(V-mu_src)@e0; 每域 300 样本)
+    gap=mean z_fake-mean z_real; d_z=gap/合并sd; Fisher=gap^2/(sd_real^2+sd_fake^2);
+    overlap=1-AUC_e0(z); d_real/d_fake=相对源 train 类均值位移; shift_mid=两类中点位移
+
+  dom           gap  sd_pool     d_z   Fisher   AUC_e0  overlap    d_real    d_fake  shift_mid
+  --------------------------------------------------------------------------------------------
+  cd1       25.8931   18.452  1.4033   0.9846   0.8576   0.1424  +25.8687   -8.9057    +8.4815
+  cd2       28.3283   18.520  1.5296   1.1699   0.8604   0.1396  +23.5098   -8.8294    +7.3402
+  dfdcp     28.1730   21.611  1.3036   0.8497   0.8322   0.1678  +18.7632  -13.7313    +2.5159
+  ffiw      26.0654   21.223  1.2281   0.7542   0.8103   0.1897   +7.4468  -27.1553    -9.8542
+  wild      23.2517   20.379  1.1410   0.6509   0.8060   0.1940  +29.9671   -7.4488   +11.2591
+
+  高斯模型投影对照 (等方差正态近似, 不是测量; Phi(d_z*f/sqrt2) 给出把间隔放大 f 倍后的等效 AUC):
+    dom          f=1.0     f=1.5     f=2.0     f=3.0   (f=1 即 Phi(d_z/sqrt2))
+    cd1         0.8395    0.9317    0.9764    0.9985
+    cd2         0.8603    0.9476    0.9847    0.9994
+    dfdcp       0.8217    0.9166    0.9674    0.9972
+    ffiw        0.8074    0.9037    0.9588    0.9954
+    wild        0.7901    0.8869    0.9467    0.9922
+  源 d_z_src=4.6555 对应的等效 AUC = 0.9995  (等方差正态近似投影, 非测量)
+
+------------------------------------------------------------------------------------------------------------------------------
+D. 衰减 vs 旋转 (V 分支; 与 B 块同一 StratifiedGroupKFold 5 折, 折内 train 构方向 / 折内 test 算 AUC, 5 折均值)
+    方向: (i) Delta_d=mu_fake-mu_real (域内均值差, 无正则, 折内 train 标签);
+          (ii) 源轴 e0 (不含域标签); (iii) Delta_d 轴外分量 Delta_d-(Delta_d.e0)e0
+
+  dom       cos(Delta,e0)  AUC(Delta全)    AUC(仅e0)     AUC(轴外)     全-仅e0  leak          mode
+  ------------------------------------------------------------------------------------------
+  cd1             +0.9790       0.8662      0.8614      0.6858   +0.0048 False     SGKF(vid)
+  cd2             +0.9766       0.8712      0.8592      0.6888   +0.0120 False     SGKF(vid)
+  dfdcp           +0.9606       0.8426      0.8358      0.7519   +0.0068 False     SGKF(vid)
+  ffiw            +0.9855       0.8107      0.8073      0.7291   +0.0033  True SKF(no-group)
+  wild            +0.9437       0.8270      0.8048      0.7298   +0.0222 False     SGKF(vid)
+  判读: 若 AUC(仅e0)≈AUC(Delta全) 且远高于 AUC(轴外) -> 同方向、幅度不足(纯衰减);
+        若 AUC(Delta全) 明显高于 AUC(仅e0)(>0.05) -> 类方向在目标域发生旋转.
+
+------------------------------------------------------------------------------------------------------------------------------
+E. 瓶颈定位 (汇总 B 块域内 oracle AUC, 取每分支最好方法, 有效域 4 域均值, 剔 ffiw)
+
+  branch    cd1        cd2        dfdcp      ffiw       wild        mean(4dom)
+  V            0.9550     0.8956     0.9223     0.9991     0.8717       0.9111
+  C            0.9534     0.9266     0.7244     1.0000     0.9083       0.8782
+  F            0.9298     0.9140     0.8461     0.9984     0.8914       0.8953
+  max(mean oracle_C, mean oracle_F) - mean oracle_V = -0.0158
+
+------------------------------------------------------------------------------------------------------------------------------
+MECHANICAL VERDICTS (预注册, 照抄执行, 不做方向演绎)
+
+  [H8_DOMAIN_CONSIST] mean_d ratio_V=0.1983 <=0.5 ? Y ; ratio_V < ratio_C-1.0 (0.1983 < 1.7160) ? Y
+      ratio_V >= 1.5 ? n  -> G14_H8_DOMAIN_CONSIST=SUPPORT
+  [H8_LIMITED] mean_d (AUC_FFPP_V - oracle_V(d)) = +0.0770 (有效域, 剔 ffiw)
+      >=0.08 ? n ; <=0.03 ? n  -> G14_H8_LIMITED=PARTIAL
+  [H8_ATTENUATION] 逐域 cos>=0.9 且 (全-仅e0)<=0.02:
+      cd1    cos=+0.9790(>=0.9?True) delta=+0.0048(<=0.02?True) cos<0.7?False delta>0.05?False -> ATTEN
+      cd2    cos=+0.9766(>=0.9?True) delta=+0.0120(<=0.02?True) cos<0.7?False delta>0.05?False -> ATTEN
+      dfdcp  cos=+0.9606(>=0.9?True) delta=+0.0068(<=0.02?True) cos<0.7?False delta>0.05?False -> ATTEN
+      ffiw   cos=+0.9855(>=0.9?True) delta=+0.0033(<=0.02?True) cos<0.7?False delta>0.05?False -> ATTEN
+      wild   cos=+0.9437(>=0.9?True) delta=+0.0222(<=0.02?False) cos<0.7?False delta>0.05?False -> -
+      同时满足域数=4/5 ; 出现(cos<0.7 或 delta>0.05)域数=0/5 -> G14_H8_ATTENUATION=ATTENUATION_ONLY
+  [BOTTLENECK] max(mean oracle_C, mean oracle_F)-mean oracle_V = -0.0158
+      >=+0.05 ? n ; |diff|<0.02 ? Y  -> G14_BOTTLENECK=BOTTLENECK_SHARED
+
+  === 判定常量汇总 ===
+    G14_H8_DOMAIN_CONSIST = SUPPORT
+    G14_H8_LIMITED        = PARTIAL
+    G14_H8_ATTENUATION    = ATTENUATION_ONLY
+    G14_BOTTLENECK        = BOTTLENECK_SHARED
+    G14_VERDICT_SUMMARY   = H8_DOMAIN_CONSIST=SUPPORT;H8_LIMITED=PARTIAL;H8_ATTENUATION=ATTENUATION_ONLY;BOTTLENECK=BOTTLENECK_SHARED
+
+------------------------------------------------------------------------------------------------------------------------------
+AUDIT
+  imgs_read=0 (零图像读取)   gpu=0 (CUDA_VISIBLE_DEVICES='', 未调用任何 cuda API)
+  forwards=0 (未实例化模型, 零前向/反向, 未读 checkpoint)   threads=1 (OMP/MKL/OPENBLAS/NUMEXPR/VECLIB/JOBLIB=1,
+  torch.set_num_threads(1), cv2.setNumThreads(0)) ; processes=1 ; npz 读取=2 (probe_feats.npz, feats_multi.npz)
+  探针: StandardScaler(fit 折内 train) + 分类器; LR lbfgs max_iter=3000; 划分 seed=0; 无 PCA 白化
+  PCA: np.linalg.svd(full_matrices=False) 于中心化特征矩阵 (与 G11 eigh(raw-cov)/G12 SVD 同口径)
+  F 源侧 = [0.306288*C_proj | V_proj] (probe npz 直接取 V_proj/C_proj, 不读 checkpoint; alpha_v 用 G12 实测常量)
+  wall_s = 25.1
+
+CAVEATS (honest)
+  1. oracle 是域内标签训练 (标签依赖, 上界性质, 不可部署): B 块 4 方法都在目标域 300 样本上
+     用 real/fake 标签训练, 得到的是'该域内线性/局部可分性的上限', 不代表无标签跨域可用.
+  2. ffiw 域只有 1 个 vid (300 样本=150 real+150 fake 同视频): 无法按视频分组, B/D 块退化为
+     StratifiedKFold 并标 leak=True, 同视频泄漏使其 oracle/AUC 被高估, 已剔出 E 聚合与 H8_LIMITED
+     mean; A/R/C 块量不依赖样本划分, 保留 ffiw; D 块机械判定的 4/5、3/5 计数按规格照抄 5 域计.
+  3. 每域仅 300 样本, 5 折 CV 折间方差大 (B 块已报折间 std): 单域 AUC 差异 < ~0.05 不宜解读;
+     D 块每折 test 约 60 样本, 方向 AUC 折间波动大, 只看跨域一致方向与量级.
+  4. kNN/SVM 与 LR 的可比性: 三者均先 StandardScaler(fit 折内 train); SVM 用 class_weight='balanced'
+     应对均衡数据(实际 150/150 已均衡); kNN 用 predict_proba; 三者的 AUC 都按 positive=fake 统一.
+  5. 高斯投影是等方差正态近似下的投影, 不是测量: Phi(d_z*f/sqrt2) 假设两类沿 z 等方差正态,
+     只用于'若把间隔放大 f 倍, 单轴 AUC 大致到多少'的对照, 不能当实测.
+  6. 相关 != 因果: 域内 oracle 高于跨域 srcLR, 只说明'域内标签可训练出更好的判别器', 不能证明
+     ViT 依赖该判别方向, 也不能证明增广/解冻即可把 oracle 变现为跨域增益.
+  7. '域一致'只能表述为相对: ratio_V(mean)=0.1983 表示 V 分支的类间隔(源)相对域位移很小, 但 V 的
+     real-only 域判别 AUC 仍在 0.86 级别 (G12 C 块), 即 V 并非对域身份零敏感, 只是相对 C 弱得多.
+  8. F 分支缺 128-d bridge 块 (7.7% 维度, 需前向, 离线不可得): F 的真实可分性可能高于此处 1536-d 估计.
+  9. D 块 '与 B 的折一致' 落实为复用 B 块同一 StratifiedGroupKFold 5 折 (train~80%/test~20%);
+     规格中 '70/30' 按'与 B 折一致'的约束理解为 5 折划分, 而非另起 70/30 单次划分.
+  10. 本实验全部离线特征几何量, 未重测任何下游检测性能; 锚点均复算一致 (<1e-3), 口径未漂移.
+  11. H8_LIMITED 为临界值: mean_d (AUC_FFPP_V - oracle_V(d)) = +0.0770, 距 LIMITED 门 +0.08 仅 0.003.
+      该值对 'oracle=最好方法' 与 'AUC_FFPP=LR(C=1e-3)锚点' 的口径选择敏感 (0.074~0.077),
+      两种口径都落在 PARTIAL 区间上沿 (0.03, 0.08); 结论应表述为 'PARTIAL(临界, 略低于 LIMITED 门)',
+      不宜解读为 'H8 已被否证' 或 'H8 已被证实'.
+
+==============================================================================================================================
+END OF REPORT   (wall 25.1 s)
+==============================================================================================================================

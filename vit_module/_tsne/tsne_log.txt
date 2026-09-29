@@ -1,0 +1,16 @@
+[load] E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_tsne\feats_multi.npz
+[load] domains present: ['cd1', 'cd2', 'dfdcp', 'ffiw', 'ffpp', 'wild']
+[load] shapes F(2300, 1664) V(2300, 768) C(2300, 1024), n=2300, real=1150, fake=1150
+[tsne] embedding V ...
+[tsne] embedding C ...
+[tsne] embedding F ...
+[save] PNGs written
+[metric] per-domain AUC ...
+Traceback (most recent call last):
+  File "E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_tsne\tsne_visualize.py", line 268, in <module>
+    main()
+  File "E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_tsne\tsne_visualize.py", line 230, in main
+    cka = cka_ab(V[m_a].astype(np.float64), V[m_b].astype(np.float64))
+  File "E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_tsne\tsne_visualize.py", line 95, in cka_ab
+    m = A.T @ B
+ValueError: matmul: Input operand 1 has a mismatch in its core dimension 0, with gufunc signature (n?,k),(k,m?)->(n?,m?) (size 300 is different from 800)

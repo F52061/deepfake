@@ -1,0 +1,66 @@
+============================================================================================
+T-SNE CROSS-DOMAIN REPORT  (M2F2-Det Stage-1 detector)  [numeric]
+============================================================================================
+npz     : E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_tsne\feats_multi.npz
+total n : 2300   real=1150  fake=1150
+PNGs    : tsne_V_bylabel.png / tsne_V_bydomain.png / tsne_C_bydomain.png / tsne_F_bydomain.png  (in vit_module/_tsne/)
+t-SNE   : PCA->50 then TSNE(perplexity=30, seed=0) on V / C / F
+
+Per-domain real/fake separability (5-fold CV linear probe on that domain only; fake=positive)
+domain         n    AUC_V    AUC_C    AUC_F      FisherV
+--------------------------------------------------------
+ffpp         800   0.9969   0.9982   0.9957     653.2783
+cd1          300   0.9976   0.9956   0.9837     956.6083
+cd2          300   0.9288   0.9509   0.9493     527.9810
+dfdcp        300   0.9870   0.9854   0.9704     787.6642
+ffiw         300   0.9982   1.0000   0.9989    1131.4303
+wild         300   0.8741   0.9035   0.8868     473.5262
+
+Cross-domain V-space overlap matrix  (aligned top-20-PC subspace; 1=identical dominant subspace, 0=orthogonal)
+          FF++(tes  Celeb-DF  Celeb-DF  DFDC-pre      FFIW  WildDeep
+    ffpp     1.000     0.539     0.628     0.489     0.457     0.579
+     cd1     0.539     1.000     0.702     0.471     0.455     0.563
+     cd2     0.628     0.702     1.000     0.520     0.493     0.653
+   dfdcp     0.489     0.471     0.520     1.000     0.448     0.545
+    ffiw     0.457     0.455     0.493     0.448     1.000     0.505
+    wild     0.579     0.563     0.653     0.545     0.505     1.000
+
+Domain-pair V overlap ranking (high -> low):
+    cd1 vs cd2    overlap=0.702
+    cd2 vs wild   overlap=0.653
+   ffpp vs cd2    overlap=0.628
+   ffpp vs wild   overlap=0.579
+    cd1 vs wild   overlap=0.563
+  dfdcp vs wild   overlap=0.545
+   ffpp vs cd1    overlap=0.539
+    cd2 vs dfdcp  overlap=0.520
+   ffiw vs wild   overlap=0.505
+    cd2 vs ffiw   overlap=0.493
+   ffpp vs dfdcp  overlap=0.489
+    cd1 vs dfdcp  overlap=0.471
+   ffpp vs ffiw   overlap=0.457
+    cd1 vs ffiw   overlap=0.455
+  dfdcp vs ffiw   overlap=0.448
+
+Method notes:
+  * AUC_V/C/F: 5-fold CV L2-logistic (features standardized inside each fold).
+  * FisherV: LDA-style generalized Fisher ratio, in-sample, shrinkage 1e-3; larger = better within-domain real/fake separation.
+  * Overlap: strict linear CKA needs paired same-set samples, so cross-domain (unpaired, unequal n) uses the aligned top-20 principal-subspace cosine overlap = ||U_A^T U_B||_F^2 / 20. This is the linear-CKA value of the two 20-d subspaces.
+  * y convention: real=1, fake=0 (as in dataset txt).
+============================================================================================
+[save] report -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_tsne\tsne_report.txt
+
+===== SUMMARY =====
+   ffpp: AUC_V=0.9969  AUC_C=0.9982  AUC_F=0.9957
+    cd1: AUC_V=0.9976  AUC_C=0.9956  AUC_F=0.9837
+    cd2: AUC_V=0.9288  AUC_C=0.9509  AUC_F=0.9493
+  dfdcp: AUC_V=0.9870  AUC_C=0.9854  AUC_F=0.9704
+   ffiw: AUC_V=0.9982  AUC_C=1.0000  AUC_F=0.9989
+   wild: AUC_V=0.8741  AUC_C=0.9035  AUC_F=0.8868
+V overlap matrix:
+[[1.    0.539 0.628 0.489 0.457 0.579]
+ [0.539 1.    0.702 0.471 0.455 0.563]
+ [0.628 0.702 1.    0.52  0.493 0.653]
+ [0.489 0.471 0.52  1.    0.448 0.545]
+ [0.457 0.455 0.493 0.448 1.    0.505]
+ [0.579 0.563 0.653 0.545 0.505 1.   ]]

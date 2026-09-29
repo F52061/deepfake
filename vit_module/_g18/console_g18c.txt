@@ -1,0 +1,27 @@
+[g18c] alignment OK (25 checks): all arms' paths/y/vids/domain byte-equal to _g17/cnn_feats.npz, which stacks probe(0:3000)+multi(3000:5300)
+[g18c] anchor V C=1e-3: cd1=0.8286 cd2=0.8633 dfdcp=0.8261 ffiw=0.8244 wild=0.8090 maxdev=3.33e-05  ratio_V=0.1983  ratio_C=2.7160
+[g18c] unique K = [512, 1024] ; building capacity controls over seeds [0, 1, 2, 3, 4] ...
+[g18c]   ctrl K=512 seed=0 done (9s)
+[g18c]   ctrl K=512 seed=1 done (18s)
+[g18c]   ctrl K=512 seed=2 done (25s)
+[g18c]   ctrl K=512 seed=3 done (33s)
+[g18c]   ctrl K=512 seed=4 done (41s)
+[g18c]   ctrl K=1024 seed=0 done (51s)
+[g18c]   ctrl K=1024 seed=1 done (61s)
+[g18c]   ctrl K=1024 seed=2 done (71s)
+[g18c]   ctrl K=1024 seed=3 done (80s)
+[g18c]   ctrl K=1024 seed=4 done (90s)
+[g18c] arm V                        dim=  768 b1=0.9852  b2(C1e-3)=cd1=0.8286 cd2=0.8633 dfdcp=0.8261 ffiw=0.8244 wild=0.8090
+[g18c] arm ImageNet_dense121_final  dim= 1792 b1=0.9842  b2(C1e-3)=cd1=0.8475 cd2=0.8615 dfdcp=0.8095 ffiw=0.8167 wild=0.8146
+[g18c] arm df_ffpp_final            dim= 1792 b1=0.9869  b2(C1e-3)=cd1=0.7285 cd2=0.7847 dfdcp=0.8197 ffiw=0.8462 wild=0.8072
+[g18c] arm df_ffpp_db3              dim= 1792 b1=0.9886  b2(C1e-3)=cd1=0.7924 cd2=0.8089 dfdcp=0.7901 ffiw=0.7993 wild=0.8133
+[g18c] arm df_ffpp_db2              dim= 1280 b1=0.9895  b2(C1e-3)=cd1=0.8247 cd2=0.8563 dfdcp=0.8050 ffiw=0.8174 wild=0.7806
+[g18c] arm df_lodo_dfdcp_final      dim= 1792 b1=0.9905  b2(C1e-3)=cd1=0.9978 cd2=0.9945 dfdcp=0.8181 ffiw=0.9538 wild=0.9768
+[g18c] arm df_lodo_cd2_final        dim= 1792 b1=0.9908  b2(C1e-3)=cd1=0.8083 cd2=0.8149 dfdcp=0.9597 ffiw=0.9505 wild=0.9768
+[g18c] arm df_lodo_wild_final       dim= 1792 b1=0.9843  b2(C1e-3)=cd1=0.9811 cd2=0.9876 dfdcp=0.9522 ffiw=0.9572 wild=0.8194
+[g18c] oracle_V mean4=0.9111 (ref 0.9111)
+[g18c] ratio: g18a(df_ffpp_final)=0.2598  g18b folds=['0.6713', '0.2824', '0.3375'] mean=0.4304  ratio=1.6563 (gate<=0.70)
+[done] report -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g18\g18c_report.txt
+[done] stats  -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g18\g18c_stats.npz
+[GATES] INC=NOCOMP;NOCOMP;NOCOMP;NOCOMP;N/A_LT4_VALID(0/1);N/A_LT4_VALID(0/2);N/A_LT4_VALID(0/1) | SPEC=NO_EFFECT(-0.0483) | LODO=NO_EFFECT(1/3) | DELOCK=NO_EFFECT(1.6563)
+[done] wall=483.3s

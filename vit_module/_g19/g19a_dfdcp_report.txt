@@ -1,0 +1,293 @@
+[gpu] nvidia-smi query (index, mem_used MiB, util%)=[(0, 4821, 1), (1, 0, 0), (2, 5135, 0)]
+[gpu] CUDA_VISIBLE_DEVICES=1 (target physical GPU index 1)
+[gpu] physical GPU 1 mem.used=0MiB -> IDLE (<=100MiB)
+[torch] 2.2.2+cu118 ; device=NVIDIA GeForce GTX 1080 Ti ; current_device=0 ; num_threads=4 ; cudnn.benchmark=True
+[cpu] OMP=4 MKL=4 OPENBLAS=4 NUMEXPR=4 VECLIB=4 BLIS=4 ; cv2 threads=1 ; num_workers=0
+[align] 5300-row paths byte-equal to _g17/cnn_feats.npz: True (assert passed)
+[align] probe rows 0..2999 (train 0..2199, test 2200..2999) ; multi rows 3000..5299
+[probe] probe folder directory-chain keys = 670 (from all 3000 probe rows)
+[ffpp] train.json videos: real=718 fake=3590 total=4308 (missing_dirs=12 excluded_by_probe_dirchain=0)
+[target] training-domain videos: 483 (cd2=173 ffiw=10 wild=300)
+[leak] held-out domain dfdcp folders present in training (dir-chain): 0
+[leak] held-out domain cd1   folders present in training (dir-chain): 0
+[leak] probe folder dir-chain keys present in FF++ training: 0
+[leak] CONTAMINATION (expected) cd2   eval folders also in training: 173/173
+[leak] CONTAMINATION (expected) ffiw  eval folders also in training: 10/10
+[leak] CONTAMINATION (expected) wild  eval folders also in training: 300/300
+
+[model] building ViT_M2F2Det_Bridge + loading bridge_v2_phase1.pth
+[model] load_state_dict strict=False -> missing=0 unexpected=0
+[model] model.vit = VisionTransformer ; params=91.4M ; blocks=12 ; attn has qkv/proj
+
+==========================================================================================
+ARM R0 -- frozen ViT feature extraction (pipeline sanity gate)
+==========================================================================================
+[preload] decoded all 5093 eval images in 15.1s
+  [extract R0] 32/5300 wall=4s
+  [extract R0] 832/5300 wall=9s
+  [extract R0] 1632/5300 wall=15s
+  [extract R0] 2432/5300 wall=20s
+  [extract R0] 3232/5300 wall=26s
+  [extract R0] 4032/5300 wall=31s
+  [extract R0] 4832/5300 wall=37s
+[R0] feat shape=(5300, 768) wall=41s saved E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\feats_g19a_dfdcp_R0.npz
+[R0] maxabs deviation vs probe_feats.npz['V'] (3000 rows) = 0.000e+00
+[R0] maxabs deviation vs feats_multi.npz['V'] (2300 rows) = 3.159e-05
+[R0] in-domain FF++ probe-test AUC=0.9852 (anchor 0.9852, |dev|=0.0000)
+[R0] target cd1   AUC=0.8286 (frozen anchor 0.8286, |dev|=0.0000) n=300
+[R0] target cd2   AUC=0.8633 (frozen anchor 0.8633, |dev|=0.0000) n=300
+[R0] target dfdcp AUC=0.8261 (frozen anchor 0.8261, |dev|=0.0000) n=300
+[R0] target ffiw  AUC=0.8244 (frozen anchor 0.8244, |dev|=0.0000) n=300
+[R0] target wild  AUC=0.8090 (frozen anchor 0.8090, |dev|=0.0000) n=300
+[R0] max anchor deviation over 5 domains = 0.0000 (gate 0.005) -> PASS
+[R0] G12 s=1.5097 class_gap=40.2122 ratio=0.1983 (G17c anchor ratio_V=0.1983, |dev|=0.0000)
+      ratio[cd1]=0.2113
+      ratio[cd2]=0.1861
+      ratio[dfdcp]=0.1609
+      ratio[ffiw]=0.1995
+      ratio[wild]=0.2336
+[GATE] PIPELINE SANITY GATE PASSED
+
+[data] raw per-(domain,class) frame counts: {'cd2/0': 2080, 'cd2/1': 4840, 'ffiw/0': 173, 'ffiw/1': 173, 'ffpp/0': 10770, 'ffpp/1': 10770, 'wild/0': 6000, 'wild/1': 6000}
+[data] capped per-cell counts (ffpp cap=4000, target cap=4000): {'cd2/0': 2080, 'cd2/1': 4000, 'ffiw/0': 173, 'ffiw/1': 173, 'ffpp/0': 4000, 'ffpp/1': 4000, 'wild/0': 4000, 'wild/1': 4000}
+[data] total training frames = 22426
+[split] val videos=479 (real 99 / fake 380) ; held-out fold=dfdcp ; NO dfdcp/cd1/probe video is used for training or selection
+[split] val frames=1445 (real 266 / fake 1179), video-held-out
+[split] val balanced -> 532 frames (real 266 / fake 266)
+[preload] cache total = 27448 images (~9.30 GB uint8 336x336x3)
+
+==========================================================================================
+TRAIN ARM R1   (lambda=None)
+==========================================================================================
+[arm R1] train samples=22426 over 8 (domain,class) cells
+   cell cd2   lab=0 id=3 n=2080
+   cell cd2   lab=1 id=2 n=4000
+   cell ffiw  lab=0 id=5 n=173
+   cell ffiw  lab=1 id=4 n=173
+   cell ffpp  lab=0 id=1 n=4000
+   cell ffpp  lab=1 id=0 n=4000
+   cell wild  lab=0 id=7 n=4000
+   cell wild  lab=1 id=6 n=4000
+[arm R1] training labels SHUFFLED (seed=20260917) ; n_real=12173 n_fake=10253
+[arm R1] balanced batch sampler: 8 cells x 4 / batch of 32 ; batches/epoch=250 (iters/epoch cap=250) ; smallest cell=173 -> ~5.8x draws/epoch)
+[arm R1] trainable params=886274 / 92273426  (0.9605%)
+[arm R1] lora trainable=884736  head trainable=1538
+[arm R1 epoch 01/12] loss=0.7496 ce=0.7496 pen=0.0000 acc=0.5088 val_auc=0.6708 skip=0 lr=9.83e-05 (134s) *BEST*
+[arm R1 epoch 02/12] loss=0.7064 ce=0.7064 pen=0.0000 acc=0.5324 val_auc=0.5680 skip=0 lr=9.34e-05 (135s)
+[arm R1 epoch 03/12] loss=0.6906 ce=0.6906 pen=0.0000 acc=0.5355 val_auc=0.7004 skip=0 lr=8.55e-05 (134s) *BEST*
+[arm R1 epoch 04/12] loss=0.6837 ce=0.6837 pen=0.0000 acc=0.5456 val_auc=0.5885 skip=0 lr=7.52e-05 (134s)
+[arm R1 epoch 05/12] loss=0.6788 ce=0.6788 pen=0.0000 acc=0.5446 val_auc=0.5018 skip=0 lr=6.33e-05 (135s)
+[arm R1 epoch 06/12] loss=0.6720 ce=0.6720 pen=0.0000 acc=0.5597 val_auc=0.4480 skip=0 lr=5.05e-05 (135s)
+[arm R1 epoch 07/12] loss=0.6617 ce=0.6617 pen=0.0000 acc=0.5726 val_auc=0.7026 skip=0 lr=3.77e-05 (133s) *BEST*
+[arm R1 epoch 08/12] loss=0.6574 ce=0.6574 pen=0.0000 acc=0.5779 val_auc=0.6155 skip=0 lr=2.58e-05 (134s)
+[arm R1 epoch 09/12] loss=0.6466 ce=0.6466 pen=0.0000 acc=0.5941 val_auc=0.6300 skip=0 lr=1.55e-05 (135s)
+[arm R1 epoch 10/12] loss=0.6397 ce=0.6397 pen=0.0000 acc=0.5879 val_auc=0.4485 skip=0 lr=7.63e-06 (134s)
+[arm R1 epoch 11/12] loss=0.6354 ce=0.6354 pen=0.0000 acc=0.6000 val_auc=0.5563 skip=0 lr=2.69e-06 (133s)
+[arm R1 early-stop] no val_auc improvement for 4 epochs at epoch 11
+[arm R1 done] best_val_auc=0.7026 (epoch 7) wall=1476s
+[arm R1 save] E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\lora_g19a_dfdcp_R1.pt
+  [extract R1] 32/5300 wall=0s
+  [extract R1] 832/5300 wall=7s
+  [extract R1] 1632/5300 wall=14s
+  [extract R1] 2432/5300 wall=21s
+  [extract R1] 3232/5300 wall=27s
+  [extract R1] 4032/5300 wall=35s
+  [extract R1] 4832/5300 wall=42s
+[arm R1] feats saved E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\feats_g19a_dfdcp_R1.npz shape=(5300, 768)
+
+==========================================================================================
+TRAIN ARM O1   (lambda=None)
+==========================================================================================
+[arm O1] train samples=22426 over 8 (domain,class) cells
+   cell cd2   lab=0 id=3 n=2080
+   cell cd2   lab=1 id=2 n=4000
+   cell ffiw  lab=0 id=5 n=173
+   cell ffiw  lab=1 id=4 n=173
+   cell ffpp  lab=0 id=1 n=4000
+   cell ffpp  lab=1 id=0 n=4000
+   cell wild  lab=0 id=7 n=4000
+   cell wild  lab=1 id=6 n=4000
+[arm O1] balanced batch sampler: 8 cells x 4 / batch of 32 ; batches/epoch=250 (iters/epoch cap=250) ; smallest cell=173 -> ~5.8x draws/epoch)
+[arm O1] trainable params=886274 / 92273426  (0.9605%)
+[arm O1] lora trainable=884736  head trainable=1538
+[arm O1 epoch 01/12] loss=0.3351 ce=0.3351 pen=0.0000 acc=0.8531 val_auc=0.9912 skip=0 lr=9.83e-05 (135s) *BEST*
+[arm O1 epoch 02/12] loss=0.1480 ce=0.1480 pen=0.0000 acc=0.9424 val_auc=0.9959 skip=0 lr=9.34e-05 (133s) *BEST*
+[arm O1 epoch 03/12] loss=0.1057 ce=0.1057 pen=0.0000 acc=0.9589 val_auc=0.9941 skip=0 lr=8.55e-05 (134s)
+[arm O1 epoch 04/12] loss=0.0783 ce=0.0783 pen=0.0000 acc=0.9726 val_auc=0.9957 skip=0 lr=7.52e-05 (135s)
+[arm O1 epoch 05/12] loss=0.0603 ce=0.0603 pen=0.0000 acc=0.9778 val_auc=0.9964 skip=0 lr=6.33e-05 (133s) *BEST*
+[arm O1 epoch 06/12] loss=0.0530 ce=0.0530 pen=0.0000 acc=0.9808 val_auc=0.9986 skip=0 lr=5.05e-05 (134s) *BEST*
+[arm O1 epoch 07/12] loss=0.0437 ce=0.0437 pen=0.0000 acc=0.9850 val_auc=0.9993 skip=0 lr=3.77e-05 (135s) *BEST*
+[arm O1 epoch 08/12] loss=0.0309 ce=0.0309 pen=0.0000 acc=0.9892 val_auc=0.9993 skip=0 lr=2.58e-05 (134s)
+[arm O1 epoch 09/12] loss=0.0293 ce=0.0293 pen=0.0000 acc=0.9906 val_auc=0.9993 skip=0 lr=1.55e-05 (134s) *BEST*
+[arm O1 epoch 10/12] loss=0.0286 ce=0.0286 pen=0.0000 acc=0.9895 val_auc=0.9989 skip=0 lr=7.63e-06 (135s)
+[arm O1 epoch 11/12] loss=0.0244 ce=0.0244 pen=0.0000 acc=0.9919 val_auc=0.9991 skip=0 lr=2.69e-06 (134s)
+[arm O1 epoch 12/12] loss=0.0276 ce=0.0276 pen=0.0000 acc=0.9900 val_auc=0.9990 skip=0 lr=1.00e-06 (134s)
+[arm O1 done] best_val_auc=0.9993 (epoch 9) wall=1610s
+[arm O1 save] E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\lora_g19a_dfdcp_O1.pt
+  [extract O1] 32/5300 wall=0s
+  [extract O1] 832/5300 wall=7s
+  [extract O1] 1632/5300 wall=14s
+  [extract O1] 2432/5300 wall=21s
+  [extract O1] 3232/5300 wall=28s
+  [extract O1] 4032/5300 wall=35s
+  [extract O1] 4832/5300 wall=42s
+[arm O1] feats saved E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\feats_g19a_dfdcp_O1.npz shape=(5300, 768)
+
+==========================================================================================
+TRAIN ARM O3a   (lambda=0.3)
+==========================================================================================
+[arm O3a] train samples=22426 over 8 (domain,class) cells
+   cell cd2   lab=0 id=3 n=2080
+   cell cd2   lab=1 id=2 n=4000
+   cell ffiw  lab=0 id=5 n=173
+   cell ffiw  lab=1 id=4 n=173
+   cell ffpp  lab=0 id=1 n=4000
+   cell ffpp  lab=1 id=0 n=4000
+   cell wild  lab=0 id=7 n=4000
+   cell wild  lab=1 id=6 n=4000
+[arm O3a] balanced batch sampler: 8 cells x 4 / batch of 32 ; batches/epoch=250 (iters/epoch cap=250) ; smallest cell=173 -> ~5.8x draws/epoch)
+[arm O3a] trainable params=886274 / 92273426  (0.9605%)
+[arm O3a] lora trainable=884736  head trainable=1538
+[arm O3a epoch 01/12] loss=6.8392 ce=0.6457 pen=20.6452 acc=0.6667 val_auc=0.8788 skip=0 lr=9.83e-05 (135s) *BEST*
+[arm O3a epoch 02/12] loss=0.7766 ce=0.6465 pen=0.4338 acc=0.6676 val_auc=0.8260 skip=0 lr=9.34e-05 (133s)
+[arm O3a epoch 03/12] loss=0.7049 ce=0.6370 pen=0.2263 acc=0.6635 val_auc=0.8268 skip=0 lr=8.55e-05 (134s)
+[arm O3a epoch 04/12] loss=0.6622 ce=0.6086 pen=0.1787 acc=0.6957 val_auc=0.8576 skip=0 lr=7.52e-05 (134s)
+[arm O3a epoch 05/12] loss=0.5904 ce=0.5299 pen=0.2016 acc=0.7502 val_auc=0.9133 skip=0 lr=6.33e-05 (133s) *BEST*
+[arm O3a epoch 06/12] loss=0.4844 ce=0.4126 pen=0.2393 acc=0.8209 val_auc=0.9611 skip=0 lr=5.05e-05 (134s) *BEST*
+[arm O3a epoch 07/12] loss=0.4096 ce=0.3381 pen=0.2384 acc=0.8568 val_auc=0.9717 skip=0 lr=3.77e-05 (133s) *BEST*
+[arm O3a epoch 08/12] loss=0.3438 ce=0.2783 pen=0.2183 acc=0.8876 val_auc=0.9775 skip=0 lr=2.58e-05 (133s) *BEST*
+[arm O3a epoch 09/12] loss=0.3004 ce=0.2419 pen=0.1949 acc=0.9050 val_auc=0.9766 skip=0 lr=1.55e-05 (135s)
+[arm O3a epoch 10/12] loss=0.2777 ce=0.2212 pen=0.1886 acc=0.9124 val_auc=0.9768 skip=0 lr=7.63e-06 (133s)
+[arm O3a epoch 11/12] loss=0.2669 ce=0.2130 pen=0.1799 acc=0.9187 val_auc=0.9773 skip=0 lr=2.69e-06 (133s)
+[arm O3a epoch 12/12] loss=0.2692 ce=0.2166 pen=0.1753 acc=0.9183 val_auc=0.9776 skip=0 lr=1.00e-06 (132s) *BEST*
+[arm O3a done] best_val_auc=0.9776 (epoch 12) wall=1602s
+[arm O3a save] E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\lora_g19a_dfdcp_O3a.pt
+  [extract O3a] 32/5300 wall=0s
+  [extract O3a] 832/5300 wall=7s
+  [extract O3a] 1632/5300 wall=14s
+  [extract O3a] 2432/5300 wall=20s
+  [extract O3a] 3232/5300 wall=27s
+  [extract O3a] 4032/5300 wall=34s
+  [extract O3a] 4832/5300 wall=41s
+[arm O3a] feats saved E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\feats_g19a_dfdcp_O3a.npz shape=(5300, 768)
+
+==========================================================================================
+TRAIN ARM O3b   (lambda=1.0)
+==========================================================================================
+[arm O3b] train samples=22426 over 8 (domain,class) cells
+   cell cd2   lab=0 id=3 n=2080
+   cell cd2   lab=1 id=2 n=4000
+   cell ffiw  lab=0 id=5 n=173
+   cell ffiw  lab=1 id=4 n=173
+   cell ffpp  lab=0 id=1 n=4000
+   cell ffpp  lab=1 id=0 n=4000
+   cell wild  lab=0 id=7 n=4000
+   cell wild  lab=1 id=6 n=4000
+[arm O3b] balanced batch sampler: 8 cells x 4 / batch of 32 ; batches/epoch=250 (iters/epoch cap=250) ; smallest cell=173 -> ~5.8x draws/epoch)
+[arm O3b] trainable params=886274 / 92273426  (0.9605%)
+[arm O3b] lora trainable=884736  head trainable=1538
+[arm O3b epoch 01/12] loss=18.7302 ce=0.6491 pen=18.0811 acc=0.6646 val_auc=0.8604 skip=0 lr=9.83e-05 (133s) *BEST*
+[arm O3b epoch 02/12] loss=1.0077 ce=0.6577 pen=0.3500 acc=0.6631 val_auc=0.7890 skip=0 lr=9.34e-05 (134s)
+[arm O3b epoch 03/12] loss=0.8096 ce=0.6620 pen=0.1476 acc=0.6429 val_auc=0.7596 skip=0 lr=8.55e-05 (133s)
+[arm O3b epoch 04/12] loss=0.7503 ce=0.6632 pen=0.0871 acc=0.6346 val_auc=0.7474 skip=0 lr=7.52e-05 (133s)
+[arm O3b epoch 05/12] loss=0.7227 ce=0.6615 pen=0.0612 acc=0.6348 val_auc=0.7424 skip=0 lr=6.33e-05 (133s)
+[arm O3b early-stop] no val_auc improvement for 4 epochs at epoch 5
+[arm O3b done] best_val_auc=0.8604 (epoch 1) wall=665s
+[arm O3b save] E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\lora_g19a_dfdcp_O3b.pt
+  [extract O3b] 32/5300 wall=0s
+  [extract O3b] 832/5300 wall=7s
+  [extract O3b] 1632/5300 wall=14s
+  [extract O3b] 2432/5300 wall=20s
+  [extract O3b] 3232/5300 wall=27s
+  [extract O3b] 4032/5300 wall=34s
+  [extract O3b] 4832/5300 wall=41s
+[arm O3b] feats saved E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\feats_g19a_dfdcp_O3b.npz shape=(5300, 768)
+
+==========================================================================================
+G19a RESULTS -- held-out fold = dfdcp
+==========================================================================================
+
+PRIMARY TABLE -- cross-domain AUC (probe: StandardScaler(probe-train)+LR C=1e-3)
+arm    |   in-dom |       cd1       cd2     dfdcp      ffiw      wild |     mean5
+---------------------------------------------------------------------------------
+R0     |   0.9852 |    0.8286    0.8633    0.8261    0.8244    0.8090 |    0.8303
+R1     |   0.9662 |    0.7416    0.7336    0.7924    0.5942    0.6821 |    0.7088
+O1     |   0.9785 |    0.9993    0.9992    0.9320    1.0000    0.9920 |    0.9845
+O3a    |   0.9551 |    0.9653    0.9726    0.7870    0.9979    0.9271 |    0.9300
+O3b    |   0.9620 |    0.7472    0.7474    0.7673    0.7075    0.7363 |    0.7411
+---------------------------------------------------------------------------------
+ANCHOR |   0.9852 |    0.8286    0.8633    0.8261    0.8244    0.8090 |    0.8303   (prior frozen-ViT anchors, same protocol)
+
+CONTAMINATION FLAGS for fold=dfdcp: training domains = ['ffpp', 'cd2', 'ffiw', 'wild'] ; held-out = dfdcp
+  columns marked CONTAMINATED (excluded from aggregates): cd2, ffiw, wild
+  VALID transfer column: dfdcp
+
+IN-DOMAIN GUARD (FF++ probe-test 800 rows, train_mask False)
+  R0    in-domain AUC=0.9852   (frozen baseline 0.9852)
+  R1    in-domain AUC=0.9662   (frozen baseline 0.9852)
+  O1    in-domain AUC=0.9785   (frozen baseline 0.9852)
+  O3a   in-domain AUC=0.9551   (frozen baseline 0.9852)
+  O3b   in-domain AUC=0.9620   (frozen baseline 0.9852)
+
+G12 DOMAIN-SENSITIVITY RATIO (s / class_gap printed for cross-check)
+arm             s  class_gap |       cd1       cd2     dfdcp      ffiw      wild |       mean
+R0         1.5097    40.2122 |    0.2113    0.1861    0.1609    0.1995    0.2336 |     0.1983
+R1         0.4038    14.5388 |    0.6633    0.6942    0.7966    2.1852    0.9320 |     1.0542
+O1         1.3137    39.6095 |    0.1743    0.1448    0.1633    0.1397    0.1631 |     0.1570
+O3a        0.0539    39.6465 |    0.1043    0.1164    0.1526    0.1260    0.1088 |     0.1216
+O3b        0.0634     9.6705 |    1.0811    1.1141    1.4178    1.4383    1.2581 |     1.2618
+  (G17c frozen-ViT anchor: ratio_V=0.1983)
+
+HELD-OUT DOMAIN (dfdcp) AUC BY ARM: {'R0': 0.8261, 'R1': 0.7924, 'O1': 0.932, 'O3a': 0.787, 'O3b': 0.7673}
+
+GATE VERDICTS (mechanical)
+  G19_UNFREEZE_HELPS       value=+0.1060  ->  PASS
+  G19_INVARIANCE_HELPS     value=-0.1450  ->  FAIL
+  G19_VS_RANDLABEL         value=-0.0053  ->  FAIL
+  G19_NO_FORGETTING        value=+0.9852  ->  PASS
+  G19_CEILING_RECOVERY     value=-0.5647  ->  FAIL
+
+KILL SIGNAL CHECK: |O1-R0|=0.1060  |R1-R0|=0.0337  both <=0.005 -> not triggered
+
+WALL / RESOURCE
+  arm R1   wall=1476s best_val_auc=0.7026 best_epoch=7 trainable=886274
+  arm O1   wall=1610s best_val_auc=0.9993 best_epoch=9 trainable=886274
+  arm O3a  wall=1602s best_val_auc=0.9776 best_epoch=12 trainable=886274
+  arm O3b  wall=665s best_val_auc=0.8604 best_epoch=1 trainable=886274
+  threads: torch=4 OMP=4 MKL=4 OPENBLAS=4 NUMEXPR=4 ; cv2=1 ; num_workers=0
+[wall] total = 5690.1 s
+[save] stats -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g19\g19a_dfdcp_stats.npz
+[gpu-end] nvidia-smi query (index, mem_used MiB, util%)=[(0, 4821, 1), (1, 1249, 0), (2, 64, 0)]
+
+==========================================================================================
+ADDENDUM -- CORRECTED GATE EVALUATION (post-run recompute, 2026-09-14)
+==========================================================================================
+Defect in the in-run gate block (fixed in train_g19a.py after the run):
+  * G19_NO_FORGETTING read probe_res['R0']['in_domain'] (=0.9852 by construction)
+    so it passed trivially; it must use the designated BEST arm's in-domain AUC.
+  * 'best' was defined as best-of-{O3a,O3b} instead of best-overall-trained-arm.
+  Both interpretations are reported below.  All AUC inputs come from
+  g19a_dfdcp_stats.npz / the feats_g19a_dfdcp_*.npz feature files.
+
+held-out dfdcp AUC by arm : {'R0': 0.8261, 'R1': 0.7924, 'O1': 0.932, 'O3a': 0.787, 'O3b': 0.7673}
+in-domain  FF++200..2999  : {'R0': 0.9852, 'R1': 0.9662, 'O1': 0.9785, 'O3a': 0.9551, 'O3b': 0.962}
+best-overall trained arm  = O1 (dfdcp 0.9320)
+best O3 arm               = O3a (dfdcp 0.7870)
+
+  G19_UNFREEZE_HELPS             value=+0.1060  ->  PASS   [rule: O1 - R0 >= +0.01]
+  G19_INVARIANCE_HELPS           value=-0.1450  ->  FAIL   [rule: best(O3a,O3b) - O1 >= +0.02]
+  G19_VS_RANDLABEL               value=+0.1397  ->  PASS   [rule: best - R1 >= +0.02]
+  G19_VS_RANDLABEL[bestO3]       value=-0.0053  ->  FAIL   [rule: best(O3a,O3b) - R1 >= +0.02]
+  G19_NO_FORGETTING              value=+0.9785  ->  PASS   [rule: in-domain(best arm) >= 0.9852-0.01]
+  G19_CEILING_RECOVERY           value=+1.2641  ->  PASS   [rule: (best-0.8318)/(0.9111-0.8318) >= 0.30]
+  G19_CEILING_RECOVERY[bestO3]   value=-0.5647  ->  FAIL   [rule: (best(O3)-0.8318)/(0.9111-0.8318) >= 0.30]
+
+  no-forgetting detail (baseline-0.01 = 0.9752):
+    R1   in-domain=0.9662 -> FORGETTING
+    O1   in-domain=0.9785 -> OK
+    O3a  in-domain=0.9551 -> FORGETTING
+    O3b  in-domain=0.9620 -> FORGETTING
+
+  KILL SIGNAL: |O1-R0|=0.1060 |R1-R0|=0.0337 both<=0.005 -> not triggered
+  (R1 - R0 = -0.0337, i.e. shuffled-label training moved dfdcp AUC by 0.0337)
+==========================================================================================

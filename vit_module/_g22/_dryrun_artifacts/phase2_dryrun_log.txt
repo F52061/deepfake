@@ -1,0 +1,247 @@
+[09-19 20:07:56] ==============================================================================
+[09-19 20:07:56] G22 PHASE-2 LONG RUN START
+[09-19 20:07:56] ==============================================================================
+[09-19 20:07:56]   pid=14480  cwd=E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy
+[09-19 20:07:56]   order = INTERLEAVED: (fix,42) (randbridge,42) (nofix,42) (fix,43) (randbridge,43) (nofix,43) (fix,44) (randbridge,44) (nofix,44)
+[09-19 20:07:56]   seeds=[42, 43, 44]  randbridge bridge seeds=[7777, 7778, 7779]
+[09-19 20:07:56]   batch_size_arg=32 (real micro-batch 30)  lr bridge=0.0005 output=0.00025  wd=0.0001
+[09-19 20:07:56]   eval = g16/layer_feats.npz: split=="test"(800) + cd1/cd2/dfdcp/ffiw/wild(300 ea)
+[09-19 20:07:56]   train txt = E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g22\_smoke_train_200.txt
+[09-19 20:07:56]   DRYRUN = True
+[09-19 20:07:56]   results -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g22\phase2_results_dryrun.txt
+[09-19 20:07:57] [GPU] BEFORE -- gpu0: used=6896MiB/11264MiB util=4%; gpu1: used=0MiB/11264MiB util=0%; gpu2: used=88MiB/11264MiB util=0%
+[09-19 20:07:57] [GPU] gate (physical card 1 <= 100 MiB): PASS
+[09-19 20:07:57] [GPU] pinned CUDA_VISIBLE_DEVICES=1  visible=1  NVIDIA GeForce GTX 1080 Ti
+[09-19 20:07:57] ==============================================================================
+[09-19 20:08:02] [eval] 250 rows ready; missing_files=0
+[09-19 20:08:02] [split==test] y counts = {0: 50, 1: 50}
+[09-19 20:08:02] 
+[09-19 20:08:02] ##############################################################################
+[09-19 20:08:02] ### RUN  fix_s42   (group=fix, seed=42)
+[09-19 20:08:02] ##############################################################################
+Freezing CLIP vision encoder.
+[build] model constructed in 7.0s
+[ViT_M2F2Det_Bridge] Loaded 162 ViT backbone keys, skipped 2 classification head keys.
+  Missing keys (BridgeAdapter etc, expected): 662
+  Unexpected keys: 0
+[build] shipped ckpt: 824 keys, missing=0 unexpected=0
+[FIX-A] replaced bridge_adapter_proj.bridge_adapter_proj (View,Linear,LayerNorm(1)) -> (View,Linear)
+[FIX-A] linear weight max|diff| vs ckpt = 0.000e+00  bias max|diff| = 0.000e+00
+[09-19 20:08:25]   [build] 23.3s  fix_a=True bridge_init_seed=None
+[09-19 20:08:25]   [trainable] 52 tensors / 0.5767M
+[09-19 20:08:25]   [optim] 50t@lr=0.0005, 2t@lr=0.00025
+[09-19 20:08:26]   [sampler] per_class=6 effective_batch=30 batches/epoch=6 images/epoch=180
+C:\Users\Supor2\.conda\envs\M2F2_Det\lib\site-packages\flash_attn\modules\mha.py:89: UserWarning: 1Torch was not compiled with flash attention. (Triggered internally at ..\aten\src\ATen\native\transformers\cuda\sdp_utils.cpp:263.)
+  out = F.scaled_dot_product_attention(
+[09-19 20:08:30]   [MICRO-BATCH] first batch real micro-batch size = 30   (sampler.effective_batch = 30, sampler.per_class = 6)
+[09-19 20:08:35]   [50%] reached at step 3/6 -- evaluating 250 images ...
+[09-19 20:08:52]   [50%] ffpp_test=0.9932  cd1=0.7738  cd2=0.8756  dfdcp=0.7500  ffiw=0.7500  wild=0.7225  mean4dom=0.7805
+[09-19 20:08:52]   [50%] saved 52 tensors -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g22\phase2_ckpt_fix_s42_50_dryrun.pth
+[09-19 20:08:59]   [epoch] batches=6 images=180 micro=[30] wall=33.1s (hook 16.7s) 184.11 ms/img
+[09-19 20:08:59]   [epoch] final loss=0.0004 train_acc=100.00%
+[09-19 20:08:59]   [100%] evaluating 250 images ...
+[09-19 20:09:16]   [100%] ffpp_test=0.9932  cd1=0.7738  cd2=0.8756  dfdcp=0.7411  ffiw=0.7500  wild=0.7225  mean4dom=0.7782
+[09-19 20:09:16]   [DONE] fix_s42  wall=0.020h  half_mean4dom=0.7805
+[09-19 20:09:16] 
+[09-19 20:09:16] ##############################################################################
+[09-19 20:09:16] ### RUN  randbridge_s42   (group=randbridge, seed=42)
+[09-19 20:09:16] ##############################################################################
+Freezing CLIP vision encoder.
+[build] model constructed in 5.4s
+[ViT_M2F2Det_Bridge] Loaded 162 ViT backbone keys, skipped 2 classification head keys.
+  Missing keys (BridgeAdapter etc, expected): 662
+  Unexpected keys: 0
+[randbridge] bridge re-initialised randomly with seed 7777 (58 tensors), rest of model = shipped ckpt
+[FIX-A] replaced bridge_adapter_proj.bridge_adapter_proj (View,Linear,LayerNorm(1)) -> (View,Linear)
+[FIX-A] linear weight max|diff| vs ckpt = 0.000e+00  bias max|diff| = 0.000e+00
+[09-19 20:09:27]   [build] 11.3s  fix_a=True bridge_init_seed=7777
+[09-19 20:09:27]   [trainable] 2 tensors / 0.0033M
+[09-19 20:09:27]   [optim] 2t@lr=0.00025
+[09-19 20:09:27]   [sampler] per_class=6 effective_batch=30 batches/epoch=6 images/epoch=180
+[09-19 20:09:29]   [MICRO-BATCH] first batch real micro-batch size = 30   (sampler.effective_batch = 30, sampler.per_class = 6)
+[09-19 20:09:33]   [50%] reached at step 3/6 -- evaluating 250 images ...
+[09-19 20:09:50]   [50%] ffpp_test=0.9928  cd1=0.7738  cd2=0.8756  dfdcp=0.7545  ffiw=0.7545  wild=0.7129  mean4dom=0.7792
+[09-19 20:09:50]   [50%] saved 2 tensors -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g22\phase2_ckpt_randbridge_s42_50_dryrun.pth
+[09-19 20:09:57]   [epoch] batches=6 images=180 micro=[30] wall=29.6s (hook 16.9s) 164.47 ms/img
+[09-19 20:09:57]   [epoch] final loss=0.0004 train_acc=100.00%
+[09-19 20:09:57]   [100%] evaluating 250 images ...
+[09-19 20:10:14]   [100%] ffpp_test=0.9932  cd1=0.7738  cd2=0.8708  dfdcp=0.7545  ffiw=0.7500  wild=0.7177  mean4dom=0.7792
+[09-19 20:10:14]   [DONE] randbridge_s42  wall=0.016h  half_mean4dom=0.7792
+[09-19 20:10:14] 
+[09-19 20:10:14] ##############################################################################
+[09-19 20:10:14] ### RUN  nofix_s42   (group=nofix, seed=42)
+[09-19 20:10:14] ##############################################################################
+Freezing CLIP vision encoder.
+[build] model constructed in 5.0s
+[ViT_M2F2Det_Bridge] Loaded 162 ViT backbone keys, skipped 2 classification head keys.
+  Missing keys (BridgeAdapter etc, expected): 662
+  Unexpected keys: 0
+[build] shipped ckpt: 824 keys, missing=0 unexpected=0
+[09-19 20:10:26]   [build] 11.8s  fix_a=False bridge_init_seed=None
+[09-19 20:10:26]   [trainable] 54 tensors / 0.5767M
+[09-19 20:10:26]   [optim] 52t@lr=0.0005, 2t@lr=0.00025
+[09-19 20:10:26]   [sampler] per_class=6 effective_batch=30 batches/epoch=6 images/epoch=180
+[09-19 20:10:28]   [MICRO-BATCH] first batch real micro-batch size = 30   (sampler.effective_batch = 30, sampler.per_class = 6)
+[09-19 20:10:33]   [50%] reached at step 3/6 -- evaluating 250 images ...
+[09-19 20:10:50]   [50%] ffpp_test=0.9928  cd1=0.7738  cd2=0.8756  dfdcp=0.7500  ffiw=0.7500  wild=0.7225  mean4dom=0.7805
+[09-19 20:10:50]   [50%] saved 54 tensors -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g22\phase2_ckpt_nofix_s42_50_dryrun.pth
+[09-19 20:10:57]   [epoch] batches=6 images=180 micro=[30] wall=31.6s (hook 17.1s) 175.78 ms/img
+[09-19 20:10:57]   [epoch] final loss=0.0004 train_acc=100.00%
+[09-19 20:10:57]   [100%] evaluating 250 images ...
+[09-19 20:11:14]   [100%] ffpp_test=0.9932  cd1=0.7738  cd2=0.8756  dfdcp=0.7411  ffiw=0.7500  wild=0.7225  mean4dom=0.7782
+[09-19 20:11:14]   [DONE] nofix_s42  wall=0.017h  half_mean4dom=0.7805
+[09-19 20:11:15] 
+[09-19 20:11:15] ##############################################################################
+[09-19 20:11:15] ### RUN  fix_s43   (group=fix, seed=43)
+[09-19 20:11:15] ##############################################################################
+Freezing CLIP vision encoder.
+[build] model constructed in 5.1s
+[ViT_M2F2Det_Bridge] Loaded 162 ViT backbone keys, skipped 2 classification head keys.
+  Missing keys (BridgeAdapter etc, expected): 662
+  Unexpected keys: 0
+[build] shipped ckpt: 824 keys, missing=0 unexpected=0
+[FIX-A] replaced bridge_adapter_proj.bridge_adapter_proj (View,Linear,LayerNorm(1)) -> (View,Linear)
+[FIX-A] linear weight max|diff| vs ckpt = 0.000e+00  bias max|diff| = 0.000e+00
+[09-19 20:11:27]   [build] 12.4s  fix_a=True bridge_init_seed=None
+[09-19 20:11:27]   [trainable] 52 tensors / 0.5767M
+[09-19 20:11:27]   [optim] 50t@lr=0.0005, 2t@lr=0.00025
+[09-19 20:11:27]   [sampler] per_class=6 effective_batch=30 batches/epoch=6 images/epoch=180
+[09-19 20:11:29]   [MICRO-BATCH] first batch real micro-batch size = 30   (sampler.effective_batch = 30, sampler.per_class = 6)
+[09-19 20:11:34]   [50%] reached at step 3/6 -- evaluating 250 images ...
+[09-19 20:11:52]   [50%] ffpp_test=0.9928  cd1=0.7738  cd2=0.8756  dfdcp=0.7500  ffiw=0.7455  wild=0.7225  mean4dom=0.7805
+[09-19 20:11:52]   [50%] saved 52 tensors -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g22\phase2_ckpt_fix_s43_50_dryrun.pth
+[09-19 20:11:59]   [epoch] batches=6 images=180 micro=[30] wall=31.9s (hook 17.3s) 177.36 ms/img
+[09-19 20:11:59]   [epoch] final loss=0.0004 train_acc=100.00%
+[09-19 20:11:59]   [100%] evaluating 250 images ...
+[09-19 20:12:16]   [100%] ffpp_test=0.9932  cd1=0.7738  cd2=0.8756  dfdcp=0.7455  ffiw=0.7500  wild=0.7225  mean4dom=0.7793
+[09-19 20:12:16]   [DONE] fix_s43  wall=0.017h  half_mean4dom=0.7805
+[09-19 20:12:16] 
+[09-19 20:12:16] ##############################################################################
+[09-19 20:12:16] ### RUN  randbridge_s43   (group=randbridge, seed=43)
+[09-19 20:12:16] ##############################################################################
+Freezing CLIP vision encoder.
+[build] model constructed in 4.9s
+[ViT_M2F2Det_Bridge] Loaded 162 ViT backbone keys, skipped 2 classification head keys.
+  Missing keys (BridgeAdapter etc, expected): 662
+  Unexpected keys: 0
+[randbridge] bridge re-initialised randomly with seed 7778 (58 tensors), rest of model = shipped ckpt
+[FIX-A] replaced bridge_adapter_proj.bridge_adapter_proj (View,Linear,LayerNorm(1)) -> (View,Linear)
+[FIX-A] linear weight max|diff| vs ckpt = 0.000e+00  bias max|diff| = 0.000e+00
+[09-19 20:12:27]   [build] 10.5s  fix_a=True bridge_init_seed=7778
+[09-19 20:12:27]   [trainable] 2 tensors / 0.0033M
+[09-19 20:12:27]   [optim] 2t@lr=0.00025
+[09-19 20:12:27]   [sampler] per_class=6 effective_batch=30 batches/epoch=6 images/epoch=180
+[09-19 20:12:29]   [MICRO-BATCH] first batch real micro-batch size = 30   (sampler.effective_batch = 30, sampler.per_class = 6)
+[09-19 20:12:33]   [50%] reached at step 3/6 -- evaluating 250 images ...
+[09-19 20:12:50]   [50%] ffpp_test=0.9932  cd1=0.7692  cd2=0.8756  dfdcp=0.7455  ffiw=0.7455  wild=0.7177  mean4dom=0.7770
+[09-19 20:12:50]   [50%] saved 2 tensors -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g22\phase2_ckpt_randbridge_s43_50_dryrun.pth
+[09-19 20:12:57]   [epoch] batches=6 images=180 micro=[30] wall=29.8s (hook 17.1s) 165.73 ms/img
+[09-19 20:12:57]   [epoch] final loss=0.0004 train_acc=100.00%
+[09-19 20:12:57]   [100%] evaluating 250 images ...
+[09-19 20:13:14]   [100%] ffpp_test=0.9932  cd1=0.7692  cd2=0.8756  dfdcp=0.7500  ffiw=0.7455  wild=0.7225  mean4dom=0.7793
+[09-19 20:13:14]   [DONE] randbridge_s43  wall=0.016h  half_mean4dom=0.7770
+[09-19 20:13:14] 
+[09-19 20:13:14] ##############################################################################
+[09-19 20:13:14] ### RUN  nofix_s43   (group=nofix, seed=43)
+[09-19 20:13:14] ##############################################################################
+Freezing CLIP vision encoder.
+[build] model constructed in 5.6s
+[ViT_M2F2Det_Bridge] Loaded 162 ViT backbone keys, skipped 2 classification head keys.
+  Missing keys (BridgeAdapter etc, expected): 662
+  Unexpected keys: 0
+[build] shipped ckpt: 824 keys, missing=0 unexpected=0
+[09-19 20:13:27]   [build] 13.3s  fix_a=False bridge_init_seed=None
+[09-19 20:13:27]   [trainable] 54 tensors / 0.5767M
+[09-19 20:13:27]   [optim] 52t@lr=0.0005, 2t@lr=0.00025
+[09-19 20:13:28]   [sampler] per_class=6 effective_batch=30 batches/epoch=6 images/epoch=180
+[09-19 20:13:30]   [MICRO-BATCH] first batch real micro-batch size = 30   (sampler.effective_batch = 30, sampler.per_class = 6)
+[09-19 20:13:35]   [50%] reached at step 3/6 -- evaluating 250 images ...
+[09-19 20:13:52]   [50%] ffpp_test=0.9928  cd1=0.7738  cd2=0.8756  dfdcp=0.7500  ffiw=0.7455  wild=0.7225  mean4dom=0.7805
+[09-19 20:13:52]   [50%] saved 54 tensors -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g22\phase2_ckpt_nofix_s43_50_dryrun.pth
+[09-19 20:14:00]   [epoch] batches=6 images=180 micro=[30] wall=32.0s (hook 17.3s) 177.95 ms/img
+[09-19 20:14:00]   [epoch] final loss=0.0004 train_acc=100.00%
+[09-19 20:14:00]   [100%] evaluating 250 images ...
+[09-19 20:14:17]   [100%] ffpp_test=0.9932  cd1=0.7738  cd2=0.8756  dfdcp=0.7455  ffiw=0.7500  wild=0.7225  mean4dom=0.7793
+[09-19 20:14:17]   [DONE] nofix_s43  wall=0.017h  half_mean4dom=0.7805
+[09-19 20:14:17] 
+[09-19 20:14:17] ##############################################################################
+[09-19 20:14:17] ### RUN  fix_s44   (group=fix, seed=44)
+[09-19 20:14:17] ##############################################################################
+Freezing CLIP vision encoder.
+[build] model constructed in 5.3s
+[ViT_M2F2Det_Bridge] Loaded 162 ViT backbone keys, skipped 2 classification head keys.
+  Missing keys (BridgeAdapter etc, expected): 662
+  Unexpected keys: 0
+[build] shipped ckpt: 824 keys, missing=0 unexpected=0
+[FIX-A] replaced bridge_adapter_proj.bridge_adapter_proj (View,Linear,LayerNorm(1)) -> (View,Linear)
+[FIX-A] linear weight max|diff| vs ckpt = 0.000e+00  bias max|diff| = 0.000e+00
+[09-19 20:14:30]   [build] 12.9s  fix_a=True bridge_init_seed=None
+[09-19 20:14:30]   [trainable] 52 tensors / 0.5767M
+[09-19 20:14:30]   [optim] 50t@lr=0.0005, 2t@lr=0.00025
+[09-19 20:14:30]   [sampler] per_class=6 effective_batch=30 batches/epoch=6 images/epoch=180
+[09-19 20:14:32]   [MICRO-BATCH] first batch real micro-batch size = 30   (sampler.effective_batch = 30, sampler.per_class = 6)
+[09-19 20:14:37]   [50%] reached at step 3/6 -- evaluating 250 images ...
+[09-19 20:14:55]   [50%] ffpp_test=0.9928  cd1=0.7738  cd2=0.8756  dfdcp=0.7500  ffiw=0.7455  wild=0.7177  mean4dom=0.7793
+[09-19 20:14:55]   [50%] saved 52 tensors -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g22\phase2_ckpt_fix_s44_50_dryrun.pth
+[09-19 20:15:02]   [epoch] batches=6 images=180 micro=[30] wall=32.1s (hook 17.4s) 178.29 ms/img
+[09-19 20:15:02]   [epoch] final loss=0.0005 train_acc=100.00%
+[09-19 20:15:02]   [100%] evaluating 250 images ...
+[09-19 20:15:19]   [100%] ffpp_test=0.9932  cd1=0.7738  cd2=0.8756  dfdcp=0.7455  ffiw=0.7455  wild=0.7225  mean4dom=0.7793
+[09-19 20:15:19]   [DONE] fix_s44  wall=0.017h  half_mean4dom=0.7793
+[09-19 20:15:20] 
+[09-19 20:15:20] ##############################################################################
+[09-19 20:15:20] ### RUN  randbridge_s44   (group=randbridge, seed=44)
+[09-19 20:15:20] ##############################################################################
+Freezing CLIP vision encoder.
+[build] model constructed in 5.3s
+[ViT_M2F2Det_Bridge] Loaded 162 ViT backbone keys, skipped 2 classification head keys.
+  Missing keys (BridgeAdapter etc, expected): 662
+  Unexpected keys: 0
+[randbridge] bridge re-initialised randomly with seed 7779 (58 tensors), rest of model = shipped ckpt
+[FIX-A] replaced bridge_adapter_proj.bridge_adapter_proj (View,Linear,LayerNorm(1)) -> (View,Linear)
+[FIX-A] linear weight max|diff| vs ckpt = 0.000e+00  bias max|diff| = 0.000e+00
+[09-19 20:15:31]   [build] 11.2s  fix_a=True bridge_init_seed=7779
+[09-19 20:15:31]   [trainable] 2 tensors / 0.0033M
+[09-19 20:15:31]   [optim] 2t@lr=0.00025
+[09-19 20:15:31]   [sampler] per_class=6 effective_batch=30 batches/epoch=6 images/epoch=180
+[09-19 20:15:33]   [MICRO-BATCH] first batch real micro-batch size = 30   (sampler.effective_batch = 30, sampler.per_class = 6)
+[09-19 20:15:37]   [50%] reached at step 3/6 -- evaluating 250 images ...
+[09-19 20:15:54]   [50%] ffpp_test=0.9928  cd1=0.7738  cd2=0.8756  dfdcp=0.7545  ffiw=0.7455  wild=0.7225  mean4dom=0.7816
+[09-19 20:15:54]   [50%] saved 2 tensors -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g22\phase2_ckpt_randbridge_s44_50_dryrun.pth
+[09-19 20:16:01]   [epoch] batches=6 images=180 micro=[30] wall=30.0s (hook 17.1s) 166.45 ms/img
+[09-19 20:16:01]   [epoch] final loss=0.0005 train_acc=100.00%
+[09-19 20:16:01]   [100%] evaluating 250 images ...
+[09-19 20:16:18]   [100%] ffpp_test=0.9932  cd1=0.7738  cd2=0.8756  dfdcp=0.7500  ffiw=0.7455  wild=0.7225  mean4dom=0.7805
+[09-19 20:16:18]   [DONE] randbridge_s44  wall=0.016h  half_mean4dom=0.7816
+[09-19 20:16:18] 
+[09-19 20:16:18] ##############################################################################
+[09-19 20:16:18] ### RUN  nofix_s44   (group=nofix, seed=44)
+[09-19 20:16:18] ##############################################################################
+Freezing CLIP vision encoder.
+[build] model constructed in 5.2s
+[ViT_M2F2Det_Bridge] Loaded 162 ViT backbone keys, skipped 2 classification head keys.
+  Missing keys (BridgeAdapter etc, expected): 662
+  Unexpected keys: 0
+[build] shipped ckpt: 824 keys, missing=0 unexpected=0
+[09-19 20:16:31]   [build] 12.4s  fix_a=False bridge_init_seed=None
+[09-19 20:16:31]   [trainable] 54 tensors / 0.5767M
+[09-19 20:16:31]   [optim] 52t@lr=0.0005, 2t@lr=0.00025
+[09-19 20:16:31]   [sampler] per_class=6 effective_batch=30 batches/epoch=6 images/epoch=180
+[09-19 20:16:33]   [MICRO-BATCH] first batch real micro-batch size = 30   (sampler.effective_batch = 30, sampler.per_class = 6)
+[09-19 20:16:38]   [50%] reached at step 3/6 -- evaluating 250 images ...
+[09-19 20:16:55]   [50%] ffpp_test=0.9928  cd1=0.7738  cd2=0.8756  dfdcp=0.7500  ffiw=0.7455  wild=0.7177  mean4dom=0.7793
+[09-19 20:16:55]   [50%] saved 54 tensors -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g22\phase2_ckpt_nofix_s44_50_dryrun.pth
+[09-19 20:17:03]   [epoch] batches=6 images=180 micro=[30] wall=32.0s (hook 17.3s) 177.63 ms/img
+[09-19 20:17:03]   [epoch] final loss=0.0005 train_acc=100.00%
+[09-19 20:17:03]   [100%] evaluating 250 images ...
+[09-19 20:17:20]   [100%] ffpp_test=0.9932  cd1=0.7738  cd2=0.8756  dfdcp=0.7455  ffiw=0.7455  wild=0.7225  mean4dom=0.7793
+[09-19 20:17:20]   [DONE] nofix_s44  wall=0.017h  half_mean4dom=0.7793
+[09-19 20:17:20] 
+[09-19 20:17:20] ==============================================================================
+[09-19 20:17:20] ALL 9 RUNS COMPLETE in 0.15 h
+[09-19 20:17:20] ==============================================================================
+[09-19 20:17:20]   fix         mean4dom = 0.7790 +- 0.0005  (runs [0.7782, 0.7793, 0.7793])   half=[0.7805, 0.7805, 0.7793]
+[09-19 20:17:20]   randbridge  mean4dom = 0.7797 +- 0.0006  (runs [0.7792, 0.7793, 0.7805])   half=[0.7792, 0.777, 0.7816]
+[09-19 20:17:20]   nofix       mean4dom = 0.7790 +- 0.0005  (runs [0.7782, 0.7793, 0.7793])   half=[0.7805, 0.7805, 0.7793]
+[09-19 20:17:20]   peak GPU mem = 7542 MiB
+[09-19 20:17:20]   [GPU] AFTER -- gpu0=6766MiB; gpu1=3667MiB; gpu2=88MiB

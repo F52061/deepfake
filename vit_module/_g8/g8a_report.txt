@@ -1,0 +1,115 @@
+======================================================================================
+G8A REPORT - FF++ 域内归因: V 判别方向是不是低级统计捷径?  (纯 CPU, 单线程)
+======================================================================================
+MACHINE_BLOCK
+G8A_V_full_AUC=0.9852 G8A_C_full_AUC=0.9108 G8A_STATONLY_AUC=0.5580 G8A_STATONLY_TOP3_AUC=0.5407 G8A_ADJR2_V=0.0426 G8A_ADJR2_C=0.0551 G8A_VERDICT=NOT-SUPPORTED
+
+Verification anchors: V_full_AUC = 0.9852 (expect 0.9852), C_full_AUC = 0.9108 (expect 0.9108)
+
+A0. 特征侧: center-only PCA on train V. mu (768d), E cols desc. PC0 explains varfrac=0.6229. z_train=(V_train-mu)@e0.
+    s_V / s_C = train in-sample decision_function of anchor LR; RES_train/test = per-sample rank-1(PC0) reconstruction residual norm (|V-(mu+z e0)|), unused by gates.
+
+A1. real/fake 分离 (train; n_real=1100, n_fake=1100). Cohen d 方向 = (fake-real)/pooled_sd, 正=fake更大:
+  stat           d(fake-real)   mean_fake   mean_real
+  grad_mean           -0.2104     34.9845     36.8165
+  noise_est           -0.1733      2.5636      2.7751
+  hi_en               -0.1437      0.0171      0.0190
+  edge_density        -0.1368      0.3811      0.3900
+  lapl_var            -0.1203     61.6452     72.1981
+  g_mean              -0.0971    111.7193    114.3527
+  g_std               -0.0894     47.9516     48.9286
+  spec_slope          -0.0454     -3.9959     -3.9775
+  sat_mean             0.0446      0.4047      0.3997
+  g_entropy           -0.0218      5.2396      5.2445
+  sat_std             -0.0166      0.1504      0.1511
+  colorfulness         0.0040     44.6452     44.6000
+  ch_diff             -0.0036     47.4392     47.4956
+  blockiness          -0.0035     -0.0009     -0.0007
+  top |d| stats: ['grad_mean', 'noise_est', 'hi_en', 'edge_density', 'lapl_var']
+
+A2. 每统计 与 z_train(PC0投影) 及 s_V(in-sample logit) 的 Pearson r (train), 按|r_v|排序:
+  stat            r(z_train)      r(s_V)
+  grad_mean           0.1139      0.1248
+  hi_en               0.0640      0.1192
+  noise_est           0.0967      0.1190
+  edge_density        0.0886      0.0711
+  lapl_var            0.0471      0.0658
+  g_mean              0.0260      0.0653
+  spec_slope          0.0461      0.0570
+  sat_mean            0.0050     -0.0325
+  g_std               0.0581      0.0202
+  ch_diff             0.0381      0.0201
+  sat_std            -0.0069     -0.0193
+  colorfulness       -0.0232      0.0172
+  blockiness         -0.0111     -0.0023
+  g_entropy           0.0191     -0.0018
+  top3 by |r(s_V)|: ['grad_mean', 'hi_en', 'noise_est']
+  top3 by |r(z_train)|: ['grad_mean', 'noise_est', 'edge_density']
+
+A3. 仅低级统计判别力 (StandardScaler fit train -> LR(C=1e-3,lbfgs); test AUC):
+  stat-only(all 14) AUC       = 0.5580   [对照: V_full=0.9852, C_full=0.9108]
+  stat-only(top3 by |r_sV|)   = 0.5407   top3=['grad_mean', 'hi_en', 'noise_est']
+  delta(all14 - top3)         = 0.0173   (<=0.01 => <=3 stats suffice: False)
+  14 个统计各自单统计 AUC (desc):
+    grad_mean     0.5671
+    edge_density  0.5549
+    g_mean        0.5383
+    sat_mean      0.5362
+    noise_est     0.5286
+    colorfulness  0.5233
+    lapl_var      0.5218
+    hi_en         0.5102
+    blockiness    0.5054
+    g_entropy     0.5047
+    ch_diff       0.5036
+    spec_slope    0.5022
+    g_std         0.5005
+    sat_std       0.4805
+  #stats single-AUC >= 0.80 : 0
+
+A4. OLS (LinearRegression, intercept) on train:  s_V ~ 14stats,  s_C ~ 14stats:
+  adjR2(s_V ~ stats) = 0.0426   (R2=0.0487, n=2200, p=14)
+  adjR2(s_C ~ stats) = 0.0551   (R2=0.0611)
+  解读(机械): V高C低 => V判别可被低级量解释而C不能 (V捷径/C弥散语义候选)
+
+A5. fake 子方法拆解 (train). 显示 top|d| 统计均值 per method + real 均值:
+  method / count | grad_mean | noise_est | hi_en | edge_density | lapl_var
+  Deepfakes       n=280  | 34.71 | 2.50 | 0.02 | 0.38 | 57.64
+  Face2Face       n=292  | 34.73 | 2.61 | 0.02 | 0.38 | 68.01
+  FaceSwap        n=257  | 36.50 | 2.89 | 0.02 | 0.39 | 78.24
+  NeuralTextures  n=271  | 34.10 | 2.27 | 0.02 | 0.38 | 43.18
+  real            n=1100 | 36.82 | 2.78 | 0.02 | 0.39 | 72.20
+  (train fake counts total=1100)
+
+A6. 审计:
+  14 统计 train 相关矩阵 (Pearson):
+         g_mean  g_std sat_me sat_st colorf ch_dif lapl_v grad_m edge_d  hi_en spec_s g_entr noise_ blocki
+   g_mean   1.00   0.04  -0.70  -0.33  -0.02  -0.12   0.29   0.38   0.25   0.38   0.31   0.14   0.42   0.00
+    g_std   0.04   1.00  -0.06   0.46  -0.09  -0.09   0.33   0.43   0.23  -0.17   0.16   0.58   0.39  -0.04
+   sat_me  -0.70  -0.06   1.00   0.39   0.29   0.65  -0.16  -0.22  -0.09  -0.26  -0.20  -0.10  -0.29  -0.05
+   sat_st  -0.33   0.46   0.39   1.00   0.11   0.00   0.13   0.05  -0.13  -0.14  -0.04   0.06   0.09   0.00
+   colorf  -0.02  -0.09   0.29   0.11   1.00   0.37   0.06   0.09   0.00   0.17   0.03   0.04   0.09   0.06
+   ch_dif  -0.12  -0.09   0.65   0.00   0.37   1.00   0.05   0.05   0.14   0.01   0.02   0.12  -0.02  -0.10
+   lapl_v   0.29   0.33  -0.16   0.13   0.06   0.05   1.00   0.78   0.41   0.70   0.68   0.34   0.90  -0.08
+   grad_m   0.38   0.43  -0.22   0.05   0.09   0.05   0.78   1.00   0.78   0.59   0.47   0.64   0.86  -0.09
+   edge_d   0.25   0.23  -0.09  -0.13   0.00   0.14   0.41   0.78   1.00   0.25   0.21   0.66   0.48  -0.10
+    hi_en   0.38  -0.17  -0.26  -0.14   0.17   0.01   0.70   0.59   0.25   1.00   0.65   0.06   0.75  -0.04
+   spec_s   0.31   0.16  -0.20  -0.04   0.03   0.02   0.68   0.47   0.21   0.65   1.00   0.17   0.79  -0.09
+   g_entr   0.14   0.58  -0.10   0.06   0.04   0.12   0.34   0.64   0.66   0.06   0.17   1.00   0.42  -0.09
+   noise_   0.42   0.39  -0.29   0.09   0.09  -0.02   0.90   0.86   0.48   0.75   0.79   0.42   1.00  -0.08
+   blocki   0.00  -0.04  -0.05   0.00   0.06  -0.10  -0.08  -0.09  -0.10  -0.04  -0.09  -0.09  -0.08   1.00
+  native h,w 分布(全部3000张): h min/med/max = 70/167/920, w min/med/max = 70/161/834
+  读图失败数: 0
+
+VERDICT logic:
+  stat-only test AUC=0.5580 ; adjR2_V=0.0426 ; <=3stats_suffice=False
+  G8A_VERDICT = NOT-SUPPORTED
+
+Caveats (honest):
+  * 图像原生分辨率实测 h/w min/med/max = 70/167/920 / 70/161/834 px; 统一重采样到 224 做 LANCZOS (多数轻微上采样, 少数明显下采样). hi_en / spec_slope 等频域/锐度统计在重采样后高频被轻微平滑/衰减, 单统计判别力可能被低估.
+  * A2/A4 用 in-sample decision function / in-sample OLS: R^2/adjusted-R^2 乐观, 是上界而非泛化值; A3 的 test AUC 是真正的 out-of-video 泛化.
+  * A2 的 Pearson r 为相关, 不构成因果; V logit 与低级统计高度相关不能证明 ViT 只用了这些量,只能证明这些量足以线性复现其判别轴. 相关!=因果.
+  * PC0/e0 的符号由 SVD/eigh 约定决定, 无物理意义; r(z) 符号相应任意, |r| 才有意义.
+  * RES_train/RES_test 定义 = rank-1 PC0 重建残差范数(任务缓存 schema 列名但无分析步骤使用).
+
+wall time = 0.8s

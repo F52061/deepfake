@@ -1,0 +1,135 @@
+E3 variance-spectrum attribution report (M2F2-Det hyy, only pre-extracted features)
+Protocol: StandardScaler(train)->LogisticRegression(C=1e-3,lbfgs).  y: real=1/fake=0.
+PCA = center-only raw-cov PCA unless marked 'corr' (= StandardScaler(train) then PCA).
+probe split: train n=2200, test n=800, video-disjoint.
+
+============================================================================================
+E3a  - V discriminative spectrum  (raw-cov PCA on train V, 768 dirs)
+============================================================================================
+full-feature video-split AUC(V) = 0.9852
+top-10 Fisher variance-ranks : [0, 10, 1, 41, 14, 23, 31, 3, 9, 225]
+variance rank of max-F dir   : 0   (rank 0 = LARGEST eigenvalue)
+Spearman(log10 lambda, F)    : +0.9992
+Spearman(log10 lambda,|corr|): +0.9992
+cumulative discrimination (directions sorted by F desc):
+    frac  n_dims  energy_frac
+     10%       1       0.6229
+     50%       1       0.6229
+     90%       1       0.6229
+energy thresholds: n_dims for 10/50/90% cumulative energy = 1/1/5
+binned spectrum (variance order -> 16 bins, rank0 = largest var):
+  bin      ranks  mean_log10lam     mean_F      max_F  energy%
+  ------------------------------------------------------------
+    1    (0, 47)          0.239     0.4568    21.6932   98.74%
+    2   (48, 95)         -0.704     0.0009     0.0039    0.57%
+    3  (96, 143)         -1.055     0.0007     0.0062    0.25%
+    4 (144, 191)         -1.302     0.0005     0.0026    0.14%
+    5 (192, 239)         -1.499     0.0007     0.0076    0.09%
+    6 (240, 287)         -1.664     0.0004     0.0029    0.06%
+    7 (288, 335)         -1.812     0.0003     0.0018    0.04%
+    8 (336, 383)         -1.946     0.0003     0.0010    0.03%
+    9 (384, 431)         -2.070     0.0002     0.0014    0.02%
+   10 (432, 479)         -2.193     0.0002     0.0012    0.02%
+   11 (480, 527)         -2.309     0.0002     0.0014    0.01%
+   12 (528, 575)         -2.429     0.0002     0.0010    0.01%
+   13 (576, 623)         -2.551     0.0002     0.0011    0.01%
+   14 (624, 671)         -2.682     0.0001     0.0010    0.01%
+   15 (672, 719)         -2.828     0.0001     0.0005    0.00%
+   16 (720, 767)         -3.226     0.0001     0.0014    0.00%
+
+============================================================================================
+E3b  - V truncation causal test (raw-cov PCA) + corr-PCA sensitivity
+============================================================================================
+full AUC(V) = 0.9852
+mode=raw:  K -> AUC_topK | AUC_tailK
+  K=1    topK=0.9827 tailK=0.5209; K=2    topK=0.9828 tailK=0.5206; K=5    topK=0.9850 tailK=0.5179; K=10   topK=0.9889 tailK=0.5255; K=20   topK=0.9835 tailK=0.4963; K=50   topK=0.9891 tailK=0.4885; K=100  topK=0.9870 tailK=0.4946; K=200  topK=0.9877 tailK=0.4607
+mode=corr:  K -> AUC_topK | AUC_tailK
+  K=1    topK=0.9816 tailK=0.5202; K=2    topK=0.9815 tailK=0.5199; K=5    topK=0.9845 tailK=0.5174; K=10   topK=0.9867 tailK=0.5165; K=20   topK=0.9820 tailK=0.4935; K=50   topK=0.9849 tailK=0.4899; K=100  topK=0.9881 tailK=0.4659; K=200  topK=0.9876 tailK=0.4605
+
+============================================================================================
+E3b-null  - V controls (K=50)
+============================================================================================
+[null-1 label-shuffle train y, 30 seeds, PROJECTED top/tail K=50]  topK AUC=0.4771+-0.1013   tailK AUC=0.5135+-0.0427   (expect ~0.5)
+[null-2 Gaussian surrogate, tail per-dir std]  tailK n_dir=718 AUC=0.4924  (expect ~0.5)
+[null-2a random-orth projection of REAL V, 718-d] AUC=0.9861  (rotation-invariance: a random 718/768-d subspace keeps ~all signal -> only the top ~K0 dirs were load-bearing, the tail itself is signal-free; not a label null)
+
+============================================================================================
+E3c - three-channel spectral comparison (V / C / R, probe npz)
+============================================================================================
+--- channel V (dim=768)  full AUC=0.9852
+    top-6 Fisher variance-ranks: [0, 10, 1, 41, 14, 23]
+    max-F variance rank: 0   Spearman(loglam,F)=+0.9992   Spearman(loglam,|corr|)=+0.9992
+    cumulative F: 10%->1dir/0.623E  50%->1dir/0.623E  90%->1dir/0.623E
+    trunc(raw): K=5 topK=0.9850 tailK=0.5179 K=20 topK=0.9835 tailK=0.4963 K=50 topK=0.9891 tailK=0.4885 K=100 topK=0.9870 tailK=0.4946
+
+--- channel C (dim=1024)  full AUC=0.9108
+    top-6 Fisher variance-ranks: [1, 3, 5, 73, 108, 2]
+    max-F variance rank: 1   Spearman(loglam,F)=+0.9994   Spearman(loglam,|corr|)=+0.9994
+    cumulative F: 10%->1dir/0.051E  50%->34dir/0.286E  90%->274dir/0.738E
+    trunc(raw): K=5 topK=0.7369 tailK=0.7388 K=20 topK=0.8094 tailK=0.7060 K=50 topK=0.8197 tailK=0.6861 K=100 topK=0.8559 tailK=0.6482
+
+--- channel R (dim=768)  full AUC=0.7034
+    top-6 Fisher variance-ranks: [0, 6, 9, 15, 12, 8]
+    max-F variance rank: 0   Spearman(loglam,F)=+0.9989   Spearman(loglam,|corr|)=+0.9989
+    cumulative F: 10%->1dir/0.695E  50%->1dir/0.695E  90%->91dir/0.829E
+    trunc(raw): K=5 topK=0.7029 tailK=0.5301 K=20 topK=0.7009 tailK=0.5308 K=50 topK=0.6918 tailK=0.5340 K=100 topK=0.6972 tailK=0.5302
+
+--- V vs C discriminant-band overlap (same test samples)
+    corr(V top-F proj, C top-F proj) on test = -0.3496
+    linear CKA(V,C) on test = 0.1689   (Phase A reported ~0.14)
+    corr(V-probe logit, C-probe logit) on test = +0.6677
+    V vs R top-F eigenvector |cos angle| (same 768-d space) = 0.9928
+    NOTE: 'lower variance order' = larger rank index within each channel's own spectrum.
+
+============================================================================================
+AUDIT - protocol robustness
+============================================================================================
+(1) per-dim standard deviation (train only) -- raw==corr degeneracy check:
+  V: std min=0.3917  median=1.2908  max=5.3601  max/min=13.683
+       cv(across dims)=0.4292   (cv<<1 => near-uniform scale => raw-cov PCA ~ corr PCA)
+  C: std min=0.2024  median=0.2620  max=0.8074  max/min=3.988
+       cv(across dims)=0.1443   (cv<<1 => near-uniform scale => raw-cov PCA ~ corr PCA)
+(2) full-AUC anchor sensitivity to regularization C (residual-probe report used C=1.0; Phase A / E3 use C=1e-3):
+   channel       1e-04       1e-03       1e-02       1e+00
+  --------------------------------------------------------
+         V      0.9845      0.9852      0.9868      0.9881
+         C      0.8671      0.9108      0.9170      0.8781
+         R      0.7044      0.7034      0.6970      0.6717
+  -> weak channels (C, R) shift up to ~+0.03 under stronger L2 (C small) because the 1024-d noise tail is shrunk harder; V is stable. Relative E3 conclusions are unaffected.
+============================================================================================
+E3d - cross-domain band transfer (bands: full | top50 | tail50; probe C=1e-3)
+============================================================================================
+--- channel V  FF++ in-domain (video split): full=0.9852 top50=0.9891 tail50=0.4885
+  domain     full     top50    tail50   tail-full
+  -----------------------------------------------
+     cd1   0.8286    0.8164    0.6296     -0.1990
+     cd2   0.8633    0.8392    0.6238     -0.2396
+   dfdcp   0.8261    0.7907    0.5356     -0.2905
+    ffiw   0.8244    0.8061    0.6399     -0.1845
+    wild   0.8090    0.7611    0.6070     -0.2020
+
+--- channel C  FF++ in-domain (video split): full=0.9108 top50=0.8197 tail50=0.6861
+  domain     full     top50    tail50   tail-full
+  -----------------------------------------------
+     cd1   0.6559    0.8028    0.5114     -0.1445
+     cd2   0.7227    0.7321    0.5284     -0.1943
+   dfdcp   0.7068    0.6963    0.4812     -0.2256
+    ffiw   0.8344    0.7272    0.4579     -0.3765
+    wild   0.7170    0.6520    0.5430     -0.1740
+
+Reading: tail-full > 0 means keeping only the LOW-variance tail (drop top-50 var dirs) transfers better than full features; tail-full < 0 means the top variance directions carry the transferable signal.
+============================================================================================
+E3e - probe-weight spectral attribution (scaled-space PCA basis)
+============================================================================================
+--- channel V_proj (dim=768)  full-AUC=0.9850 (same probe protocol)
+    variance-rank of max weight-energy PC : 0   variance-rank of max Fisher PC: 0
+    Spearman(log10 lam_s, weight-energy g) = +0.9998   (+1 => model leans on HIGH-variance dirs, -1 => low-variance dirs)
+    cumulative weight energy in top-1/5/10/50/200 var ranks = 0.5255/0.9159/0.9961/0.9990/1.0000
+    weight-energy by 16 variance-ordered bands (rank0=largest var): 99.9% 0.1% 0.0% 0.0% 0.0% 0.0% 0.0% 0.0% 0.0% 0.0% 0.0% 0.0% 0.0% 0.0% 0.0% 0.0%
+
+--- channel V (dim=768)  full-AUC=0.9852 (same probe protocol)
+    variance-rank of max weight-energy PC : 0   variance-rank of max Fisher PC: 0
+    Spearman(log10 lam_s, weight-energy g) = +0.9997   (+1 => model leans on HIGH-variance dirs, -1 => low-variance dirs)
+    cumulative weight energy in top-1/5/10/50/200 var ranks = 0.5485/0.5750/0.6712/0.9519/0.9949
+    weight-energy by 16 variance-ordered bands (rank0=largest var): 95.1% 3.1% 0.9% 0.4% 0.3% 0.1% 0.1% 0.0% 0.0% 0.0% 0.0% 0.0% 0.0% 0.0% 0.0% 0.0%
+

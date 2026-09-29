@@ -39,6 +39,21 @@ def load_image(image_file):
 def main(args):
     model_name = get_model_name_from_path(args.model_path)
 
+    # ── CLIP 离线重定向: from_pretrained('openai/clip*') → 本地 checkpoint ──
+    _clip_local = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+        '..', '..', 'checkpoints', 'clip-vit-large-patch14-336'))
+    if os.path.isdir(_clip_local):
+        from transformers import (CLIPVisionConfig, CLIPVisionModel, CLIPImageProcessor,
+            CLIPTextConfig, CLIPTextModel, AutoConfig, AutoTokenizer)
+        def _rdr(f):
+            def w(p, *a, **k):
+                if 'openai/clip' in str(p): return f(_clip_local, *a, **k)
+                return f(p, *a, **k)
+            return w
+        for _cls in [CLIPVisionConfig, CLIPVisionModel, CLIPImageProcessor, CLIPTextModel, AutoConfig, AutoTokenizer]:
+            _cls.from_pretrained = _rdr(_cls.from_pretrained)
+        print(f"CLIP offline redirect: {_clip_local}")
+
     # ── Step 1: Load model on CPU (then move vision tower to GPU) ──
     print("Loading model (CPU first)...")
     gc.collect()
@@ -52,6 +67,7 @@ def main(args):
         args.model_path,
         low_cpu_mem_usage=False,
         ignore_mismatched_sizes=True,
+        torch_dtype=torch.float16,  # 合并 checkpoint 含 bf16 权重, Pascal 不支持, 统一转 fp16
     )
     model.eval()
     print("Model loaded on CPU. Loading vision tower...")

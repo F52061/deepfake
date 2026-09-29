@@ -1,0 +1,180 @@
+==============================================================================================================================
+G11 REPORT - 特征归因: 源 PC0 轴 (e0) 在目标域 是 错位(misalignment) 还是 缺失(missing)?
+(纯 CPU 单线程, 不 import torch, 只读 npz; 轴=center-only raw-cov PCA@probe-train-V (2200),
+ e0=E[:,0], mu=train 均值, z=(V-mu)@e0; LR 固定 C=1e-3 lbfgs max_iter=2000; AUC positive=fake)
+==============================================================================================================================
+MACHINE_BLOCK
+G11_SRC=probe_train_n=2200 G11_SRC_ZDIMF_frac=0.6229 G11_SRC_PC0_varfrac=0.6229 G11_SRC_DELTAZ=4.6555 G11_SRC_RESIDK1=0.3771 G11_SRC_RESIDK50=0.0122 G11_ANCHOR_VtestAUC=0.9852 G11_COS_wsrc_e0=+0.4251
+G11_FFTEST_row=probe_test_n=800_vids=42 G11_ZDIMF_frac_fftest=0.6232 G11_RESIDK1_fftest=0.3778 G11_RESIDK5_fftest=0.0699 G11_RESIDK50_fftest=0.0174 G11_DELTAZ_fftest=4.0358 G11_AUCe0_fftest=0.9827 G11_AUCe0dom_fftest=0.9822 G11_COS_e0dom_fftest=+0.9993 G11_OVERLAP10_fftest=0.8723 G11_ORACLE_AUC_fftest=0.9790 G11_SRCLR_AUC_fftest=0.9852 G11_RECENTER_DELTA_fftest=+0.0000 G11_CORAL_DELTA_fftest=+0.0004 G11_COS_ddom_e0_fftest=+0.9991 G11_COS_wd_e0_fftest=+0.0258
+G11_MULTIFFPP_contaminated=1 n=800 vids=140 vids_also_in_srcTrain=98 G11_RESIDK1_multiffpp=0.3816 G11_DELTAZ_multiffpp=4.7836 G11_AUCe0_multiffpp=0.9967 G11_SRCLR_AUC_multiffpp=0.9970
+G11_ANCHOR_e0AUC_cd1=0.8576 G11_ZDIMF_frac_cd1=0.6357 G11_RESIDK1_cd1=0.3983 G11_RESIDK5_cd1=0.1282 G11_RESIDK50_cd1=0.0431 G11_COS_e0dom_cd1=+0.9870 G11_OVERLAP10_cd1=0.7711 G11_DELTAZ_cd1=1.4033 G11_AUCe0dom_cd1=0.8532 G11_RECENTER_AUC_cd1=0.8576 G11_RECENTER_DELTA_cd1=+0.0000 G11_CORAL_AUC_cd1=0.8332 G11_CORAL_DELTA_cd1=+0.0046 G11_ORACLE_AUC_cd1=0.9082 G11_ORACLE_AUCSTD_cd1=0.1341 G11_SRCLR_AUC_cd1=0.8286 G11_ORACLE_MINUS_SRCLR_cd1=+0.0796 G11_COS_wd_e0_cd1=+0.0074 G11_COS_ddom_e0_cd1=+0.9790 G11_DZ_RATIO_cd1=0.3014 G11_GAPRATIO_cd1=0.4268 G11_SDRATIO_cd1=1.4160 G11_SHIFTMID_cd1=8.4815 G11_DREAL_cd1=+25.8687 G11_DFAKE_cd1=-8.9057 G11_DRESIDK1_cd1=+0.0204 G11_DRESIDK5_cd1=+0.0583 G11_DRESIDK50_cd1=+0.0257 G11_RESIDANOM_K1_cd1=0 G11_RESIDANOM_K5_cd1=1 G11_RESIDANOM_K50_cd1=0 G11_DZSHRINK_cd1=1
+G11_ANCHOR_e0AUC_cd2=0.8604 G11_ZDIMF_frac_cd2=0.5986 G11_RESIDK1_cd2=0.4233 G11_RESIDK5_cd2=0.1189 G11_RESIDK50_cd2=0.0409 G11_COS_e0dom_cd2=+0.9890 G11_OVERLAP10_cd2=0.8555 G11_DELTAZ_cd2=1.5296 G11_AUCe0dom_cd2=0.8620 G11_RECENTER_AUC_cd2=0.8604 G11_RECENTER_DELTA_cd2=+0.0000 G11_CORAL_AUC_cd2=0.8507 G11_CORAL_DELTA_cd2=-0.0126 G11_ORACLE_AUC_cd2=0.8860 G11_ORACLE_AUCSTD_cd2=0.0604 G11_SRCLR_AUC_cd2=0.8633 G11_ORACLE_MINUS_SRCLR_cd2=+0.0226 G11_COS_wd_e0_cd2=+0.0067 G11_COS_ddom_e0_cd2=+0.9766 G11_DZ_RATIO_cd2=0.3286 G11_GAPRATIO_cd2=0.4669 G11_SDRATIO_cd2=1.4212 G11_SHIFTMID_cd2=7.3402 G11_DREAL_cd2=+23.5098 G11_DFAKE_cd2=-8.8294 G11_DRESIDK1_cd2=+0.0455 G11_DRESIDK5_cd2=+0.0490 G11_DRESIDK50_cd2=+0.0235 G11_RESIDANOM_K1_cd2=0 G11_RESIDANOM_K5_cd2=0 G11_RESIDANOM_K50_cd2=0 G11_DZSHRINK_cd2=1
+G11_ANCHOR_e0AUC_dfdcp=0.8322 G11_ZDIMF_frac_dfdcp=0.6581 G11_RESIDK1_dfdcp=0.3932 G11_RESIDK5_dfdcp=0.1749 G11_RESIDK50_dfdcp=0.0602 G11_COS_e0dom_dfdcp=+0.9790 G11_OVERLAP10_dfdcp=0.7034 G11_DELTAZ_dfdcp=1.3036 G11_AUCe0dom_dfdcp=0.8364 G11_RECENTER_AUC_dfdcp=0.8322 G11_RECENTER_DELTA_dfdcp=+0.0000 G11_CORAL_AUC_dfdcp=0.8109 G11_CORAL_DELTA_dfdcp=-0.0152 G11_ORACLE_AUC_dfdcp=0.8774 G11_ORACLE_AUCSTD_dfdcp=0.0435 G11_SRCLR_AUC_dfdcp=0.8261 G11_ORACLE_MINUS_SRCLR_dfdcp=+0.0513 G11_COS_wd_e0_dfdcp=+0.0129 G11_COS_ddom_e0_dfdcp=+0.9606 G11_DZ_RATIO_dfdcp=0.2800 G11_GAPRATIO_dfdcp=0.4644 G11_SDRATIO_dfdcp=1.6584 G11_SHIFTMID_dfdcp=2.5159 G11_DREAL_dfdcp=+18.7632 G11_DFAKE_dfdcp=-13.7313 G11_DRESIDK1_dfdcp=+0.0153 G11_DRESIDK5_dfdcp=+0.1050 G11_DRESIDK50_dfdcp=+0.0428 G11_RESIDANOM_K1_dfdcp=0 G11_RESIDANOM_K5_dfdcp=1 G11_RESIDANOM_K50_dfdcp=0 G11_DZSHRINK_dfdcp=1
+G11_ANCHOR_e0AUC_ffiw=0.8103 G11_ZDIMF_frac_ffiw=0.6852 G11_RESIDK1_ffiw=0.3180 G11_RESIDK5_ffiw=0.1421 G11_RESIDK50_ffiw=0.0540 G11_COS_e0dom_ffiw=-0.9796 G11_OVERLAP10_ffiw=0.6019 G11_DELTAZ_ffiw=1.2281 G11_AUCe0dom_ffiw=0.7943 G11_RECENTER_AUC_ffiw=0.8103 G11_RECENTER_DELTA_ffiw=+0.0000 G11_CORAL_AUC_ffiw=0.8213 G11_CORAL_DELTA_ffiw=-0.0031 G11_ORACLE_AUC_ffiw=0.8980 G11_ORACLE_AUCSTD_ffiw=0.0108 G11_SRCLR_AUC_ffiw=0.8244 G11_ORACLE_MINUS_SRCLR_ffiw=+0.0736 G11_COS_wd_e0_ffiw=+0.0085 G11_COS_ddom_e0_ffiw=+0.9855 G11_DZ_RATIO_ffiw=0.2638 G11_GAPRATIO_ffiw=0.4296 G11_SDRATIO_ffiw=1.6286 G11_SHIFTMID_ffiw=-9.8542 G11_DREAL_ffiw=+7.4468 G11_DFAKE_ffiw=-27.1553 G11_DRESIDK1_ffiw=-0.0598 G11_DRESIDK5_ffiw=+0.0721 G11_DRESIDK50_ffiw=+0.0365 G11_RESIDANOM_K1_ffiw=0 G11_RESIDANOM_K5_ffiw=1 G11_RESIDANOM_K50_ffiw=0 G11_DZSHRINK_ffiw=1
+G11_ANCHOR_e0AUC_wild=0.8060 G11_ZDIMF_frac_wild=0.6122 G11_RESIDK1_wild=0.3844 G11_RESIDK5_wild=0.1478 G11_RESIDK50_wild=0.0588 G11_COS_e0dom_wild=+0.9793 G11_OVERLAP10_wild=0.8094 G11_DELTAZ_wild=1.1410 G11_AUCe0dom_wild=0.8200 G11_RECENTER_AUC_wild=0.8060 G11_RECENTER_DELTA_wild=+0.0000 G11_CORAL_AUC_wild=0.7888 G11_CORAL_DELTA_wild=-0.0202 G11_ORACLE_AUC_wild=0.8349 G11_ORACLE_AUCSTD_wild=0.0586 G11_SRCLR_AUC_wild=0.8090 G11_ORACLE_MINUS_SRCLR_wild=+0.0259 G11_COS_wd_e0_wild=+0.0048 G11_COS_ddom_e0_wild=+0.9437 G11_DZ_RATIO_wild=0.2451 G11_GAPRATIO_wild=0.3833 G11_SDRATIO_wild=1.5638 G11_SHIFTMID_wild=11.2591 G11_DREAL_wild=+29.9671 G11_DFAKE_wild=-7.4488 G11_DRESIDK1_wild=+0.0066 G11_DRESIDK5_wild=+0.0779 G11_DRESIDK50_wild=+0.0414 G11_RESIDANOM_K1_wild=0 G11_RESIDANOM_K5_wild=1 G11_RESIDANOM_K50_wild=0 G11_DZSHRINK_wild=1
+G11_H5_ANOM_cd1=1 (residK_anyK=1,residK1=0,dz_shrink=1) G11_H5_RECOVER_cd1=1 (recenter=0,oracle=1) G11_VERDICT_cd1=SUPPORT G11_VERDICT_B_cd1=SUPPORT G11_VERDICT_C_cd1=SUPPORT G11_VERDICT_SUPP_cd1=SUPPORT
+G11_H5_ANOM_cd2=1 (residK_anyK=0,residK1=0,dz_shrink=1) G11_H5_RECOVER_cd2=0 (recenter=0,oracle=0) G11_VERDICT_cd2=PARTIAL G11_VERDICT_B_cd2=NOT-SUPPORTED G11_VERDICT_C_cd2=PARTIAL G11_VERDICT_SUPP_cd2=PARTIAL
+G11_H5_ANOM_dfdcp=1 (residK_anyK=1,residK1=0,dz_shrink=1) G11_H5_RECOVER_dfdcp=1 (recenter=0,oracle=1) G11_VERDICT_dfdcp=SUPPORT G11_VERDICT_B_dfdcp=SUPPORT G11_VERDICT_C_dfdcp=SUPPORT G11_VERDICT_SUPP_dfdcp=SUPPORT
+G11_H5_ANOM_ffiw=1 (residK_anyK=1,residK1=0,dz_shrink=1) G11_H5_RECOVER_ffiw=1 (recenter=0,oracle=1) G11_VERDICT_ffiw=SUPPORT G11_VERDICT_B_ffiw=SUPPORT G11_VERDICT_C_ffiw=SUPPORT G11_VERDICT_SUPP_ffiw=SUPPORT
+G11_H5_ANOM_wild=1 (residK_anyK=1,residK1=0,dz_shrink=1) G11_H5_RECOVER_wild=0 (recenter=0,oracle=0) G11_VERDICT_wild=PARTIAL G11_VERDICT_B_wild=PARTIAL G11_VERDICT_C_wild=PARTIAL G11_VERDICT_SUPP_wild=PARTIAL
+G11_VERDICT=SUPPORT G11_VERDICT_COUNTS_SUPPORT=3 PARTIAL=2 NOT-SUPPORTED=0
+G11_VERDICT_B(b 任一 K 异常, 认为 d 与 AUC_z 同义; 可恢复含 CORAL)=SUPPORT COUNTS=3/1/1
+G11_VERDICT_C(只认 d 间隔收缩 + oracle 门)=SUPPORT COUNTS=3/2/0
+G11_VERDICT_K1b(b 只取 K=1)=NOT-SUPPORTED COUNTS=0/0/5 DOMAINS=cd1:NOT-SUPPORTED|cd2:NOT-SUPPORTED|dfdcp:NOT-SUPPORTED|ffiw:NOT-SUPPORTED|wild:NOT-SUPPORTED
+G11_VERDICT_SUPP(recenter 门换规格外 CORAL_delta)=SUPPORT COUNTS=3/2/0
+G11_PHI_AUDIT_maxabsdev=0.0181 G11_POOLED_RECENTER_DELTA=+0.0064
+
+------------------------------------------------------------------------------------------------------------------------------
+A0. 锚点复算 (全部必须与给定对照一致到 <1e-3)
+  源 train PC0 varfrac (沿轴能量占比参照)  : 复算 0.6229 / 预期 0.6229
+  FF++ test 域内 srcLR AUC (probe test 800) : 复算 0.9852 / 预期 0.9852
+  dom     e0_AUC_recalc  e0_AUC_exp  srcLR_recalc   srcLR_exp
+  cd1            0.8576      0.8576        0.8286      0.8286
+  cd2            0.8604      0.8604        0.8633      0.8633
+  dfdcp          0.8322      0.8322        0.8261      0.8261
+  ffiw           0.8103      0.8103        0.8244      0.8244
+  wild           0.8060      0.8060        0.8090      0.8090
+
+  参照集说明: FF++ test 参照行取 probe_feats 的 test 部分 (800, 42 vids, 与源 train
+  98 vids 完全 video-disjoint). feats_multi 的 'ffpp' 域 (800, 140 vids) 虽与 probe 同源,
+  但其 vid 有 98/140 属于源 train 视频 -> 作参照会被污染, 仅作脚注:
+    multi-ffpp (污染): residK1=0.3816  d_z=4.7836  AUC_e0=0.9967  srcLR_AUC=0.9970
+
+------------------------------------------------------------------------------------------------------------------------------
+Q1. 轴表达/支撑 (参照: 源 train PC0 varfrac=0.6229, d_z_src=4.6555, residK1_src=0.3771, residK50_src=0.0122)
+    zdim_frac = 域内 z 方差 / 域内 V 各维方差和 (ddof=1, 与源 0.6229 同口径);
+    residK = 1 - ||proj_{E[:,:K]}(V_d - mu)||^2 / ||V_d - mu||^2  (源子空间外残差能量占比);
+    cos(e0d,e0)=域自身 PC0 与源 e0 的 cos (PCA 符号任意, 看 |cos| 列); overlap10=域/源 top-10 子空间平均 cos^2;
+    AUCe0d = 用域自身 PC0 轴(域内中心化)的 AUC (控制: 是否'源轴'本身被针对);
+    d_z = (mean(z_fake)-mean(z_real))/合并sd (域内重对中不改变该值).
+
+  dom         n  nvid  zdim_frac  residK1  residK5  residK50  cos(e0d,e0)   |cos|  overlap10  pc0vf_dom   AUCe0d      d_z
+  -----------------------------------------------------------------------------------------------------------------------
+  TRAIN    2200    98     0.6229   0.3771   0.0682    0.0122       1.0000  1.0000     1.0000     0.6229        -   4.6555
+  fftest    800    42     0.6232   0.3778   0.0699    0.0174      +0.9993  0.9993     0.8723     0.6239   0.9822   4.0358
+  cd1       300    41     0.6357   0.3983   0.1282    0.0431      +0.9870  0.9870     0.7711     0.6517   0.8532   1.4033
+  cd2       300   124     0.5986   0.4233   0.1189    0.0409      +0.9890  0.9890     0.8555     0.6111   0.8620   1.5296
+  dfdcp     300    47     0.6581   0.3932   0.1749    0.0602      +0.9790  0.9790     0.7034     0.6854   0.8364   1.3036
+  ffiw      300     1     0.6852   0.3180   0.1421    0.0540      -0.9796  0.9796     0.6019     0.7115   0.7943   1.2281
+  wild      300   239     0.6122   0.3844   0.1478    0.0588      +0.9793  0.9793     0.8094     0.6358   0.8200   1.1410
+  (fftest = FF++ test参照行; TRAIN = probe train 2200, 轴在该集上拟合)
+
+  审计: d_z 与单轴 AUC_z 的算术一致性 (等方差正态近似 AUC ~ Phi(d_z/sqrt(2))):
+    dom           d_z  Phi(d/sqrt2)    AUC_z     diff
+    fftest     4.0358        0.9978   0.9827  +0.0151
+    cd1        1.4033        0.8395   0.8576  -0.0181
+    cd2        1.5296        0.8603   0.8604  -0.0001
+    dfdcp      1.3036        0.8217   0.8322  -0.0105
+    ffiw       1.2281        0.8074   0.8103  -0.0028
+    wild       1.1410        0.7901   0.8060  -0.0159
+    最大偏差 = 0.0181 -> (d) d_z 收缩与单轴 AUC_z 下降是同一现象的两种表述,
+    (d) 分支不含超出 AUC_z 的独立证据.
+
+  Q1e 沿轴类别位置分解 (区分'整体错位' vs '间隔衰减'):
+    z 以源 train 的 mu 为零点, 故源 train 的 fake/real 均值即为其自身偏移 (和为 0).
+    dom         z_real    z_fake      gap    d_real    d_fake gap/gap_src  shift_mid    sd_z sd_ratio
+    TRAIN     -30.3338   30.3338  60.6675    0.0000    0.0000      1.0000     0.0000  13.031   1.0000
+    fftest    -29.9224   29.5924  59.5149    0.4113   -0.7413      0.9810    -0.1650  14.747   1.1316
+    cd1        -4.4650   21.4281  25.8931   25.8687   -8.9057      0.4268     8.4815  18.452   1.4160
+    cd2        -6.8240   21.5044  28.3283   23.5098   -8.8294      0.4669     7.3402  18.520   1.4212
+    dfdcp     -11.5706   16.6024  28.1730   18.7632  -13.7313      0.4644     2.5159  21.611   1.6584
+    ffiw      -22.8869    3.1784  26.0654    7.4468  -27.1553      0.4296    -9.8542  21.223   1.6286
+    wild       -0.3667   22.8850  23.2517   29.9671   -7.4488      0.3833    11.2591  20.379   1.5638
+    d_real/d_fake = 相对源 train 的类均值位移; shift_mid = 两类中点位移 (整体错位分量);
+    gap/gap_src = 间隔保留比例 (衰减分量); sd_ratio = 沿轴类内合并 sd 比值 (噪声分量);
+    d_z = gap/(合并 sd), 故三者共同解释 d_z 下降.
+
+------------------------------------------------------------------------------------------------------------------------------
+Q2. 无标签重对中 z'=z-mean(z_d) 的可校正性 (+ 补充: CORAL 白化 / 跨域池化)
+  重要: AUC 是秩统计量, 域内整体平移 z->z-mean(z_d) 不改变任何排序,
+        故 RECENTER_DELTA 恒为 0.0000 (精确退化, 数学恒等; 且 d_z 亦不变).
+
+  dom         AUC_z  AUC_z_recenter    delta  mean_z_dom  CORAL_AUC  CORAL_delta
+  ------------------------------------------------------------------------------
+  fftest     0.9827          0.9827  +0.0000     -0.1650     0.9856      +0.0004
+  cd1        0.8576          0.8576  +0.0000      8.4815     0.8332      +0.0046
+  cd2        0.8604          0.8604  +0.0000      7.3402     0.8507      -0.0126
+  dfdcp      0.8322          0.8322  +0.0000      2.5159     0.8109      -0.0152
+  ffiw       0.8103          0.8103  +0.0000     -9.8542     0.8213      -0.0031
+  wild       0.8060          0.8060  +0.0000     11.2591     0.7888      -0.0202
+  跨域池化 (6 域合并, 每域先各自重对中): AUC raw z = 0.8947 -> recentered = 0.9011  (delta +0.0064)
+  (CORAL = label-free 协方差对齐到源后源训 LR 的跨域 AUC; 规格外补充, 用于替代退化的 recenter)
+
+------------------------------------------------------------------------------------------------------------------------------
+Q3. oracle 上限: 域内自训 LR(768d, 同 C=1e-3) 按 vid 分组 5 折 CV  vs  源训 LR 跨域
+
+  dom       oracle_mean  fold_std      oof    srcLR  oracle-src  nvid        split  leak  cos(wd,e0)  cos(ddom,e0)  cos(wsrc,e0)
+  ------------------------------------------------------------------------------------------------------------------------------
+  fftest         0.9790    0.0323   0.9754   0.9852     -0.0062    42    SGKF(vid) False     +0.0258       +0.9991       +0.4251
+  cd1            0.9082    0.1341   0.8991   0.8286     +0.0796    41    SGKF(vid) False     +0.0074       +0.9790       +0.4251
+  cd2            0.8860    0.0604   0.8792   0.8633     +0.0226   124    SGKF(vid) False     +0.0067       +0.9766       +0.4251
+  dfdcp          0.8774    0.0435   0.8684   0.8261     +0.0513    47    SGKF(vid) False     +0.0129       +0.9606       +0.4251
+  ffiw           0.8980    0.0108   0.8981   0.8244     +0.0736     1SKF(no-group)  True     +0.0085       +0.9855       +0.4251
+  wild           0.8349    0.0586   0.8399   0.8090     +0.0259   239    SGKF(vid) False     +0.0048       +0.9437       +0.4251
+  cos(wd,e0)=域内 LDA(lsqr, shrinkage='auto' 受正则影响); cos(ddom,e0)=域内均值差方向
+  (mean_fake-mean_real, raw V, 无正则, 更稳健); cos(wsrc,e0) 为常数 (源 LR 标准化权重转回原始空间,
+  w_raw=w_std/std_train, 与 e0 同为 fake 正方向). split=SGKF(vid) 才无同视频泄漏; nvid<5 的域退化 SKF, leak=True.
+
+------------------------------------------------------------------------------------------------------------------------------
+Q4. 汇总表 (每域一行)
+
+  dom     z_var_frac residK1 residK5 residK50cos(e0d,e0)  ovlp10     d_z   AUC_z AUC_z_rc   d_rec  oracle   srcLR  orc-src cos(wd,e0)        verdict
+  --------------------------------------------------------------------------------------------------------------------------------------------------
+  fftest      0.6232  0.3778  0.0699   0.0174     0.9993  0.8723  4.0358  0.9827   0.9827  0.0000  0.9790  0.9852  -0.0062     0.0258          (ref)
+  cd1         0.6357  0.3983  0.1282   0.0431     0.9870  0.7711  1.4033  0.8576   0.8576  0.0000  0.9082  0.8286   0.0796     0.0074        SUPPORT
+  cd2         0.5986  0.4233  0.1189   0.0409     0.9890  0.8555  1.5296  0.8604   0.8604  0.0000  0.8860  0.8633   0.0226     0.0067        PARTIAL
+  dfdcp       0.6581  0.3932  0.1749   0.0602     0.9790  0.7034  1.3036  0.8322   0.8322  0.0000  0.8774  0.8261   0.0513     0.0129        SUPPORT
+  ffiw        0.6852  0.3180  0.1421   0.0540    -0.9796  0.6019  1.2281  0.8103   0.8103  0.0000  0.8980  0.8244   0.0736     0.0085        SUPPORT
+  wild        0.6122  0.3844  0.1478   0.0588     0.9793  0.8094  1.1410  0.8060   0.8060  0.0000  0.8349  0.8090   0.0259     0.0048        PARTIAL
+  d_rec = AUC_z_recenter - AUC_z (恒 0, 见 Q2); orc-src = oracle_mean - srcLR_AUC
+
+------------------------------------------------------------------------------------------------------------------------------
+Q5. 机械判定 H5「跨域崩是否对应源轴表达错位(misalignment)」
+  门: 残差能量 (源 top-K 子空间外, K 见下表) 比 FF++ test 参照高 >= 0.05
+      或 |d_z| <= 0.50*|d_z_src| => 轴表达异常;
+      可恢复: d_recenter >= +0.02 或 oracle-srcLR >= +0.05
+  判定: 无异常=NOT-SUPPORTED; 异常且两可恢复门都未过=PARTIAL; 异常且至少一门过=SUPPORT
+
+  dom       residK1  residK5 residK50  anomK1  anomK5  anomK50  dz_shr  anomaly  rec_rec  rec_orc  recover  orc-src        verdict
+  (ref)      0.3778   0.0699   0.0174       -       -        -       -        -        -        -        -        -       (fftest)
+  cd1        0.3983   0.1282   0.0431   False    True    False    True     True    False     True     True  +0.0796        SUPPORT
+  cd2        0.4233   0.1189   0.0409   False   False    False    True     True    False    False    False  +0.0226        PARTIAL
+  dfdcp      0.3932   0.1749   0.0602   False    True    False    True     True    False     True     True  +0.0513        SUPPORT
+  ffiw       0.3180   0.1421   0.0540   False    True    False    True     True    False     True     True  +0.0736        SUPPORT
+  wild       0.3844   0.1478   0.0588   False    True    False    True     True    False    False    False  +0.0259        PARTIAL
+
+  d_z_src=4.6555; residK 参照(fftest) 见 '(ref)' 行; anomK* = residK 比参照高 >= 0.05
+  逐域: cd1=SUPPORT  cd2=PARTIAL  dfdcp=SUPPORT  ffiw=SUPPORT  wild=PARTIAL
+  全局 (>=3 域同名 或 SUPPORT+PARTIAL>=4): SUPPORT   [SUPPORT=3 PARTIAL=2 NOT-SUPPORTED=0]
+  替代判定 B (严格版: 认为 (d) 与 AUC_z 数学同义, 只认 (b); (b) 取任一 K 命中; 可恢复门含规格外 CORAL): 全局=SUPPORT [SUPPORT=3 PARTIAL=1 NOT-SUPPORTED=1]  DOMAINS=cd1:SUPPORT|cd2:NOT-SUPPORTED|dfdcp:SUPPORT|ffiw:SUPPORT|wild:PARTIAL
+  替代判定 C (更保守: 只认 (d) 间隔收缩 + oracle 门): 全局=SUPPORT [SUPPORT=3 PARTIAL=2 NOT-SUPPORTED=0]  DOMAINS=cd1:SUPPORT|cd2:PARTIAL|dfdcp:SUPPORT|ffiw:SUPPORT|wild:PARTIAL
+  替代判定 K1b ((b) 只取 K=1): 全局=NOT-SUPPORTED [0/0/5] —— 即 (b) 的结论对 K 敏感: K=1 时 0/5 域异常, K=5 时 4/5 域异常, K=50 时 0/5 域达门.
+  替代判定 SUPP (原判定门不变, 只把退化的 recenter 门换成规格外 CORAL_delta): 全局=SUPPORT cd1=SUPPORT  cd2=PARTIAL  dfdcp=SUPPORT  ffiw=SUPPORT  wild=PARTIAL
+
+------------------------------------------------------------------------------------------------------------------------------
+CAVEATS (honest):
+  * Q2 规格内的 recenter 严格退化: AUC 是秩统计量, 域内整体平移不改变任何排序, RECENTER_DELTA
+    恒为 0.0000 (数学恒等, 非数值误差/实现差异); 连 d_z 也一字不变. 要检验'错位可恢复', 必须用
+    非平移的 label-free 校正 (规格外补充 CORAL / 跨域池化), 或允许目标域标签 (本实验不做).
+  * (d) 分支与 AUC 数学同义: 等方差正态近似 AUC ~ Phi(d_z/sqrt(2)), 实测最大偏差 0.0181;
+    因此'(d) d_z 显著收缩'不能作为独立于 AUC_z 的'轴表达错位'证据.
+  * (b) 分支对 K 敏感 (同一份数据, 换 K 换结论): K=1 时 5 域残差能量与 FF++ test 参照的差为
+    -0.060~+0.046 (0.318-0.423 vs 0.378), 无一达 +0.05 门; K=5 时 5 域全部更高 (0.119-0.175 vs
+    0.070), 其中 4 域达门 (cd2 +0.049 差 0.001 未达); K=50 时 5 域全部更高 (0.041-0.060 vs 0.017),
+    但幅度无一达 +0.05 门. 即: 承载 62% 能量的第一主轴在目标域并未错位, 而在第 2-5 维上目标域
+    样本明显更偏离源子空间; '(b) 轴外能量是否明显更高'的结论完全取决于 K, 不能只报单一 K.
+  * 目标域每域仅 300 样本 (balanced 150/150), oracle 5 折 AUC 折间方差大 (见 fold_std);
+    单域 AUC 差异 < ~0.03-0.05 不宜解读为真实差异. cd1 fold_std 最大 (每视频最多 18 帧).
+  * ffiw 的 vid 只有 1 个 (vid 字段退化), oracle 无法按视频分组, 退化为 StratifiedKFold,
+    同视频泄漏使该域 oracle AUC 被高估; 该域 oracle 数字不可与其它域并列比较.
+  * LDA shrinkage='auto' (Ledoit-Wolf) 在 768 维/300 样本下正则强, cos(w_d,e0) 被压向 0;
+    故另报无正则的均值差方向 cos(d_dom,e0) 作对照 (更稳健但受域内噪声影响).
+  * 源 e0 只在 FF++ 上估计 (probe train 2200, video-disjoint), 不代表任何'真' fake 方向;
+    目标域 PCA / 子空间重叠由该域自身 300 样本估计, n 小, 有噪声.
+  * resid_K 以 (V_d - mu_src) 为中心 (规格要求), 同时含'域均值平移'与'域内形状差异'两来源;
+    它衡量'样本是否待在源子空间里', 不等于'源子空间是否携带判别信息'.
+  * CORAL 用域内无标签样本估协方差 (768x768/300), 估计本身高方差; 其 delta 只应看作弱证据.
+  * 相关不等于因果: 即使轴表达与跨域崩同向, 也不能证明 ViT 依赖该轴判别, 更不能证明校正该轴
+    即可提升跨域性能 (oracle 是上界, 且'域内自训'可用上目标域标签与域特有捷径).
+
+wall time = 7.7s

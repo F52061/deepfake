@@ -1,0 +1,55 @@
+==============================================================================
+[GPU] BEFORE SMOKE -- gpu0: used=5390MiB/11264MiB util=1%; gpu1: used=0MiB/11264MiB util=0%; gpu2: used=85MiB/11264MiB util=0%
+[GPU] gate (physical card 1 <= 100 MiB): PASS
+==============================================================================
+[CHECK] FULL split=="test" set: n=800  y counts={0: 400, 1: 400}  -> both classes? True
+[smoke] eval subset = 700 rows (100 fake + 100 real from test + 100 x 5 cross domains); fixes the phase-1 smoke nan
+
+==============================================================================
+SMOKE GROUP = fix
+==============================================================================
+  [build] 16.7s  fix_a=True bridge_init_seed=None
+  [trainable] 52 tensors / 0.5767M params (bridge=50, output=2, other=0)
+  [trainable] NAMES: ['clip_reduction.weight', 'clip_reduction.bias', 'linear_vit_1.weight', 'linear_vit_1.bias', 'linear_vit_2.weight', 'linear_vit_2.bias', 'linear_vit_3.weight', 'linear_vit_3.bias', 'bridge_adapter.0.attn.Wqkv.weight', 'bridge_adapter.0.attn.Wqkv.bias', 'bridge_adapter.0.attn.out_proj.weight', 'bridge_adapter.0.attn.out_proj.bias', 'bridge_adapter.0.norm1.weight', 'bridge_adapter.0.norm1.bias', 'bridge_adapter.0.norm2.weight', 'bridge_adapter.0.norm2.bias', 'bridge_adapter.0.ffn.0.weight', 'bridge_adapter.0.ffn.0.bias', 'bridge_adapter.0.ffn.3.weight', 'bridge_adapter.0.ffn.3.bias', 'bridge_adapter.1.attn.Wqkv.weight', 'bridge_adapter.1.attn.Wqkv.bias', 'bridge_adapter.1.attn.out_proj.weight', 'bridge_adapter.1.attn.out_proj.bias', 'bridge_adapter.1.norm1.weight', 'bridge_adapter.1.norm1.bias', 'bridge_adapter.1.norm2.weight', 'bridge_adapter.1.norm2.bias', 'bridge_adapter.1.ffn.0.weight', 'bridge_adapter.1.ffn.0.bias', 'bridge_adapter.1.ffn.3.weight', 'bridge_adapter.1.ffn.3.bias', 'bridge_adapter.2.attn.Wqkv.weight', 'bridge_adapter.2.attn.Wqkv.bias', 'bridge_adapter.2.attn.out_proj.weight', 'bridge_adapter.2.attn.out_proj.bias', 'bridge_adapter.2.norm1.weight', 'bridge_adapter.2.norm1.bias', 'bridge_adapter.2.norm2.weight', 'bridge_adapter.2.norm2.bias', 'bridge_adapter.2.ffn.0.weight', 'bridge_adapter.2.ffn.0.bias', 'bridge_adapter.2.ffn.3.weight', 'bridge_adapter.2.ffn.3.bias', 'bridge_adapter_proj.bridge_adapter_proj.1.weight', 'bridge_adapter_proj.bridge_adapter_proj.1.bias', 'bridge_adapter_proj.bridge_adapter_reduction.0.weight', 'bridge_adapter_proj.bridge_adapter_reduction.0.bias', 'bridge_adapter_proj.bridge_adapter_reduction.1.weight', 'bridge_adapter_proj.bridge_adapter_reduction.1.bias', 'output.weight', 'output.bias']
+  [optim] 50t@lr=0.0005, 2t@lr=0.00025
+  [sampler] --batch-size=32 -> per_class=6 effective_batch=30 batches=6
+  [MICRO-BATCH] first batch real micro-batch size = 30   (sampler.effective_batch = 30, sampler.per_class = 6)
+  [epoch] batches=6 images=180 micro=[30] wall=14.87s 82.6 ms/img  loss=0.0004 acc=100.00%
+  [eval-subset] ffpp_test=0.9899  cd1=0.7829  cd2=0.8422  dfdcp=0.8242  ffiw=0.8316  wild=0.6953  mean4dom=0.7861
+
+==============================================================================
+SMOKE GROUP = randbridge
+==============================================================================
+  [build] 10.0s  fix_a=True bridge_init_seed=7777
+  [trainable] 2 tensors / 0.0033M params (bridge=0, output=2, other=0)
+  [trainable] NAMES: ['output.weight', 'output.bias']
+  [FREEZE-FIX CHECK] randbridge trainable must be ONLY output (2 tensors) -> PASS
+  [optim] 2t@lr=0.00025
+  [sampler] --batch-size=32 -> per_class=6 effective_batch=30 batches=6
+  [MICRO-BATCH] first batch real micro-batch size = 30   (sampler.effective_batch = 30, sampler.per_class = 6)
+  [epoch] batches=6 images=180 micro=[30] wall=12.69s 70.5 ms/img  loss=0.0004 acc=100.00%
+  [eval-subset] ffpp_test=0.9902  cd1=0.7829  cd2=0.8378  dfdcp=0.8213  ffiw=0.8288  wild=0.6908  mean4dom=0.7832
+
+==============================================================================
+SMOKE GROUP = nofix
+==============================================================================
+  [build] 10.8s  fix_a=False bridge_init_seed=None
+  [trainable] 54 tensors / 0.5767M params (bridge=52, output=2, other=0)
+  [trainable] NAMES: ['clip_reduction.weight', 'clip_reduction.bias', 'linear_vit_1.weight', 'linear_vit_1.bias', 'linear_vit_2.weight', 'linear_vit_2.bias', 'linear_vit_3.weight', 'linear_vit_3.bias', 'bridge_adapter.0.attn.Wqkv.weight', 'bridge_adapter.0.attn.Wqkv.bias', 'bridge_adapter.0.attn.out_proj.weight', 'bridge_adapter.0.attn.out_proj.bias', 'bridge_adapter.0.norm1.weight', 'bridge_adapter.0.norm1.bias', 'bridge_adapter.0.norm2.weight', 'bridge_adapter.0.norm2.bias', 'bridge_adapter.0.ffn.0.weight', 'bridge_adapter.0.ffn.0.bias', 'bridge_adapter.0.ffn.3.weight', 'bridge_adapter.0.ffn.3.bias', 'bridge_adapter.1.attn.Wqkv.weight', 'bridge_adapter.1.attn.Wqkv.bias', 'bridge_adapter.1.attn.out_proj.weight', 'bridge_adapter.1.attn.out_proj.bias', 'bridge_adapter.1.norm1.weight', 'bridge_adapter.1.norm1.bias', 'bridge_adapter.1.norm2.weight', 'bridge_adapter.1.norm2.bias', 'bridge_adapter.1.ffn.0.weight', 'bridge_adapter.1.ffn.0.bias', 'bridge_adapter.1.ffn.3.weight', 'bridge_adapter.1.ffn.3.bias', 'bridge_adapter.2.attn.Wqkv.weight', 'bridge_adapter.2.attn.Wqkv.bias', 'bridge_adapter.2.attn.out_proj.weight', 'bridge_adapter.2.attn.out_proj.bias', 'bridge_adapter.2.norm1.weight', 'bridge_adapter.2.norm1.bias', 'bridge_adapter.2.norm2.weight', 'bridge_adapter.2.norm2.bias', 'bridge_adapter.2.ffn.0.weight', 'bridge_adapter.2.ffn.0.bias', 'bridge_adapter.2.ffn.3.weight', 'bridge_adapter.2.ffn.3.bias', 'bridge_adapter_proj.bridge_adapter_proj.1.weight', 'bridge_adapter_proj.bridge_adapter_proj.1.bias', 'bridge_adapter_proj.bridge_adapter_proj.2.weight', 'bridge_adapter_proj.bridge_adapter_proj.2.bias', 'bridge_adapter_proj.bridge_adapter_reduction.0.weight', 'bridge_adapter_proj.bridge_adapter_reduction.0.bias', 'bridge_adapter_proj.bridge_adapter_reduction.1.weight', 'bridge_adapter_proj.bridge_adapter_reduction.1.bias', 'output.weight', 'output.bias']
+  [optim] 52t@lr=0.0005, 2t@lr=0.00025
+  [sampler] --batch-size=32 -> per_class=6 effective_batch=30 batches=6
+  [MICRO-BATCH] first batch real micro-batch size = 30   (sampler.effective_batch = 30, sampler.per_class = 6)
+  [epoch] batches=6 images=180 micro=[30] wall=14.47s 80.4 ms/img  loss=0.0003 acc=100.00%
+  [eval-subset] ffpp_test=0.9899  cd1=0.7837  cd2=0.8422  dfdcp=0.8237  ffiw=0.8320  wild=0.6957  mean4dom=0.7863
+
+==============================================================================
+SMOKE v2 VERDICT
+==============================================================================
+  real micro-batch sizes = [30]  (ruling A accepts 30; user hard constraint batch<=32 satisfied: True)
+  fix         trainable_tensors= 52 (bridge=50, output=2) loss=0.0004 mean4dom(sub)=0.7861
+  randbridge  trainable_tensors=  2 (bridge=0, output=2) loss=0.0004 mean4dom(sub)=0.7832
+  nofix       trainable_tensors= 54 (bridge=52, output=2) loss=0.0003 mean4dom(sub)=0.7863
+  randbridge freeze-fix: bridge tensors = 0 (must be 0) -> PASS
+  fix vs nofix bridge tensor counts equal (must be): 50 vs 52 -> FAIL
+  GPU peak mem = 7497 MiB
+  [GPU] AFTER SMOKE -- gpu0=5391MiB; gpu1=2607MiB; gpu2=85MiB

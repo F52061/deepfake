@@ -1,0 +1,89 @@
+==============================================================================
+BLOCK G5 - REAL bridge_v2 head attribution (spectral / contribution)
+==============================================================================
+[G5] loading checkpoint: E:/Cross-domain_authentication_verification/Next_work/M2F2_Det-main-hyy\checkpoints\stage_1\bridge_v2_phase1.pth
+[G5] state_dict entries: 824
+[G5] keys matching output/head/classifier/alpha:
+    clip_text_alpha  shape=() dtype=torch.float32
+    clip_vision_alpha  shape=() dtype=torch.float32
+    output.bias  shape=(2,) dtype=torch.float32
+    output.weight  shape=(2, 1664) dtype=torch.float32
+[G5] all weight keys with shape[0]==2:
+    output.weight  shape=(2, 1664)
+
+[A] located head key = 'output.weight'  weight shape = (2, 1664)
+[A] head.bias shape = (2,)
+[A] (2,1664) holds: True   (actual F dim = 1664)
+[A] clip_vision_alpha = 0.306288  shape=()
+[A] clip_text_alpha   = 1.779604  shape=()
+
+[B] three-block weight share table
+block                 cols           L2w_share   L2d_share   L1d_share
+----------------------------------------------------------------------
+A_Cproj(0:768)        [0:768)     59.684%     62.295%     58.521%
+bridge(768:896)       [768:896)      1.069%      0.026%      0.295%
+B_Vproj(896:1664)     [896:1664)     39.247%     37.679%     41.184%
+
+[G5] loading probe npz for PCA bases ...
+[G5] probe npz V_proj(3000,) train n=2200  C_proj train n=2200
+[G5] V_proj train top singular value = 5.742e+02 ; C_proj train top singular = 3.849e+02
+
+[C] block A / block B expansions under E_C (C_proj basis) and E_V (V_proj basis)
+case                      basis          top5_energy top50_energy  spearman
+---------------------------------------------------------------------------
+blockA_Δ(0:768)           E_C(C_proj)        80.741%      95.933%    0.3890
+blockA_Δ(0:768)           E_V(V_proj)         1.248%       6.388%   -0.0421
+blockB_Δ(896:1664)        E_C(C_proj)         0.429%       6.345%    0.0003
+blockB_Δ(896:1664)        E_V(V_proj)        93.784%      97.006%    0.2119
+[C] C_proj feature variance band: top5_eig=76.57% top50_eig=98.20% participation_ratio=5.21
+[C] V_proj feature variance band: top5_eig=99.86% top50_eig=99.99% participation_ratio=1.13
+
+[C] mechanical A/B <-> V/C judgement (by task rule: concentrated in E_V AND diffuse in E_C => V-side)
+    blockA_Δ(0:768): top5 in E_V=1.25%  top5 in E_C=80.74%
+    blockB_Δ(896:1664): top5 in E_V=93.78%  top5 in E_C=0.43%
+
+[C] wiring ground-truth (from vit_m2f2_detector_bridge.py forward): features = cat([clip_vision_cls(768), bridge(128), vit_features(768)])
+    => block 0:768 feeds clip_vision_cls (= probe C_proj side, CLIP)
+    => block 896:1664 feeds vit_features   (= probe V_proj side, ViT)
+
+[D] bridge 128 block
+    bridge Δ-slice L2 share (norm^2): 0.0265%
+    bridge Δ-slice |comp| share:       0.2949%
+    bridge Δ-slice L2 norm (raw):      0.022210   delta total L2 norm: 1.364697
+
+[head_done]
+================================================================================
+BLOCK G3 - bootstrap CI for key AUC numbers (sample-level, no new training)
+================================================================================
+[G3] probe npz: train n=2200 test n=800 y1=400 y0=400
+[G3] feats_multi: total=2300 domains in file=['ffpp', 'cd1', 'cd2', 'dfdcp', 'ffiw', 'wild']
+    domain ffpp   n=800 y1=400 y0=400
+    domain cd1    n=300 y1=150 y0=150
+    domain cd2    n=300 y1=150 y0=150
+    domain dfdcp  n=300 y1=150 y0=150
+    domain ffiw   n=300 y1=150 y0=150
+    domain wild   n=300 y1=150 y0=150
+
+[G3.1] IN-DOMAIN: probe npz test 800 (fit on train_mask 2200)
+    V-only-LR                                       800  AUC=0.9852  95% CI [0.9763, 0.9926]  (width=0.0163)
+    C-only-LR                                       800  AUC=0.9108  95% CI [0.8922, 0.9291]  (width=0.0369)
+    concat-LR (np.c_[V,C])                          800  AUC=0.9878  95% CI [0.9798, 0.9943]  (width=0.0144)
+
+[G3.2] CROSS-DOMAIN: feats_multi 5 target domains x 300 (fit on probe train 2200)
+    setting                          cd1                       cd2                     dfdcp                      ffiw                      wild
+    V-only      0.8286[0.7808,0.8733]  0.8633[0.8208,0.9018]  0.8261[0.7794,0.8690]  0.8244[0.7759,0.8692]  0.8090[0.7605,0.8547]
+    C-only      0.6559[0.5945,0.7179]  0.7227[0.6628,0.7781]  0.7068[0.6463,0.7638]  0.8344[0.7839,0.8780]  0.7170[0.6594,0.7739]
+    concat      0.8372[0.7898,0.8807]  0.8730[0.8335,0.9106]  0.8236[0.7765,0.8686]  0.8181[0.7703,0.8622]  0.8200[0.7716,0.8630]
+
+[G3.3] concat-LR cross-domain AUC + CI width (the E4 key new number)
+    concat cd1    AUC=0.8372 CI[0.7898,0.8807] width=0.0909
+    concat cd2    AUC=0.8730 CI[0.8335,0.9106] width=0.0771
+    concat dfdcp  AUC=0.8236 CI[0.7765,0.8686] width=0.0921
+    concat ffiw   AUC=0.8181 CI[0.7703,0.8622] width=0.0919
+    concat wild   AUC=0.8200 CI[0.7716,0.8630] width=0.0914
+
+[G3] SEED declaration: LR = StandardScaler + LogisticRegression(C=1e-3, lbfgs, max_iter=3000, random_state=0) fit once on probe train_mask 2200 (E0/E3d/E4 protocol); bootstrap RNG=default_rng(0); B=2000; CI = 2.5/97.5 percentile of 2000 resampled roc_auc.
+[G3] CAVEAT: sample-level bootstrap; within-video frame correlation makes these confidence intervals optimistic (anti-conservative).
+[g3_done]
+
+[head_done]

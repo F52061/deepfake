@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(nvidia-smi *)",
+      "Bash(tasklist *)",
+      "Bash(tr *)"
+    ]
+  }
+}

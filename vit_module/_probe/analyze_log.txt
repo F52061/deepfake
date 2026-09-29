@@ -1,0 +1,44 @@
+[sanity] corr(stored R, recomputed R) = 1.000000
+==============================================================================
+R-TEST / RESIDUAL PROBE REPORT  (M2F2-Det Stage-1 detector)
+==============================================================================
+
+npz input         : E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_probe\probe_feats.npz
+total samples     : 3000  (train 2200, test 800)
+labels (1=real/0=fake): real=1500, fake=1500
+
+Feature definitions
+  C : raw CLIP vision tower CLS  (hidden_states[-2], position 0), 1024-d, BEFORE vision_proj
+  V : raw ViT (PDI-initialized) final CLS token after final LayerNorm, 768-d, BEFORE deepfake_proj
+  R : V - Ridge_pred(V|C); Ridge fit on probe-train, applied to all
+  (sensitivity: C_proj / V_proj = the projected 768-d head-input pair)
+
+AUC (L2-logistic probe; target fake=1; CI = 2.5/97.5 bootstrap on test)
+  probe(C)      AUC = 0.8781   95% CI [0.8552, 0.8998]
+  probe(V)      AUC = 0.9881   95% CI [0.9816, 0.9936]
+  probe(R)      AUC = 0.6721   95% CI [0.6378, 0.7077]   <-- CORE
+
+Sensitivity (head-input projected 768-d features)
+  probe(C_proj) AUC = 0.8736   probe(V_proj) AUC = 0.9895   probe(R_proj) AUC = 0.6900   95% CI [0.6525, 0.7254]
+
+Linear CKA (V, C) : all-data = 0.1417    probe-train = 0.1344
+Effective rank (column-centered SVD; pooled all data):
+  format = (participation_ratio, n_dims_90%_energy, numerical_rank)
+  V : (30.35431687579603, 5, 767)
+  C : (316.8569504410468, 165, 1024)
+  R : (41.90393021318943, 5, 767)
+
+Notes:
+  * video-level (source identity) 70/30 split done in residual_probe.py before extraction.
+  * linear CKA on centered Gram matrices; effective rank on column-centered data matrix SVD; participation ratio = sum(s)^2/sum(s^2); numerical_rank = #s > 1e-6*s_max.
+  * sanity: corr(stored R, freshly refit R) = 1.000000
+
+DECISION : COMPLEMENTARY (residual carries fake-discriminative info)
+REASON  : probe(R) AUC=0.6721 (95% CI 0.6378-0.7077) clearly > 0.5: the ViT branch adds info not linearly predictable from CLIP.
+==============================================================================
+[save] report -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_probe\residual_probe_report.txt
+
+===== SUMMARY =====
+probe(C)=0.8781  probe(V)=0.9881  probe(R)=0.6721 (CI 0.6378-0.7077)
+CKA(V,C)=0.1417  effrank V=(30.35431687579603, 5, 767) C=(316.8569504410468, 165, 1024) R=(41.90393021318943, 5, 767)
+DECISION: COMPLEMENTARY (residual carries fake-discriminative info)

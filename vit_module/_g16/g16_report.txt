@@ -1,0 +1,336 @@
+====================================================================================================
+G16 REPORT -- feature-source leverage: ViT intermediate layers (blocks 3/6/9) vs final CLS
+====================================================================================================
+A  load + pipeline sanity + hook semantics (hard gate)
+B  extraction: 4500 imgs (probe train 2200 + test 800 + 5 target domains x 300) -> 7 x 768-d
+C  analysis: FF++ in-domain AUC, per-domain cross-domain AUC (source-trained linear head),
+   per-domain in-domain oracle (video-grouped 5-fold CV); 3 concatenations; mechanical verdicts
+
+#### MACHINE_BLOCK ##########################################################################################
+G16_TASK=feature_source_leverage (ViT intermediate layers vs final CLS)
+G16_MODE=gpu
+G16_GPU_QUERY=[(0, 8838, 11264, 1), (1, 4155, 11264, 18), (2, 54, 11264, 0)]
+G16_GPU_PICK=2
+G16_DEVICE=NVIDIA GeForce GTX 1080 Ti
+G16_SEED=20260910
+G16_BATCH=16
+G16_N_IMGS=4500
+G16_FP32=1
+G16_HOOK_SEMANTICS=blocks[3]/[6]/[9] register_forward_hook -> keys b_1/b_2/b_3; hook output is the Block.forward RETURN value = the post-residual-stream hidden state (B,197,768) with CLS at [:,0] and 196 patch tokens at [:,1:]. It is a PRE-NORM ViT block: each block internally LayerNorms its ATTENTION/MLP INPUTS (norm1/norm2), but the block OUTPUT itself is NOT passed through an output-side LayerNorm, and (unlike the final V) it is NOT passed through vit.norm (the final LayerNorm). So: 'post-LayerNorm residual stream at depth k' / 'pre-final-norm' relative to V. Bridge consumes hook[:,1:,:] (CLS dropped) and applies its own linear_vit_*.
+G16_HOOK_KEYS=b_1(blocks[3]);b_2(blocks[6]);b_3(blocks[9])
+G16_HOOK_SHAPES={'b_1': (10, 197, 768), 'b_2': (10, 197, 768), 'b_3': (10, 197, 768)}
+G16_A_PIPE_COS_probe10_min=1.000000
+G16_A_PIPE_COS_probe10_mean=1.000000
+G16_ANCHOR_CD_cd1=0.8286 EXP=0.8286 dev=2.22e-05
+G16_ANCHOR_CD_cd2=0.8633 EXP=0.8633 dev=3.33e-05
+G16_ANCHOR_CD_dfdcp=0.8261 EXP=0.8261 dev=1.11e-05
+G16_ANCHOR_CD_ffiw=0.8244 EXP=0.8244 dev=0.00e+00
+G16_ANCHOR_CD_wild=0.8090 EXP=0.8090 dev=2.22e-05
+G16_ANCHOR_MAXDEV=0.000033
+G16_ANCHOR_PASS=1
+G16_FFPP_LR_REF=0.9852
+G16_FFPP_AUC_cls_final=LR1e-3=0.9852;LR1.0=0.9881
+G16_CD_C1e-3_cls_final=cd1=0.8286;cd2=0.8633;dfdcp=0.8261;ffiw=0.8244;wild=0.8090
+G16_CD_C1.0_cls_final=cd1=0.7698;cd2=0.8397;dfdcp=0.7864;ffiw=0.7747;wild=0.7870
+G16_ORACLE_cls_final=cd1=0.9550;cd2=0.8953;dfdcp=0.9223;ffiw=0.9991;wild=0.8717
+G16_FFPP_AUC_cls_b3=LR1e-3=0.8325;LR1.0=0.8687
+G16_CD_C1e-3_cls_b3=cd1=0.5915;cd2=0.6152;dfdcp=0.7190;ffiw=0.5905;wild=0.5633
+G16_CD_C1.0_cls_b3=cd1=0.7272;cd2=0.6244;dfdcp=0.7622;ffiw=0.6124;wild=0.5845
+G16_ORACLE_cls_b3=cd1=0.9442;cd2=0.7479;dfdcp=0.6760;ffiw=0.9920;wild=0.7530
+G16_FFPP_AUC_cls_b6=LR1e-3=0.9640;LR1.0=0.9578
+G16_CD_C1e-3_cls_b6=cd1=0.8149;cd2=0.7133;dfdcp=0.7332;ffiw=0.6308;wild=0.7564
+G16_CD_C1.0_cls_b6=cd1=0.7512;cd2=0.6880;dfdcp=0.7058;ffiw=0.6197;wild=0.7900
+G16_ORACLE_cls_b6=cd1=0.9507;cd2=0.8751;dfdcp=0.7586;ffiw=0.9904;wild=0.8368
+G16_FFPP_AUC_cls_b9=LR1e-3=0.9895;LR1.0=0.9872
+G16_CD_C1e-3_cls_b9=cd1=0.8361;cd2=0.8572;dfdcp=0.8300;ffiw=0.8053;wild=0.8112
+G16_CD_C1.0_cls_b9=cd1=0.8080;cd2=0.8232;dfdcp=0.7871;ffiw=0.7560;wild=0.8142
+G16_ORACLE_cls_b9=cd1=0.9100;cd2=0.8999;dfdcp=0.9072;ffiw=1.0000;wild=0.8520
+G16_FFPP_AUC_mp_b3=LR1e-3=0.8831;LR1.0=0.8839
+G16_CD_C1e-3_mp_b3=cd1=0.6855;cd2=0.6031;dfdcp=0.6880;ffiw=0.6168;wild=0.6618
+G16_CD_C1.0_mp_b3=cd1=0.7799;cd2=0.6741;dfdcp=0.7402;ffiw=0.6119;wild=0.6926
+G16_ORACLE_mp_b3=cd1=0.9670;cd2=0.8265;dfdcp=0.7485;ffiw=0.9927;wild=0.8031
+G16_FFPP_AUC_mp_b6=LR1e-3=0.9774;LR1.0=0.9782
+G16_CD_C1e-3_mp_b6=cd1=0.7672;cd2=0.7520;dfdcp=0.7254;ffiw=0.6698;wild=0.7665
+G16_CD_C1.0_mp_b6=cd1=0.7371;cd2=0.7301;dfdcp=0.7347;ffiw=0.6265;wild=0.7440
+G16_ORACLE_mp_b6=cd1=0.9577;cd2=0.9061;dfdcp=0.8117;ffiw=0.9996;wild=0.8670
+G16_FFPP_AUC_mp_b9=LR1e-3=0.9884;LR1.0=0.9878
+G16_CD_C1e-3_mp_b9=cd1=0.8167;cd2=0.8572;dfdcp=0.8272;ffiw=0.8065;wild=0.8058
+G16_CD_C1.0_mp_b9=cd1=0.8161;cd2=0.8432;dfdcp=0.7780;ffiw=0.7461;wild=0.7987
+G16_ORACLE_mp_b9=cd1=0.9523;cd2=0.9191;dfdcp=0.9303;ffiw=0.9967;wild=0.8633
+G16_FFPP_AUC_cat_cls369=LR1e-3=0.9918;LR1.0=0.9896
+G16_CD_C1e-3_cat_cls369=cd1=0.8599;cd2=0.8328;dfdcp=0.8475;ffiw=0.7879;wild=0.8169
+G16_CD_C1.0_cat_cls369=cd1=0.8296;cd2=0.7811;dfdcp=0.8057;ffiw=0.8215;wild=0.7765
+G16_ORACLE_cat_cls369=cd1=0.9452;cd2=0.9244;dfdcp=0.9042;ffiw=1.0000;wild=0.8581
+G16_FFPP_AUC_cat_b6_final=LR1e-3=0.9881;LR1.0=0.9914
+G16_CD_C1e-3_cat_b6_final=cd1=0.8549;cd2=0.8554;dfdcp=0.8415;ffiw=0.8053;wild=0.8200
+G16_CD_C1.0_cat_b6_final=cd1=0.8088;cd2=0.8068;dfdcp=0.7805;ffiw=0.7975;wild=0.7985
+G16_ORACLE_cat_b6_final=cd1=0.9454;cd2=0.9218;dfdcp=0.9167;ffiw=0.9998;wild=0.8737
+G16_FFPP_AUC_cat_mp369_final=LR1e-3=0.9906;LR1.0=0.9899
+G16_CD_C1e-3_cat_mp369_final=cd1=0.8442;cd2=0.8486;dfdcp=0.8230;ffiw=0.7608;wild=0.8096
+G16_CD_C1.0_cat_mp369_final=cd1=0.8175;cd2=0.8134;dfdcp=0.8221;ffiw=0.7700;wild=0.7732
+G16_ORACLE_cat_mp369_final=cd1=0.9708;cd2=0.9453;dfdcp=0.9149;ffiw=1.0000;wild=0.8901
+G16_ORACLE_G14_V_REF=cd1=0.9550;cd2=0.8956;dfdcp=0.9223;wild=0.8717 (cite-only, best-of-4-methods)
+G16_VALID_DOMAINS=cd1,cd2,dfdcp,wild (ffiw leak excluded)
+G16_LAYER_TRANSFER=PARTIAL
+G16_LAYER_ORACLE=PARTIAL
+G16_LAYER_TRANSFER_BEST_WIN=1/4 src=cat_cls369
+G16_LAYER_ORACLE_BEST_WIN=1/4 src=cat_mp369_final
+G16_BEST_SOURCE_CD=cat_b6_final mean4dom=0.8429 (cls_final=0.8318)
+G16_BEST_SOURCE_ORACLE=cat_mp369_final mean4dom=0.9303 (cls_final=0.9111)
+G16_FORWARDS=4510
+G16_BATCH_CALLS=283
+G16_PEAK_MIB=4070
+G16_PEAK_TORCH_MIB=2199
+G16_WALL_S=104.2
+G16_READ_FAIL=0
+
+----------------------------------------------------------------------------------------------------
+A. LOAD / SANITY / HOOK SEMANTICS
+----------------------------------------------------------------------------------------------------
+model   : ViT_M2F2Det_Bridge (checkpoints/stage_1/bridge_v2_phase1.pth, strict=False) missing=0 unexpected=0
+device  : NVIDIA GeForce GTX 1080 Ti  mode=gpu  CUDA_VISIBLE_DEVICES=2
+pipeline: cv2.imread -> BGR2RGB -> cv2.resize(336) -> albumentations Normalize(CLIP) -> ToTensorV2 ->
+          model._preprocess_for_vit (un-norm, F.interpolate 224, /0.5-1) -> vit.forward_features
+repro   : cosine(V_fresh, probe_feats.npz['V']) over 10 probe-test imgs: min=1.000000 mean=1.000000   gate=0.999 -> PASS
+hook semantics:
+  - registered in vit_m2f2_detector_bridge.py __init__: vit.blocks[3].register_forward_hook(_make_hook('b_1')),
+    blocks[6] -> 'b_2', blocks[9] -> 'b_3'.  The hook stores the BLOCK OUTPUT (return value) into
+    self.vit_block_outputs[key].
+  - shape (B,197,768): position 0 = CLS, positions 1..196 = patch tokens. dtype float32.
+  - semantics: this ViT is a PRE-NORM transformer. Each Block.forward does
+        y,attn = attn(norm1(x));  x = x + ls1(y);  x = x + ls2(mlp(norm2(x)));  return x
+    so the hook output is the RESIDUAL STREAM after block k (post-residual-add). The block's two
+    LayerNorms normalize the INPUTS of attention/MLP, not the block output. The final V is
+    vit.norm(blocks[11](...))[:,0] -- i.e. V additionally passes the FINAL LayerNorm, which the
+    intermediate hooks do NOT.  => hook output = 'post-LayerNorm residual stream at depth k' =
+    'pre-final-norm' relative to V.  The bridge consumes hook[:,1:,:] (CLS dropped) and projects it
+    via linear_vit_1/2/3 (768->64).
+  - FEATURE KEYS extracted per image (768-d each):
+      cls_final = vit_out[:,0,:] (= probe V); cls_b3/b6/b9 = hook[:,0,:];
+      mp_b3/b6/b9 = mean over the 196 patch tokens of hook[:,1:,:].
+  - measured hook shapes: {'b_1': (10, 197, 768), 'b_2': (10, 197, 768), 'b_3': (10, 197, 768)}
+
+----------------------------------------------------------------------------------------------------
+B. EXTRACTION
+----------------------------------------------------------------------------------------------------
+  samples : probe train 2200 + probe test 800 + cd1=300 + cd2=300 + dfdcp=300 + ffiw=300 + wild=300 = 4500
+  forwards: 4510 images in 283 batch calls (batch=16, fp32, no_grad)
+  read_fail=0   wall_extraction=50.9s
+  saved  : layer_feats.npz (keys: cls_final, cls_b3, cls_b6, cls_b9, mp_b3, mp_b6, mp_b9 + y/paths/vids/domain/split)
+
+----------------------------------------------------------------------------------------------------
+C1. FF++ IN-DOMAIN AUC  (probe train 2200 -> test 800, video-disjoint; positive=fake)
+----------------------------------------------------------------------------------------------------
+  source              dim    LR(C=1e-3)     LR(C=1.0)
+  cls_final           768        0.9852        0.9881
+  cls_b3              768        0.8325        0.8687
+  cls_b6              768        0.9640        0.9578
+  cls_b9              768        0.9895        0.9872
+  mp_b3               768        0.8831        0.8839
+  mp_b6               768        0.9774        0.9782
+  mp_b9               768        0.9884        0.9878
+  cat_cls369         2304        0.9918        0.9896
+  cat_b6_final       1536        0.9881        0.9914
+  cat_mp369_final    3072        0.9906        0.9899
+
+----------------------------------------------------------------------------------------------------
+C2. CROSS-DOMAIN AUC  (head = StandardScaler + LR fit on FF++ train 2200; eval per target domain)
+    positive=fake.  Reference (cls_final, C=1e-3) must reproduce the G13 anchors within 1e-3.
+----------------------------------------------------------------------------------------------------
+  C=1e-3 :
+  source                   cd1       cd2     dfdcp      ffiw      wild  mean4dom
+  cls_final             0.8286    0.8633    0.8261    0.8244    0.8090    0.8318
+  cls_b3                0.5915    0.6152    0.7190    0.5905    0.5633    0.6223
+  cls_b6                0.8149    0.7133    0.7332    0.6308    0.7564    0.7545
+  cls_b9                0.8361    0.8572    0.8300    0.8053    0.8112    0.8337
+  mp_b3                 0.6855    0.6031    0.6880    0.6168    0.6618    0.6596
+  mp_b6                 0.7672    0.7520    0.7254    0.6698    0.7665    0.7528
+  mp_b9                 0.8167    0.8572    0.8272    0.8065    0.8058    0.8267
+  cat_cls369            0.8599    0.8328    0.8475    0.7879    0.8169    0.8393
+  cat_b6_final          0.8549    0.8554    0.8415    0.8053    0.8200    0.8429
+  cat_mp369_final       0.8442    0.8486    0.8230    0.7608    0.8096    0.8313
+  C=1.0  :
+  cls_final             0.7698    0.8397    0.7864    0.7747    0.7870
+  cls_b3                0.7272    0.6244    0.7622    0.6124    0.5845
+  cls_b6                0.7512    0.6880    0.7058    0.6197    0.7900
+  cls_b9                0.8080    0.8232    0.7871    0.7560    0.8142
+  mp_b3                 0.7799    0.6741    0.7402    0.6119    0.6926
+  mp_b6                 0.7371    0.7301    0.7347    0.6265    0.7440
+  mp_b9                 0.8161    0.8432    0.7780    0.7461    0.7987
+  cat_cls369            0.8296    0.7811    0.8057    0.8215    0.7765
+  cat_b6_final          0.8088    0.8068    0.7805    0.7975    0.7985
+  cat_mp369_final       0.8175    0.8134    0.8221    0.7700    0.7732
+
+  delta vs cls_final (C=1e-3, valid domains cd1/cd2/dfdcp/wild):
+  cls_b3               -0.2371   -0.2481   -0.1071   -0.2457
+  cls_b6               -0.0137   -0.1500   -0.0929   -0.0526
+  cls_b9               +0.0075   -0.0061   +0.0040   +0.0022
+  mp_b3                -0.1431   -0.2603   -0.1380   -0.1472
+  mp_b6                -0.0614   -0.1113   -0.1007   -0.0425
+  mp_b9                -0.0119   -0.0062   +0.0012   -0.0032
+  cat_cls369           +0.0312   -0.0305   +0.0214   +0.0079
+  cat_b6_final         +0.0263   -0.0080   +0.0154   +0.0110
+  cat_mp369_final      +0.0156   -0.0148   -0.0031   +0.0006
+
+----------------------------------------------------------------------------------------------------
+C3. TARGET-DOMAIN IN-DOMAIN ORACLE  (per-domain 300 samples, video-grouped 5-fold CV; ffiw leak)
+    oracle = max(LR(C=1e-3) mean, LR(C=1.0) mean); kNN(k=5) reported as control.  mean over folds.
+----------------------------------------------------------------------------------------------------
+  cls_final           LR1e-3   LR1.0    kNN5   | oracle  leak/mode
+    cd1      0.9082  0.9550  0.8465 | 0.9550  False SGKF(vid)
+    cd2      0.8860  0.8953  0.8116 | 0.8953  False SGKF(vid)
+    dfdcp    0.8774  0.9223  0.7964 | 0.9223  False SGKF(vid)
+    ffiw     0.8980  0.9991  0.9744 | 0.9991  True  SKF(no-group)
+    wild     0.8349  0.8717  0.7748 | 0.8717  False SGKF(vid)
+
+  cls_b3              LR1e-3   LR1.0    kNN5   | oracle  leak/mode
+    cd1      0.9029  0.9442  0.7857 | 0.9442  False SGKF(vid)
+    cd2      0.7228  0.7479  0.5949 | 0.7479  False SGKF(vid)
+    dfdcp    0.6760  0.6694  0.6554 | 0.6760  False SGKF(vid)
+    ffiw     0.9096  0.9920  0.9660 | 0.9920  True  SKF(no-group)
+    wild     0.7099  0.7530  0.6771 | 0.7530  False SGKF(vid)
+
+  cls_b6              LR1e-3   LR1.0    kNN5   | oracle  leak/mode
+    cd1      0.9328  0.9507  0.8358 | 0.9507  False SGKF(vid)
+    cd2      0.8204  0.8751  0.6788 | 0.8751  False SGKF(vid)
+    dfdcp    0.7473  0.7586  0.6236 | 0.7586  False SGKF(vid)
+    ffiw     0.9489  0.9904  0.9714 | 0.9904  True  SKF(no-group)
+    wild     0.8067  0.8368  0.7783 | 0.8368  False SGKF(vid)
+
+  cls_b9              LR1e-3   LR1.0    kNN5   | oracle  leak/mode
+    cd1      0.9019  0.9100  0.8029 | 0.9100  False SGKF(vid)
+    cd2      0.8822  0.8999  0.8188 | 0.8999  False SGKF(vid)
+    dfdcp    0.9072  0.8906  0.7872 | 0.9072  False SGKF(vid)
+    ffiw     0.9631  1.0000  0.9848 | 1.0000  True  SKF(no-group)
+    wild     0.8392  0.8520  0.8191 | 0.8520  False SGKF(vid)
+
+  mp_b3               LR1e-3   LR1.0    kNN5   | oracle  leak/mode
+    cd1      0.9483  0.9670  0.8284 | 0.9670  False SGKF(vid)
+    cd2      0.7898  0.8265  0.6618 | 0.8265  False SGKF(vid)
+    dfdcp    0.7181  0.7485  0.5913 | 0.7485  False SGKF(vid)
+    ffiw     0.9642  0.9927  0.9780 | 0.9927  True  SKF(no-group)
+    wild     0.7653  0.8031  0.7119 | 0.8031  False SGKF(vid)
+
+  mp_b6               LR1e-3   LR1.0    kNN5   | oracle  leak/mode
+    cd1      0.9476  0.9577  0.7861 | 0.9577  False SGKF(vid)
+    cd2      0.8649  0.9061  0.6960 | 0.9061  False SGKF(vid)
+    dfdcp    0.7980  0.8117  0.5572 | 0.8117  False SGKF(vid)
+    ffiw     0.9838  0.9996  0.9884 | 0.9996  True  SKF(no-group)
+    wild     0.8278  0.8670  0.8009 | 0.8670  False SGKF(vid)
+
+  mp_b9               LR1e-3   LR1.0    kNN5   | oracle  leak/mode
+    cd1      0.9160  0.9523  0.8211 | 0.9523  False SGKF(vid)
+    cd2      0.8986  0.9191  0.8360 | 0.9191  False SGKF(vid)
+    dfdcp    0.9005  0.9303  0.7678 | 0.9303  False SGKF(vid)
+    ffiw     0.9411  0.9967  0.9886 | 0.9967  True  SKF(no-group)
+    wild     0.8508  0.8633  0.7939 | 0.8633  False SGKF(vid)
+
+  cat_cls369          LR1e-3   LR1.0    kNN5   | oracle  leak/mode
+    cd1      0.9452  0.9445  0.8301 | 0.9452  False SGKF(vid)
+    cd2      0.9072  0.9244  0.7990 | 0.9244  False SGKF(vid)
+    dfdcp    0.9042  0.8683  0.7166 | 0.9042  False SGKF(vid)
+    ffiw     0.9918  1.0000  0.9809 | 1.0000  True  SKF(no-group)
+    wild     0.8491  0.8581  0.8155 | 0.8581  False SGKF(vid)
+
+  cat_b6_final        LR1e-3   LR1.0    kNN5   | oracle  leak/mode
+    cd1      0.9324  0.9454  0.8756 | 0.9454  False SGKF(vid)
+    cd2      0.8994  0.9218  0.8295 | 0.9218  False SGKF(vid)
+    dfdcp    0.9167  0.8919  0.8088 | 0.9167  False SGKF(vid)
+    ffiw     0.9616  0.9998  0.9753 | 0.9998  True  SKF(no-group)
+    wild     0.8545  0.8737  0.8108 | 0.8737  False SGKF(vid)
+
+  cat_mp369_final     LR1e-3   LR1.0    kNN5   | oracle  leak/mode
+    cd1      0.9490  0.9708  0.8611 | 0.9708  False SGKF(vid)
+    cd2      0.9213  0.9453  0.8443 | 0.9453  False SGKF(vid)
+    dfdcp    0.9149  0.9023  0.7599 | 0.9149  False SGKF(vid)
+    ffiw     0.9862  1.0000  0.9853 | 1.0000  True  SKF(no-group)
+    wild     0.8671  0.8901  0.7957 | 0.8901  False SGKF(vid)
+
+  oracle delta vs cls_final (valid domains cd1/cd2/dfdcp/wild):
+  cls_b3               -0.0108   -0.1474   -0.2463   -0.1186
+  cls_b6               -0.0044   -0.0202   -0.1637   -0.0349
+  cls_b9               -0.0451   +0.0046   -0.0151   -0.0197
+  mp_b3                +0.0119   -0.0688   -0.1738   -0.0685
+  mp_b6                +0.0027   +0.0107   -0.1106   -0.0047
+  mp_b9                -0.0027   +0.0237   +0.0080   -0.0084
+  cat_cls369           -0.0099   +0.0291   -0.0181   -0.0135
+  cat_b6_final         -0.0097   +0.0264   -0.0057   +0.0020
+  cat_mp369_final      +0.0158   +0.0500   -0.0074   +0.0184
+
+----------------------------------------------------------------------------------------------------
+MECHANICAL VERDICTS (pre-registered; no directional inference beyond the rule)
+----------------------------------------------------------------------------------------------------
+  [G16_LAYER_TRANSFER]  per-source count over 4 valid domains of cross-domain AUC (C=1e-3)
+      >= cls_final_reference + 0.03:
+      cls_b3             n_ge0.03=0/4
+      cls_b6             n_ge0.03=0/4
+      cls_b9             n_ge0.03=0/4
+      mp_b3              n_ge0.03=0/4
+      mp_b6              n_ge0.03=0/4
+      mp_b9              n_ge0.03=0/4
+      cat_cls369         n_ge0.03=1/4
+      cat_b6_final       n_ge0.03=0/4
+      cat_mp369_final    n_ge0.03=0/4
+    -> G16_LAYER_TRANSFER = PARTIAL (best_win=1/4 src=cat_cls369; all<=+0.01 -> NOT_FOUND)
+
+  [G16_LAYER_ORACLE]  per-source count over 4 valid domains of oracle >= cls_final_oracle + 0.03:
+      cls_b3             n_ge0.03=0/4
+      cls_b6             n_ge0.03=0/4
+      cls_b9             n_ge0.03=0/4
+      mp_b3              n_ge0.03=0/4
+      mp_b6              n_ge0.03=0/4
+      mp_b9              n_ge0.03=0/4
+      cat_cls369         n_ge0.03=0/4
+      cat_b6_final       n_ge0.03=0/4
+      cat_mp369_final    n_ge0.03=1/4
+    -> G16_LAYER_ORACLE = PARTIAL (best_win=1/4 src=cat_mp369_final)
+
+  [G16_BEST_SOURCE]  mean over 4 valid domains:
+      cross-domain (C=1e-3) : cat_b6_final  mean=0.8429  (cls_final=0.8318)
+      oracle (max LR)       : cat_mp369_final  mean=0.9303  (cls_final=0.9111)
+
+----------------------------------------------------------------------------------------------------
+AUDIT
+----------------------------------------------------------------------------------------------------
+  gpu query : [(0, 8838, 11264, 1), (1, 4155, 11264, 18), (2, 54, 11264, 0)]
+  gpu pick  : index=2 mode=gpu device=NVIDIA GeForce GTX 1080 Ti CUDA_VISIBLE_DEVICES=2
+  forwards  : 4510 images in 283 batch calls (batch=16, fp32, no_grad, num_workers=0, single process)
+  read_fail : 0
+  peak mem  : nvidia-smi 4070 MiB / torch max_alloc 2199 MiB
+  wall      : total 104.2s (extraction 50.9s)
+  seed      : 20260910 (extraction); CV/logistic seed 0
+  threads   : OMP/MKL/OPENBLAS/NUMEXPR/VECLIB/JOBLIB=1, torch.set_num_threads(1), cv2.setNumThreads(0)
+  LR        : lbfgs, max_iter=3000, random_state=0; StandardScaler fit on train side only
+
+CAVEATS (honest)
+  1. HOOK SEMANTICS UNCERTAINTY: the intermediate-layer features are the block-output residual stream
+     (post-LayerNorm in the pre-norm sense, but NOT passed through the final vit.norm that V gets).
+     We take them AS-IS from the registered hooks (the exact tensors the bridge consumes, minus its
+     linear_vit_* projection). If a downstream comparison treats 'norm-before-vs-after' as material,
+     the interpretation could shift; the block output is the un-normalized residual sum, not a unit-
+     variance embedding.
+  2. THE INTERMEDIATE FEATURES ARE NOT PASSED THROUGH the bridge's linear_vit_* (768->64) projections
+     that the model actually fuses. This experiment therefore measures INFORMATION AVAILABILITY at each
+     layer, NOT the model's actual learned fusion behaviour.
+  3. n=300 per domain; 5-fold CV fold-to-fold variance is large (oracle stds reported in C3 tables via
+     the per-method columns only at mean level -- see g14 for the same protocol). Single-domain AUC
+     differences < ~0.05 should not be over-read.
+  4. ffiw has exactly 1 vid -> StratifiedGroupKFold degenerates to StratifiedKFold (leak=True); its oracle
+     is upward-biased and excluded from all aggregates (VALID_DOMAINS = cd1/cd2/dfdcp/wild).
+  5. Concatenation standardization: StandardScaler is per-feature (mean/std per column), so a single fit on
+     the concatenated vector is mathematically IDENTICAL to standardizing each 768-d block separately.
+  6. Cross-domain AUC trains a LINEAR head on the source (FF++) domain only -> this is a LOWER BOUND on
+     transferability ('linear reachability'); a non-linear or fine-tuned head could do better, and does
+     not imply the fused detector would exploit the same signal.
+  7. CORRELATION != CAUSATION: a higher cross-domain/oracle AUC for an intermediate layer shows that layer
+     carries more linearly-available real/fake signal; it does not prove the detector uses it, nor that
+     unfreezing/fine-tuning would convert it into a downstream gain.
+  8. cls_final cross-domain anchors reproduced from fresh extraction (flash_attn MHA, as run_g10) match the
+     G13 anchors (which were computed on feats_multi.npz extracted with the pure-PyTorch MHA shim) to
+     <=1e-3, so no backend mismatch affects the verdicts at the reported precision.
+  9. mp_* mean-pools the 196 patch tokens (CLS removed), discarding spatial layout; it is a coarse spatial
+     summary, not the full patch set the bridge uses.
+
+====================================================================================================
+END OF REPORT   (wall 104.2s)
+====================================================================================================

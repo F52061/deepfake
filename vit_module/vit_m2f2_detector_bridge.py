@@ -37,7 +37,14 @@ from llava.model.deepfake.M2F2Det.text_encoder import CLIPTextEncoder
 from llava.model.deepfake.M2F2Det.vision_encoder import CLIPVisionEncoder
 
 # flash_attn MHA — used by TransformerEncoderBlock
-from flash_attn.modules.mha import MHA
+# 本环境无 cu118 Windows 轮子时回退到纯 PyTorch shim (非 flash 路径, 数学一致)
+try:
+    from flash_attn.modules.mha import MHA
+except ImportError:
+    try:
+        from .flash_attn_shim.mha import MHA
+    except ImportError:
+        from vit_module.flash_attn_shim.mha import MHA
 
 # ViT backbone (shared with cosine-similarity ViT_M2F2Det)
 try:

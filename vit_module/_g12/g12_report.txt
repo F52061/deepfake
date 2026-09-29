@@ -1,0 +1,384 @@
+==============================================================================================================================
+G12 REPORT - H6 分支级 'FF++ 专用性' 分解
+分支 B in {V, C, F, V_proj, C_proj};  目标域 d in {cd1, cd2, dfdcp, ffiw, wild}
+纯 CPU 单线程 (OMP/MKL/OPENBLAS/NUMEXPR/VECLIB/JOBLIB=1, torch=1, cv2=0, 单进程, CUDA_VISIBLE_DEVICES='')
+零模型前向 (不实例化模型/不读图像); 只读 npz + checkpoint 的 Linear/LayerNorm 权重 (map_location='cpu')
+y: 1=real, 0=fake;  线性探针一律 StandardScaler(fit train)+LR(C=1e-3, lbfgs, max_iter=3000)
+==============================================================================================================================
+#### MACHINE_BLOCK #############################################################################################################
+G12_TASK=H6_branch_level_FFPP_specificity
+G12_DATA=probe_feats.npz(V/C/V_proj/C_proj n=3000:train2200/test800); feats_multi.npz(F/V/C n=2300:ffpp800+5x300)
+G12_BRANCHES=V=768; C=1024; F=1536(V_proj|C_proj join, no bridge128); V_proj=768; C_proj=768
+G12_ANCHOR_e0AUC_cd1=0.8576
+G12_ANCHOR_e0AUC_cd1_EXP=0.8576
+G12_ANCHOR_srcLR_cd1=0.8286
+G12_ANCHOR_srcLR_cd1_EXP=0.8286
+G12_ANCHOR_PC0_varfrac_srcV=0.6229
+G12_ANCHOR_MAXDEV=0.000022
+G12_ANCHOR_PASS=1
+G12_PROJCHECK_Vproj_cos_min=1.000000
+G12_PROJCHECK_Vproj_cos_mean=1.000000
+G12_PROJCHECK_Cproj_cos_min=1.000000
+G12_PROJCHECK_Cproj_cos_mean=1.000000
+G12_PROJCHECK_LN_eps=1e-05
+G12_PROJCHECK_PASS=1
+G12_F_LAYOUT=seg0[0:768]=clip_vision_alpha*C_proj(cos_min=1.000000);seg1[768:896]=bridge_adapter_embed(128-d,离线不可得);seg2[896:1664]=V_proj(cos_min=1.000000)
+G12_F_LAYOUT_bestwin_C=0
+G12_F_LAYOUT_bestwin_V=896
+G12_F_LAYOUT_cos_seg0_vs_alphaCproj=1.000000
+G12_F_LAYOUT_cos_seg2_vs_Vproj=1.000000
+G12_F_LAYOUT_crosscheck_seg0_vs_Vproj=0.022112
+G12_F_LAYOUT_crosscheck_seg2_vs_alphaCproj=0.022112
+G12_F_LAYOUT_PASS=1
+G12_F_BRANCH_USED=[F[:,0:768]|F[:,896:1664]] concat -> 1536-d (bridge 128-d offline-unavailable)
+G12_F_RECON_CHECK_cos_min=1.000000
+G12_ALPHA_v=0.306288
+G12_ALPHA_t=1.779604
+G12_DECISION_GATES=H6VIT:dratio>=+1.0 or dauc>=+0.05 in >=4/5; H6SHARED:both below in >=4/5; FW:rF>=0.8rV or aF>=0.8aV->INHERITS; rF<=min(1.2rC,0.8rV)->MITIGATES; COND:mean|ar-af|<0.05&both>=0.90->REGION_LEVEL; ar<0.75&af>=ar+0.10->FAKE_SUBCLASS_ONLY
+G12_VALID_DOMAINS_ratio=cd1,cd2,dfdcp,ffiw,wild
+G12_VALID_DOMAINS_auc=cd1,cd2,dfdcp,wild (ffiw leak=True excluded)
+G12_GAP_CLASSGAP_BY_BRANCH=V=40.2122;C=6.5508;F=66.7601;V_proj=49.4870;C_proj=13.6498
+G12_GAP_SCALE_s_BY_BRANCH=V=1.510;C=0.270;F=0.339;V_proj=0.456;C_proj=0.489
+G12_RATIO_V=cd1=0.2113;cd2=0.1861;dfdcp=0.1609;ffiw=0.1995;wild=0.2336
+G12_RATIO_C=cd1=2.4252;cd2=2.5436;dfdcp=3.2183;ffiw=2.8577;wild=2.5350
+G12_RATIO_F=cd1=0.1777;cd2=0.1739;dfdcp=0.1249;ffiw=0.2256;wild=0.1960
+G12_RATIO_V_proj=cd1=0.1455;cd2=0.1386;dfdcp=0.0894;ffiw=0.2081;wild=0.1649
+G12_RATIO_C_proj=cd1=1.1395;cd2=1.1715;dfdcp=0.9701;ffiw=0.9859;wild=1.1850
+G12_DOMGAP_V=cd1=8.4953;cd2=7.4846;dfdcp=6.4720;ffiw=8.0233;wild=9.3930
+G12_DOMGAP_C=cd1=15.8871;cd2=16.6624;dfdcp=21.0823;ffiw=18.7200;wild=16.6064
+G12_DOMGAP_F=cd1=11.8653;cd2=11.6095;dfdcp=8.3383;ffiw=15.0586;wild=13.0858
+G12_DOMGAP_V_proj=cd1=7.2020;cd2=6.8599;dfdcp=4.4252;ffiw=10.2991;wild=8.1617
+G12_DOMGAP_C_proj=cd1=15.5546;cd2=15.9902;dfdcp=13.2421;ffiw=13.4569;wild=16.1748
+G12_RATIO_MEAN_BY_BRANCH=V=0.1983;C=2.7160;F=0.1796;V_proj=0.1493;C_proj=1.0904
+G12_AUC_V=real:cd1=0.7951;cd2=0.8464;dfdcp=0.8895;ffiw=0.9422;wild=0.9111|fake:cd1=0.7925;cd2=0.8454;dfdcp=0.9400;ffiw=0.8859;wild=0.8741|all:cd1=0.9028;cd2=0.8999;dfdcp=0.9972;ffiw=0.9920;wild=0.9265
+G12_AUC_C=real:cd1=0.9965;cd2=1.0000;dfdcp=0.9991;ffiw=1.0000;wild=1.0000|fake:cd1=0.9894;cd2=1.0000;dfdcp=1.0000;ffiw=1.0000;wild=0.9995|all:cd1=1.0000;cd2=0.9952;dfdcp=1.0000;ffiw=1.0000;wild=1.0000
+G12_AUC_F=real:cd1=0.8859;cd2=0.9472;dfdcp=0.9959;ffiw=0.9852;wild=0.9807|fake:cd1=0.9431;cd2=0.9536;dfdcp=0.9948;ffiw=0.9580;wild=0.9343|all:cd1=0.9776;cd2=0.9769;dfdcp=0.9982;ffiw=0.9990;wild=0.9932
+G12_AUC_V_proj=real:cd1=0.8047;cd2=0.8662;dfdcp=0.7777;ffiw=0.7496;wild=0.8904|fake:cd1=0.7445;cd2=0.7398;dfdcp=0.8582;ffiw=0.8672;wild=0.7165|all:cd1=0.7980;cd2=0.8380;dfdcp=0.8994;ffiw=0.8552;wild=0.7972
+G12_AUC_C_proj=real:cd1=0.9631;cd2=0.9798;dfdcp=0.9982;ffiw=0.9867;wild=0.9975|fake:cd1=0.9582;cd2=0.9832;dfdcp=0.9839;ffiw=0.9862;wild=0.9432|all:cd1=0.9739;cd2=0.9702;dfdcp=0.9948;ffiw=0.9978;wild=0.9927
+G12_AUC_LEAK_DOMAINS=ffiw
+G12_AUC_MEAN_REAL_BY_BRANCH_5dom=V=0.8769;C=0.9991;F=0.9590;V_proj=0.8177;C_proj=0.9850
+G12_AUC_MEAN_REAL_BY_BRANCH_VALID=V=0.8606;C=0.9989;F=0.9524;V_proj=0.8347;C_proj=0.9846
+G12_AUC_MEAN_FAKE_BY_BRANCH_VALID=V=0.8630;C=0.9972;F=0.9564;V_proj=0.7648;C_proj=0.9671
+G12_AUC_MEAN_ALL_BY_BRANCH_VALID=V=0.9316;C=0.9988;F=0.9865;V_proj=0.8332;C_proj=0.9829
+G12_RESID_V=src:K1=0.3771,K5=0.0682,K50=0.0122|fftest:K1=0.3778,K5=0.0699,K50=0.0174|delta:cd1=K1=+0.0204,K5=+0.0583,K50=+0.0257;cd2=K1=+0.0455,K5=+0.0490,K50=+0.0235;dfdcp=K1=+0.0153,K5=+0.1050,K50=+0.0428;ffiw=K1=-0.0598,K5=+0.0721,K50=+0.0365;wild=K1=+0.0066,K5=+0.0779,K50=+0.0414
+G12_RESID_C=src:K1=0.8831,K5=0.7121,K50=0.2580|fftest:K1=0.8842,K5=0.7385,K50=0.4505|delta:cd1=K1=+0.0959,K5=+0.1690,K50=+0.2228;cd2=K1=+0.0982,K5=+0.1739,K50=+0.2385;dfdcp=K1=+0.0227,K5=+0.0564,K50=+0.0648;ffiw=K1=+0.0990,K5=+0.1212,K50=+0.1329;wild=K1=+0.0974,K5=+0.1552,K50=+0.2272
+G12_RESID_F=src:K1=0.1470,K5=0.0405,K50=0.0022|fftest:K1=0.1497,K5=0.0428,K50=0.0040|delta:cd1=K1=+0.1883,K5=+0.0865,K50=+0.0093;cd2=K1=+0.1883,K5=+0.0963,K50=+0.0127;dfdcp=K1=+0.0846,K5=+0.0459,K50=+0.0076;ffiw=K1=+0.0419,K5=+0.0414,K50=+0.0077;wild=K1=+0.1445,K5=+0.0612,K50=+0.0105
+G12_RESID_V_proj=src:K1=0.0613,K5=0.0014,K50=0.0001|fftest:K1=0.0616,K5=0.0015,K50=0.0001|delta:cd1=K1=+0.0589,K5=+0.0002,K50=+0.0001;cd2=K1=+0.0611,K5=+0.0005,K50=+0.0001;dfdcp=K1=+0.0257,K5=+0.0005,K50=+0.0002;ffiw=K1=+0.0021,K5=+0.0000,K50=+0.0002;wild=K1=+0.0337,K5=+0.0006,K50=+0.0002
+G12_RESID_C_proj=src:K1=0.6335,K5=0.2343,K50=0.0180|fftest:K1=0.6453,K5=0.2524,K50=0.0343|delta:cd1=K1=-0.0180,K5=+0.0488,K50=+0.0129;cd2=K1=+0.0562,K5=+0.0919,K50=+0.0267;dfdcp=K1=+0.0828,K5=+0.1032,K50=+0.0275;ffiw=K1=+0.1257,K5=+0.1063,K50=+0.0377;wild=K1=-0.0179,K5=+0.0194,K50=+0.0259
+G12_AXIS_V=src_zdim=0.6229 fftest_abs_cos=0.9993 fftest_zdim=0.6232 | dom_abs_cos:cd1=0.9870;cd2=0.9890;dfdcp=0.9790;ffiw=0.9796;wild=0.9793|dom_zdim_srcaxis:cd1=0.6357;cd2=0.5986;dfdcp=0.6581;ffiw=0.6852;wild=0.6122|dom_zdim_domaxis:cd1=0.6517;cd2=0.6111;dfdcp=0.6854;ffiw=0.7115;wild=0.6358
+G12_AXIS_C=src_zdim=0.1169 fftest_abs_cos=0.9124 fftest_zdim=0.1171 | dom_abs_cos:cd1=0.0930;cd2=0.3327;dfdcp=0.1431;ffiw=0.1470;wild=0.1225|dom_zdim_srcaxis:cd1=0.0237;cd2=0.0201;dfdcp=0.0154;ffiw=0.0156;wild=0.0138|dom_zdim_domaxis:cd1=0.0910;cd2=0.0621;dfdcp=0.1382;ffiw=0.2385;wild=0.0810
+G12_AXIS_F=src_zdim=0.8530 fftest_abs_cos=0.9998 fftest_zdim=0.8524 | dom_abs_cos:cd1=0.9967;cd2=0.9957;dfdcp=0.9920;ffiw=0.9893;wild=0.9978|dom_zdim_srcaxis:cd1=0.7369;cd2=0.7427;dfdcp=0.8308;ffiw=0.8138;wild=0.7671|dom_zdim_domaxis:cd1=0.7417;cd2=0.7488;dfdcp=0.8440;ffiw=0.8312;wild=0.7704
+G12_AXIS_V_proj=src_zdim=0.9387 fftest_abs_cos=1.0000 fftest_zdim=0.9385 | dom_abs_cos:cd1=0.9980;cd2=0.9969;dfdcp=0.9936;ffiw=0.9951;wild=0.9990|dom_zdim_srcaxis:cd1=0.9558;cd2=0.9495;dfdcp=0.9579;ffiw=0.9457;wild=0.9511|dom_zdim_domaxis:cd1=0.9596;cd2=0.9553;dfdcp=0.9700;ffiw=0.9550;wild=0.9530
+G12_AXIS_C_proj=src_zdim=0.3665 fftest_abs_cos=0.9933 fftest_zdim=0.3499 | dom_abs_cos:cd1=0.9835;cd2=0.9587;dfdcp=0.8888;ffiw=0.3337;wild=0.9525|dom_zdim_srcaxis:cd1=0.4817;cd2=0.3884;dfdcp=0.3483;ffiw=0.1973;wild=0.4055|dom_zdim_domaxis:cd1=0.4965;cd2=0.4159;dfdcp=0.4160;ffiw=0.3754;wild=0.4401
+G12_DELTA_RATIO_V_MINUS_C=cd1=-2.2140;cd2=-2.3574;dfdcp=-3.0573;ffiw=-2.6582;wild=-2.3014
+G12_DELTA_AUCREAL_V_MINUS_C=cd1=-0.2014;cd2=-0.1536;dfdcp=-0.1096;ffiw=-0.0578;wild=-0.0889
+G12_DELTA_RATIO_MEAN_V_MINUS_C=-2.5177
+G12_DELTA_AUCREAL_MEAN_V_MINUS_C=-0.1384
+G12_H6_COUNT_dratio_ge_1_0=0/5
+G12_H6_COUNT_dauc_ge_0_05=0/4
+G12_H6_COUNT_dauc_ge_0_05_all5=0/5
+G12_H6_VIT_ONLY=NOT-SUPPORT
+G12_H6_SHARED=SUPPORT
+G12_FRAMEWORK=INHERITS
+G12_FRAMEWORK_perdomain_INHERITS=5/5 (cd1,cd2,dfdcp,ffiw,wild)
+G12_FRAMEWORK_perdomain_MITIGATES=1/5 (dfdcp)
+G12_FRAMEWORK_perdomain_MITIGATES_auc=0/5 ()
+G12_CONDITION=CONDITIONAL_MIXED (branch=V, valid-domains mean)
+G12_CONDITION_C=REGION_LEVEL
+G12_CONDITION_F=REGION_LEVEL
+G12_CONDITION_mean_absdiff_ar_af=V=0.0228;C=0.0021;F=0.0278
+G12_CONDITION_auc_real_fake=V=0.8606/0.8630;C=0.9989/0.9972;F=0.9524/0.9564
+G12_VERDICT_SUMMARY=H6VIT=NOT-SUPPORT;H6SHARED=SUPPORT;FRAMEWORK=INHERITS;CONDITION=CONDITIONAL_MIXED
+G12_WALL_S=26.4
+G12_IMGS_READ=0
+G12_GPU=0
+G12_FORWARDS=0
+G12_THREADS=1
+G12_PROCESSES=1
+G12_NPZ_READ=2
+G12_CKPT_READ=1 (map_location=cpu; only deepfake_proj/vision_proj/clip_*_alpha)
+
+
+------------------------------------------------------------------------------------------------------------------------------
+A. 前置校验 (任一不过则该分支停用; 锚点偏差 >1e-3 即停)
+A0.1 锚点复算 (probe train 2200 拟合; 口径与 G11 一致: center-only raw-cov PCA, SVD/eigh 首轴)
+  源 train V PC0 varfrac        : 复算 0.6229 / 预期 0.6229
+  cd1 单轴 e0 z AUC             : 复算 0.8576 / 预期 0.8576   (|dev|=0.000000)
+  cd1 源训 LR 跨域 AUC          : 复算 0.8286 / 预期 0.8286   (|dev|=0.000022)
+  -> ANCHOR_PASS=1 (atol=1e-3)
+
+A0.2 V_proj / C_proj 离线复算 (float64; LayerNorm eps=1e-5, elementwise_affine=True)
+  V_proj_hat = LayerNorm(Linear(V))        vs npz V_proj : cos min=1.000000 mean=1.000000 (max|1-|cos||=0.00000000)
+  C_proj_hat = LayerNorm(Linear(C))[:,0,:] vs npz C_proj : cos min=1.000000 mean=1.000000 (max|1-|cos||=0.00000000)
+  门槛 cos >= 0.999 : V_proj PASS / C_proj PASS -> V_proj 与 C_proj 派生分支均采用
+  multi 侧无 V_proj/C_proj 字段 -> 用同组权重离线重建 (V_proj_m, C_proj_m)
+
+A0.3 F (1664-d) 布局逐段 cos 验证 (multi 全 2300 样本; 无前向重建)
+  F = cat[clip_vision_alpha*vision_proj(C)[:,0,:] (768), bridge_adapter_embed*clip_text_alpha (128), deepfake_proj(V) (768)]
+  候选 768 窗口 (步长 32) 逐位 cos 均值, 取 |cos| 最大者:
+    vs C_proj  top3: win@0 cos=1.000000  win@448 cos=0.069726  win@416 cos=0.064665
+    vs V_proj  top3: win@896 cos=1.000000  win@416 cos=-0.059084  win@384 cos=0.047067
+  实测布局: seg0[0:768]=clip_vision_alpha*C_proj(cos_min=1.000000);seg1[768:896]=bridge_adapter_embed(128-d,离线不可得);seg2[896:1664]=V_proj(cos_min=1.000000)
+  F[:,0:768]    vs alpha_v*C_proj (alpha_v=0.306288) : cos min=1.000000 mean=1.000000
+  F[:,896:1664] vs V_proj (无 alpha 缩放)      : cos min=1.000000 mean=1.000000
+  交叉核对 (非对角应低) F[:,0:768] vs V_proj = 0.022112 ; F[:,896:] vs alpha_v*C_proj = 0.022112
+  bridge 中间块 128-d (alpha_t=1.779604) 需模型前向, 离线不可得 -> 分支 F 只用 1536/1664 维 (92.3%)
+  F 分支重建一致性 (npz F 对应列 vs 离线重建) cos min=1.000000 -> F_LAYOUT_PASS=1
+
+------------------------------------------------------------------------------------------------------------------------------
+B. 域-类间隔比 (源侧 probe train 2200: mu_src/mu_real/mu_fake;
+   s_B = sqrt(mean_j Var_j(源全池, ddof=1)); class_gap_B=||mu_fake-mu_real||/s;
+   dom_gap_B(d)=||mu_d-mu_src||/s; ratio=dom_gap/class_gap)
+  注: ratio 的分子分母同除 s -> ratio 与 s 无关 (s 只给绝对尺度)
+
+  branch   dim      s     class_gap |       cd1       cd2     dfdcp      ffiw      wild   (ratio = dom_gap/class_gap)
+  --------------------------------------------------------------------------------------------------------------------
+  V         768   1.510  40.2122  |    0.2113    0.1861    0.1609    0.1995    0.2336
+  C        1024   0.270   6.5508  |    2.4252    2.5436    3.2183    2.8577    2.5350
+  F        1536   0.339  66.7601  |    0.1777    0.1739    0.1249    0.2256    0.1960
+  V_proj    768   0.456  49.4870  |    0.1455    0.1386    0.0894    0.2081    0.1649
+  C_proj    768   0.489  13.6498  |    1.1395    1.1715    0.9701    0.9859    1.1850
+  --------------------------------------------------------------------------------------------------------------------
+  ratio 跨域均值: V=0.1983  C=2.7160  F=0.1796  V_proj=0.1493  C_proj=1.0904
+
+  dom_gap 绝对值表 (单位 s):
+  branch         cd1       cd2     dfdcp      ffiw      wild   |  mean
+  V           8.4953    7.4846    6.4720    8.0233    9.3930   | 7.9736
+  C          15.8871   16.6624   21.0823   18.7200   16.6064   | 17.7916
+  F          11.8653   11.6095    8.3383   15.0586   13.0858   | 11.9915
+  V_proj      7.2020    6.8599    4.4252   10.2991    8.1617   | 7.3896
+  C_proj     15.5546   15.9902   13.2421   13.4569   16.1748   | 14.8837
+
+  Delta_ratio(d) = ratio_V - ratio_C :
+    cd1=-2.2140 cd2=-2.3574 dfdcp=-3.0573 ffiw=-2.6582 wild=-2.3014   |  跨域均值 -2.5177
+
+------------------------------------------------------------------------------------------------------------------------------
+C. 类条件域可分性 (二分类线性探针: StandardScaler(fit train)+LR(C=1e-3,lbfgs,max_iter=3000))
+  参照侧 = probe test 800 (FF++ test, 42 vids, 与源 train video-disjoint); 域侧 = 该域 300
+  两侧各自按 vid 70/30 划分 -> min 均衡 train/test 样本数; label 1=FF++参照, 0=目标域
+  AUC 高 = 该分支空间里'域身份'线性可分性强 (不等于模型真的用了它, 见 CAVEATS)
+  ffiw 仅 1 vid -> 退化随机划分 leak=True, 剔出聚合门 ('mean_valid' 列)
+
+  AUC_real (real-only 探针) :
+    branch        cd1       cd2     dfdcp      ffiw      wild |  mean5  mean_valid  (n_tr/n_te @cd1)
+    V          0.7951    0.8464    0.8895    0.9422    0.9111 |  0.8769   0.8606      204/96
+    C          0.9965    1.0000    0.9991    1.0000    1.0000 |  0.9991   0.9989      204/96
+    F          0.8859    0.9472    0.9959    0.9852    0.9807 |  0.9590   0.9524      204/96
+    V_proj     0.8047    0.8662    0.7777    0.7496    0.8904 |  0.8177   0.8347      204/96
+    C_proj     0.9631    0.9798    0.9982    0.9867    0.9975 |  0.9850   0.9846      204/96
+
+  AUC_fake (fake-only 探针) :
+    branch        cd1       cd2     dfdcp      ffiw      wild |  mean5  mean_valid  (n_tr/n_te @cd1)
+    V          0.7925    0.8454    0.9400    0.8859    0.8741 |  0.8676   0.8630      192/108
+    C          0.9894    1.0000    1.0000    1.0000    0.9995 |  0.9978   0.9972      192/108
+    F          0.9431    0.9536    0.9948    0.9580    0.9343 |  0.9568   0.9564      192/108
+    V_proj     0.7445    0.7398    0.8582    0.8672    0.7165 |  0.7852   0.7648      192/108
+    C_proj     0.9582    0.9832    0.9839    0.9862    0.9432 |  0.9709   0.9671      192/108
+
+  AUC_all (mixed real+fake 域判别探针, 对照) :
+    branch        cd1       cd2     dfdcp      ffiw      wild |  mean5  mean_valid  (n_tr/n_te @cd1)
+    V          0.9028    0.8999    0.9972    0.9920    0.9265 |  0.9437   0.9316      392/186
+    C          1.0000    0.9952    1.0000    1.0000    1.0000 |  0.9990   0.9988      392/186
+    F          0.9776    0.9769    0.9982    0.9990    0.9932 |  0.9890   0.9865      392/186
+    V_proj     0.7980    0.8380    0.8994    0.8552    0.7972 |  0.8376   0.8332      392/186
+    C_proj     0.9739    0.9702    0.9948    0.9978    0.9927 |  0.9859   0.9829      392/186
+
+  mixed 探针规模: 每侧 300 样本 (real 150 + fake 150)
+  leak 标记: cd1=0, cd2=0, dfdcp=0, ffiw=1, wild=0
+
+  Delta_AUCreal(d) = AUCreal_V - AUCreal_C :
+    cd1=-0.2014 cd2=-0.1536 dfdcp=-0.1096 ffiw=-0.0578 wild=-0.0889   |  跨域均值(valid) -0.1384
+
+  定位参照 (G11 V 分支单轴 e0 的 fake-detection AUC, positive=fake): cd1=0.8576 cd2=0.8604 dfdcp=0.8322 ffiw=0.8103 wild=0.8060
+  (该行与 AUC_real 含义不同: 前者判 real/fake, 后者判 FF++/目标域, 不可直接相减)
+
+------------------------------------------------------------------------------------------------------------------------------
+D. 子空间包含 (源 train 拟合 center-only PCA; SVD 前 K 右奇异向量; X-mu_src 的集合能量比)
+  residK = 1 - ||proj_{E[:K]}(X-mu_src)||^2 / ||X-mu_src||^2 ; Delta = 域 - FF++ test 参照
+  K=1 时 E[:1] 即源 PC0 轴 e0 (与 G11 同轴)
+
+  branch V (dim=768, raw ViT CLS):
+    row                K=1       K=5      K=50
+    src2200      0.3771    0.0682    0.0122
+    fftest800    0.3778    0.0699    0.0174
+    cd1           0.3983    0.1282    0.0431   Delta: +0.0204 +0.0583 +0.0257
+    cd2           0.4233    0.1189    0.0409   Delta: +0.0455 +0.0490 +0.0235
+    dfdcp         0.3932    0.1749    0.0602   Delta: +0.0153 +0.1050 +0.0428
+    ffiw          0.3180    0.1421    0.0540   Delta: -0.0598 +0.0721 +0.0365
+    wild          0.3844    0.1478    0.0588   Delta: +0.0066 +0.0779 +0.0414
+    [G11 软核对, V] src(0.3771,0.0682,0.0122) fftest(0.3778,0.0699,0.0174) cd1(0.3983,0.1282,0.0431) cd2(0.4233,0.1189,0.0409)
+                   dfdcp(0.3932,0.1749,0.0602) ffiw(0.3180,0.1421,0.0540) wild(0.3844,0.1478,0.0588)
+      (G12 用 SVD, G11 用 eigh(raw-cov); 同口径应 <5e-3 级一致; 不一致则说明口径漂移)
+
+  branch C (dim=1024, raw CLIP vision CLS):
+    row                K=1       K=5      K=50
+    src2200      0.8831    0.7121    0.2580
+    fftest800    0.8842    0.7385    0.4505
+    cd1           0.9801    0.9075    0.6732   Delta: +0.0959 +0.1690 +0.2228
+    cd2           0.9824    0.9124    0.6890   Delta: +0.0982 +0.1739 +0.2385
+    dfdcp         0.9069    0.7949    0.5153   Delta: +0.0227 +0.0564 +0.0648
+    ffiw          0.9832    0.8597    0.5834   Delta: +0.0990 +0.1212 +0.1329
+    wild          0.9816    0.8937    0.6777   Delta: +0.0974 +0.1552 +0.2272
+
+  branch F (dim=1536, F 可离线重建子集 (无 128-d bridge 块)):
+    row                K=1       K=5      K=50
+    src2200      0.1470    0.0405    0.0022
+    fftest800    0.1497    0.0428    0.0040
+    cd1           0.3380    0.1293    0.0133   Delta: +0.1883 +0.0865 +0.0093
+    cd2           0.3381    0.1391    0.0167   Delta: +0.1883 +0.0963 +0.0127
+    dfdcp         0.2344    0.0887    0.0116   Delta: +0.0846 +0.0459 +0.0076
+    ffiw          0.1916    0.0842    0.0118   Delta: +0.0419 +0.0414 +0.0077
+    wild          0.2943    0.1040    0.0145   Delta: +0.1445 +0.0612 +0.0105
+
+  branch V_proj (dim=768, LN(Linear(V))):
+    row                K=1       K=5      K=50
+    src2200      0.0613    0.0014    0.0001
+    fftest800    0.0616    0.0015    0.0001
+    cd1           0.1205    0.0017    0.0002   Delta: +0.0589 +0.0002 +0.0001
+    cd2           0.1227    0.0020    0.0002   Delta: +0.0611 +0.0005 +0.0001
+    dfdcp         0.0873    0.0020    0.0003   Delta: +0.0257 +0.0005 +0.0002
+    ffiw          0.0637    0.0015    0.0002   Delta: +0.0021 +0.0000 +0.0002
+    wild          0.0953    0.0021    0.0003   Delta: +0.0337 +0.0006 +0.0002
+
+  branch C_proj (dim=768, LN(Linear(C))):
+    row                K=1       K=5      K=50
+    src2200      0.6335    0.2343    0.0180
+    fftest800    0.6453    0.2524    0.0343
+    cd1           0.6273    0.3012    0.0473   Delta: -0.0180 +0.0488 +0.0129
+    cd2           0.7015    0.3444    0.0610   Delta: +0.0562 +0.0919 +0.0267
+    dfdcp         0.7281    0.3557    0.0618   Delta: +0.0828 +0.1032 +0.0275
+    ffiw          0.7710    0.3588    0.0721   Delta: +0.1257 +0.1063 +0.0377
+    wild          0.6274    0.2718    0.0603   Delta: -0.0179 +0.0194 +0.0259
+
+------------------------------------------------------------------------------------------------------------------------------
+E. 轴对齐 (每分支每域用该域样本 300 单独拟合 center-only PCA -> 域 PC0 与源 e0 的 |cos|;
+   zdim 两口径 (分母均为该域自身 sum_j Var_j(域特征), ddof=1):
+     zdim_srcaxis = Var((X_d - mu_src) @ e0_src)/sum_j Var_j(X_d)   <- G11 analyze_unit Q1a 同口径
+     zdim_domaxis = Var((X_d - mu_dom) @ e0_dom)/sum_j Var_j(X_d)   <- 域自身轴口径 (>=srcaxis, 域轴最大化域方差)
+   末列 [G11] 为 V 分支 zdim_srcaxis 参照)
+
+  branch   row        |cos(e0d,e0_src)|  zdim_srcaxis  zdim_domaxis  [G11 V]
+  ----------------------------------------------------------------------------------
+  V        src2200            1.0000         0.6229        0.6229    0.6229
+  V        fftest800          0.9993         0.6232        0.6239    0.6232
+  V        cd1                0.9870         0.6357        0.6517    0.6357
+  V        cd2                0.9890         0.5986        0.6111    0.5986
+  V        dfdcp              0.9790         0.6581        0.6854    0.6581
+  V        ffiw               0.9796         0.6852        0.7115    0.6852
+  V        wild               0.9793         0.6122        0.6358    0.6122
+
+  C        src2200            1.0000         0.1169        0.1169    -
+  C        fftest800          0.9124         0.1171        0.1356    -
+  C        cd1                0.0930         0.0237        0.0910    -
+  C        cd2                0.3327         0.0201        0.0621    -
+  C        dfdcp              0.1431         0.0154        0.1382    -
+  C        ffiw               0.1470         0.0156        0.2385    -
+  C        wild               0.1225         0.0138        0.0810    -
+
+  F        src2200            1.0000         0.8530        0.8530    -
+  F        fftest800          0.9998         0.8524        0.8528    -
+  F        cd1                0.9967         0.7369        0.7417    -
+  F        cd2                0.9957         0.7427        0.7488    -
+  F        dfdcp              0.9920         0.8308        0.8440    -
+  F        ffiw               0.9893         0.8138        0.8312    -
+  F        wild               0.9978         0.7671        0.7704    -
+
+  V_proj   src2200            1.0000         0.9387        0.9387    -
+  V_proj   fftest800          1.0000         0.9385        0.9385    -
+  V_proj   cd1                0.9980         0.9558        0.9596    -
+  V_proj   cd2                0.9969         0.9495        0.9553    -
+  V_proj   dfdcp              0.9936         0.9579        0.9700    -
+  V_proj   ffiw               0.9951         0.9457        0.9550    -
+  V_proj   wild               0.9990         0.9511        0.9530    -
+
+  C_proj   src2200            1.0000         0.3665        0.3665    -
+  C_proj   fftest800          0.9933         0.3499        0.3533    -
+  C_proj   cd1                0.9835         0.4817        0.4965    -
+  C_proj   cd2                0.9587         0.3884        0.4159    -
+  C_proj   dfdcp              0.8888         0.3483        0.4160    -
+  C_proj   ffiw               0.3337         0.1973        0.3754    -
+  C_proj   wild               0.9525         0.4055        0.4401    -
+
+------------------------------------------------------------------------------------------------------------------------------
+MECHANICAL VERDICTS (预注册, 照抄执行, 不做方向演绎)
+
+  [V1] Delta_ratio(d) = ratio_V-ratio_C >= +1.0 :
+       cd1:n(-2.2140,0) cd2:n(-2.3574,0) dfdcp:n(-3.0573,0) ffiw:n(-2.6582,0) wild:n(-2.3014,0)
+       成立域 = 无 -> 0/5 有效域 (B 块不依赖 vid 划分, 5 域全有效)
+  [V2] Delta_AUCreal(d) = AUCreal_V-AUCreal_C >= +0.05 :
+       cd1:n(-0.2014,0) cd2:n(-0.1536,0) dfdcp:n(-0.1096,0) ffiw:n(-0.0578,0[leak]) wild:n(-0.0889,0)
+       成立域(有效) = 无 -> 0/4 ; 含 ffiw 口径 = 0/5
+
+  => G12_H6_VIT_ONLY : (V1 在 >=4/5 域成立) 或 (V2 在 >=4/5 有效域成立)
+     V1 0/5 , V2 0/4  -> G12_H6_VIT_ONLY=NOT-SUPPORT
+  => G12_H6_SHARED   : 上述两者均 <4/5 低于阈值:
+     V1 0/5 <4 且 V2 0/4 <4 -> G12_H6_SHARED=SUPPORT
+     (两条判定为对同一前件的互补表述, 故恒有恰一条为 SUPPORT; 本处结论以实际计数为准)
+
+  [V3] 框架归属 (F 是否继承/缓解 V 的域信息):
+       ratio_F(mean)=0.1796 vs 0.8*ratio_V(mean)=0.1586  -> Y
+       AUCreal_F(valid mean)=0.9524 vs 0.8*AUCreal_V(valid mean)=0.6884 -> Y
+       INHERITS 判据 (或) = 1 ; 逐域计数 = 5/5 (cd1,cd2,dfdcp,ffiw,wild)
+       MITIGATES 判据: ratio_F <= min(1.2*ratio_C=3.2591, 0.8*ratio_V=0.1586) = 0.1586 -> n
+       逐域 ratio 口径 = 1/5 ; 逐域 AUC 口径 = 0/5
+     -> G12_FRAMEWORK=INHERITS
+
+  [V4] 类条件归属 (主判 branch=V, 有效域 mean):
+       mean|AUC_real-AUC_fake| = 0.0228 (<0.05 ? Y)
+       AUC_real=0.8606 (>=0.90 ? n) ; AUC_fake=0.8630 (>=0.90 ? n)
+       FAKE_SUBCLASS 判据: AUC_real<0.75 ? n ; AUC_fake >= AUC_real+0.10 ? n
+       -> G12_CONDITION=CONDITIONAL_MIXED   (对照: C=REGION_LEVEL, F=REGION_LEVEL)
+       C 明细: mean|d|=0.0021 real=0.9989 fake=0.9972 ; F 明细: mean|d|=0.0278 real=0.9524 fake=0.9564
+
+  === 判定常量汇总 ===
+    G12_H6_VIT_ONLY = NOT-SUPPORT
+    G12_H6_SHARED   = SUPPORT
+    G12_FRAMEWORK   = INHERITS
+    G12_CONDITION   = CONDITIONAL_MIXED
+
+------------------------------------------------------------------------------------------------------------------------------
+AUDIT
+  imgs_read=0 (零图像读取)            gpu=0 (CUDA_VISIBLE_DEVICES='', 未调用任何 cuda API)
+  forwards=0 (未实例化模型, 零前向/反向)   threads=1 (OMP/MKL/OPENBLAS/NUMEXPR/VECLIB/JOBLIB=1,
+  torch.set_num_threads(1), cv2.setNumThreads(0)) ; processes=1
+  npz 读取=2 (probe_feats.npz, feats_multi.npz) ; checkpoint 读取=1 (map_location='cpu',
+  只取 deepfake_proj.0/1, vision_proj.0/1, clip_vision_alpha, clip_text_alpha)
+  V_proj/C_proj 复算: float64, LayerNorm eps=1e-5, elementwise_affine=True (与模型定义一致)
+  探针: StandardScaler(fit train) + LR(C=0.001, lbfgs, max_iter=3000); 划分 seed=0; 无 PCA 白化
+  SVD: np.linalg.svd(full_matrices=False) 于中心化特征矩阵 (与 G11 eigh(raw-cov) 同口径)
+  wall_s = 26.4
+
+CAVEATS (honest)
+  1. ffiw 域只有 1 个 vid (300 样本 = 150 real + 150 fake 同视频): C 块按 vid 划分退化为随机按样本
+     划分 (leak=True), 其 AUC_real/AUC_fake 被高估, 已剔出聚合门与 H6 计数; 其 B/D/E 块量不依赖
+     样本划分, 仍然保留, 但'同一视频内 150+150'意味着 D/E 的域几何可能被单视频风格主导.
+  2. 每个目标域仅 300 样本 (150/150): 均衡后探针 train/test 各约 105/45 每侧 (mixed 为 210/90),
+     test=90 时 AUC 的 1SE 量级约 0.05-0.07 -> 域间小差异不可解读, 只看跨域一致方向与量级.
+  3. 线性探针给的是'可分性下界类'指标: 线性可分性存在 != 下游模型使用了该信息; 探针弱不代表
+     信息不存在 (非线性/局部可读), 探针强也不代表模型依赖. 三个探针 (real/fake/mixed) 只是同一
+     问题的三种切片.
+  4. 相关 != 因果: 域可分性高不等于'ViT 只用域信息', 也不等于'ViT 学的是域而非伪造痕迹'.
+     本实验只量化源-域可分的线性结构强度在分支间的分布, 不能定位模型决策所依赖的变量.
+  5. multi 的 'ffpp' 域 (800, 140 vids, 其中 98 vids 属于 probe 源 train 视频) 有源视频污染,
+     全程只作脚注, 不作 FF++ 参照; FF++ 参照一律用 probe test 800 (42 vids, 完全 video-disjoint).
+  6. 派生分支 V_proj/C_proj 依赖 A0.2 的 cos 校验 (实测 min cos 与 1 的偏差 ~1e-13, 通过);
+     若 checkpoint 与 npz 不同源则该分支失效. F 分支只含可离线重建的 1536/1664 维
+     (bridge_adapter 128-d 需前向), 且 F 是两塔特征拼接 -> 其域可分性可被融合放大或压制,
+     不能直接归因到任一单塔.
+  7. s 尺度用 ddof=1 的逐维方差均值开方; ratio = dom_gap/class_gap 中 s 约去, 故 s 的 ddof
+     选择不影响任何判定常量; dom_gap/class_gap 的绝对值受 ddof 影响 (<1% 量级).
+  8. 分支 F 的源侧 = probe npz 的 [alpha_v*C_proj | V_proj] 拼接, 域侧 = npz F 的对应列
+     (两侧构造一致, 校验 cos>0.999); 缺 128-d bridge 块 (7.7% 维度) 使 F 的绝对量级与真值 F
+     有偏差, 但该块在模型里乘 alpha_t=1.7796 (较大), 故 F 的真实域可分性可能高于此处估计.
+  9. B 块 dom_gap 用'域均值-源全池均值'的欧氏范数, 未做白化/去相关 -> 被高方差方向主导;
+     D 块 residK 与 E 块 zdim_frac 是同一现象的另两种归一化口径, 三者结论一致才可采信.
+     E 块 zdim 给了两口径 (源轴/G11 同口径 与 域自身轴口径), 二者对源集相同、对目标域差 0.01-0.03;
+     该量不参与任何判定常量, 只作诊断.
+ 10. 本实验全部为离线特征几何量, 没有重测任何下游检测性能; C 块的 AUC_real/AUC_fake 是
+     '域判别'探针, 与 G11 的单轴 fake-detection AUC 含义不同, 不可直接比较或相减.
+ 11. H6 的 4/5 门在 ffiw 被剔除后分母变为 4 (V2 口径): 即要求 4/4 全部成立; 该严格化已如实
+     报告 (同时给出含 ffiw 的 5 域计数), 不对阈值做任何宽松化处理.
+
+==============================================================================================================================
+END OF REPORT   (wall 26.4 s)
+==============================================================================================================================

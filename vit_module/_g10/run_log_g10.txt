@@ -1,0 +1,39 @@
+Freezing CLIP vision encoder.
+[model] missing=0 unexpected=0
+[model] device=NVIDIA GeForce GTX 1080 Ti visible=2
+[E0] npz-V PC0 varfrac=0.6229  LR(C=1e-3) test AUC=0.9852  z-axis test AUC=0.9827
+[I0] repro cos(V_fresh, npz V) min=1.000000 mean=1.000000 | vs npz V_proj min=0.000452 | relL2 max=0.0000e+00
+  [I1] 20/120  imgs_fwd=150
+  [I1] 40/120  imgs_fwd=290
+  [I1] 60/120  imgs_fwd=430
+  [I1] 80/120  imgs_fwd=570
+  [I1] 100/120  imgs_fwd=710
+  [I1] 120/120  imgs_fwd=850
+[I1] z-AUC: {'orig': 0.9733, 'gray': 0.9364, 'jpeg70': 0.9781, 'resize2x': 0.9633, 'flip': 0.9825, 'blur': 0.9578, 'crop90': 0.8008}
+[I1] LR-AUC: {'orig': 0.9867, 'gray': 0.9381, 'jpeg70': 0.98, 'resize2x': 0.9697, 'flip': 0.9886, 'blur': 0.9658, 'crop90': 0.8722}
+[I1] dAUC(z): {'gray': 3.69, 'jpeg70': -0.47, 'resize2x': 1.0, 'flip': -0.92, 'blur': 1.56, 'crop90': 17.25}
+  [I2] occlusion 10/40  imgs_fwd=1500
+  [I2] occlusion 20/40  imgs_fwd=2150
+  [I2] occlusion 30/40  imgs_fwd=2800
+  [I2] occlusion 40/40  imgs_fwd=3450
+[I2] real top=(5,5),(2,2),(6,2),(6,4),(4,5) cen=0.397 | fake top=(1,5),(5,4),(4,3),(3,3),(5,3) cen=0.312
+[I2] inputXgrad=skipped (TypeError: can't convert cuda:0 device type tensor to numpy. Use Tensor.cpu() to copy the tensor to host memory first.)
+  [ I3-cd1] occlusion 10/40  imgs_fwd=4100
+  [ I3-cd1] occlusion 20/40  imgs_fwd=4750
+  [ I3-cd1] occlusion 30/40  imgs_fwd=5400
+  [ I3-cd1] occlusion 40/40  imgs_fwd=6050
+  [ I3-ffiw] occlusion 10/40  imgs_fwd=6700
+  [ I3-ffiw] occlusion 20/40  imgs_fwd=7350
+  [ I3-ffiw] occlusion 30/40  imgs_fwd=8000
+  [ I3-ffiw] occlusion 40/40  imgs_fwd=8650
+[I3] ffpp  top5=(5,4),(5,5),(1,5),(6,2),(5,3) share=0.145 center16=0.333
+[I3] cd1   top5=(5,2),(5,3),(5,4),(2,1),(5,5) share=0.155 center16=0.319
+[I3] ffiw  top5=(5,4),(5,5),(2,6),(3,6),(4,4) share=0.172 center16=0.371
+[save] report -> E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g10\g10_report.txt
+
+===== SUMMARY =====
+repro_cos_min=1.000000  PC0_varfrac=0.6229  z-AUC full test=0.9827
+I1 z-AUC orig=0.9733  dAUC(pt)=gray:3.69 jpeg70:-0.47 resize2x:1.00 flip:-0.92 blur:1.56 crop90:17.25
+I2 top real=(5,5) cen=0.397  fake=(1,5) cen=0.312
+I3 center: ffpp=0.333 cd1=0.319 ffiw=0.371
+VERDICT=AXIS_NOT_LOWLEVEL  forwards=8650 batches=721  peak_smi=4094MiB

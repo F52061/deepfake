@@ -1,0 +1,83 @@
+[align] row order = probe native 3000 + multi native 2300; paths/y/vids/domain == source npz element-wise PASS
+==========================================================================================
+G17a -- low-level / frequency-domain descriptor extraction
+==========================================================================================
+n_total=5300  (probe=3000 + multi=2300)
+threads: OMP/MKL/OPENBLAS/NUMEXPR/VECLIB/BLIS=4, cv2.setNumThreads(2), ThreadPoolExecutor max_workers=2, single process
+pipeline: cv2.imread -> BGR2RGB -> cv2.resize(336,336) -> uint8 RGB (0-255)
+sensitivity scope: CLIP-normalized tensor (mean/std) -> same _extract
+N_REF_EDGES=400 N_SENS=300
+[ref] SRM residual quantile edges built from 400 imgs in 19.5s
+  [extract] 500/5300 wall=71s read_fail=0
+  [extract] 1000/5300 wall=146s read_fail=0
+  [extract] 1500/5300 wall=220s read_fail=0
+  [extract] 2000/5300 wall=291s read_fail=0
+  [extract] 2500/5300 wall=362s read_fail=0
+  [extract] 3000/5300 wall=433s read_fail=0
+  [extract] 3500/5300 wall=507s read_fail=0
+  [extract] 4000/5300 wall=581s read_fail=0
+  [extract] 4500/5300 wall=654s read_fail=0
+  [extract] 5000/5300 wall=721s read_fail=0
+  [extract] 5300/5300 wall=763s read_fail=0
+[extract] done in 762.9s  read_fail=0
+  [sens] F1        dim= 40 mean|r|=0.993321 min|r|=0.852797 (n=300)
+  [sens] F1_radial dim= 32 mean|r|=0.992271 min|r|=0.852797 (n=300)
+  [sens] F2        dim=  4 mean|r|=0.983546 min|r|=0.934189 (n=300)
+  [sens] F3        dim= 20 mean|r|=0.999992 min|r|=0.999975 (n=300)
+  [sens] F3_hist   dim=160 mean|r|=0.140039 min|r|=-0.413176 (n=300)
+  [sens] F4        dim= 23 mean|r|=0.970360 min|r|=0.408709 (n=300)
+  [sens] F5        dim=  4 mean|r|=0.223381 min|r|=-0.292826 (n=300)
+[sens] CLIP-normalized vs uint8 correlation done in 159.8s
+
+------------------------------------------------------------------------------------------
+SELF-CHECK: 5 rows (path + first 5 dims of each family)
+------------------------------------------------------------------------------------------
+row 0: source=probe domain=ffpp_probe split=train y=0
+    path=F:/zhj/data/FaceForensic++_raw/manipulated_sequences/Deepfakes/c23/faces23/114_102/167.png
+    F1       [:5]=[13.482   13.28935 13.06497 12.90721 12.83435]
+    F1_radial[:5]=[13.482   13.28935 13.06497 12.90721 12.83435]
+    F2       [:5]=[ 1.07000e-03  1.00000e-05 -2.28489e+00  9.00000e-05]
+    F3       [:5]=[-0.02199 12.27181  0.47306 20.4936  -0.05549]
+    F3_hist  [:5]=[0.02339 0.02743 0.01761 0.02971 0.     ]
+    F4       [:5]=[ 2.76171  6.36149  6.11093 11.03757  2.76713]
+    F5       [:5]=[0.0085  0.9659  0.01371 0.03139]
+row 1500: source=probe domain=ffpp_probe split=train y=1
+    path=F:/zhj/data/FaceForensic++_raw/original_sequences/c23/faces23/707/284.png
+    F1       [:5]=[13.62513 13.44739 13.25068 13.10531 13.01304]
+    F1_radial[:5]=[13.62513 13.44739 13.25068 13.10531 13.01304]
+    F2       [:5]=[ 1.76000e-03  1.00000e-05 -2.27444e+00  1.70000e-04]
+    F3       [:5]=[-0.04794 17.03808  0.49807 16.29772 -0.12171]
+    F3_hist  [:5]=[0.03152 0.04038 0.02648 0.04478 0.     ]
+    F4       [:5]=[ 5.34346 45.53244 11.17104 35.09476  4.48515]
+    F5       [:5]=[0.00969 0.9451  0.02345 0.05395]
+row 2999: source=probe domain=ffpp_probe split=test y=1
+    path=F:/zhj/data/FaceForensic++_raw/original_sequences/c23/faces23/842/68.png
+    F1       [:5]=[13.48019 13.24255 12.99303 12.86667 12.84682]
+    F1_radial[:5]=[13.48019 13.24255 12.99303 12.86667 12.84682]
+    F2       [:5]=[ 3.77000e-03  5.00000e-05 -1.95239e+00  1.32000e-03]
+    F3       [:5]=[-7.329000e-02  4.200170e+01 -9.251000e-02  1.932712e+01  1.931000e-02]
+    F3_hist  [:5]=[0.06214 0.03959 0.02493 0.04249 0.     ]
+    F4       [:5]=[ 2.97507  7.12461  6.09156 12.1751   2.61196]
+    F5       [:5]=[0.0082  0.85852 0.01148 0.02626]
+row 3000: source=multi domain=ffpp split=ffpp y=1
+    path=F:/zhj/data/FaceForensic++_raw/original_sequences/c23/faces23/670/432.png
+    F1       [:5]=[13.81115 13.52477 13.20137 12.97207 12.86134]
+    F1_radial[:5]=[13.81115 13.52477 13.20137 12.97207 12.86134]
+    F2       [:5]=[ 6.60000e-04  0.00000e+00 -2.29525e+00  7.00000e-05]
+    F3       [:5]=[ 0.03286 15.39344  1.52847 21.58278  0.16173]
+    F3_hist  [:5]=[0.02367 0.03397 0.02242 0.03624 0.     ]
+    F4       [:5]=[ 3.69126 14.02788  8.49942 17.92425  1.98024]
+    F5       [:5]=[0.00741 0.9358  0.01908 0.0546 ]
+row 5299: source=multi domain=wild split=wild y=1
+    path=F:/zhj/data/WildDeepfake/real_test/8/real/198/3132.png
+    F1       [:5]=[12.95675 12.78433 12.57809 12.38149 12.20319]
+    F1_radial[:5]=[12.95675 12.78433 12.57809 12.38149 12.20319]
+    F2       [:5]=[ 1.4100e-03  3.0000e-05 -2.0359e+00  4.7000e-04]
+    F3       [:5]=[-1.250000e-03  4.148480e+00 -7.282100e-01  7.025004e+01  1.337000e-02]
+    F3_hist  [:5]=[0.00951 0.01007 0.00723 0.01329 0.     ]
+    F4       [:5]=[0.79882 1.62117 2.26432 4.78903 0.79635]
+    F5       [:5]=[0.01628 0.95811 0.04315 0.1153 ]
+[save] E:\Cross-domain_authentication_verification\Next_work\M2F2_Det-main-hyy\vit_module\_g17\freq_feats.npz
+[verify] reloaded freq_feats.npz: paths/y == source npz element-wise, all 7 feature arrays (5300 rows) finite -> PASS
+[done] wall=942.4s  read_ok=5300 read_fail=0
+[done] feature families: F1=40d, F1_radial=32d, F2=4d, F3=20d, F3_hist=160d, F4=23d, F5=4d
