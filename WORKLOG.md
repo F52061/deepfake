@@ -3166,10 +3166,19 @@ FFPP_all    ...  AUC% = 98.81   N=21000
 
 **备份**：`E:/Cross-domain_authentication_verification/Next_work/_git_backup_M2F2_Det_20260929.git`（1.1 GB 镜像，18 个提交，master 原指向 `1990a5d`）。这是唯一的回退途径。
 
-### D.47.4 未完成 / 需用户自己决定的事
+### D.47.4 推送结果：已完成，且**不需要强制推送**
 
-1. **强制推送未执行**。本机 SSH 连不上远程，且强制推送会覆盖 GitHub 上的历史 —— 应在确认远程状态（是否为共享仓库、是否已有旧历史）后由用户自行执行：
-   `git push --force origin master`。
-2. **所有提交哈希值已改变**，不可逆，用户已确认接受。
-3. 若日后要回退：从上述镜像备份恢复。
+原方案预计要 `git push --force`（历史已重写）。实际情况不同：
+
+1. **首次推送失败的真实原因**：本机 `~/.ssh` 里**只有公钥 `id_rsa.pub`，私钥不存在**，也没有 ssh-agent / credential helper / `.git-credentials` —— 无法向 GitHub 认证（`Permission denied (publickey)`）。原先报的 `Host key verification failed` 只是 `known_hosts` 缺条目，属表层原因。
+2. 主机密钥经核实为 GitHub 官方 Ed25519 指纹 `SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU`，**连接未被劫持，可放心使用**。
+3. 经用户确认后生成新密钥对 `~/.ssh/id_ed25519`（ed25519，**无口令**——带口令则非交互推送无法工作；指纹 `SHA256:j0MBYlltbhxpPPyo5a7VwbHD9V9N4v9RwfPRzRbN+oI`），由用户将公钥添加到 GitHub 账号 `F52061`。私钥全程未离开本机。
+4. 认证通过：`Hi F52061! You've successfully authenticated`。
+5. **远程确实是空的**：`git ls-remote origin`、`--heads`、`fetch --dry-run` 三者均**退出码 0 且无任何输出**（无分支、无标签、无任何 ref）。既然没有历史可覆盖，**`--force` 就不需要了** —— 原先担心的破坏性风险不存在。
+6. 执行 `git push -u origin master` → `* [new branch] master -> master`。
+7. 核对：远程 `refs/heads/master` = 本地 `HEAD` = `9bd424c`；`git status -sb` 显示 `## master...origin/master`（无 ahead/behind），完全同步。推上去的是 **236 个文件 / 1.3 MB**，不含任何 npz / pt / jpg / pdf。
+
+**遗留一项（需用户自行决定）**：GitHub 仓库创建时的默认分支多半是 `main`，而实际推上去的分支名是 `master`。若希望打开仓库首页就直接看到代码，需在 GitHub 的 Settings → Branches 把默认分支改为 `master`（或本地 `git branch -m master main` 后重推）。不改也不影响数据完整性。
+
+**回退途径仍然有效**：`E:/Cross-domain_authentication_verification/Next_work/_git_backup_M2F2_Det_20260929.git`（1.1 GB 镜像，含重写前的全部 18 个提交，master 原指向 `1990a5d`）。
 
