@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "label": "1=fake, 0=real",
+  "arguments": {
+    "manifest": "vit_module/_g23/manifest_full.csv",
+    "checkpoint": "checkpoints/stage_1/bridge_v2_phase1.pth",
+    "clip": "checkpoints/clip-vit-large-patch14-336",
+    "output": "vit_module/_g23/diag_runs/extract_full",
+    "device": "cuda:0",
+    "batch_size": 4,
+    "fake_logit": 0,
+    "save_tokens": false,
+    "variants": [
+      "clean",
+      "jpeg70",
+      "blur",
+      "resize",
+      "color"
+    ]
+  },
+  "checkpoint_sha256": "6d3b7c366ac0a00301f085e0b6c053f2855d0e85985ea1a71be003276bed09ab",
+  "manifest_sha256": "2af71d19433248f899c4c65bb272d3ff6bddcc1cfd31f4f568c368cea5d1884e",
+  "prompts": [
+    "a face with consistent lighting and shadows",
+    "a face with inconsistent lighting and shadows",
+    "a face with natural eyes and teeth",
+    "a face with distorted eyes and teeth",
+    "a face with consistent skin texture",
+    "a face with unnatural skin texture",
+    "a face with natural facial boundaries",
+    "a face with blending artifacts around its boundaries"
+  ],
+  "native_clip_tower_verified": true,
+  "semantic_definition": "cosine of official pooled CLIP embedding and fixed text prompts",
+  "patch_semantics": "last-layer patches projected by CLS-trained projection; exploratory only",
+  "torch": "2.2.2+cu118",
+  "numpy": "1.26.4",
+  "opencv": "4.11.0",
+  "extraction_code_sha256": "0d4973eb74dfe99b9ee1c8078463a6991425723659e2c71c4a8be474797ea156",
+  "first_image_batch_independence_max_abs_error": 4.291534423828125e-06
+}

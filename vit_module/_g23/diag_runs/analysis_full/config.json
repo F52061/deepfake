@@ -1,0 +1,767 @@
+{
+  "arguments": {
+    "input": "vit_module/_g23/diag_runs/extract_full",
+    "output": "vit_module/_g23/diag_runs/analysis_full",
+    "source": "ffpp",
+    "seed": 20261001,
+    "repeats": 5,
+    "bootstrap": 1000,
+    "regularization": 0.001,
+    "radii": [
+      0.25,
+      0.5,
+      1.0,
+      2.0
+    ]
+  },
+  "extraction": {
+    "schema": 1,
+    "label": "1=fake, 0=real",
+    "arguments": {
+      "manifest": "vit_module/_g23/manifest_full.csv",
+      "checkpoint": "checkpoints/stage_1/bridge_v2_phase1.pth",
+      "clip": "checkpoints/clip-vit-large-patch14-336",
+      "output": "vit_module/_g23/diag_runs/extract_full",
+      "device": "cuda:0",
+      "batch_size": 4,
+      "fake_logit": 0,
+      "save_tokens": false,
+      "variants": [
+        "clean",
+        "jpeg70",
+        "blur",
+        "resize",
+        "color"
+      ]
+    },
+    "checkpoint_sha256": "6d3b7c366ac0a00301f085e0b6c053f2855d0e85985ea1a71be003276bed09ab",
+    "manifest_sha256": "2af71d19433248f899c4c65bb272d3ff6bddcc1cfd31f4f568c368cea5d1884e",
+    "prompts": [
+      "a face with consistent lighting and shadows",
+      "a face with inconsistent lighting and shadows",
+      "a face with natural eyes and teeth",
+      "a face with distorted eyes and teeth",
+      "a face with consistent skin texture",
+      "a face with unnatural skin texture",
+      "a face with natural facial boundaries",
+      "a face with blending artifacts around its boundaries"
+    ],
+    "native_clip_tower_verified": true,
+    "semantic_definition": "cosine of official pooled CLIP embedding and fixed text prompts",
+    "patch_semantics": "last-layer patches projected by CLS-trained projection; exploratory only",
+    "torch": "2.2.2+cu118",
+    "numpy": "1.26.4",
+    "opencv": "4.11.0",
+    "extraction_code_sha256": "0d4973eb74dfe99b9ee1c8078463a6991425723659e2c71c4a8be474797ea156",
+    "first_image_batch_independence_max_abs_error": 4.291534423828125e-06
+  },
+  "replay_max_abs_error": 5.7220458984375e-06,
+  "source_pc0_variance_fraction": 0.6229146550315887,
+  "numpy": "1.26.4",
+  "sklearn": "1.7.2",
+  "interventions": [
+    {
+      "condition": "axis_r0.25_rep0",
+      "radius": 0.25,
+      "repeat": 0,
+      "l2_min": 8.253032884050532,
+      "l2_max": 8.253032884050533
+    },
+    {
+      "condition": "orthogonal_r0.25_rep0",
+      "radius": 0.25,
+      "repeat": 0,
+      "l2_min": 8.253032884050526,
+      "l2_max": 8.25303288405053
+    },
+    {
+      "condition": "random_r0.25_rep0",
+      "radius": 0.25,
+      "repeat": 0,
+      "l2_min": 8.253032884050526,
+      "l2_max": 8.25303288405053
+    },
+    {
+      "condition": "fixed_orthogonal_r0.25_rep0",
+      "radius": 0.25,
+      "repeat": 0,
+      "l2_min": 8.253032884050526,
+      "l2_max": 8.253032884050528
+    },
+    {
+      "condition": "pc1_r0.25_rep0",
+      "radius": 0.25,
+      "repeat": 0,
+      "l2_min": 8.253032884050533,
+      "l2_max": 8.253032884050535
+    },
+    {
+      "condition": "axis_r0.5_rep0",
+      "radius": 0.5,
+      "repeat": 0,
+      "l2_min": 16.506065768101063,
+      "l2_max": 16.506065768101067
+    },
+    {
+      "condition": "orthogonal_r0.5_rep0",
+      "radius": 0.5,
+      "repeat": 0,
+      "l2_min": 16.506065768101053,
+      "l2_max": 16.50606576810106
+    },
+    {
+      "condition": "random_r0.5_rep0",
+      "radius": 0.5,
+      "repeat": 0,
+      "l2_min": 16.506065768101053,
+      "l2_max": 16.50606576810106
+    },
+    {
+      "condition": "fixed_orthogonal_r0.5_rep0",
+      "radius": 0.5,
+      "repeat": 0,
+      "l2_min": 16.506065768101053,
+      "l2_max": 16.506065768101056
+    },
+    {
+      "condition": "pc1_r0.5_rep0",
+      "radius": 0.5,
+      "repeat": 0,
+      "l2_min": 16.506065768101067,
+      "l2_max": 16.50606576810107
+    },
+    {
+      "condition": "axis_r1_rep0",
+      "radius": 1.0,
+      "repeat": 0,
+      "l2_min": 33.012131536202126,
+      "l2_max": 33.01213153620213
+    },
+    {
+      "condition": "orthogonal_r1_rep0",
+      "radius": 1.0,
+      "repeat": 0,
+      "l2_min": 33.012131536202105,
+      "l2_max": 33.01213153620212
+    },
+    {
+      "condition": "random_r1_rep0",
+      "radius": 1.0,
+      "repeat": 0,
+      "l2_min": 33.012131536202105,
+      "l2_max": 33.01213153620212
+    },
+    {
+      "condition": "fixed_orthogonal_r1_rep0",
+      "radius": 1.0,
+      "repeat": 0,
+      "l2_min": 33.012131536202105,
+      "l2_max": 33.01213153620211
+    },
+    {
+      "condition": "pc1_r1_rep0",
+      "radius": 1.0,
+      "repeat": 0,
+      "l2_min": 33.01213153620213,
+      "l2_max": 33.01213153620214
+    },
+    {
+      "condition": "axis_r2_rep0",
+      "radius": 2.0,
+      "repeat": 0,
+      "l2_min": 66.02426307240425,
+      "l2_max": 66.02426307240427
+    },
+    {
+      "condition": "orthogonal_r2_rep0",
+      "radius": 2.0,
+      "repeat": 0,
+      "l2_min": 66.02426307240421,
+      "l2_max": 66.02426307240424
+    },
+    {
+      "condition": "random_r2_rep0",
+      "radius": 2.0,
+      "repeat": 0,
+      "l2_min": 66.02426307240421,
+      "l2_max": 66.02426307240424
+    },
+    {
+      "condition": "fixed_orthogonal_r2_rep0",
+      "radius": 2.0,
+      "repeat": 0,
+      "l2_min": 66.02426307240421,
+      "l2_max": 66.02426307240422
+    },
+    {
+      "condition": "pc1_r2_rep0",
+      "radius": 2.0,
+      "repeat": 0,
+      "l2_min": 66.02426307240427,
+      "l2_max": 66.02426307240428
+    },
+    {
+      "condition": "axis_r0.25_rep1",
+      "radius": 0.25,
+      "repeat": 1,
+      "l2_min": 8.253032884050532,
+      "l2_max": 8.253032884050533
+    },
+    {
+      "condition": "orthogonal_r0.25_rep1",
+      "radius": 0.25,
+      "repeat": 1,
+      "l2_min": 8.253032884050526,
+      "l2_max": 8.25303288405053
+    },
+    {
+      "condition": "random_r0.25_rep1",
+      "radius": 0.25,
+      "repeat": 1,
+      "l2_min": 8.253032884050526,
+      "l2_max": 8.25303288405053
+    },
+    {
+      "condition": "fixed_orthogonal_r0.25_rep1",
+      "radius": 0.25,
+      "repeat": 1,
+      "l2_min": 8.253032884050528,
+      "l2_max": 8.253032884050528
+    },
+    {
+      "condition": "pc1_r0.25_rep1",
+      "radius": 0.25,
+      "repeat": 1,
+      "l2_min": 8.253032884050533,
+      "l2_max": 8.253032884050535
+    },
+    {
+      "condition": "axis_r0.5_rep1",
+      "radius": 0.5,
+      "repeat": 1,
+      "l2_min": 16.506065768101063,
+      "l2_max": 16.506065768101067
+    },
+    {
+      "condition": "orthogonal_r0.5_rep1",
+      "radius": 0.5,
+      "repeat": 1,
+      "l2_min": 16.506065768101053,
+      "l2_max": 16.50606576810106
+    },
+    {
+      "condition": "random_r0.5_rep1",
+      "radius": 0.5,
+      "repeat": 1,
+      "l2_min": 16.506065768101053,
+      "l2_max": 16.50606576810106
+    },
+    {
+      "condition": "fixed_orthogonal_r0.5_rep1",
+      "radius": 0.5,
+      "repeat": 1,
+      "l2_min": 16.506065768101056,
+      "l2_max": 16.506065768101056
+    },
+    {
+      "condition": "pc1_r0.5_rep1",
+      "radius": 0.5,
+      "repeat": 1,
+      "l2_min": 16.506065768101067,
+      "l2_max": 16.50606576810107
+    },
+    {
+      "condition": "axis_r1_rep1",
+      "radius": 1.0,
+      "repeat": 1,
+      "l2_min": 33.012131536202126,
+      "l2_max": 33.01213153620213
+    },
+    {
+      "condition": "orthogonal_r1_rep1",
+      "radius": 1.0,
+      "repeat": 1,
+      "l2_min": 33.012131536202105,
+      "l2_max": 33.01213153620212
+    },
+    {
+      "condition": "random_r1_rep1",
+      "radius": 1.0,
+      "repeat": 1,
+      "l2_min": 33.012131536202105,
+      "l2_max": 33.01213153620212
+    },
+    {
+      "condition": "fixed_orthogonal_r1_rep1",
+      "radius": 1.0,
+      "repeat": 1,
+      "l2_min": 33.01213153620211,
+      "l2_max": 33.01213153620211
+    },
+    {
+      "condition": "pc1_r1_rep1",
+      "radius": 1.0,
+      "repeat": 1,
+      "l2_min": 33.01213153620213,
+      "l2_max": 33.01213153620214
+    },
+    {
+      "condition": "axis_r2_rep1",
+      "radius": 2.0,
+      "repeat": 1,
+      "l2_min": 66.02426307240425,
+      "l2_max": 66.02426307240427
+    },
+    {
+      "condition": "orthogonal_r2_rep1",
+      "radius": 2.0,
+      "repeat": 1,
+      "l2_min": 66.02426307240421,
+      "l2_max": 66.02426307240424
+    },
+    {
+      "condition": "random_r2_rep1",
+      "radius": 2.0,
+      "repeat": 1,
+      "l2_min": 66.02426307240421,
+      "l2_max": 66.02426307240424
+    },
+    {
+      "condition": "fixed_orthogonal_r2_rep1",
+      "radius": 2.0,
+      "repeat": 1,
+      "l2_min": 66.02426307240422,
+      "l2_max": 66.02426307240422
+    },
+    {
+      "condition": "pc1_r2_rep1",
+      "radius": 2.0,
+      "repeat": 1,
+      "l2_min": 66.02426307240427,
+      "l2_max": 66.02426307240428
+    },
+    {
+      "condition": "axis_r0.25_rep2",
+      "radius": 0.25,
+      "repeat": 2,
+      "l2_min": 8.253032884050532,
+      "l2_max": 8.253032884050533
+    },
+    {
+      "condition": "orthogonal_r0.25_rep2",
+      "radius": 0.25,
+      "repeat": 2,
+      "l2_min": 8.253032884050526,
+      "l2_max": 8.25303288405053
+    },
+    {
+      "condition": "random_r0.25_rep2",
+      "radius": 0.25,
+      "repeat": 2,
+      "l2_min": 8.253032884050526,
+      "l2_max": 8.25303288405053
+    },
+    {
+      "condition": "fixed_orthogonal_r0.25_rep2",
+      "radius": 0.25,
+      "repeat": 2,
+      "l2_min": 8.253032884050526,
+      "l2_max": 8.253032884050528
+    },
+    {
+      "condition": "pc1_r0.25_rep2",
+      "radius": 0.25,
+      "repeat": 2,
+      "l2_min": 8.253032884050533,
+      "l2_max": 8.253032884050535
+    },
+    {
+      "condition": "axis_r0.5_rep2",
+      "radius": 0.5,
+      "repeat": 2,
+      "l2_min": 16.506065768101063,
+      "l2_max": 16.506065768101067
+    },
+    {
+      "condition": "orthogonal_r0.5_rep2",
+      "radius": 0.5,
+      "repeat": 2,
+      "l2_min": 16.506065768101053,
+      "l2_max": 16.50606576810106
+    },
+    {
+      "condition": "random_r0.5_rep2",
+      "radius": 0.5,
+      "repeat": 2,
+      "l2_min": 16.506065768101053,
+      "l2_max": 16.50606576810106
+    },
+    {
+      "condition": "fixed_orthogonal_r0.5_rep2",
+      "radius": 0.5,
+      "repeat": 2,
+      "l2_min": 16.506065768101056,
+      "l2_max": 16.506065768101056
+    },
+    {
+      "condition": "pc1_r0.5_rep2",
+      "radius": 0.5,
+      "repeat": 2,
+      "l2_min": 16.506065768101067,
+      "l2_max": 16.50606576810107
+    },
+    {
+      "condition": "axis_r1_rep2",
+      "radius": 1.0,
+      "repeat": 2,
+      "l2_min": 33.012131536202126,
+      "l2_max": 33.01213153620213
+    },
+    {
+      "condition": "orthogonal_r1_rep2",
+      "radius": 1.0,
+      "repeat": 2,
+      "l2_min": 33.012131536202105,
+      "l2_max": 33.01213153620212
+    },
+    {
+      "condition": "random_r1_rep2",
+      "radius": 1.0,
+      "repeat": 2,
+      "l2_min": 33.012131536202105,
+      "l2_max": 33.01213153620212
+    },
+    {
+      "condition": "fixed_orthogonal_r1_rep2",
+      "radius": 1.0,
+      "repeat": 2,
+      "l2_min": 33.01213153620211,
+      "l2_max": 33.01213153620211
+    },
+    {
+      "condition": "pc1_r1_rep2",
+      "radius": 1.0,
+      "repeat": 2,
+      "l2_min": 33.01213153620213,
+      "l2_max": 33.01213153620214
+    },
+    {
+      "condition": "axis_r2_rep2",
+      "radius": 2.0,
+      "repeat": 2,
+      "l2_min": 66.02426307240425,
+      "l2_max": 66.02426307240427
+    },
+    {
+      "condition": "orthogonal_r2_rep2",
+      "radius": 2.0,
+      "repeat": 2,
+      "l2_min": 66.02426307240421,
+      "l2_max": 66.02426307240424
+    },
+    {
+      "condition": "random_r2_rep2",
+      "radius": 2.0,
+      "repeat": 2,
+      "l2_min": 66.02426307240421,
+      "l2_max": 66.02426307240424
+    },
+    {
+      "condition": "fixed_orthogonal_r2_rep2",
+      "radius": 2.0,
+      "repeat": 2,
+      "l2_min": 66.02426307240422,
+      "l2_max": 66.02426307240422
+    },
+    {
+      "condition": "pc1_r2_rep2",
+      "radius": 2.0,
+      "repeat": 2,
+      "l2_min": 66.02426307240427,
+      "l2_max": 66.02426307240428
+    },
+    {
+      "condition": "axis_r0.25_rep3",
+      "radius": 0.25,
+      "repeat": 3,
+      "l2_min": 8.253032884050532,
+      "l2_max": 8.253032884050533
+    },
+    {
+      "condition": "orthogonal_r0.25_rep3",
+      "radius": 0.25,
+      "repeat": 3,
+      "l2_min": 8.253032884050526,
+      "l2_max": 8.25303288405053
+    },
+    {
+      "condition": "random_r0.25_rep3",
+      "radius": 0.25,
+      "repeat": 3,
+      "l2_min": 8.253032884050526,
+      "l2_max": 8.25303288405053
+    },
+    {
+      "condition": "fixed_orthogonal_r0.25_rep3",
+      "radius": 0.25,
+      "repeat": 3,
+      "l2_min": 8.253032884050526,
+      "l2_max": 8.253032884050528
+    },
+    {
+      "condition": "pc1_r0.25_rep3",
+      "radius": 0.25,
+      "repeat": 3,
+      "l2_min": 8.253032884050533,
+      "l2_max": 8.253032884050535
+    },
+    {
+      "condition": "axis_r0.5_rep3",
+      "radius": 0.5,
+      "repeat": 3,
+      "l2_min": 16.506065768101063,
+      "l2_max": 16.506065768101067
+    },
+    {
+      "condition": "orthogonal_r0.5_rep3",
+      "radius": 0.5,
+      "repeat": 3,
+      "l2_min": 16.506065768101053,
+      "l2_max": 16.50606576810106
+    },
+    {
+      "condition": "random_r0.5_rep3",
+      "radius": 0.5,
+      "repeat": 3,
+      "l2_min": 16.506065768101053,
+      "l2_max": 16.50606576810106
+    },
+    {
+      "condition": "fixed_orthogonal_r0.5_rep3",
+      "radius": 0.5,
+      "repeat": 3,
+      "l2_min": 16.506065768101056,
+      "l2_max": 16.506065768101056
+    },
+    {
+      "condition": "pc1_r0.5_rep3",
+      "radius": 0.5,
+      "repeat": 3,
+      "l2_min": 16.506065768101067,
+      "l2_max": 16.50606576810107
+    },
+    {
+      "condition": "axis_r1_rep3",
+      "radius": 1.0,
+      "repeat": 3,
+      "l2_min": 33.012131536202126,
+      "l2_max": 33.01213153620213
+    },
+    {
+      "condition": "orthogonal_r1_rep3",
+      "radius": 1.0,
+      "repeat": 3,
+      "l2_min": 33.012131536202105,
+      "l2_max": 33.01213153620212
+    },
+    {
+      "condition": "random_r1_rep3",
+      "radius": 1.0,
+      "repeat": 3,
+      "l2_min": 33.012131536202105,
+      "l2_max": 33.01213153620212
+    },
+    {
+      "condition": "fixed_orthogonal_r1_rep3",
+      "radius": 1.0,
+      "repeat": 3,
+      "l2_min": 33.01213153620211,
+      "l2_max": 33.01213153620211
+    },
+    {
+      "condition": "pc1_r1_rep3",
+      "radius": 1.0,
+      "repeat": 3,
+      "l2_min": 33.01213153620213,
+      "l2_max": 33.01213153620214
+    },
+    {
+      "condition": "axis_r2_rep3",
+      "radius": 2.0,
+      "repeat": 3,
+      "l2_min": 66.02426307240425,
+      "l2_max": 66.02426307240427
+    },
+    {
+      "condition": "orthogonal_r2_rep3",
+      "radius": 2.0,
+      "repeat": 3,
+      "l2_min": 66.02426307240421,
+      "l2_max": 66.02426307240424
+    },
+    {
+      "condition": "random_r2_rep3",
+      "radius": 2.0,
+      "repeat": 3,
+      "l2_min": 66.02426307240421,
+      "l2_max": 66.02426307240424
+    },
+    {
+      "condition": "fixed_orthogonal_r2_rep3",
+      "radius": 2.0,
+      "repeat": 3,
+      "l2_min": 66.02426307240422,
+      "l2_max": 66.02426307240422
+    },
+    {
+      "condition": "pc1_r2_rep3",
+      "radius": 2.0,
+      "repeat": 3,
+      "l2_min": 66.02426307240427,
+      "l2_max": 66.02426307240428
+    },
+    {
+      "condition": "axis_r0.25_rep4",
+      "radius": 0.25,
+      "repeat": 4,
+      "l2_min": 8.253032884050532,
+      "l2_max": 8.253032884050533
+    },
+    {
+      "condition": "orthogonal_r0.25_rep4",
+      "radius": 0.25,
+      "repeat": 4,
+      "l2_min": 8.253032884050526,
+      "l2_max": 8.25303288405053
+    },
+    {
+      "condition": "random_r0.25_rep4",
+      "radius": 0.25,
+      "repeat": 4,
+      "l2_min": 8.253032884050526,
+      "l2_max": 8.25303288405053
+    },
+    {
+      "condition": "fixed_orthogonal_r0.25_rep4",
+      "radius": 0.25,
+      "repeat": 4,
+      "l2_min": 8.253032884050526,
+      "l2_max": 8.253032884050528
+    },
+    {
+      "condition": "pc1_r0.25_rep4",
+      "radius": 0.25,
+      "repeat": 4,
+      "l2_min": 8.253032884050533,
+      "l2_max": 8.253032884050535
+    },
+    {
+      "condition": "axis_r0.5_rep4",
+      "radius": 0.5,
+      "repeat": 4,
+      "l2_min": 16.506065768101063,
+      "l2_max": 16.506065768101067
+    },
+    {
+      "condition": "orthogonal_r0.5_rep4",
+      "radius": 0.5,
+      "repeat": 4,
+      "l2_min": 16.506065768101053,
+      "l2_max": 16.50606576810106
+    },
+    {
+      "condition": "random_r0.5_rep4",
+      "radius": 0.5,
+      "repeat": 4,
+      "l2_min": 16.506065768101053,
+      "l2_max": 16.50606576810106
+    },
+    {
+      "condition": "fixed_orthogonal_r0.5_rep4",
+      "radius": 0.5,
+      "repeat": 4,
+      "l2_min": 16.506065768101053,
+      "l2_max": 16.506065768101056
+    },
+    {
+      "condition": "pc1_r0.5_rep4",
+      "radius": 0.5,
+      "repeat": 4,
+      "l2_min": 16.506065768101067,
+      "l2_max": 16.50606576810107
+    },
+    {
+      "condition": "axis_r1_rep4",
+      "radius": 1.0,
+      "repeat": 4,
+      "l2_min": 33.012131536202126,
+      "l2_max": 33.01213153620213
+    },
+    {
+      "condition": "orthogonal_r1_rep4",
+      "radius": 1.0,
+      "repeat": 4,
+      "l2_min": 33.012131536202105,
+      "l2_max": 33.01213153620212
+    },
+    {
+      "condition": "random_r1_rep4",
+      "radius": 1.0,
+      "repeat": 4,
+      "l2_min": 33.012131536202105,
+      "l2_max": 33.01213153620212
+    },
+    {
+      "condition": "fixed_orthogonal_r1_rep4",
+      "radius": 1.0,
+      "repeat": 4,
+      "l2_min": 33.01213153620211,
+      "l2_max": 33.01213153620211
+    },
+    {
+      "condition": "pc1_r1_rep4",
+      "radius": 1.0,
+      "repeat": 4,
+      "l2_min": 33.01213153620213,
+      "l2_max": 33.01213153620214
+    },
+    {
+      "condition": "axis_r2_rep4",
+      "radius": 2.0,
+      "repeat": 4,
+      "l2_min": 66.02426307240425,
+      "l2_max": 66.02426307240427
+    },
+    {
+      "condition": "orthogonal_r2_rep4",
+      "radius": 2.0,
+      "repeat": 4,
+      "l2_min": 66.02426307240421,
+      "l2_max": 66.02426307240424
+    },
+    {
+      "condition": "random_r2_rep4",
+      "radius": 2.0,
+      "repeat": 4,
+      "l2_min": 66.02426307240421,
+      "l2_max": 66.02426307240424
+    },
+    {
+      "condition": "fixed_orthogonal_r2_rep4",
+      "radius": 2.0,
+      "repeat": 4,
+      "l2_min": 66.02426307240422,
+      "l2_max": 66.02426307240422
+    },
+    {
+      "condition": "pc1_r2_rep4",
+      "radius": 2.0,
+      "repeat": 4,
+      "l2_min": 66.02426307240427,
+      "l2_max": 66.02426307240428
+    }
+  ],
+  "scope": "CLS interventions hold CLIP/bridge fixed; image variants change all branches",
+  "threshold": "source-trained logistic decision=0; fixed detector fake-minus-real logit=0",
+  "interpretation": "error subsets are descriptive, never fitted or used for tuning"
+}

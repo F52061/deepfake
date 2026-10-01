@@ -101,7 +101,14 @@ def main():
             break
     state = {key[7:] if key.startswith("module.") else key: value for key, value in state.items()}
     model.load_state_dict(state, strict=True)
-    model.to(device=args.device, dtype=torch.float32).eval().requires_grad_(False)
+    # Move to device WITHOUT a global dtype cast. TransformerEncoderBlock builds
+    # its attention in bfloat16 on purpose (vit_m2f2_detector_bridge.py:116) and
+    # casts its input to match at :129; forcing torch.float32 on the whole model
+    # upcasts those weights and the attention then fails with
+    # "expected scalar type Float but found BFloat16". Every other submodule is
+    # already float32 from the constructor defaults. This matches how the
+    # project itself loads the model (vit_module/_g16/run_g16.py:303).
+    model.to(device=args.device).eval().requires_grad_(False)
     native = CLIPModel.from_pretrained(args.clip, local_files_only=True).eval().requires_grad_(False)
     tower = model.clip_vision_encoder.model.state_dict()
     native_tower = native.vision_model.state_dict()
