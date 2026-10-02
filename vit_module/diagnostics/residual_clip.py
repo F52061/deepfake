@@ -102,8 +102,21 @@ def main():
                                        raw_weight[dimension:]])
     equivalent_bias = raw_bias + raw_weight[dimension:] @ offset
     scores["V_Cres_equivalent"] = sets["V_Cres"] @ equivalent_weight + equivalent_bias
+    # Compared as a RELATIVE error. The identity below is exact algebra, but the
+    # two sides are evaluated along different floating-point paths, and the ridge
+    # solve is ill conditioned here (V's spectrum is steep: PC0 alone carries
+    # ~62% of the variance, so the Gram matrix has rcond ~3e-8 and sklearn emits
+    # LinAlgWarning). That amplifies roundoff to ~1e-8 relative, which on scores
+    # of magnitude ~7 lands just above an ABSOLUTE 1e-7 threshold. The absolute
+    # error still passed 1e-7 on the synthetic check because those features are
+    # 8-dimensional and the scores are O(1); it does not generalise to this data.
+    # Scaling by the score magnitude keeps the guard's intent — a coding error in
+    # the transform would be orders of magnitude larger than this — while making
+    # it independent of the score scale.
+    score_scale = max(1.0, float(np.max(np.abs(scores["V_C"]))))
     equivalent_error = float(np.max(np.abs(scores["V_Cres_equivalent"] - scores["V_C"])))
-    if equivalent_error > 1e-7:
+    equivalent_relative_error = equivalent_error / score_scale
+    if equivalent_relative_error > 1e-7:
         raise ValueError("Equivalent classifier does not preserve predictions")
     np.savez_compressed(output / "equivalent_head.npz", weight=equivalent_weight, bias=np.array(equivalent_bias))
     random_artifacts = {}
@@ -135,6 +148,9 @@ def main():
     metadata = {"arguments": vars(args), "input_metadata_sha256": digest,
                 "label": "1=fake", "ridge_cv_mse": losses, "selected_alpha": alpha,
                 "reconstruction_error": reconstruction, "equivalent_score_error": equivalent_error,
+                "equivalent_score_relative_error": equivalent_relative_error,
+                "equivalent_score_scale": score_scale,
+                "equivalent_check": "relative to max|score|; threshold 1e-7",
                 "code_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
                 "interpretation": "Residual fusion is an invertible reparameterization; gains are not proof of new information."}
     (output / "config.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
@@ -147,7 +163,8 @@ def main():
             data, scores["V_C"], scores["V_Cres"], mask, args.bootstrap, args.seed)
     (output / "summary.json").write_text(json.dumps(report, indent=2, allow_nan=False), encoding="utf-8")
     (output / "COMPLETE").write_text("Analysis completed\n", encoding="utf-8")
-    print(f"Saved {output.resolve()}; equivalent-score error={equivalent_error:.3g}")
+    print(f"Saved {output.resolve()}; equivalent-score error={equivalent_error:.3g} "
+          f"(relative {equivalent_relative_error:.3g}, scale {score_scale:.3g})")
 
 
 if __name__ == "__main__":

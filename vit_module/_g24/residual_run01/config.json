@@ -1,0 +1,36 @@
+{
+  "arguments": {
+    "input": "vit_module/_g23/diag_runs/extract_full",
+    "output": "vit_module/_g24/residual_run01",
+    "source": "ffpp",
+    "label_one": "fake",
+    "alphas": [
+      0.1,
+      1,
+      10,
+      100,
+      1000
+    ],
+    "regularization": 0.001,
+    "repeats": 5,
+    "bootstrap": 1000,
+    "seed": 20261002
+  },
+  "input_metadata_sha256": "d0847ded0f0579db4fc39ac19b8c52fb1143377ba3a81de4fb687049d21a7e6c",
+  "label": "1=fake",
+  "ridge_cv_mse": {
+    "0.1": 0.10635796980424361,
+    "1": 0.08935458790172231,
+    "10": 0.07307485233653675,
+    "100": 0.06417536475441672,
+    "1000": 0.061048484282060105
+  },
+  "selected_alpha": 1000,
+  "reconstruction_error": 8.302410190452747e-07,
+  "equivalent_score_error": 1.42491388466226e-07,
+  "equivalent_score_relative_error": 2.049502173182077e-08,
+  "equivalent_score_scale": 6.952487795853004,
+  "equivalent_check": "relative to max|score|; threshold 1e-7",
+  "code_sha256": "0c730621e31bf358ca937e695c3f98d94b92072ce3ea230b93718b24f1d2d33e",
+  "interpretation": "Residual fusion is an invertible reparameterization; gains are not proof of new information."
+}
