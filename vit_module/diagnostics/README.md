@@ -113,3 +113,61 @@ python vit_module/diagnostics/self_check.py
 
 使用临时合成数据执行两次离线分析，验证分类头重放、等能量、正交方向、置换隔离、视频泄漏拒绝，以及改变目标域数据不改变源域 PCA/读取器。合成结果不作为研究证据；验证目录结束后自动清理。
 真实实验仍需 manifest、完整 checkpoint、原生 CLIP 目录及项目推理依赖。
+
+---
+
+## 本项目（M2F2_Det-main-hyy）专用说明
+
+> 以下为本仓库实测确认的口径与坑位，**与本文档其他部分的通用约定不同**，使用时以此为准。
+> 实测记录见 `WORKLOG.md` §D.51–§D.57 与 `FINDINGS_问题验证数据.md` 第四部分。
+
+### 必须显式传 `--fake-logit 0`
+
+本仓库 checkpoint 的 **logit 下标 0 = fake**，而工具默认 `--fake-logit 1`。
+
+| 分数取法 | ffpp 域内 AUC |
+|---|---|
+| `logits[:,1] − logits[:,0]`（工具默认） | 0.0207 |
+| `logits[:,0] − logits[:,1]`（**本仓库正确**） | 0.9793 |
+
+工具自带的 `replay_head` 检查**查不出**这个错误——它在重放与对照两边用同一个下标，放反了照样自洽通过。**放反不会报错，只会让全部结果方向相反。**
+
+### 标签与 split 需先转换
+
+本仓库 `_g16/layer_feats.npz` 的约定与工具不同，**不能直接喂入**：
+
+| 项 | 本仓库 | 工具要求 | 转换 |
+|---|---|---|---|
+| 标签 | `y == 1` 表示 **real** | `y == 1` 表示 **fake** | `y = 1 − y` |
+| `split` 列 | 目标域直接存域名字符串（`cd1`/`cd2`/`dfdcp`/`wild`） | 只接受 `train`/`val`/`test` | 目标域改为 `test` |
+| `ffiw` | 300 张全部来自**同 1 个视频** | 语义置换要求 ≥2 视频 | **剔除**，不入任何聚合 |
+
+现成适配器：`vit_module/_g23/make_manifest.py`，输出 `vit_module/_g23/manifest_full.csv`（4200 行）。
+
+### 本仓库实测可用的命令
+
+```bash
+# 提取（注意 --fake-logit 0；输出目录不得预先存在）
+python vit_module/diagnostics/extract.py \
+  --manifest vit_module/_g23/manifest_full.csv \
+  --checkpoint checkpoints/stage_1/bridge_v2_phase1.pth \
+  --clip checkpoints/clip-vit-large-patch14-336 \
+  --device cuda:1 --batch-size 4 --fake-logit 0 --variants clean \
+  --output vit_module/_g23/diag_runs/extract_full
+
+# 局部/结构实验需再加 --save-regions
+python vit_module/diagnostics/local_analyze.py \
+  --input vit_module/_g25/diag_runs/extract_regions \
+  --output vit_module/_g25/local_run01 --bootstrap 1000
+```
+
+**分辨率**：4200 张 1 个变体约 13.5 分钟；5 个变体 29 分 12 秒。`--save-regions` 后 1 个变体约 525 MB。
+
+### 运行时
+
+- 分析侧**瓶颈是 `summarize` 的配对自助法**，不是读取器拟合。全量规模（2200 × 16128 维）单次 LogisticRegression 拟合仅 **1.31 秒**（10 次迭代收敛，远未触及 `max_iter=3000`）；但 `--bootstrap 1000` 下约 130 次调用需 **9–10 分钟**。
+- 工具默认 `--bootstrap 1000`；本项目 §D.54 用的是 300。**bootstrap 只影响区间宽度，全部点估计与之无关。**
+
+### 已知需修复处（本仓库已打补丁）
+
+原始提交的 `extract.py` / `local_analyze.py` / `residual_clip.py` 存在若干**阻断性**问题，本仓库已修复，逐条记录在 `FINDINGS_问题验证数据.md` 的「附 · 诊断工具链自身的缺陷」。**未打补丁的原始版本无法产出任何结果。**

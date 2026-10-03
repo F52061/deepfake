@@ -70,9 +70,10 @@ def main():
         "V_relations": np.concatenate([data["V"], v_relation], axis=1),
         "C_relations": np.concatenate([data["C"], c_relation], axis=1),
     }
-    scores = {}
+    scores, readers = {}, {}
     for name, features in sets.items():
         reader = fit_reader(features, data["y"], train, args.regularization, args.seed)
+        readers[name] = reader
         scores[name] = reader.decision_function(features)
         save_reader(output / f"reader_{name}.npz", reader)
     rng = np.random.default_rng(args.seed)
@@ -82,6 +83,15 @@ def main():
         for domain in np.unique(data["domain"]):
             for split in np.unique(data["split"]):
                 ids = np.flatnonzero((data["domain"] == domain) & (data["split"] == split))
+                if len(ids) == 0:
+                    # Skip empty cells. np.unique(data["split"]) is global, so this
+                    # loop visits every (domain, split) combination, but a given
+                    # domain need not populate every split: in our manifest only
+                    # ffpp has "train" rows, so cd1/train etc. are empty. There is
+                    # nothing to permute there, and failing would make the control
+                    # unrunnable. A cell with exactly one row is still an error,
+                    # because permutation needs a partner.
+                    continue
                 if len(ids) < 2:
                     raise ValueError(f"Spatial permutation needs >=2 rows: {domain}/{split}")
                 c_perm[ids] = c_region[ids[rng.permutation(len(ids))]]

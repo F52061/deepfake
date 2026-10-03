@@ -1,0 +1,17 @@
+{
+  "arguments": {
+    "input": "vit_module/_g25/diag_runs/extract_smoke",
+    "output": "vit_module/_g25/local_smoke",
+    "source": "ffpp",
+    "regularization": 0.001,
+    "bootstrap": 100,
+    "seed": 20261003,
+    "permutations": 5
+  },
+  "input_config_sha256": "706fd168b09d02bc0c4b80dd6c1def7594271684321d9eeefb93c59947e7fc3f",
+  "grid": 3,
+  "region_count": 9,
+  "descriptors": "normalized 3x3 pooled token regions; pairwise and region-to-global cosine relations",
+  "label": "1=fake",
+  "interpretation": "diagnostic probes only; no architecture training"
+}
