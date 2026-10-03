@@ -68,6 +68,10 @@ def main():
     parser.add_argument("--batch-size", type=int, default=4)
     parser.add_argument("--fake-logit", type=int, choices=[0, 1], default=1)
     parser.add_argument("--save-tokens", action="store_true")
+    parser.add_argument("--save-regions", action="store_true")
+    parser.add_argument("--region-grid", type=int, default=3)
+    parser.add_argument("--save-regions", action="store_true")
+    parser.add_argument("--region-grid", type=int, default=3)
     parser.add_argument("--variants", nargs="+", default=["clean", "jpeg70", "blur", "resize", "color"])
     args = parser.parse_args()
     if args.batch_size < 1 or "clean" not in args.variants or len(set(args.variants)) != len(args.variants):
@@ -75,6 +79,10 @@ def main():
     allowed = {"clean", "jpeg70", "blur", "resize", "color"}
     if not set(args.variants) <= allowed:
         parser.error(f"Variants must be in {sorted(allowed)}")
+    if not 2 <= args.region_grid <= 14:
+        parser.error("region-grid must be between 2 and 14")
+    if not 2 <= args.region_grid <= 14:
+        parser.error("region-grid must be between 2 and 14")
     rows = read_manifest(args.manifest)
     output = Path(args.output)
     output.mkdir(parents=True, exist_ok=False)
@@ -198,6 +206,18 @@ def main():
                     data["vit_tokens"] = captured["vit_tokens"].cpu().numpy()
                     for name, tokens in model.vit_block_outputs.items():
                         data["vit_" + name] = tokens.cpu().numpy()
+                if args.save_regions:
+                    from local_features import pool_tokens
+                    data["vit_regions"] = pool_tokens(
+                        captured["vit_tokens"].cpu().numpy(), args.region_grid, has_cls=True)
+                    data["clip_regions"] = pool_tokens(
+                        patches.cpu().numpy(), args.region_grid)
+                if args.save_regions:
+                    from local_features import pool_tokens
+                    data["vit_regions"] = pool_tokens(
+                        captured["vit_tokens"].cpu().numpy(), args.region_grid, has_cls=True)
+                    data["clip_regions"] = pool_tokens(patches.cpu().numpy(), args.region_grid)
+                    data["clip_last_cls"] = clip.hidden_states[-1][:, 0].cpu().numpy()
                 np.savez_compressed(output / f"{variant}_{start:08d}.npz", **data)
                 print(f"{variant}: {start + len(batch_rows)}/{len(rows)}", flush=True)
     finally:
