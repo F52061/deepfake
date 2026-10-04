@@ -171,3 +171,7 @@ python vit_module/diagnostics/local_analyze.py \
 ### 已知需修复处（本仓库已打补丁）
 
 原始提交的 `extract.py` / `local_analyze.py` / `residual_clip.py` 存在若干**阻断性**问题，本仓库已修复，逐条记录在 `FINDINGS_问题验证数据.md` 的「附 · 诊断工具链自身的缺陷」。**未打补丁的原始版本无法产出任何结果。**
+
+### 下一轮实验规格
+
+在现有残差/局部实验之后，下一步验证“保留 ViT 主决策、条件读取 CLIP image 局部区域并以残差纠错”的假设。实验设计、对照、判定和数据保存要求见 `CONDITIONAL_CLIP_EXPERIMENT.md`；该文件只描述协议，尚未包含 G26 实测结果。
