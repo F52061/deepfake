@@ -202,3 +202,17 @@ python vit_module/diagnostics/check_conditional.py
 ```
 
 覆盖 `s_V` 方向、关闭控制（`delta≡0` 逐元素精确还原 `s_V`）、donor 不跨视频/不跨 (domain, split)、源域视频同时含两类、F 的置换不变性。
+
+### G26 域条件性复验
+
+修改后的 `conditional_clip.py` 还会生成 `F_cross_domain`：不同 domain、相同 split、不同 video 的 CLIP donor，并在每个评估域写入 `correction_diagnostics`（`delta_auc`、rescue/harm、修正幅度等）。新运行必须使用新目录，不覆盖已有 G26 结果：
+
+```powershell
+python vit_module/diagnostics/conditional_clip.py `
+  --input vit_module/_g25/diag_runs/extract_regions `
+  --output vit_module/_g26/conditional_clip_run02_domain `
+  --seeds 20261007 20261008 20261009 --folds 3 `
+  --epochs 200 --bootstrap 1000 --repeats 5 --threads 4
+```
+
+交叉验证选参阶段现在只使用 fit fold 的标准化统计；旧的 `conditional_clip_run01` 是修复前产物，不能与新运行的数值直接混合。

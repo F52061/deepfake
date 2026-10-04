@@ -55,6 +55,22 @@ def normalize_regions(regions):
     return regions / np.linalg.norm(regions, axis=-1, keepdims=True).clip(1e-8)
 
 
+def standardize_features(data, fit_rows):
+    """Standardize reader inputs using only the supplied fit rows."""
+    from sklearn.preprocessing import StandardScaler
+
+    scalers = {key: StandardScaler().fit(data[key][fit_rows]) for key in ("v", "c")}
+    region_values = data["ci"].reshape(len(data["y"]), -1)
+    region_scaler = StandardScaler().fit(region_values[fit_rows])
+    return {
+        "v": scalers["v"].transform(data["v"]).astype(np.float32),
+        "c": scalers["c"].transform(data["c"]).astype(np.float32),
+        "ci": region_scaler.transform(region_values).astype(np.float32).reshape(
+            len(data["y"]), data["ci"].shape[1], data["ci"].shape[2]),
+        "s": data["s"],
+    }
+
+
 def split_donors(video_id, domain, split, rng):
     """Donor rows within the same (domain, split) but never the same video.
 
@@ -75,6 +91,57 @@ def split_donors(video_id, domain, split, rng):
                 candidates = np.flatnonzero(videos != group)
                 donors[cell[selected]] = cell[rng.choice(candidates, size=len(selected), replace=True)]
     return donors
+
+
+def split_cross_domain_donors(video_id, domain, split, rng):
+    """Choose donors from another domain and the same split.
+
+    This is a stronger domain-mismatch control than ``split_donors``.  It is
+    intentionally allowed to return -1 for a cell with only one domain (the
+    FF++ source train cell is such a case); callers must report and fall back
+    without using those rows as evidence.
+    """
+    donors = np.full(len(video_id), -1, dtype=int)
+    for cell_split in np.unique(split):
+        cell = np.flatnonzero(split == cell_split)
+        for cell_domain in np.unique(domain[cell]):
+            target = cell[domain[cell] == cell_domain]
+            candidates = cell[domain[cell] != cell_domain]
+            if len(target) == 0 or len(candidates) == 0:
+                continue
+            for row in target:
+                eligible = candidates[video_id[candidates] != video_id[row]]
+                if len(eligible):
+                    donors[row] = rng.choice(eligible)
+    return donors
+
+
+def correction_diagnostics(labels, baseline, candidate):
+    """Describe whether the correction itself carries domain-conditional signal."""
+    from sklearn.metrics import roc_auc_score
+
+    labels = np.asarray(labels)
+    baseline = np.asarray(baseline)
+    candidate = np.asarray(candidate)
+    delta = candidate - baseline
+    result = {
+        "delta_mean": float(delta.mean()),
+        "delta_std": float(delta.std()),
+        "delta_abs_p50": float(np.quantile(np.abs(delta), 0.50)),
+        "delta_abs_p90": float(np.quantile(np.abs(delta), 0.90)),
+    }
+    if len(np.unique(labels)) == 2:
+        result["delta_auc"] = float(roc_auc_score(labels, delta))
+        result["baseline_auc"] = float(roc_auc_score(labels, baseline))
+        result["candidate_auc"] = float(roc_auc_score(labels, candidate))
+    else:
+        result.update({"delta_auc": None, "baseline_auc": None, "candidate_auc": None})
+    baseline_wrong = (baseline >= 0) != labels.astype(bool)
+    candidate_wrong = (candidate >= 0) != labels.astype(bool)
+    result["rescue_rate"] = float(np.mean(baseline_wrong & ~candidate_wrong))
+    result["harm_rate"] = float(np.mean(~baseline_wrong & candidate_wrong))
+    result["net_correction_rate"] = result["rescue_rate"] - result["harm_rate"]
+    return result
 
 
 class RegionReader(nn.Module):
@@ -278,7 +345,6 @@ def main():
     output.mkdir(parents=True, exist_ok=False)
 
     from sklearn.model_selection import GroupKFold
-    from sklearn.preprocessing import StandardScaler
     from sklearn.metrics import roc_auc_score
 
     train_index = np.flatnonzero(train)
@@ -289,18 +355,31 @@ def main():
                 if len(set(data["y"][(data["video_id"] == video) & train])) == 2)
     rng = np.random.default_rng(args.seeds[0])
     donors = split_donors(data["video_id"], data["domain"], data["split"], rng)
+    cross_domain_donors = split_cross_domain_donors(
+        data["video_id"], data["domain"], data["split"], rng)
     usable = donors >= 0
+    cross_usable = cross_domain_donors >= 0
     checks = {
         "s_v_auc_source_train": float(roc_auc_score(data["y"][train], data["s"][train])),
         "regions": regions, "region_dim": c_dim,
         "train_rows": int(train.sum()), "train_videos": int(len(np.unique(videos))),
         "train_videos_with_both_classes": int(mixed),
         "rows_without_donor": int((~usable).sum()),
+        "rows_without_cross_domain_donor": int((~cross_usable).sum()),
         "donor_same_video_violations": int(np.sum(
             data["video_id"][donors[usable]] == data["video_id"][usable])),
         "donor_cell_violations": int(np.sum(
             (data["domain"][donors[usable]] != data["domain"][usable]) |
             (data["split"][donors[usable]] != data["split"][usable]))),
+        "cross_domain_same_domain_violations": int(np.sum(
+            data["domain"][cross_domain_donors[cross_usable]] ==
+            data["domain"][cross_usable])),
+        "cross_domain_same_video_violations": int(np.sum(
+            data["video_id"][cross_domain_donors[cross_usable]] ==
+            data["video_id"][cross_usable])),
+        "cross_domain_split_violations": int(np.sum(
+            data["split"][cross_domain_donors[cross_usable]] !=
+            data["split"][cross_usable])),
     }
     if checks["s_v_auc_source_train"] < 0.5:
         raise ValueError("s_V is oriented backwards; fake score must be logits[:,0]-logits[:,1]")
@@ -308,17 +387,14 @@ def main():
         raise ValueError("Some source videos do not carry both classes; grouping by video would leak")
     if checks["donor_same_video_violations"] or checks["donor_cell_violations"]:
         raise ValueError("Donor construction violated the same-video or same-cell rule")
+    if (checks["cross_domain_same_domain_violations"] or
+            checks["cross_domain_same_video_violations"] or
+            checks["cross_domain_split_violations"]):
+        raise ValueError("Cross-domain donor construction violated its domain/video/split rule")
 
-    # ---- standardisation uses fit-fold statistics only ----
-    scalers = {key: StandardScaler().fit(data[key][train]) for key in ("v", "c")}
-    region_scaler = StandardScaler().fit(data["ci"].reshape(len(data["y"]), -1)[train])
-    standardised = {
-        "v": scalers["v"].transform(data["v"]).astype(np.float32),
-        "c": scalers["c"].transform(data["c"]).astype(np.float32),
-        "ci": region_scaler.transform(data["ci"].reshape(len(data["y"]), -1))
-              .astype(np.float32).reshape(len(data["y"]), regions, c_dim),
-        "s": data["s"],
-    }
+    # Final reader/controls use source-train statistics. CV folds below create
+    # their own stores from only the fitting rows, preventing validation leakage.
+    standardised = standardize_features(data, train)
     store = Store(standardised, regions, c_dim, device)
 
     # ---- parameter matching: B/C/D must be able to match F before it is fitted ----
@@ -351,11 +427,12 @@ def main():
                 squared, elements = 0.0, 0
                 for fitting, validation in folds.split(train_index, groups=videos):
                     fit_rows, val_rows = train_index[fitting], train_index[validation]
+                    fold_store = Store(standardize_features(data, fit_rows), regions, c_dim, device)
                     model = build(name, v_dim, c_dim, regions, widths[name], args.dim, args.depth)
-                    train_reader(model, name, store, fit_rows, data["y"][fit_rows],
+                    train_reader(model, name, fold_store, fit_rows, data["y"][fit_rows],
                                  {"lambda_delta": lam, "weight_decay": wd}, args, device)
                     model.eval()
-                    val_batch = store.batch(val_rows)
+                    val_batch = fold_store.batch(val_rows)
                     with torch.no_grad():
                         delta, _ = forward(model, name, val_batch)
                     target = torch.as_tensor(data["y"][val_rows], device=device).float()
@@ -390,7 +467,18 @@ def main():
                       "ci": standardised["ci"][np.where(usable, donors, np.arange(len(usable)))],
                       "s": standardised["s"]}
     donor_store = Store(donor_features, regions, c_dim, device)
-    controls = {"donors": donors, "donor_usable": usable}
+    cross_donor_features = {
+        "v": standardised["v"], "c": standardised["c"],
+        "ci": standardised["ci"][np.where(
+            cross_usable, cross_domain_donors, np.arange(len(cross_usable)))],
+        "s": standardised["s"],
+    }
+    cross_donor_store = Store(cross_donor_features, regions, c_dim, device)
+    controls = {
+        "donors": donors, "donor_usable": usable,
+        "cross_domain_donors": cross_domain_donors,
+        "cross_domain_donor_usable": cross_usable,
+    }
     for seed in args.seeds:
         args.seed = seed
         key = f"F|{seed}"
@@ -398,6 +486,8 @@ def main():
         hyper = {"lambda_delta": chosen["lambda_delta"], "weight_decay": chosen["weight_decay"]}
         model = adapters[key]
         scores[f"F_donor|{seed}"], _ = score_reader(model, "F", donor_store, np.arange(len(data["y"])))
+        scores[f"F_cross_domain|{seed}"], _ = score_reader(
+            model, "F", cross_donor_store, np.arange(len(data["y"])))
         noise_rng = np.random.default_rng(seed)
         for repeat in range(args.repeats):
             noise = (noise_rng.normal(size=(len(data["y"]), regions * c_dim)).astype(np.float32)
@@ -441,10 +531,22 @@ def main():
                 data, scores[f"E|{seed}"], scores[f"F|{seed}"], mask, args.bootstrap, seed)
             entry[f"F_donor|{seed}"] = summarize(
                 data, scores["A"], scores[f"F_donor|{seed}"], mask, args.bootstrap, seed)
+            entry[f"F_cross_domain|{seed}"] = summarize(
+                data, scores["A"], scores[f"F_cross_domain|{seed}"], mask,
+                args.bootstrap, seed)
             entry[f"F_noise_fixed|{seed}"] = summarize(
                 data, scores["A"], scores[f"F_noise_fixed|{seed}|0"], mask, args.bootstrap, seed)
             entry[f"F_noise_retrain|{seed}"] = summarize(
                 data, scores["A"], scores[f"F_noise_retrain|{seed}|0"], mask, args.bootstrap, seed)
+        diagnostics = {}
+        for name in ("F|mean", *[f"F|{seed}" for seed in args.seeds],
+                     *[f"F_donor|{seed}" for seed in args.seeds],
+                     *[f"F_cross_domain|{seed}" for seed in args.seeds]):
+            candidate = (np.mean([scores[f"F|{seed}"] for seed in args.seeds], axis=0)
+                         if name == "F|mean" else scores[name])
+            diagnostics[name] = correction_diagnostics(
+                data["y"][mask], scores["A"][mask], candidate[mask])
+        entry["correction_diagnostics"] = diagnostics
         report[domain] = entry
 
     metadata = {
@@ -457,6 +559,14 @@ def main():
             "SKIPPED by design: F is permutation invariant (query from V only, regions enter via a "
             "softmax-weighted sum), so region-order shuffling cannot change its output and would not "
             "be a valid control (spec section 4.6)."),
+        "domain_conditional_controls": {
+            "same_domain_donor": "same domain/split, different video; tests current-image dependence",
+            "cross_domain_donor": "different domain, same split, different video; tests domain compatibility",
+            "correction_diagnostics": "per-domain delta AUC, rescue/harm rates and correction magnitude",
+        },
+        "standardization": (
+            "final reader uses source-train statistics; each GroupKFold fit/validation selection "
+            "uses statistics fitted on the fit fold only"),
         "interpretation": "frozen-representation diagnostic; no architecture training",
     }
     (output / "config.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
@@ -465,7 +575,8 @@ def main():
     (output / "COMPLETE").write_text("Analysis completed\n", encoding="utf-8")
     print(f"Saved {output.resolve()}")
     print(f"s_V source-train AUC={checks['s_v_auc_source_train']:.4f} "
-          f"params={parameter_counts} rows_without_donor={checks['rows_without_donor']}")
+          f"params={parameter_counts} rows_without_donor={checks['rows_without_donor']} "
+          f"rows_without_cross_domain_donor={checks['rows_without_cross_domain_donor']}")
 
 
 if __name__ == "__main__":

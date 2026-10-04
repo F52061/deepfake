@@ -4386,3 +4386,39 @@ F 的九个区域平均权重、以及权重分布的熵：
 - 未删除任何实验产物；`_g26/` 原样保留（含 2.15 GB 的 `controls.npz`）。
 - 未提交、未推送。`git status` 中 3 个修改文件 + 2 个新增代码文件 + `_g26/` 仍待处理。
 - 未修改 `FINDINGS_问题验证数据.md` 中 P1–P13 的任何原有数字。
+
+## §D.63 G26 后续验证设计：检验 CLIP 局部增益的域条件性（2026-10-04）
+
+### D.63.1 研究问题
+
+G26 表明 F 在 cd1/cd2 有增益、在 dfdcp/wild 没有稳定增益，同时 donor/噪声会抹掉增益。下一步不把“部分域有效”直接解释为 CLIP 学到了域标签，而是检验以下更窄的假设：
+
+> CLIP 局部证据与 ViT 的条件修正强度依赖目标域；同一读取器在不同域上的 `delta` 可读性、救回/误伤和 donor 敏感性不同。
+
+完整协议已更新至 `vit_module/diagnostics/CONDITIONAL_CLIP_EXPERIMENT.md`，新增 H4“域条件性假设”。
+
+### D.63.2 脚本改动
+
+`vit_module/diagnostics/conditional_clip.py` 新增：
+
+1. `split_cross_domain_donors`：从不同 domain、相同 split、不同 video 选择 donor；FF++ source train 没有可用跨域 donor 的行记为 `-1`，不把回退行当作证据。
+2. `F_cross_domain` 控制：保留当前样本的 `V/s_V`，替换 CLIP 区域，检验域兼容性是否参与 F 的读取。
+3. `correction_diagnostics`：按域保存 `delta_auc`、`rescue_rate`、`harm_rate`、`net_correction_rate` 和修正幅度分位数。
+4. `config.json` 新增跨域 donor 规则及不可用行数检查；`controls.npz` 保存跨域 donor 行号与可用掩码。
+
+`check_conditional.py` 同步增加跨域 donor 的域、视频、split 隔离自检。原有 G26 产物不覆盖；修改后的脚本需要输出到新目录。
+
+### D.63.3 固定解释规则
+
+| 观察 | 允许的解释 |
+|---|---|
+| F 优于 A，同域 donor 退化 | F 依赖当前图像的 CLIP 内容 |
+| 跨域 donor 比同域 donor 更差 | 存在域兼容性/域条件性迹象 |
+| donor/噪声均接近 A | 不能证明使用了当前样本的 CLIP 内容 |
+| 只有 cd1/cd2 有效 | 只能报告 Celeb-DF 现象；cd1 ⊂ cd2，不是两个独立域 |
+
+跨域 donor 是破坏性控制，不能单独证明“域语义”或“域捷径”。逐域 `delta` 诊断只用于机制描述，最终判定仍以总体 AUC 和视频分组 paired bootstrap 为准。
+
+### D.63.4 运行纪律
+
+新运行必须使用新的输出目录（建议 `vit_module/_g26/conditional_clip_run02_domain/`），不覆盖 `conditional_clip_run01`。目标域标签只用于最终统计；donor 选择只使用 domain/split/video 元数据。结果需同时报告真实 F、同域 donor、跨域 donor、匹配噪声及逐域 correction diagnostics。

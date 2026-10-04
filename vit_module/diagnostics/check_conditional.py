@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 import torch
 
-from conditional_clip import RegionReader, split_donors
+from conditional_clip import RegionReader, split_cross_domain_donors, split_donors
 
 
 def main():
@@ -61,7 +61,14 @@ def main():
         assert checks["s_v_auc_source_train"] > 0.9, "s_V must point at the fake class"
         assert checks["donor_same_video_violations"] == 0
         assert checks["donor_cell_violations"] == 0
+        assert checks["cross_domain_same_domain_violations"] == 0
+        assert checks["cross_domain_same_video_violations"] == 0
+        assert checks["cross_domain_split_violations"] == 0
         assert checks["train_videos_with_both_classes"] == checks["train_videos"]
+        summary = json.loads((out / "summary.json").read_text(encoding="utf-8"))
+        assert all("correction_diagnostics" in entry for entry in summary.values())
+        assert all(any(key.startswith("F_cross_domain|") for key in entry)
+                   for entry in summary.values())
 
         with np.load(out / "scores.npz") as scores, np.load(out / "controls.npz") as controls:
             # The off control (delta = 0) must reproduce s_V exactly.
@@ -72,6 +79,11 @@ def main():
             assert np.all(videos[donors[usable]] != videos[usable])
             assert np.all(domains[donors[usable]] == domains[usable])
             assert np.all(splits[donors[usable]] == splits[usable])
+            cross = split_cross_domain_donors(videos, domains, splits, np.random.default_rng(2))
+            cross_usable = cross >= 0
+            assert np.all(domains[cross[cross_usable]] != domains[cross_usable])
+            assert np.all(videos[cross[cross_usable]] != videos[cross_usable])
+            assert np.all(splits[cross[cross_usable]] == splits[cross_usable])
         assert (out / "COMPLETE").exists()
 
     # F must be permutation invariant, which is why the spec forbids using a
@@ -92,7 +104,7 @@ def main():
     donors = split_donors(np.array(["a"] * 4), np.array(["d"] * 4), np.array(["train"] * 4),
                           np.random.default_rng(0))
     assert np.all(donors == -1)
-    print("PASS: s_V orientation, off control, donor rules, both-class videos, F permutation invariance")
+    print("PASS: s_V orientation, off control, same/cross-domain donor rules, both-class videos, F permutation invariance")
 
 
 if __name__ == "__main__":
