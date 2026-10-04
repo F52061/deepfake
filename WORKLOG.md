@@ -4648,3 +4648,54 @@ donor 制度自查：同域 donor 100% 同 domain、同 (domain,split)、**同�
 | `diagnostics/README.md` | 「G26 域条件性复验」补**本次运行结果**三条要点 + cd1↔cd2 donor 的 15–17% 前提 |
 
 未做：`WORKLOG` 里 §D.61.6 / §D.61.7 的历史文本**保留原样不改**（它们记录的是当时的判断），更正统一由 §D.65.7 承担。
+
+## §D.66 G27 设计与实现：CLIP 局部读取相对于纯 ViT 的增量（2026-10-05）
+
+### D.66.1 必须先更正的基线与统计口径
+
+G26 将完整检测器 `logits[:,0]-logits[:,1]` 命名为 `s_V`。但 `vit_m2f2_detector_bridge.py` 的最终分类头输入含 CLIP image CLS、bridge 和 ViT 特征，所以 G26 的 A 实际是原融合检测器，不是纯 ViT；过去“在纯 ViT 上纠错”的表述不成立。既有数值仍用于原检测器增量分析，产物不覆盖。
+
+另一个口径问题：混合全部目标帧计算的 pooled AUC 配对区间，不能作为逐域 AUC 算术平均的宏平均区间。G27 在每个域内按视频重采样，再平均各域 AUC；主域固定为 CD2/DFDCP/Wild，CD1 单列，避免 Celeb-DF 重复加权。单模型 AUC 均值与分数平均后的集成 AUC 分开列。
+
+### D.66.2 实验目的及对照
+
+详细规格：`vit_module/diagnostics/PURE_VIT_CLIP_EXPERIMENT.md`。独立实现：`pure_vit_clip.py`，不改写旧 G26 分数或历史实验脚本。
+
+纯基线 V_BASE 为 FF++ train 的 V-only `StandardScaler + LogisticRegression(C=0.001)`；完整检测器 logits 仅以 DETECTOR_REFERENCE 保存，不进入残差训练。对照包括：
+
+| 组 | 验证什么 |
+|---|---|
+| CALIBRATED | 正仿射温度/偏置校准能否解释净救回；AUC不变 |
+| V_ONLY | 容量匹配的ViT非线性读取，排除新增参数收益 |
+| V_C_LINEAR / V_REGIONS_LINEAR | 原全局/局部静态拼接；始终保留ViT CLS |
+| POOLED | 相同结构下全局CLIP证据是否已经足够 |
+| MEAN / ADAPTIVE | 相同投影、查询、分类头、参数量与初始化，只改变均匀/自适应区域权重 |
+
+MEAN中的query仍进入修正头，避免用死参数虚假配平。模型构造前固定随机种子；每折重新拟合纯ViT头与标准化，不使用验证折统计。
+
+### D.66.3 训练、控制和统计
+
+默认三折视频分组、三个种子20261010/11/12、200 epochs；lambda=[0,0.001,0.01,0.1]，weight_decay=[0.0001,0.001]，只以源域验证BCE选参。目标域标签只用于最终统计。
+
+每个ADAPTIVE种子执行五次同域跨视频donor、固定头噪声、噪声重训。所有重复的分数和比较均落盘，不只使用第0次。噪声保存源均值/标准差、种子和生成公式，避免重复保存多GB数组。没有有效donor的行不进入控制比较。
+
+主比较为ADAPTIVE对V_BASE和对MEAN；容量/校准/拼接及输入控制为机制辅助。逐域及宏平均报告配对视频bootstrap，所有种子单列，ensemble另列。这些是反复查看过目标域上的探索性证据，不冒充新的确认实验。
+
+### D.66.4 判定与局限
+
+超过V_BASE但不超过V_ONLY，不能归因于CLIP；超过纯ViT和容量对照且真实CLIP优于输入控制，才支持本读取协议下的CLIP增量；进一步超过MEAN，才支持自适应权重的结构贡献。净救回但无AUC改善需与CALIBRATED对照，避免把校准称为新判别信息。
+
+纯V基线是源域线性探针，不是ViT原生分类头。冻结checkpoint的FFIW选模偏差仍存在（P7）；本轮只保证新增拟合无目标域参与。源域残差拟合的基线分数为样本内，而验证/目标为样本外，保留这一失配限制。区域权重不表示器官语义，也不能证明已“充分利用全部CLIP信息”。
+
+### D.66.5 使用及自检
+
+```powershell
+python vit_module/diagnostics/check_pure_vit_clip.py
+python vit_module/diagnostics/pure_vit_clip.py `
+  --input vit_module/_g25/diag_runs/extract_regions `
+  --output vit_module/_g27/pure_vit_clip_run01 `
+  --primary-domains cd2 dfdcp wild `
+  --seeds 20261010 20261011 20261012 --epochs 200 --bootstrap 1000
+```
+
+合成自检使用本机 `E:/Anaconda/envs/hyy/python.exe`（torch2.4.1/scikit-learn1.3.2）执行：确认纯V输入隔离、目标数据/标签不改变源选参、同结构参数与初始化一致、正仿射校准AUC不变、宏平均不同于pooled AUC、donor隔离和完整产物。合成结果不是研究证据；正式G27尚未运行，不包含任何新真实AUC。

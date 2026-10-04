@@ -174,6 +174,8 @@ python vit_module/diagnostics/local_analyze.py \
 
 ### G26 条件读取实验：规格与实现
 
+**基线口径更正（2026-10-05）**：G26的`s_V`来自完整检测器logits，不是纯ViT分数。若验证“CLIP局部信息相对于纯ViT的增量”，使用下面G27独立脚本，不复用G26分数作为ViT-only基线。
+
 验证"保留 ViT 主决策、条件读取 CLIP image 局部区域并以残差纠错"的假设。
 **规格**：`CONDITIONAL_CLIP_EXPERIMENT.md`（预注册，只描述协议）。
 **实现**：`conditional_clip.py`（本仓库补写）+ `check_conditional.py`（合成自检）。
@@ -202,6 +204,21 @@ python vit_module/diagnostics/check_conditional.py
 ```
 
 覆盖 `s_V` 方向、关闭控制（`delta≡0` 逐元素精确还原 `s_V`）、donor 不跨视频/不跨 (domain, split)、源域视频同时含两类、F 的置换不变性。
+
+### G27 纯 ViT 增量实验
+
+规格见`PURE_VIT_CLIP_EXPERIMENT.md`。纯ViT基线仅用源域V训练线性头；原检测器分数只作参考。MEAN与ADAPTIVE共享参数结构、初始化和投影/分类头，只改变区域聚合权重；同时提供校准、ViT-only容量和局部/全局线性拼接对照。
+
+```powershell
+python vit_module/diagnostics/check_pure_vit_clip.py
+python vit_module/diagnostics/pure_vit_clip.py `
+  --input vit_module/_g25/diag_runs/extract_regions `
+  --output vit_module/_g27/pure_vit_clip_run01 `
+  --primary-domains cd2 dfdcp wild `
+  --seeds 20261010 20261011 20261012 --epochs 200 --bootstrap 1000
+```
+
+主统计是CD2/DFDCP/Wild逐域AUC宏平均及域内视频bootstrap，不是混合帧的pooled AUC。所有种子/控制重复均保存；单模型统计与ensemble分开报告。需要完整clean分片，输出目录不得存在。
 
 ### G26 域条件性复验
 
