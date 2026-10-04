@@ -172,6 +172,33 @@ python vit_module/diagnostics/local_analyze.py \
 
 原始提交的 `extract.py` / `local_analyze.py` / `residual_clip.py` 存在若干**阻断性**问题，本仓库已修复，逐条记录在 `FINDINGS_问题验证数据.md` 的「附 · 诊断工具链自身的缺陷」。**未打补丁的原始版本无法产出任何结果。**
 
-### 下一轮实验规格
+### G26 条件读取实验：规格与实现
 
-在现有残差/局部实验之后，下一步验证“保留 ViT 主决策、条件读取 CLIP image 局部区域并以残差纠错”的假设。实验设计、对照、判定和数据保存要求见 `CONDITIONAL_CLIP_EXPERIMENT.md`；该文件只描述协议，尚未包含 G26 实测结果。
+验证"保留 ViT 主决策、条件读取 CLIP image 局部区域并以残差纠错"的假设。
+**规格**：`CONDITIONAL_CLIP_EXPERIMENT.md`（预注册，只描述协议）。
+**实现**：`conditional_clip.py`（本仓库补写）+ `check_conditional.py`（合成自检）。
+**实测结果**：`FINDINGS_问题验证数据.md` 的 **P14**；完整过程见 `WORKLOG.md` §D.60–§D.61。
+**产物**：`vit_module/_g26/conditional_clip_run01/`。
+
+```bash
+# 正式运行（输出目录不得预先存在；纯 CPU，不占显卡）
+python vit_module/diagnostics/conditional_clip.py \
+  --input vit_module/_g25/diag_runs/extract_regions \
+  --output vit_module/_g26/conditional_clip_run01 \
+  --seeds 20261004 20261005 20261006 \
+  --folds 3 --epochs 200 --bootstrap 1000 --repeats 5 --threads 4
+```
+
+**使用前必须知道的三件事**：
+
+1. **参数量自动配平**。规格要求 F 的参数量与 B–E 接近，但按字面取值 F 会是 B 的约 25 倍，容量控制（判定链第 2 条）随之失效。实现中 B/C/D 的隐藏宽度由二分搜索解出，保证**其参数量不低于 F**。若改动 `--dim` / `--width`，配平会自动重算。
+2. **区域位置控制被有意跳过**。F 的查询只来自 `V`、区域只经 softmax 加权求和进入，**数学上置换不变**；规格 §4.6 明确禁止把区域顺序置换当作有效控制。自检中有对应断言。
+3. **`E` 组可能退化**。9984 维线性头在源域训练量下可能无法超过冻结的 `s_V`，正则化搜索会把 `delta` 压到 0（实测三个种子均选中网格上限 `lambda_delta=1e-2`，验证 BCE 等于 `BCE(s_V)`）。**此时 `F vs E` 的比较无效**，简单融合基线应改用 D。
+
+**首次运行前的自检**：
+
+```bash
+python vit_module/diagnostics/check_conditional.py
+```
+
+覆盖 `s_V` 方向、关闭控制（`delta≡0` 逐元素精确还原 `s_V`）、donor 不跨视频/不跨 (domain, split)、源域视频同时含两类、F 的置换不变性。
