@@ -1,5 +1,7 @@
 # 单轴脆弱性与语义增量诊断
 
+研究导航见 [EXPERIMENT_INDEX.md](EXPERIMENT_INDEX.md)，最新 G27 解读见 [G27_REVIEW.md](G27_REVIEW.md)。历史目录和脚本路径保持不变；当前 checkout 的 JSON 汇总不等于完整原始产物。
+
 此目录提供冻结检测器的数据提取和离线统计，不修改训练模型或权重。
 当前支持完整的 ViT_M2F2Det_Bridge stage-1 checkpoint；其他架构不能直接复用。
 这是一组预先固定的诊断条件，不根据目标域结果搜索提示词、超参数或阈值。
@@ -195,7 +197,7 @@ python vit_module/diagnostics/conditional_clip.py \
 
 1. **参数量自动配平**。规格要求 F 的参数量与 B–E 接近，但按字面取值 F 会是 B 的约 25 倍，容量控制（判定链第 2 条）随之失效。实现中 B/C/D 的隐藏宽度由二分搜索解出，保证**其参数量不低于 F**。若改动 `--dim` / `--width`，配平会自动重算。
 2. **区域位置控制被有意跳过**。F 的查询只来自 `V`、区域只经 softmax 加权求和进入，**数学上置换不变**；规格 §4.6 明确禁止把区域顺序置换当作有效控制。自检中有对应断言。
-3. **`E` 组可能退化**。9984 维线性头在源域训练量下可能无法超过冻结的 `s_V`，正则化搜索会把 `delta` 压到 0（实测三个种子均选中网格上限 `lambda_delta=1e-2`，验证 BCE 等于 `BCE(s_V)`）。**此时 `F vs E` 的比较无效**，简单融合基线应改用 D。
+3. **`E` 组退化的旧结论已更正**。P14.8 与 WORKLOG D.65 复核发现 E 从不等于 `s_V`，因此 E 是有效基线，`F vs E` 比较有意义。选中强正则或验证 BCE 接近基线，不能证明逐样本修正量为零。run01/run02 选参不同，结果不直接相减。
 
 **首次运行前的自检**：
 
@@ -222,10 +224,10 @@ python vit_module/diagnostics/pure_vit_clip.py `
 
 **本次运行结果**（2026-10-05，110 分钟，纯 CPU）见 `FINDINGS_问题验证数据.md` **P15** 与 `WORKLOG.md` **§D.67–§D.68**。四条要点：
 
-1. **管线复核通过**：`V_BASE` 逐域 AUC 与 G16 的 `cls_final` 探针锚点**小数点后 4 位全同**（0.8286/0.8633/0.8261/0.8090，mean3 = 0.8328）。
-2. **五个预注册比较 0/5 成立，且方向为负**：ADAPTIVE vs V_BASE 主宏平均 **−0.0144 [−0.0308,−0.0002]**，三个种子全为负；对 POOLED / `V_C_LINEAR` / `V_REGIONS_LINEAR` **显著更差**。
-3. **被否定的是结构而不是区域**：同一批九区域做**线性**拼接（0.8392）或只读**池化** CLIP（0.8411）都高于 ADAPTIVE（0.8184）；三者方向一致为正（+0.006~+0.008）但区间含 0。
-4. **两个未解限制**：λ 上边界 1e-1 被选中 7/12 且仍在下降（网格截断）；ADAPTIVE 与噪声控制无差异（0/15 排除 0），且劣于噪声重训（2/3 种子）。
+1. **基线复核通过**：`V_BASE` 逐域 AUC 与 G16 的 `cls_final` 探针锚点**小数点后 4 位全同**（0.8286/0.8633/0.8261/0.8090，mean3 = 0.8328）；不代替运行时代码与其他模块核查。
+2. **当前 ADAPTIVE 的增量假设未获支持**：ADAPTIVE vs V_BASE 主宏平均 **−0.0144 [−0.0308,−0.0002]**，三个种子全为负；相对 POOLED 三种子均显著负，相对两种线性拼接多数显著负。规格列的是五组不同问题，不是五条同性质的成败检验。
+3. **当前读取协议未获支持，区域本身未被否定**：同一批九区域做**线性**拼接（0.8392）或只读**全局 C**（POOLED，0.8411）都高于 ADAPTIVE（0.8184）；两种线性组与 POOLED 相对 V_BASE 方向为正（+0.006~+0.008）但区间含 0。
+4. **限制与新线索**：λ 上边界 1e-1 被选中 7/12；ADAPTIVE 未检出超过固定噪声的优势（0/15 排除 0，不代表等价）。POOLED 在 DFDCP 的 ensemble 增量为 **+0.0153 [+0.0017,+0.0323]**，Wild 正向但区间含 0，仍需独立留出和 POOLED 自身内容控制。DONOR 的正区间次数经 JSON 复核更正为 **3/15**。
 
 本运行使用 `--threads 4`（规格 §7 写的是 1），理由与记录见 `WORKLOG.md` §D.67.3。
 
@@ -250,3 +252,23 @@ python vit_module/diagnostics/conditional_clip.py `
 3. **cd1↔cd2 的"跨域" donor 有 15–17% 是"同数据集换视频"**（cd1 ⊂ cd2，路径推导的文件夹身份已核）。解读该控制的 cd1/cd2 列时必须带此前提。
 
 判定链的更正表、逐域 `correction_diagnostics`、donor 组成统计均在 §14.8。
+
+### G28 内容增量与局部读取失效验证（待真实运行）
+
+规格见 [CLIP_READOUT_EXPERIMENT.md](CLIP_READOUT_EXPERIMENT.md)，实现为 `clip_readout.py`，合成自检为 `check_clip_readout.py`。POOLED 和 ADAPTIVE 各有 donor/固定噪声/噪声重训控制；所有组按统一超参条件比较，同时保留仅由源域选定的结果。冻结模型的修正缩放、平滑/均匀区域权重是诊断干预，不按目标域选择部署配置。
+
+本轮使用嵌套视频 OOF 基线分数训练修正头，缓解 G27 的训练内/样本外基线分数失配；不同协议的非线性成绩不直接相减归因。输出包括全网格逐样本分数、源域训练/验证轨迹、控制身份、权重、参数和运行时代码快照。
+
+```powershell
+python vit_module/diagnostics/check_clip_readout.py
+python vit_module/diagnostics/clip_readout.py `
+  --input vit_module/_g25/diag_runs/extract_regions `
+  --output vit_module/_g28/clip_readout_run01 `
+  --seeds 20261020 20261021 20261022 `
+  --primary-domains cd2 dfdcp wild --folds 3 --inner-folds 3 `
+  --epochs 200 --lambdas 0.01 0.1 1 --weight-decays 0.001 `
+  --gains 0 0.25 0.5 1 --temperatures 2 4 `
+  --bootstrap 1000 --repeats 5 --threads 1
+```
+
+必须到有完整 `clean_*.npz` 的实验机运行；当前 checkout 只有提取配置和完成标记。输出目录不得存在。默认是探索性复验；新留出必须提供预先固定、整视频选择的 `--evaluation-manifest` 并声明 `--evaluation-status new-holdout`，该声明不能替代源域选模 checkpoint 或独立视频审计。
