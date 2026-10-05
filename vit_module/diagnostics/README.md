@@ -215,10 +215,19 @@ python vit_module/diagnostics/pure_vit_clip.py `
   --input vit_module/_g25/diag_runs/extract_regions `
   --output vit_module/_g27/pure_vit_clip_run01 `
   --primary-domains cd2 dfdcp wild `
-  --seeds 20261010 20261011 20261012 --epochs 200 --bootstrap 1000
+  --seeds 20261010 20261011 20261012 --epochs 200 --bootstrap 1000 --threads 4
 ```
 
 主统计是CD2/DFDCP/Wild逐域AUC宏平均及域内视频bootstrap，不是混合帧的pooled AUC。所有种子/控制重复均保存；单模型统计与ensemble分开报告。需要完整clean分片，输出目录不得存在。
+
+**本次运行结果**（2026-10-05，110 分钟，纯 CPU）见 `FINDINGS_问题验证数据.md` **P15** 与 `WORKLOG.md` **§D.67–§D.68**。四条要点：
+
+1. **管线复核通过**：`V_BASE` 逐域 AUC 与 G16 的 `cls_final` 探针锚点**小数点后 4 位全同**（0.8286/0.8633/0.8261/0.8090，mean3 = 0.8328）。
+2. **五个预注册比较 0/5 成立，且方向为负**：ADAPTIVE vs V_BASE 主宏平均 **−0.0144 [−0.0308,−0.0002]**，三个种子全为负；对 POOLED / `V_C_LINEAR` / `V_REGIONS_LINEAR` **显著更差**。
+3. **被否定的是结构而不是区域**：同一批九区域做**线性**拼接（0.8392）或只读**池化** CLIP（0.8411）都高于 ADAPTIVE（0.8184）；三者方向一致为正（+0.006~+0.008）但区间含 0。
+4. **两个未解限制**：λ 上边界 1e-1 被选中 7/12 且仍在下降（网格截断）；ADAPTIVE 与噪声控制无差异（0/15 排除 0），且劣于噪声重训（2/3 种子）。
+
+本运行使用 `--threads 4`（规格 §7 写的是 1），理由与记录见 `WORKLOG.md` §D.67.3。
 
 ### G26 域条件性复验
 
