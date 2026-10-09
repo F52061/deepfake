@@ -253,7 +253,7 @@ python vit_module/diagnostics/conditional_clip.py `
 
 判定链的更正表、逐域 `correction_diagnostics`、donor 组成统计均在 §14.8。
 
-### G28 内容增量与局部读取失效验证（待真实运行）
+### G28 内容增量与局部读取失效验证（**已于 2026-10-05 真实运行，见 §D.72 / FINDINGS P16**）
 
 规格见 [CLIP_READOUT_EXPERIMENT.md](CLIP_READOUT_EXPERIMENT.md)，实现为 `clip_readout.py`，合成自检为 `check_clip_readout.py`。POOLED 和 ADAPTIVE 各有 donor/固定噪声/噪声重训控制；所有组按统一超参条件比较，同时保留仅由源域选定的结果。冻结模型的修正缩放、平滑/均匀区域权重是诊断干预，不按目标域选择部署配置。
 
@@ -272,3 +272,13 @@ python vit_module/diagnostics/clip_readout.py `
 ```
 
 必须到有完整 `clean_*.npz` 的实验机运行；当前 checkout 只有提取配置和完成标记。输出目录不得存在。默认是探索性复验；新留出必须提供预先固定、整视频选择的 `--evaluation-manifest` 并声明 `--evaluation-status new-holdout`，该声明不能替代源域选模 checkpoint 或独立视频审计。
+
+**本次运行结果（`vit_module/_g28/clip_readout_run01`，159 分钟，纯 CPU，`--threads 4` 偏离规格 §7 的 `--threads 1`，已登记）：**
+
+1. 预注册两项主问题**都未达门槛**：POOLED vs V_BASE 宏平均 +0.0079（三 seed 区间全含 0）；ADAPTIVE vs MEAN 无差异。
+2. 全局 CLIP 有**小而真实**的增量：vs 容量匹配 V_ONLY 三 seed 全显著为正；对 DONOR/NOISE_FIXED/NOISE_RETRAIN **各 15/15 区间排除零**；λ=1 行与 alpha=0.25/0.5 均显著为正。但与 `[V,C]` 线性读法无差异 → 非残差头特有。
+3. 局部九区域**打不过噪声重训**（ADAPTIVE vs NOISE_RETRAIN **0/15**，均值 +0.00004），而 POOLED 为 15/15 → 本轮最锋利的路径判别。
+4. 跨域损伤**由修正幅度驱动**：λ 从 0.01→1 各变体单调回归 V_BASE，λ=1 时 ADAPTIVE 与 MEAN 不可分；ADAPTIVE 缩到 alpha=0.25 即消除损伤；温度/均匀干预只在最差 seed 上有效。**注意力尖锐不是原因**。
+5. **λ 上边界 0/12 命中**（G27 为 7/12）→ G27 的角点解是网格截断假象，该限制关闭。
+6. G27 的 DFDCP 正线索**未复现**；ffpp 域内四个变体全为正（修正同域有用、跨域有害）。
+7. 不得按目标域 AUC 选 λ/alpha 部署；本轮默认**探索性**，非正式确认。运行前须按**路径身份**审计分组（裸 `video_id` 存在跨数据集同名巧合；`cd1 ⊂ cd2` 只由视频名全含体现，路径判据看不出）。

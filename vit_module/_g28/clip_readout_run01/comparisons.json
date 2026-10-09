@@ -1,0 +1,1467 @@
+{
+  "GRID|V_ONLY|20261020|h0_vs_V_BASE": [
+    "V_BASE",
+    "GRID|V_ONLY|20261020|h0",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "GRID|V_ONLY|20261020|h1_vs_V_BASE": [
+    "V_BASE",
+    "GRID|V_ONLY|20261020|h1",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "GRID|V_ONLY|20261020|h2_vs_V_BASE": [
+    "V_BASE",
+    "GRID|V_ONLY|20261020|h2",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "SELECTED|V_ONLY|20261020_vs_V_BASE": [
+    "V_BASE",
+    "SELECTED|V_ONLY|20261020",
+    "source_selected_readout"
+  ],
+  "GRID|POOLED|20261020|h0_vs_V_BASE": [
+    "V_BASE",
+    "GRID|POOLED|20261020|h0",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "GRID|POOLED|20261020|h1_vs_V_BASE": [
+    "V_BASE",
+    "GRID|POOLED|20261020|h1",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "GRID|POOLED|20261020|h2_vs_V_BASE": [
+    "V_BASE",
+    "GRID|POOLED|20261020|h2",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "SELECTED|POOLED|20261020_vs_V_BASE": [
+    "V_BASE",
+    "SELECTED|POOLED|20261020",
+    "source_selected_readout"
+  ],
+  "GRID|MEAN|20261020|h0_vs_V_BASE": [
+    "V_BASE",
+    "GRID|MEAN|20261020|h0",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "GRID|MEAN|20261020|h1_vs_V_BASE": [
+    "V_BASE",
+    "GRID|MEAN|20261020|h1",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "GRID|MEAN|20261020|h2_vs_V_BASE": [
+    "V_BASE",
+    "GRID|MEAN|20261020|h2",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "SELECTED|MEAN|20261020_vs_V_BASE": [
+    "V_BASE",
+    "SELECTED|MEAN|20261020",
+    "source_selected_readout"
+  ],
+  "GRID|ADAPTIVE|20261020|h0_vs_V_BASE": [
+    "V_BASE",
+    "GRID|ADAPTIVE|20261020|h0",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "GRID|ADAPTIVE|20261020|h1_vs_V_BASE": [
+    "V_BASE",
+    "GRID|ADAPTIVE|20261020|h1",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "GRID|ADAPTIVE|20261020|h2_vs_V_BASE": [
+    "V_BASE",
+    "GRID|ADAPTIVE|20261020|h2",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "SELECTED|ADAPTIVE|20261020_vs_V_BASE": [
+    "V_BASE",
+    "SELECTED|ADAPTIVE|20261020",
+    "source_selected_readout"
+  ],
+  "GRID|ADAPTIVE|20261020|h0_vs_GRID|POOLED|20261020|h0": [
+    "GRID|POOLED|20261020|h0",
+    "GRID|ADAPTIVE|20261020|h0",
+    "same_hyper_readout_diagnostic"
+  ],
+  "GRID|ADAPTIVE|20261020|h0_vs_GRID|MEAN|20261020|h0": [
+    "GRID|MEAN|20261020|h0",
+    "GRID|ADAPTIVE|20261020|h0",
+    "same_hyper_readout_diagnostic"
+  ],
+  "GRID|ADAPTIVE|20261020|h0_vs_GRID|V_ONLY|20261020|h0": [
+    "GRID|V_ONLY|20261020|h0",
+    "GRID|ADAPTIVE|20261020|h0",
+    "same_hyper_readout_diagnostic"
+  ],
+  "GRID|ADAPTIVE|20261020|h1_vs_GRID|POOLED|20261020|h1": [
+    "GRID|POOLED|20261020|h1",
+    "GRID|ADAPTIVE|20261020|h1",
+    "same_hyper_readout_diagnostic"
+  ],
+  "GRID|ADAPTIVE|20261020|h1_vs_GRID|MEAN|20261020|h1": [
+    "GRID|MEAN|20261020|h1",
+    "GRID|ADAPTIVE|20261020|h1",
+    "same_hyper_readout_diagnostic"
+  ],
+  "GRID|ADAPTIVE|20261020|h1_vs_GRID|V_ONLY|20261020|h1": [
+    "GRID|V_ONLY|20261020|h1",
+    "GRID|ADAPTIVE|20261020|h1",
+    "same_hyper_readout_diagnostic"
+  ],
+  "GRID|ADAPTIVE|20261020|h2_vs_GRID|POOLED|20261020|h2": [
+    "GRID|POOLED|20261020|h2",
+    "GRID|ADAPTIVE|20261020|h2",
+    "same_hyper_readout_diagnostic"
+  ],
+  "GRID|ADAPTIVE|20261020|h2_vs_GRID|MEAN|20261020|h2": [
+    "GRID|MEAN|20261020|h2",
+    "GRID|ADAPTIVE|20261020|h2",
+    "same_hyper_readout_diagnostic"
+  ],
+  "GRID|ADAPTIVE|20261020|h2_vs_GRID|V_ONLY|20261020|h2": [
+    "GRID|V_ONLY|20261020|h2",
+    "GRID|ADAPTIVE|20261020|h2",
+    "same_hyper_readout_diagnostic"
+  ],
+  "SELECTED|POOLED|20261020_vs_CALIBRATED": [
+    "CALIBRATED",
+    "SELECTED|POOLED|20261020",
+    "capacity_calibration_or_linear_control"
+  ],
+  "SELECTED|POOLED|20261020_vs_V_C_LINEAR": [
+    "V_C_LINEAR",
+    "SELECTED|POOLED|20261020",
+    "capacity_calibration_or_linear_control"
+  ],
+  "SELECTED|POOLED|20261020_vs_SELECTED|V_ONLY|20261020": [
+    "SELECTED|V_ONLY|20261020",
+    "SELECTED|POOLED|20261020",
+    "capacity_calibration_or_linear_control"
+  ],
+  "GAIN|POOLED|20261020|0_vs_SELECTED|POOLED|20261020": [
+    "SELECTED|POOLED|20261020",
+    "GAIN|POOLED|20261020|0",
+    "fixed_model_correction_amplitude_intervention"
+  ],
+  "GAIN|POOLED|20261020|0_vs_V_BASE": [
+    "V_BASE",
+    "GAIN|POOLED|20261020|0",
+    "amplitude_vs_base_not_deployment_selection"
+  ],
+  "GAIN|POOLED|20261020|0.25_vs_SELECTED|POOLED|20261020": [
+    "SELECTED|POOLED|20261020",
+    "GAIN|POOLED|20261020|0.25",
+    "fixed_model_correction_amplitude_intervention"
+  ],
+  "GAIN|POOLED|20261020|0.25_vs_V_BASE": [
+    "V_BASE",
+    "GAIN|POOLED|20261020|0.25",
+    "amplitude_vs_base_not_deployment_selection"
+  ],
+  "GAIN|POOLED|20261020|0.5_vs_SELECTED|POOLED|20261020": [
+    "SELECTED|POOLED|20261020",
+    "GAIN|POOLED|20261020|0.5",
+    "fixed_model_correction_amplitude_intervention"
+  ],
+  "GAIN|POOLED|20261020|0.5_vs_V_BASE": [
+    "V_BASE",
+    "GAIN|POOLED|20261020|0.5",
+    "amplitude_vs_base_not_deployment_selection"
+  ],
+  "GAIN|POOLED|20261020|1_vs_SELECTED|POOLED|20261020": [
+    "SELECTED|POOLED|20261020",
+    "GAIN|POOLED|20261020|1",
+    "fixed_model_correction_amplitude_intervention"
+  ],
+  "GAIN|POOLED|20261020|1_vs_V_BASE": [
+    "V_BASE",
+    "GAIN|POOLED|20261020|1",
+    "amplitude_vs_base_not_deployment_selection"
+  ],
+  "SELECTED|ADAPTIVE|20261020_vs_CALIBRATED": [
+    "CALIBRATED",
+    "SELECTED|ADAPTIVE|20261020",
+    "capacity_calibration_or_linear_control"
+  ],
+  "SELECTED|ADAPTIVE|20261020_vs_V_C_LINEAR": [
+    "V_C_LINEAR",
+    "SELECTED|ADAPTIVE|20261020",
+    "capacity_calibration_or_linear_control"
+  ],
+  "SELECTED|ADAPTIVE|20261020_vs_SELECTED|V_ONLY|20261020": [
+    "SELECTED|V_ONLY|20261020",
+    "SELECTED|ADAPTIVE|20261020",
+    "capacity_calibration_or_linear_control"
+  ],
+  "GAIN|ADAPTIVE|20261020|0_vs_SELECTED|ADAPTIVE|20261020": [
+    "SELECTED|ADAPTIVE|20261020",
+    "GAIN|ADAPTIVE|20261020|0",
+    "fixed_model_correction_amplitude_intervention"
+  ],
+  "GAIN|ADAPTIVE|20261020|0_vs_V_BASE": [
+    "V_BASE",
+    "GAIN|ADAPTIVE|20261020|0",
+    "amplitude_vs_base_not_deployment_selection"
+  ],
+  "GAIN|ADAPTIVE|20261020|0.25_vs_SELECTED|ADAPTIVE|20261020": [
+    "SELECTED|ADAPTIVE|20261020",
+    "GAIN|ADAPTIVE|20261020|0.25",
+    "fixed_model_correction_amplitude_intervention"
+  ],
+  "GAIN|ADAPTIVE|20261020|0.25_vs_V_BASE": [
+    "V_BASE",
+    "GAIN|ADAPTIVE|20261020|0.25",
+    "amplitude_vs_base_not_deployment_selection"
+  ],
+  "GAIN|ADAPTIVE|20261020|0.5_vs_SELECTED|ADAPTIVE|20261020": [
+    "SELECTED|ADAPTIVE|20261020",
+    "GAIN|ADAPTIVE|20261020|0.5",
+    "fixed_model_correction_amplitude_intervention"
+  ],
+  "GAIN|ADAPTIVE|20261020|0.5_vs_V_BASE": [
+    "V_BASE",
+    "GAIN|ADAPTIVE|20261020|0.5",
+    "amplitude_vs_base_not_deployment_selection"
+  ],
+  "GAIN|ADAPTIVE|20261020|1_vs_SELECTED|ADAPTIVE|20261020": [
+    "SELECTED|ADAPTIVE|20261020",
+    "GAIN|ADAPTIVE|20261020|1",
+    "fixed_model_correction_amplitude_intervention"
+  ],
+  "GAIN|ADAPTIVE|20261020|1_vs_V_BASE": [
+    "V_BASE",
+    "GAIN|ADAPTIVE|20261020|1",
+    "amplitude_vs_base_not_deployment_selection"
+  ],
+  "TEMPERATURE|20261020|2_vs_SELECTED|ADAPTIVE|20261020": [
+    "SELECTED|ADAPTIVE|20261020",
+    "TEMPERATURE|20261020|2",
+    "fixed_model_attention_intervention"
+  ],
+  "TEMPERATURE|20261020|2_vs_V_BASE": [
+    "V_BASE",
+    "TEMPERATURE|20261020|2",
+    "attention_intervention_vs_base"
+  ],
+  "TEMPERATURE|20261020|4_vs_SELECTED|ADAPTIVE|20261020": [
+    "SELECTED|ADAPTIVE|20261020",
+    "TEMPERATURE|20261020|4",
+    "fixed_model_attention_intervention"
+  ],
+  "TEMPERATURE|20261020|4_vs_V_BASE": [
+    "V_BASE",
+    "TEMPERATURE|20261020|4",
+    "attention_intervention_vs_base"
+  ],
+  "UNIFORM|20261020_vs_SELECTED|ADAPTIVE|20261020": [
+    "SELECTED|ADAPTIVE|20261020",
+    "UNIFORM|20261020",
+    "fixed_model_attention_intervention"
+  ],
+  "UNIFORM|20261020_vs_V_BASE": [
+    "V_BASE",
+    "UNIFORM|20261020",
+    "attention_intervention_vs_base"
+  ],
+  "SELECTED|ADAPTIVE|20261020_vs_SELECTED|MEAN|20261020": [
+    "SELECTED|MEAN|20261020",
+    "SELECTED|ADAPTIVE|20261020",
+    "source_selected_attention_vs_uniform_training"
+  ],
+  "SELECTED|ADAPTIVE|20261020_vs_SELECTED|POOLED|20261020": [
+    "SELECTED|POOLED|20261020",
+    "SELECTED|ADAPTIVE|20261020",
+    "source_selected_local_vs_global"
+  ],
+  "GRID|V_ONLY|20261021|h0_vs_V_BASE": [
+    "V_BASE",
+    "GRID|V_ONLY|20261021|h0",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "GRID|V_ONLY|20261021|h1_vs_V_BASE": [
+    "V_BASE",
+    "GRID|V_ONLY|20261021|h1",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "GRID|V_ONLY|20261021|h2_vs_V_BASE": [
+    "V_BASE",
+    "GRID|V_ONLY|20261021|h2",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "SELECTED|V_ONLY|20261021_vs_V_BASE": [
+    "V_BASE",
+    "SELECTED|V_ONLY|20261021",
+    "source_selected_readout"
+  ],
+  "GRID|POOLED|20261021|h0_vs_V_BASE": [
+    "V_BASE",
+    "GRID|POOLED|20261021|h0",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "GRID|POOLED|20261021|h1_vs_V_BASE": [
+    "V_BASE",
+    "GRID|POOLED|20261021|h1",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "GRID|POOLED|20261021|h2_vs_V_BASE": [
+    "V_BASE",
+    "GRID|POOLED|20261021|h2",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "SELECTED|POOLED|20261021_vs_V_BASE": [
+    "V_BASE",
+    "SELECTED|POOLED|20261021",
+    "source_selected_readout"
+  ],
+  "GRID|MEAN|20261021|h0_vs_V_BASE": [
+    "V_BASE",
+    "GRID|MEAN|20261021|h0",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "GRID|MEAN|20261021|h1_vs_V_BASE": [
+    "V_BASE",
+    "GRID|MEAN|20261021|h1",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "GRID|MEAN|20261021|h2_vs_V_BASE": [
+    "V_BASE",
+    "GRID|MEAN|20261021|h2",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "SELECTED|MEAN|20261021_vs_V_BASE": [
+    "V_BASE",
+    "SELECTED|MEAN|20261021",
+    "source_selected_readout"
+  ],
+  "GRID|ADAPTIVE|20261021|h0_vs_V_BASE": [
+    "V_BASE",
+    "GRID|ADAPTIVE|20261021|h0",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "GRID|ADAPTIVE|20261021|h1_vs_V_BASE": [
+    "V_BASE",
+    "GRID|ADAPTIVE|20261021|h1",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "GRID|ADAPTIVE|20261021|h2_vs_V_BASE": [
+    "V_BASE",
+    "GRID|ADAPTIVE|20261021|h2",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "SELECTED|ADAPTIVE|20261021_vs_V_BASE": [
+    "V_BASE",
+    "SELECTED|ADAPTIVE|20261021",
+    "source_selected_readout"
+  ],
+  "GRID|ADAPTIVE|20261021|h0_vs_GRID|POOLED|20261021|h0": [
+    "GRID|POOLED|20261021|h0",
+    "GRID|ADAPTIVE|20261021|h0",
+    "same_hyper_readout_diagnostic"
+  ],
+  "GRID|ADAPTIVE|20261021|h0_vs_GRID|MEAN|20261021|h0": [
+    "GRID|MEAN|20261021|h0",
+    "GRID|ADAPTIVE|20261021|h0",
+    "same_hyper_readout_diagnostic"
+  ],
+  "GRID|ADAPTIVE|20261021|h0_vs_GRID|V_ONLY|20261021|h0": [
+    "GRID|V_ONLY|20261021|h0",
+    "GRID|ADAPTIVE|20261021|h0",
+    "same_hyper_readout_diagnostic"
+  ],
+  "GRID|ADAPTIVE|20261021|h1_vs_GRID|POOLED|20261021|h1": [
+    "GRID|POOLED|20261021|h1",
+    "GRID|ADAPTIVE|20261021|h1",
+    "same_hyper_readout_diagnostic"
+  ],
+  "GRID|ADAPTIVE|20261021|h1_vs_GRID|MEAN|20261021|h1": [
+    "GRID|MEAN|20261021|h1",
+    "GRID|ADAPTIVE|20261021|h1",
+    "same_hyper_readout_diagnostic"
+  ],
+  "GRID|ADAPTIVE|20261021|h1_vs_GRID|V_ONLY|20261021|h1": [
+    "GRID|V_ONLY|20261021|h1",
+    "GRID|ADAPTIVE|20261021|h1",
+    "same_hyper_readout_diagnostic"
+  ],
+  "GRID|ADAPTIVE|20261021|h2_vs_GRID|POOLED|20261021|h2": [
+    "GRID|POOLED|20261021|h2",
+    "GRID|ADAPTIVE|20261021|h2",
+    "same_hyper_readout_diagnostic"
+  ],
+  "GRID|ADAPTIVE|20261021|h2_vs_GRID|MEAN|20261021|h2": [
+    "GRID|MEAN|20261021|h2",
+    "GRID|ADAPTIVE|20261021|h2",
+    "same_hyper_readout_diagnostic"
+  ],
+  "GRID|ADAPTIVE|20261021|h2_vs_GRID|V_ONLY|20261021|h2": [
+    "GRID|V_ONLY|20261021|h2",
+    "GRID|ADAPTIVE|20261021|h2",
+    "same_hyper_readout_diagnostic"
+  ],
+  "SELECTED|POOLED|20261021_vs_CALIBRATED": [
+    "CALIBRATED",
+    "SELECTED|POOLED|20261021",
+    "capacity_calibration_or_linear_control"
+  ],
+  "SELECTED|POOLED|20261021_vs_V_C_LINEAR": [
+    "V_C_LINEAR",
+    "SELECTED|POOLED|20261021",
+    "capacity_calibration_or_linear_control"
+  ],
+  "SELECTED|POOLED|20261021_vs_SELECTED|V_ONLY|20261021": [
+    "SELECTED|V_ONLY|20261021",
+    "SELECTED|POOLED|20261021",
+    "capacity_calibration_or_linear_control"
+  ],
+  "GAIN|POOLED|20261021|0_vs_SELECTED|POOLED|20261021": [
+    "SELECTED|POOLED|20261021",
+    "GAIN|POOLED|20261021|0",
+    "fixed_model_correction_amplitude_intervention"
+  ],
+  "GAIN|POOLED|20261021|0_vs_V_BASE": [
+    "V_BASE",
+    "GAIN|POOLED|20261021|0",
+    "amplitude_vs_base_not_deployment_selection"
+  ],
+  "GAIN|POOLED|20261021|0.25_vs_SELECTED|POOLED|20261021": [
+    "SELECTED|POOLED|20261021",
+    "GAIN|POOLED|20261021|0.25",
+    "fixed_model_correction_amplitude_intervention"
+  ],
+  "GAIN|POOLED|20261021|0.25_vs_V_BASE": [
+    "V_BASE",
+    "GAIN|POOLED|20261021|0.25",
+    "amplitude_vs_base_not_deployment_selection"
+  ],
+  "GAIN|POOLED|20261021|0.5_vs_SELECTED|POOLED|20261021": [
+    "SELECTED|POOLED|20261021",
+    "GAIN|POOLED|20261021|0.5",
+    "fixed_model_correction_amplitude_intervention"
+  ],
+  "GAIN|POOLED|20261021|0.5_vs_V_BASE": [
+    "V_BASE",
+    "GAIN|POOLED|20261021|0.5",
+    "amplitude_vs_base_not_deployment_selection"
+  ],
+  "GAIN|POOLED|20261021|1_vs_SELECTED|POOLED|20261021": [
+    "SELECTED|POOLED|20261021",
+    "GAIN|POOLED|20261021|1",
+    "fixed_model_correction_amplitude_intervention"
+  ],
+  "GAIN|POOLED|20261021|1_vs_V_BASE": [
+    "V_BASE",
+    "GAIN|POOLED|20261021|1",
+    "amplitude_vs_base_not_deployment_selection"
+  ],
+  "SELECTED|ADAPTIVE|20261021_vs_CALIBRATED": [
+    "CALIBRATED",
+    "SELECTED|ADAPTIVE|20261021",
+    "capacity_calibration_or_linear_control"
+  ],
+  "SELECTED|ADAPTIVE|20261021_vs_V_C_LINEAR": [
+    "V_C_LINEAR",
+    "SELECTED|ADAPTIVE|20261021",
+    "capacity_calibration_or_linear_control"
+  ],
+  "SELECTED|ADAPTIVE|20261021_vs_SELECTED|V_ONLY|20261021": [
+    "SELECTED|V_ONLY|20261021",
+    "SELECTED|ADAPTIVE|20261021",
+    "capacity_calibration_or_linear_control"
+  ],
+  "GAIN|ADAPTIVE|20261021|0_vs_SELECTED|ADAPTIVE|20261021": [
+    "SELECTED|ADAPTIVE|20261021",
+    "GAIN|ADAPTIVE|20261021|0",
+    "fixed_model_correction_amplitude_intervention"
+  ],
+  "GAIN|ADAPTIVE|20261021|0_vs_V_BASE": [
+    "V_BASE",
+    "GAIN|ADAPTIVE|20261021|0",
+    "amplitude_vs_base_not_deployment_selection"
+  ],
+  "GAIN|ADAPTIVE|20261021|0.25_vs_SELECTED|ADAPTIVE|20261021": [
+    "SELECTED|ADAPTIVE|20261021",
+    "GAIN|ADAPTIVE|20261021|0.25",
+    "fixed_model_correction_amplitude_intervention"
+  ],
+  "GAIN|ADAPTIVE|20261021|0.25_vs_V_BASE": [
+    "V_BASE",
+    "GAIN|ADAPTIVE|20261021|0.25",
+    "amplitude_vs_base_not_deployment_selection"
+  ],
+  "GAIN|ADAPTIVE|20261021|0.5_vs_SELECTED|ADAPTIVE|20261021": [
+    "SELECTED|ADAPTIVE|20261021",
+    "GAIN|ADAPTIVE|20261021|0.5",
+    "fixed_model_correction_amplitude_intervention"
+  ],
+  "GAIN|ADAPTIVE|20261021|0.5_vs_V_BASE": [
+    "V_BASE",
+    "GAIN|ADAPTIVE|20261021|0.5",
+    "amplitude_vs_base_not_deployment_selection"
+  ],
+  "GAIN|ADAPTIVE|20261021|1_vs_SELECTED|ADAPTIVE|20261021": [
+    "SELECTED|ADAPTIVE|20261021",
+    "GAIN|ADAPTIVE|20261021|1",
+    "fixed_model_correction_amplitude_intervention"
+  ],
+  "GAIN|ADAPTIVE|20261021|1_vs_V_BASE": [
+    "V_BASE",
+    "GAIN|ADAPTIVE|20261021|1",
+    "amplitude_vs_base_not_deployment_selection"
+  ],
+  "TEMPERATURE|20261021|2_vs_SELECTED|ADAPTIVE|20261021": [
+    "SELECTED|ADAPTIVE|20261021",
+    "TEMPERATURE|20261021|2",
+    "fixed_model_attention_intervention"
+  ],
+  "TEMPERATURE|20261021|2_vs_V_BASE": [
+    "V_BASE",
+    "TEMPERATURE|20261021|2",
+    "attention_intervention_vs_base"
+  ],
+  "TEMPERATURE|20261021|4_vs_SELECTED|ADAPTIVE|20261021": [
+    "SELECTED|ADAPTIVE|20261021",
+    "TEMPERATURE|20261021|4",
+    "fixed_model_attention_intervention"
+  ],
+  "TEMPERATURE|20261021|4_vs_V_BASE": [
+    "V_BASE",
+    "TEMPERATURE|20261021|4",
+    "attention_intervention_vs_base"
+  ],
+  "UNIFORM|20261021_vs_SELECTED|ADAPTIVE|20261021": [
+    "SELECTED|ADAPTIVE|20261021",
+    "UNIFORM|20261021",
+    "fixed_model_attention_intervention"
+  ],
+  "UNIFORM|20261021_vs_V_BASE": [
+    "V_BASE",
+    "UNIFORM|20261021",
+    "attention_intervention_vs_base"
+  ],
+  "SELECTED|ADAPTIVE|20261021_vs_SELECTED|MEAN|20261021": [
+    "SELECTED|MEAN|20261021",
+    "SELECTED|ADAPTIVE|20261021",
+    "source_selected_attention_vs_uniform_training"
+  ],
+  "SELECTED|ADAPTIVE|20261021_vs_SELECTED|POOLED|20261021": [
+    "SELECTED|POOLED|20261021",
+    "SELECTED|ADAPTIVE|20261021",
+    "source_selected_local_vs_global"
+  ],
+  "GRID|V_ONLY|20261022|h0_vs_V_BASE": [
+    "V_BASE",
+    "GRID|V_ONLY|20261022|h0",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "GRID|V_ONLY|20261022|h1_vs_V_BASE": [
+    "V_BASE",
+    "GRID|V_ONLY|20261022|h1",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "GRID|V_ONLY|20261022|h2_vs_V_BASE": [
+    "V_BASE",
+    "GRID|V_ONLY|20261022|h2",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "SELECTED|V_ONLY|20261022_vs_V_BASE": [
+    "V_BASE",
+    "SELECTED|V_ONLY|20261022",
+    "source_selected_readout"
+  ],
+  "GRID|POOLED|20261022|h0_vs_V_BASE": [
+    "V_BASE",
+    "GRID|POOLED|20261022|h0",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "GRID|POOLED|20261022|h1_vs_V_BASE": [
+    "V_BASE",
+    "GRID|POOLED|20261022|h1",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "GRID|POOLED|20261022|h2_vs_V_BASE": [
+    "V_BASE",
+    "GRID|POOLED|20261022|h2",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "SELECTED|POOLED|20261022_vs_V_BASE": [
+    "V_BASE",
+    "SELECTED|POOLED|20261022",
+    "source_selected_readout"
+  ],
+  "GRID|MEAN|20261022|h0_vs_V_BASE": [
+    "V_BASE",
+    "GRID|MEAN|20261022|h0",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "GRID|MEAN|20261022|h1_vs_V_BASE": [
+    "V_BASE",
+    "GRID|MEAN|20261022|h1",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "GRID|MEAN|20261022|h2_vs_V_BASE": [
+    "V_BASE",
+    "GRID|MEAN|20261022|h2",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "SELECTED|MEAN|20261022_vs_V_BASE": [
+    "V_BASE",
+    "SELECTED|MEAN|20261022",
+    "source_selected_readout"
+  ],
+  "GRID|ADAPTIVE|20261022|h0_vs_V_BASE": [
+    "V_BASE",
+    "GRID|ADAPTIVE|20261022|h0",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "GRID|ADAPTIVE|20261022|h1_vs_V_BASE": [
+    "V_BASE",
+    "GRID|ADAPTIVE|20261022|h1",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "GRID|ADAPTIVE|20261022|h2_vs_V_BASE": [
+    "V_BASE",
+    "GRID|ADAPTIVE|20261022|h2",
+    "fixed_hyper_diagnostic_not_target_selection"
+  ],
+  "SELECTED|ADAPTIVE|20261022_vs_V_BASE": [
+    "V_BASE",
+    "SELECTED|ADAPTIVE|20261022",
+    "source_selected_readout"
+  ],
+  "GRID|ADAPTIVE|20261022|h0_vs_GRID|POOLED|20261022|h0": [
+    "GRID|POOLED|20261022|h0",
+    "GRID|ADAPTIVE|20261022|h0",
+    "same_hyper_readout_diagnostic"
+  ],
+  "GRID|ADAPTIVE|20261022|h0_vs_GRID|MEAN|20261022|h0": [
+    "GRID|MEAN|20261022|h0",
+    "GRID|ADAPTIVE|20261022|h0",
+    "same_hyper_readout_diagnostic"
+  ],
+  "GRID|ADAPTIVE|20261022|h0_vs_GRID|V_ONLY|20261022|h0": [
+    "GRID|V_ONLY|20261022|h0",
+    "GRID|ADAPTIVE|20261022|h0",
+    "same_hyper_readout_diagnostic"
+  ],
+  "GRID|ADAPTIVE|20261022|h1_vs_GRID|POOLED|20261022|h1": [
+    "GRID|POOLED|20261022|h1",
+    "GRID|ADAPTIVE|20261022|h1",
+    "same_hyper_readout_diagnostic"
+  ],
+  "GRID|ADAPTIVE|20261022|h1_vs_GRID|MEAN|20261022|h1": [
+    "GRID|MEAN|20261022|h1",
+    "GRID|ADAPTIVE|20261022|h1",
+    "same_hyper_readout_diagnostic"
+  ],
+  "GRID|ADAPTIVE|20261022|h1_vs_GRID|V_ONLY|20261022|h1": [
+    "GRID|V_ONLY|20261022|h1",
+    "GRID|ADAPTIVE|20261022|h1",
+    "same_hyper_readout_diagnostic"
+  ],
+  "GRID|ADAPTIVE|20261022|h2_vs_GRID|POOLED|20261022|h2": [
+    "GRID|POOLED|20261022|h2",
+    "GRID|ADAPTIVE|20261022|h2",
+    "same_hyper_readout_diagnostic"
+  ],
+  "GRID|ADAPTIVE|20261022|h2_vs_GRID|MEAN|20261022|h2": [
+    "GRID|MEAN|20261022|h2",
+    "GRID|ADAPTIVE|20261022|h2",
+    "same_hyper_readout_diagnostic"
+  ],
+  "GRID|ADAPTIVE|20261022|h2_vs_GRID|V_ONLY|20261022|h2": [
+    "GRID|V_ONLY|20261022|h2",
+    "GRID|ADAPTIVE|20261022|h2",
+    "same_hyper_readout_diagnostic"
+  ],
+  "SELECTED|POOLED|20261022_vs_CALIBRATED": [
+    "CALIBRATED",
+    "SELECTED|POOLED|20261022",
+    "capacity_calibration_or_linear_control"
+  ],
+  "SELECTED|POOLED|20261022_vs_V_C_LINEAR": [
+    "V_C_LINEAR",
+    "SELECTED|POOLED|20261022",
+    "capacity_calibration_or_linear_control"
+  ],
+  "SELECTED|POOLED|20261022_vs_SELECTED|V_ONLY|20261022": [
+    "SELECTED|V_ONLY|20261022",
+    "SELECTED|POOLED|20261022",
+    "capacity_calibration_or_linear_control"
+  ],
+  "GAIN|POOLED|20261022|0_vs_SELECTED|POOLED|20261022": [
+    "SELECTED|POOLED|20261022",
+    "GAIN|POOLED|20261022|0",
+    "fixed_model_correction_amplitude_intervention"
+  ],
+  "GAIN|POOLED|20261022|0_vs_V_BASE": [
+    "V_BASE",
+    "GAIN|POOLED|20261022|0",
+    "amplitude_vs_base_not_deployment_selection"
+  ],
+  "GAIN|POOLED|20261022|0.25_vs_SELECTED|POOLED|20261022": [
+    "SELECTED|POOLED|20261022",
+    "GAIN|POOLED|20261022|0.25",
+    "fixed_model_correction_amplitude_intervention"
+  ],
+  "GAIN|POOLED|20261022|0.25_vs_V_BASE": [
+    "V_BASE",
+    "GAIN|POOLED|20261022|0.25",
+    "amplitude_vs_base_not_deployment_selection"
+  ],
+  "GAIN|POOLED|20261022|0.5_vs_SELECTED|POOLED|20261022": [
+    "SELECTED|POOLED|20261022",
+    "GAIN|POOLED|20261022|0.5",
+    "fixed_model_correction_amplitude_intervention"
+  ],
+  "GAIN|POOLED|20261022|0.5_vs_V_BASE": [
+    "V_BASE",
+    "GAIN|POOLED|20261022|0.5",
+    "amplitude_vs_base_not_deployment_selection"
+  ],
+  "GAIN|POOLED|20261022|1_vs_SELECTED|POOLED|20261022": [
+    "SELECTED|POOLED|20261022",
+    "GAIN|POOLED|20261022|1",
+    "fixed_model_correction_amplitude_intervention"
+  ],
+  "GAIN|POOLED|20261022|1_vs_V_BASE": [
+    "V_BASE",
+    "GAIN|POOLED|20261022|1",
+    "amplitude_vs_base_not_deployment_selection"
+  ],
+  "SELECTED|ADAPTIVE|20261022_vs_CALIBRATED": [
+    "CALIBRATED",
+    "SELECTED|ADAPTIVE|20261022",
+    "capacity_calibration_or_linear_control"
+  ],
+  "SELECTED|ADAPTIVE|20261022_vs_V_C_LINEAR": [
+    "V_C_LINEAR",
+    "SELECTED|ADAPTIVE|20261022",
+    "capacity_calibration_or_linear_control"
+  ],
+  "SELECTED|ADAPTIVE|20261022_vs_SELECTED|V_ONLY|20261022": [
+    "SELECTED|V_ONLY|20261022",
+    "SELECTED|ADAPTIVE|20261022",
+    "capacity_calibration_or_linear_control"
+  ],
+  "GAIN|ADAPTIVE|20261022|0_vs_SELECTED|ADAPTIVE|20261022": [
+    "SELECTED|ADAPTIVE|20261022",
+    "GAIN|ADAPTIVE|20261022|0",
+    "fixed_model_correction_amplitude_intervention"
+  ],
+  "GAIN|ADAPTIVE|20261022|0_vs_V_BASE": [
+    "V_BASE",
+    "GAIN|ADAPTIVE|20261022|0",
+    "amplitude_vs_base_not_deployment_selection"
+  ],
+  "GAIN|ADAPTIVE|20261022|0.25_vs_SELECTED|ADAPTIVE|20261022": [
+    "SELECTED|ADAPTIVE|20261022",
+    "GAIN|ADAPTIVE|20261022|0.25",
+    "fixed_model_correction_amplitude_intervention"
+  ],
+  "GAIN|ADAPTIVE|20261022|0.25_vs_V_BASE": [
+    "V_BASE",
+    "GAIN|ADAPTIVE|20261022|0.25",
+    "amplitude_vs_base_not_deployment_selection"
+  ],
+  "GAIN|ADAPTIVE|20261022|0.5_vs_SELECTED|ADAPTIVE|20261022": [
+    "SELECTED|ADAPTIVE|20261022",
+    "GAIN|ADAPTIVE|20261022|0.5",
+    "fixed_model_correction_amplitude_intervention"
+  ],
+  "GAIN|ADAPTIVE|20261022|0.5_vs_V_BASE": [
+    "V_BASE",
+    "GAIN|ADAPTIVE|20261022|0.5",
+    "amplitude_vs_base_not_deployment_selection"
+  ],
+  "GAIN|ADAPTIVE|20261022|1_vs_SELECTED|ADAPTIVE|20261022": [
+    "SELECTED|ADAPTIVE|20261022",
+    "GAIN|ADAPTIVE|20261022|1",
+    "fixed_model_correction_amplitude_intervention"
+  ],
+  "GAIN|ADAPTIVE|20261022|1_vs_V_BASE": [
+    "V_BASE",
+    "GAIN|ADAPTIVE|20261022|1",
+    "amplitude_vs_base_not_deployment_selection"
+  ],
+  "TEMPERATURE|20261022|2_vs_SELECTED|ADAPTIVE|20261022": [
+    "SELECTED|ADAPTIVE|20261022",
+    "TEMPERATURE|20261022|2",
+    "fixed_model_attention_intervention"
+  ],
+  "TEMPERATURE|20261022|2_vs_V_BASE": [
+    "V_BASE",
+    "TEMPERATURE|20261022|2",
+    "attention_intervention_vs_base"
+  ],
+  "TEMPERATURE|20261022|4_vs_SELECTED|ADAPTIVE|20261022": [
+    "SELECTED|ADAPTIVE|20261022",
+    "TEMPERATURE|20261022|4",
+    "fixed_model_attention_intervention"
+  ],
+  "TEMPERATURE|20261022|4_vs_V_BASE": [
+    "V_BASE",
+    "TEMPERATURE|20261022|4",
+    "attention_intervention_vs_base"
+  ],
+  "UNIFORM|20261022_vs_SELECTED|ADAPTIVE|20261022": [
+    "SELECTED|ADAPTIVE|20261022",
+    "UNIFORM|20261022",
+    "fixed_model_attention_intervention"
+  ],
+  "UNIFORM|20261022_vs_V_BASE": [
+    "V_BASE",
+    "UNIFORM|20261022",
+    "attention_intervention_vs_base"
+  ],
+  "SELECTED|ADAPTIVE|20261022_vs_SELECTED|MEAN|20261022": [
+    "SELECTED|MEAN|20261022",
+    "SELECTED|ADAPTIVE|20261022",
+    "source_selected_attention_vs_uniform_training"
+  ],
+  "SELECTED|ADAPTIVE|20261022_vs_SELECTED|POOLED|20261022": [
+    "SELECTED|POOLED|20261022",
+    "SELECTED|ADAPTIVE|20261022",
+    "source_selected_local_vs_global"
+  ],
+  "SELECTED|POOLED|20261020_vs_DONOR|POOLED|20261020|0": [
+    "DONOR|POOLED|20261020|0",
+    "SELECTED|POOLED|20261020",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261020_vs_NOISE_FIXED|POOLED|20261020|0": [
+    "NOISE_FIXED|POOLED|20261020|0",
+    "SELECTED|POOLED|20261020",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261020_vs_NOISE_RETRAIN|POOLED|20261020|0": [
+    "NOISE_RETRAIN|POOLED|20261020|0",
+    "SELECTED|POOLED|20261020",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|POOLED|20261020|0_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|POOLED|20261020|0",
+    "noise_capacity_control"
+  ],
+  "SELECTED|ADAPTIVE|20261020_vs_DONOR|ADAPTIVE|20261020|0": [
+    "DONOR|ADAPTIVE|20261020|0",
+    "SELECTED|ADAPTIVE|20261020",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261020_vs_NOISE_FIXED|ADAPTIVE|20261020|0": [
+    "NOISE_FIXED|ADAPTIVE|20261020|0",
+    "SELECTED|ADAPTIVE|20261020",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261020_vs_NOISE_RETRAIN|ADAPTIVE|20261020|0": [
+    "NOISE_RETRAIN|ADAPTIVE|20261020|0",
+    "SELECTED|ADAPTIVE|20261020",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|ADAPTIVE|20261020|0_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|ADAPTIVE|20261020|0",
+    "noise_capacity_control"
+  ],
+  "SELECTED|POOLED|20261020_vs_DONOR|POOLED|20261020|1": [
+    "DONOR|POOLED|20261020|1",
+    "SELECTED|POOLED|20261020",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261020_vs_NOISE_FIXED|POOLED|20261020|1": [
+    "NOISE_FIXED|POOLED|20261020|1",
+    "SELECTED|POOLED|20261020",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261020_vs_NOISE_RETRAIN|POOLED|20261020|1": [
+    "NOISE_RETRAIN|POOLED|20261020|1",
+    "SELECTED|POOLED|20261020",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|POOLED|20261020|1_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|POOLED|20261020|1",
+    "noise_capacity_control"
+  ],
+  "SELECTED|ADAPTIVE|20261020_vs_DONOR|ADAPTIVE|20261020|1": [
+    "DONOR|ADAPTIVE|20261020|1",
+    "SELECTED|ADAPTIVE|20261020",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261020_vs_NOISE_FIXED|ADAPTIVE|20261020|1": [
+    "NOISE_FIXED|ADAPTIVE|20261020|1",
+    "SELECTED|ADAPTIVE|20261020",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261020_vs_NOISE_RETRAIN|ADAPTIVE|20261020|1": [
+    "NOISE_RETRAIN|ADAPTIVE|20261020|1",
+    "SELECTED|ADAPTIVE|20261020",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|ADAPTIVE|20261020|1_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|ADAPTIVE|20261020|1",
+    "noise_capacity_control"
+  ],
+  "SELECTED|POOLED|20261020_vs_DONOR|POOLED|20261020|2": [
+    "DONOR|POOLED|20261020|2",
+    "SELECTED|POOLED|20261020",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261020_vs_NOISE_FIXED|POOLED|20261020|2": [
+    "NOISE_FIXED|POOLED|20261020|2",
+    "SELECTED|POOLED|20261020",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261020_vs_NOISE_RETRAIN|POOLED|20261020|2": [
+    "NOISE_RETRAIN|POOLED|20261020|2",
+    "SELECTED|POOLED|20261020",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|POOLED|20261020|2_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|POOLED|20261020|2",
+    "noise_capacity_control"
+  ],
+  "SELECTED|ADAPTIVE|20261020_vs_DONOR|ADAPTIVE|20261020|2": [
+    "DONOR|ADAPTIVE|20261020|2",
+    "SELECTED|ADAPTIVE|20261020",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261020_vs_NOISE_FIXED|ADAPTIVE|20261020|2": [
+    "NOISE_FIXED|ADAPTIVE|20261020|2",
+    "SELECTED|ADAPTIVE|20261020",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261020_vs_NOISE_RETRAIN|ADAPTIVE|20261020|2": [
+    "NOISE_RETRAIN|ADAPTIVE|20261020|2",
+    "SELECTED|ADAPTIVE|20261020",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|ADAPTIVE|20261020|2_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|ADAPTIVE|20261020|2",
+    "noise_capacity_control"
+  ],
+  "SELECTED|POOLED|20261020_vs_DONOR|POOLED|20261020|3": [
+    "DONOR|POOLED|20261020|3",
+    "SELECTED|POOLED|20261020",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261020_vs_NOISE_FIXED|POOLED|20261020|3": [
+    "NOISE_FIXED|POOLED|20261020|3",
+    "SELECTED|POOLED|20261020",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261020_vs_NOISE_RETRAIN|POOLED|20261020|3": [
+    "NOISE_RETRAIN|POOLED|20261020|3",
+    "SELECTED|POOLED|20261020",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|POOLED|20261020|3_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|POOLED|20261020|3",
+    "noise_capacity_control"
+  ],
+  "SELECTED|ADAPTIVE|20261020_vs_DONOR|ADAPTIVE|20261020|3": [
+    "DONOR|ADAPTIVE|20261020|3",
+    "SELECTED|ADAPTIVE|20261020",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261020_vs_NOISE_FIXED|ADAPTIVE|20261020|3": [
+    "NOISE_FIXED|ADAPTIVE|20261020|3",
+    "SELECTED|ADAPTIVE|20261020",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261020_vs_NOISE_RETRAIN|ADAPTIVE|20261020|3": [
+    "NOISE_RETRAIN|ADAPTIVE|20261020|3",
+    "SELECTED|ADAPTIVE|20261020",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|ADAPTIVE|20261020|3_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|ADAPTIVE|20261020|3",
+    "noise_capacity_control"
+  ],
+  "SELECTED|POOLED|20261020_vs_DONOR|POOLED|20261020|4": [
+    "DONOR|POOLED|20261020|4",
+    "SELECTED|POOLED|20261020",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261020_vs_NOISE_FIXED|POOLED|20261020|4": [
+    "NOISE_FIXED|POOLED|20261020|4",
+    "SELECTED|POOLED|20261020",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261020_vs_NOISE_RETRAIN|POOLED|20261020|4": [
+    "NOISE_RETRAIN|POOLED|20261020|4",
+    "SELECTED|POOLED|20261020",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|POOLED|20261020|4_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|POOLED|20261020|4",
+    "noise_capacity_control"
+  ],
+  "SELECTED|ADAPTIVE|20261020_vs_DONOR|ADAPTIVE|20261020|4": [
+    "DONOR|ADAPTIVE|20261020|4",
+    "SELECTED|ADAPTIVE|20261020",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261020_vs_NOISE_FIXED|ADAPTIVE|20261020|4": [
+    "NOISE_FIXED|ADAPTIVE|20261020|4",
+    "SELECTED|ADAPTIVE|20261020",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261020_vs_NOISE_RETRAIN|ADAPTIVE|20261020|4": [
+    "NOISE_RETRAIN|ADAPTIVE|20261020|4",
+    "SELECTED|ADAPTIVE|20261020",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|ADAPTIVE|20261020|4_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|ADAPTIVE|20261020|4",
+    "noise_capacity_control"
+  ],
+  "SELECTED|POOLED|20261021_vs_DONOR|POOLED|20261021|0": [
+    "DONOR|POOLED|20261021|0",
+    "SELECTED|POOLED|20261021",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261021_vs_NOISE_FIXED|POOLED|20261021|0": [
+    "NOISE_FIXED|POOLED|20261021|0",
+    "SELECTED|POOLED|20261021",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261021_vs_NOISE_RETRAIN|POOLED|20261021|0": [
+    "NOISE_RETRAIN|POOLED|20261021|0",
+    "SELECTED|POOLED|20261021",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|POOLED|20261021|0_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|POOLED|20261021|0",
+    "noise_capacity_control"
+  ],
+  "SELECTED|ADAPTIVE|20261021_vs_DONOR|ADAPTIVE|20261021|0": [
+    "DONOR|ADAPTIVE|20261021|0",
+    "SELECTED|ADAPTIVE|20261021",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261021_vs_NOISE_FIXED|ADAPTIVE|20261021|0": [
+    "NOISE_FIXED|ADAPTIVE|20261021|0",
+    "SELECTED|ADAPTIVE|20261021",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261021_vs_NOISE_RETRAIN|ADAPTIVE|20261021|0": [
+    "NOISE_RETRAIN|ADAPTIVE|20261021|0",
+    "SELECTED|ADAPTIVE|20261021",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|ADAPTIVE|20261021|0_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|ADAPTIVE|20261021|0",
+    "noise_capacity_control"
+  ],
+  "SELECTED|POOLED|20261021_vs_DONOR|POOLED|20261021|1": [
+    "DONOR|POOLED|20261021|1",
+    "SELECTED|POOLED|20261021",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261021_vs_NOISE_FIXED|POOLED|20261021|1": [
+    "NOISE_FIXED|POOLED|20261021|1",
+    "SELECTED|POOLED|20261021",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261021_vs_NOISE_RETRAIN|POOLED|20261021|1": [
+    "NOISE_RETRAIN|POOLED|20261021|1",
+    "SELECTED|POOLED|20261021",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|POOLED|20261021|1_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|POOLED|20261021|1",
+    "noise_capacity_control"
+  ],
+  "SELECTED|ADAPTIVE|20261021_vs_DONOR|ADAPTIVE|20261021|1": [
+    "DONOR|ADAPTIVE|20261021|1",
+    "SELECTED|ADAPTIVE|20261021",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261021_vs_NOISE_FIXED|ADAPTIVE|20261021|1": [
+    "NOISE_FIXED|ADAPTIVE|20261021|1",
+    "SELECTED|ADAPTIVE|20261021",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261021_vs_NOISE_RETRAIN|ADAPTIVE|20261021|1": [
+    "NOISE_RETRAIN|ADAPTIVE|20261021|1",
+    "SELECTED|ADAPTIVE|20261021",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|ADAPTIVE|20261021|1_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|ADAPTIVE|20261021|1",
+    "noise_capacity_control"
+  ],
+  "SELECTED|POOLED|20261021_vs_DONOR|POOLED|20261021|2": [
+    "DONOR|POOLED|20261021|2",
+    "SELECTED|POOLED|20261021",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261021_vs_NOISE_FIXED|POOLED|20261021|2": [
+    "NOISE_FIXED|POOLED|20261021|2",
+    "SELECTED|POOLED|20261021",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261021_vs_NOISE_RETRAIN|POOLED|20261021|2": [
+    "NOISE_RETRAIN|POOLED|20261021|2",
+    "SELECTED|POOLED|20261021",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|POOLED|20261021|2_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|POOLED|20261021|2",
+    "noise_capacity_control"
+  ],
+  "SELECTED|ADAPTIVE|20261021_vs_DONOR|ADAPTIVE|20261021|2": [
+    "DONOR|ADAPTIVE|20261021|2",
+    "SELECTED|ADAPTIVE|20261021",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261021_vs_NOISE_FIXED|ADAPTIVE|20261021|2": [
+    "NOISE_FIXED|ADAPTIVE|20261021|2",
+    "SELECTED|ADAPTIVE|20261021",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261021_vs_NOISE_RETRAIN|ADAPTIVE|20261021|2": [
+    "NOISE_RETRAIN|ADAPTIVE|20261021|2",
+    "SELECTED|ADAPTIVE|20261021",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|ADAPTIVE|20261021|2_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|ADAPTIVE|20261021|2",
+    "noise_capacity_control"
+  ],
+  "SELECTED|POOLED|20261021_vs_DONOR|POOLED|20261021|3": [
+    "DONOR|POOLED|20261021|3",
+    "SELECTED|POOLED|20261021",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261021_vs_NOISE_FIXED|POOLED|20261021|3": [
+    "NOISE_FIXED|POOLED|20261021|3",
+    "SELECTED|POOLED|20261021",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261021_vs_NOISE_RETRAIN|POOLED|20261021|3": [
+    "NOISE_RETRAIN|POOLED|20261021|3",
+    "SELECTED|POOLED|20261021",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|POOLED|20261021|3_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|POOLED|20261021|3",
+    "noise_capacity_control"
+  ],
+  "SELECTED|ADAPTIVE|20261021_vs_DONOR|ADAPTIVE|20261021|3": [
+    "DONOR|ADAPTIVE|20261021|3",
+    "SELECTED|ADAPTIVE|20261021",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261021_vs_NOISE_FIXED|ADAPTIVE|20261021|3": [
+    "NOISE_FIXED|ADAPTIVE|20261021|3",
+    "SELECTED|ADAPTIVE|20261021",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261021_vs_NOISE_RETRAIN|ADAPTIVE|20261021|3": [
+    "NOISE_RETRAIN|ADAPTIVE|20261021|3",
+    "SELECTED|ADAPTIVE|20261021",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|ADAPTIVE|20261021|3_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|ADAPTIVE|20261021|3",
+    "noise_capacity_control"
+  ],
+  "SELECTED|POOLED|20261021_vs_DONOR|POOLED|20261021|4": [
+    "DONOR|POOLED|20261021|4",
+    "SELECTED|POOLED|20261021",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261021_vs_NOISE_FIXED|POOLED|20261021|4": [
+    "NOISE_FIXED|POOLED|20261021|4",
+    "SELECTED|POOLED|20261021",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261021_vs_NOISE_RETRAIN|POOLED|20261021|4": [
+    "NOISE_RETRAIN|POOLED|20261021|4",
+    "SELECTED|POOLED|20261021",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|POOLED|20261021|4_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|POOLED|20261021|4",
+    "noise_capacity_control"
+  ],
+  "SELECTED|ADAPTIVE|20261021_vs_DONOR|ADAPTIVE|20261021|4": [
+    "DONOR|ADAPTIVE|20261021|4",
+    "SELECTED|ADAPTIVE|20261021",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261021_vs_NOISE_FIXED|ADAPTIVE|20261021|4": [
+    "NOISE_FIXED|ADAPTIVE|20261021|4",
+    "SELECTED|ADAPTIVE|20261021",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261021_vs_NOISE_RETRAIN|ADAPTIVE|20261021|4": [
+    "NOISE_RETRAIN|ADAPTIVE|20261021|4",
+    "SELECTED|ADAPTIVE|20261021",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|ADAPTIVE|20261021|4_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|ADAPTIVE|20261021|4",
+    "noise_capacity_control"
+  ],
+  "SELECTED|POOLED|20261022_vs_DONOR|POOLED|20261022|0": [
+    "DONOR|POOLED|20261022|0",
+    "SELECTED|POOLED|20261022",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261022_vs_NOISE_FIXED|POOLED|20261022|0": [
+    "NOISE_FIXED|POOLED|20261022|0",
+    "SELECTED|POOLED|20261022",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261022_vs_NOISE_RETRAIN|POOLED|20261022|0": [
+    "NOISE_RETRAIN|POOLED|20261022|0",
+    "SELECTED|POOLED|20261022",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|POOLED|20261022|0_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|POOLED|20261022|0",
+    "noise_capacity_control"
+  ],
+  "SELECTED|ADAPTIVE|20261022_vs_DONOR|ADAPTIVE|20261022|0": [
+    "DONOR|ADAPTIVE|20261022|0",
+    "SELECTED|ADAPTIVE|20261022",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261022_vs_NOISE_FIXED|ADAPTIVE|20261022|0": [
+    "NOISE_FIXED|ADAPTIVE|20261022|0",
+    "SELECTED|ADAPTIVE|20261022",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261022_vs_NOISE_RETRAIN|ADAPTIVE|20261022|0": [
+    "NOISE_RETRAIN|ADAPTIVE|20261022|0",
+    "SELECTED|ADAPTIVE|20261022",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|ADAPTIVE|20261022|0_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|ADAPTIVE|20261022|0",
+    "noise_capacity_control"
+  ],
+  "SELECTED|POOLED|20261022_vs_DONOR|POOLED|20261022|1": [
+    "DONOR|POOLED|20261022|1",
+    "SELECTED|POOLED|20261022",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261022_vs_NOISE_FIXED|POOLED|20261022|1": [
+    "NOISE_FIXED|POOLED|20261022|1",
+    "SELECTED|POOLED|20261022",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261022_vs_NOISE_RETRAIN|POOLED|20261022|1": [
+    "NOISE_RETRAIN|POOLED|20261022|1",
+    "SELECTED|POOLED|20261022",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|POOLED|20261022|1_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|POOLED|20261022|1",
+    "noise_capacity_control"
+  ],
+  "SELECTED|ADAPTIVE|20261022_vs_DONOR|ADAPTIVE|20261022|1": [
+    "DONOR|ADAPTIVE|20261022|1",
+    "SELECTED|ADAPTIVE|20261022",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261022_vs_NOISE_FIXED|ADAPTIVE|20261022|1": [
+    "NOISE_FIXED|ADAPTIVE|20261022|1",
+    "SELECTED|ADAPTIVE|20261022",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261022_vs_NOISE_RETRAIN|ADAPTIVE|20261022|1": [
+    "NOISE_RETRAIN|ADAPTIVE|20261022|1",
+    "SELECTED|ADAPTIVE|20261022",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|ADAPTIVE|20261022|1_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|ADAPTIVE|20261022|1",
+    "noise_capacity_control"
+  ],
+  "SELECTED|POOLED|20261022_vs_DONOR|POOLED|20261022|2": [
+    "DONOR|POOLED|20261022|2",
+    "SELECTED|POOLED|20261022",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261022_vs_NOISE_FIXED|POOLED|20261022|2": [
+    "NOISE_FIXED|POOLED|20261022|2",
+    "SELECTED|POOLED|20261022",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261022_vs_NOISE_RETRAIN|POOLED|20261022|2": [
+    "NOISE_RETRAIN|POOLED|20261022|2",
+    "SELECTED|POOLED|20261022",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|POOLED|20261022|2_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|POOLED|20261022|2",
+    "noise_capacity_control"
+  ],
+  "SELECTED|ADAPTIVE|20261022_vs_DONOR|ADAPTIVE|20261022|2": [
+    "DONOR|ADAPTIVE|20261022|2",
+    "SELECTED|ADAPTIVE|20261022",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261022_vs_NOISE_FIXED|ADAPTIVE|20261022|2": [
+    "NOISE_FIXED|ADAPTIVE|20261022|2",
+    "SELECTED|ADAPTIVE|20261022",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261022_vs_NOISE_RETRAIN|ADAPTIVE|20261022|2": [
+    "NOISE_RETRAIN|ADAPTIVE|20261022|2",
+    "SELECTED|ADAPTIVE|20261022",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|ADAPTIVE|20261022|2_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|ADAPTIVE|20261022|2",
+    "noise_capacity_control"
+  ],
+  "SELECTED|POOLED|20261022_vs_DONOR|POOLED|20261022|3": [
+    "DONOR|POOLED|20261022|3",
+    "SELECTED|POOLED|20261022",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261022_vs_NOISE_FIXED|POOLED|20261022|3": [
+    "NOISE_FIXED|POOLED|20261022|3",
+    "SELECTED|POOLED|20261022",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261022_vs_NOISE_RETRAIN|POOLED|20261022|3": [
+    "NOISE_RETRAIN|POOLED|20261022|3",
+    "SELECTED|POOLED|20261022",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|POOLED|20261022|3_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|POOLED|20261022|3",
+    "noise_capacity_control"
+  ],
+  "SELECTED|ADAPTIVE|20261022_vs_DONOR|ADAPTIVE|20261022|3": [
+    "DONOR|ADAPTIVE|20261022|3",
+    "SELECTED|ADAPTIVE|20261022",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261022_vs_NOISE_FIXED|ADAPTIVE|20261022|3": [
+    "NOISE_FIXED|ADAPTIVE|20261022|3",
+    "SELECTED|ADAPTIVE|20261022",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261022_vs_NOISE_RETRAIN|ADAPTIVE|20261022|3": [
+    "NOISE_RETRAIN|ADAPTIVE|20261022|3",
+    "SELECTED|ADAPTIVE|20261022",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|ADAPTIVE|20261022|3_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|ADAPTIVE|20261022|3",
+    "noise_capacity_control"
+  ],
+  "SELECTED|POOLED|20261022_vs_DONOR|POOLED|20261022|4": [
+    "DONOR|POOLED|20261022|4",
+    "SELECTED|POOLED|20261022",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261022_vs_NOISE_FIXED|POOLED|20261022|4": [
+    "NOISE_FIXED|POOLED|20261022|4",
+    "SELECTED|POOLED|20261022",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|POOLED|20261022_vs_NOISE_RETRAIN|POOLED|20261022|4": [
+    "NOISE_RETRAIN|POOLED|20261022|4",
+    "SELECTED|POOLED|20261022",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|POOLED|20261022|4_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|POOLED|20261022|4",
+    "noise_capacity_control"
+  ],
+  "SELECTED|ADAPTIVE|20261022_vs_DONOR|ADAPTIVE|20261022|4": [
+    "DONOR|ADAPTIVE|20261022|4",
+    "SELECTED|ADAPTIVE|20261022",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261022_vs_NOISE_FIXED|ADAPTIVE|20261022|4": [
+    "NOISE_FIXED|ADAPTIVE|20261022|4",
+    "SELECTED|ADAPTIVE|20261022",
+    "selected_readout_content_control"
+  ],
+  "SELECTED|ADAPTIVE|20261022_vs_NOISE_RETRAIN|ADAPTIVE|20261022|4": [
+    "NOISE_RETRAIN|ADAPTIVE|20261022|4",
+    "SELECTED|ADAPTIVE|20261022",
+    "selected_readout_content_control"
+  ],
+  "NOISE_RETRAIN|ADAPTIVE|20261022|4_vs_V_BASE": [
+    "V_BASE",
+    "NOISE_RETRAIN|ADAPTIVE|20261022|4",
+    "noise_capacity_control"
+  ],
+  "SELECTED|V_ONLY|ensemble_vs_V_BASE": [
+    "V_BASE",
+    "SELECTED|V_ONLY|ensemble",
+    "ensemble_secondary_not_single_model_mean"
+  ],
+  "SELECTED|POOLED|ensemble_vs_V_BASE": [
+    "V_BASE",
+    "SELECTED|POOLED|ensemble",
+    "ensemble_secondary_not_single_model_mean"
+  ],
+  "SELECTED|MEAN|ensemble_vs_V_BASE": [
+    "V_BASE",
+    "SELECTED|MEAN|ensemble",
+    "ensemble_secondary_not_single_model_mean"
+  ],
+  "SELECTED|ADAPTIVE|ensemble_vs_V_BASE": [
+    "V_BASE",
+    "SELECTED|ADAPTIVE|ensemble",
+    "ensemble_secondary_not_single_model_mean"
+  ],
+  "SELECTED|ADAPTIVE|ensemble_vs_SELECTED|POOLED|ensemble": [
+    "SELECTED|POOLED|ensemble",
+    "SELECTED|ADAPTIVE|ensemble",
+    "ensemble_secondary"
+  ],
+  "V_C_LINEAR_vs_V_BASE": [
+    "V_BASE",
+    "V_C_LINEAR",
+    "linear_reference"
+  ],
+  "CALIBRATED_vs_V_BASE": [
+    "V_BASE",
+    "CALIBRATED",
+    "calibration_rank_check"
+  ],
+  "DETECTOR_REFERENCE_vs_V_BASE": [
+    "V_BASE",
+    "DETECTOR_REFERENCE",
+    "detector_reference_only"
+  ]
+}

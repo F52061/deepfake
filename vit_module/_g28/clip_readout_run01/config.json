@@ -1,0 +1,238 @@
+{
+  "arguments": {
+    "input": "vit_module/_g25/diag_runs/extract_regions",
+    "output": "vit_module/_g28/clip_readout_run01",
+    "source": "ffpp",
+    "primary_domains": [
+      "cd2",
+      "dfdcp",
+      "wild"
+    ],
+    "evaluation_manifest": null,
+    "evaluation_status": "exploratory",
+    "seeds": [
+      20261020,
+      20261021,
+      20261022
+    ],
+    "folds": 3,
+    "inner_folds": 3,
+    "epochs": 200,
+    "trace_every": 20,
+    "width": 128,
+    "dim": 128,
+    "lr": 0.001,
+    "lambdas": [
+      0.01,
+      0.1,
+      1.0
+    ],
+    "weight_decays": [
+      0.001
+    ],
+    "gains": [
+      0.0,
+      0.25,
+      0.5,
+      1.0
+    ],
+    "temperatures": [
+      2.0,
+      4.0
+    ],
+    "baseline_c": 0.001,
+    "bootstrap": 1000,
+    "repeats": 5,
+    "threads": 4
+  },
+  "status": "complete",
+  "label": "1=fake, 0=real",
+  "code_sha256": {
+    "clip_readout.py": "b6ea80f05aba340e05a1dc39984fc7437c61882173802e9428370683a0968b55",
+    "pure_vit_clip.py": "ad72e931413d017ced9afc58e964d6c99c57a7d075f80a70b30c42d3868bb0da",
+    "conditional_clip.py": "69e01c77c9776ee8a5ab9571a013e0cbe6ce4d012c60ee33ed95cc4ad03d704e",
+    "analyze.py": "19606b59d2eff4f16743aa97b461cf7d6a627061a41d55258ff630632553a8a6",
+    "CLIP_READOUT_EXPERIMENT.md": "c689d2abc5f17e3ebeaa33fbac00e7d0931fec2f37cbcc6feedb7610e6d9ff63"
+  },
+  "input_config_sha256": "54d335fc4a866ba66afe14f26d7c0736957b67f6d5a07945e9eb3f92acd63aae",
+  "versions": {
+    "numpy": "1.26.4",
+    "sklearn": "1.7.2",
+    "torch": "2.2.2+cu118"
+  },
+  "baseline_training": "nested source-video OOF scores train correction; full-fit V scores evaluate",
+  "checkpoint_selection": "inherited extraction; new-holdout does not certify source-only checkpoint selection",
+  "controls": "real-source-selected hyperparameters; noise controls are not independently tuned",
+  "noise_generator": "per domain/split: default_rng(cell_seed(control_seed+100000,domain,split)); C then regions normal float32, times source std plus mean",
+  "calibration": {
+    "scale": 1.1065723423404534,
+    "bias": -0.10797424310143773,
+    "fit": "source OOF only"
+  },
+  "selection": {
+    "V_ONLY|20261020": {
+      "grid_index": 0,
+      "lambda_delta": 0.01,
+      "weight_decay": 0.001,
+      "cv_bce": 0.11770570855587721,
+      "grid_cv_bce": [
+        0.11770570855587721,
+        0.12109999906271696,
+        0.1284535264968872
+      ],
+      "at_lambda_upper_bound": false
+    },
+    "POOLED|20261020": {
+      "grid_index": 1,
+      "lambda_delta": 0.1,
+      "weight_decay": 0.001,
+      "cv_bce": 0.12468196026980877,
+      "grid_cv_bce": [
+        0.13339708391577004,
+        0.12468196026980877,
+        0.12898056019097567
+      ],
+      "at_lambda_upper_bound": false
+    },
+    "MEAN|20261020": {
+      "grid_index": 1,
+      "lambda_delta": 0.1,
+      "weight_decay": 0.001,
+      "cv_bce": 0.12365038514137268,
+      "grid_cv_bce": [
+        0.1308006202802062,
+        0.12365038514137268,
+        0.12808493573218585
+      ],
+      "at_lambda_upper_bound": false
+    },
+    "ADAPTIVE|20261020": {
+      "grid_index": 0,
+      "lambda_delta": 0.01,
+      "weight_decay": 0.001,
+      "cv_bce": 0.12471513278782367,
+      "grid_cv_bce": [
+        0.12471513278782367,
+        0.12516611270606517,
+        0.12756033424288035
+      ],
+      "at_lambda_upper_bound": false
+    },
+    "V_ONLY|20261021": {
+      "grid_index": 0,
+      "lambda_delta": 0.01,
+      "weight_decay": 0.001,
+      "cv_bce": 0.12052768662571907,
+      "grid_cv_bce": [
+        0.12052768662571907,
+        0.12208064869046212,
+        0.1284495660290122
+      ],
+      "at_lambda_upper_bound": false
+    },
+    "POOLED|20261021": {
+      "grid_index": 1,
+      "lambda_delta": 0.1,
+      "weight_decay": 0.001,
+      "cv_bce": 0.12627045188099145,
+      "grid_cv_bce": [
+        0.13525073796510698,
+        0.12627045188099145,
+        0.1279984762147069
+      ],
+      "at_lambda_upper_bound": false
+    },
+    "MEAN|20261021": {
+      "grid_index": 1,
+      "lambda_delta": 0.1,
+      "weight_decay": 0.001,
+      "cv_bce": 0.12190566912293434,
+      "grid_cv_bce": [
+        0.12974359150975942,
+        0.12190566912293434,
+        0.12750291965901853
+      ],
+      "at_lambda_upper_bound": false
+    },
+    "ADAPTIVE|20261021": {
+      "grid_index": 1,
+      "lambda_delta": 0.1,
+      "weight_decay": 0.001,
+      "cv_bce": 0.12311428055167198,
+      "grid_cv_bce": [
+        0.12543865378946065,
+        0.12311428055167198,
+        0.12782052755355836
+      ],
+      "at_lambda_upper_bound": false
+    },
+    "V_ONLY|20261022": {
+      "grid_index": 0,
+      "lambda_delta": 0.01,
+      "weight_decay": 0.001,
+      "cv_bce": 0.12199639670550823,
+      "grid_cv_bce": [
+        0.12199639670550823,
+        0.12327903743833303,
+        0.12851965699344872
+      ],
+      "at_lambda_upper_bound": false
+    },
+    "POOLED|20261022": {
+      "grid_index": 1,
+      "lambda_delta": 0.1,
+      "weight_decay": 0.001,
+      "cv_bce": 0.12631514575332403,
+      "grid_cv_bce": [
+        0.1376806216686964,
+        0.12631514575332403,
+        0.1283037829771638
+      ],
+      "at_lambda_upper_bound": false
+    },
+    "MEAN|20261022": {
+      "grid_index": 1,
+      "lambda_delta": 0.1,
+      "weight_decay": 0.001,
+      "cv_bce": 0.12389043390750885,
+      "grid_cv_bce": [
+        0.12812359910458326,
+        0.12389043390750885,
+        0.12793768480420112
+      ],
+      "at_lambda_upper_bound": false
+    },
+    "ADAPTIVE|20261022": {
+      "grid_index": 1,
+      "lambda_delta": 0.1,
+      "weight_decay": 0.001,
+      "cv_bce": 0.12408570323139428,
+      "grid_cv_bce": [
+        0.1260218482837081,
+        0.12408570323139428,
+        0.12790775407105684
+      ],
+      "at_lambda_upper_bound": false
+    }
+  },
+  "parameter_counts": {
+    "V_ONLY": 364678,
+    "POOLED": 364673,
+    "MEAN": 364673,
+    "ADAPTIVE": 364673
+  },
+  "hyper_grid": [
+    {
+      "lambda_delta": 0.01,
+      "weight_decay": 0.001
+    },
+    {
+      "lambda_delta": 0.1,
+      "weight_decay": 0.001
+    },
+    {
+      "lambda_delta": 1.0,
+      "weight_decay": 0.001
+    }
+  ]
+}
