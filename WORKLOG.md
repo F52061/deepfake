@@ -5216,3 +5216,39 @@ POOLED 换掉真实 C 就明显变差（三类控制全中）；**ADAPTIVE 把�
 - 产物：`vit_module/_g28/clip_readout_run01/`（`scores.npz` / `features.npz` / `split.json` / `*_oof.npz` / `*_baseline.npz` / `*_scalers.npz` / `adapter_*.pt` / `noise_*.pt` / `region_weights.npz` / `controls.npz` / `training_trace.json` / `summary.json` / `comparisons.json` / `code_snapshot/` / `artifact_hashes.json` / `COMPLETE`，共 105 项 333 MB）。`.npz`/`.pt` 被仓库忽略，须另行完整存档。
 - `FINDINGS` 增 P16；未跑完清单第 11 条（λ 上边界）**关闭**；第 12 条（独立数据集确认全局读取正线索）**保留且更重要**——本轮把它从"G27 单次线索"提升为"多路复核但未达门槛的小增量"，正需要真正独立的留出集来定分。
 - 未修改任何脚本、未改动 G27 产物。
+
+## D.73 G29 设计与实现：冻结 CLS 的标量向量组合（2026-10-10）
+
+### D.73.1 目的与六组对应
+
+按用户确认的六组实验逻辑编写独立 `vit_module/diagnostics/vector_fusion.py`、`check_vector_fusion.py` 和 `VECTOR_FUSION_EXPERIMENT.md`。不修改原架构、编码器、G27/G28代码或结果；沿用原 C 的倒数第二层 CLS，不偷换最后层或图文 embedding。CLIP 1024→ViT 768 的可训练投影后归一化，再按 alpha 与同归一化 V 混合，线性分类头直接读 z，不做残差纠错。
+
+六组为同口径 V_MATCHED、归一化输入 CONCAT 线性读取、FIXED(alpha=0.5)、LEARNED(alpha=sigmoid(a))、同结构噪声重训、固定真实模型 donor 替换。FIXED/LEARNED 均有自身五次内容控制，额外固定噪声与强制 CLIP_OFF 仅作诊断。噪声重训使用各真实组源域选定 decay，不是独立调优的噪声上界。
+
+### D.73.2 唯一变量、归一化和选参
+
+源 fit fold 独立 StandardScaler；V_MATCHED/FIXED/LEARNED 的 V 侧相同非仿射 LayerNorm及同维/同初始化分类头。FIXED/LEARNED 投影和 head 完全同初始化，仅相差一个标量；门控不施加 weight decay。投影后非仿射 LayerNorm 减轻尺度混淆，但不把 alpha 解释为信息贡献百分比。混合后不再加 LN/非线性；没有额外对齐或相似度损失。
+
+默认源域 GroupKFold3、200epochs、三个种子、decay=[1e-4,1e-3,1e-2]，仅源 validation BCE 选参；保留相同 decay 的 FIXED/LEARNED 全源训练和比较以隔离门控差异，不按目标网格挑部署配置。正常投影约79万参数，必须结合同参数噪声对照解释，不声称与线性探针容量相等。
+
+### D.73.3 统计与存档
+
+主问题为 LEARNED 相对 V_MATCHED、FIXED、CONCAT；固定融合对照与全部内容控制补充证据链。主宏平均CD2/DFDCP/Wild，CD1单列；同域视频paired bootstrap，单模型均值和ensemble独立报告。目标样本反复查看、checkpoint FFIW选模偏差继续登记；新视频清单仅帮助固定评估子集，不保证此前未见。
+
+保存全部scores/身份、原V/C、标准化、fold身份、训练/验证BCE与alpha轨迹、每个头和噪声头、donor索引/掩码、噪声生成统计和公式、逐样本范数/cosine/头分量、JSON汇总、执行代码/规格快照及SHA256。逐样本诊断不能单独当信息重合度测量；特征可重建融合向量，不默认重复保存大矩阵。COMPLETE在统计与校验清单后写入，拒绝覆盖，历史结果保留。
+
+### D.73.4 验证范围
+
+合成自检覆盖同初始化/参数量差、凸组合公式、alpha与投影梯度、非仿射归一化、分数分量重放、donor隔离且V固定、目标评估行删减不改变源控制、源fold标准化隔离、改变目标标签/特征不改变选参/alpha/训练轨迹/源分数、主要比较和同decay消融、快照/产物哈希、禁止覆盖。执行环境 `E:/Anaconda/envs/hyy/python.exe`，合成结果不作为deepfake研究证据。
+
+完整合成自检已通过（PASS，退出码0）；脚本 `--help`、`git diff --check` 和14处本地Markdown链接检查均通过。原模型与G27/G28代码和结果没有改动。该检查确认实验实现和数据隔离，不代表真实数据上的融合收益。
+
+当前本地提取目录仍只有COMPLETE/config，无真实clean分片，因此不运行真实G29；用户应在完整实验机执行规格和diagnostics README中的命令。运行成本尚未实测，不推断能在固定时长内完成。更新根README和实验索引入口，并更正索引中G28仍标“待运行”的过时状态。
+
+## D.74 G30：改进 ViT 基线上的融合增量验证（2026-10-10）
+
+用户澄清 `acc.txt` 对应独立改进 ViT（含高响应注意力随机抑制），而非完整 Bridge 融合模型。当前核心问题改为：同一改进 ViT 权重、同一评测图像、同一标签和源域选参规则下，CLIP image 与修复后的 Bridge 是否提供可测增量。
+
+新增 `vit_module/diagnostics/incremental_fusion.py`、`check_incremental_fusion.py` 和 `INCREMENTAL_FUSION_EXPERIMENT.md`。四组为 `V_NATIVE`、`V_MATCHED`、`V_CLIP`、`V_BRIDGE`；主比较为配平 ViT→全局 CLIP→有效 Bridge。脚本要求逐样本 native score 和修复后 Bridge 特征，使用视频级 GroupKFold、源域选择 weight decay，并保存逐样本分数与域结果；不会把 `acc.txt` 汇总 AUC 与另一批样本直接相减。
+
+G30 合成自检通过；当前 checkout 没有服务器上的完整 clean 特征、native 逐样本分数和修复后 Bridge 特征，因此尚未运行真实 G30。若 `V_CLIP` 超过 `V_MATCHED`，才支持全局 CLIP 在改进 ViT 上有增量；若 `V_BRIDGE` 进一步超过 `V_CLIP`，才支持多层交互结构的必要性。远程运行前需通过 git 同步脚本，并核对实际 checkpoint、数据清单和标签方向。

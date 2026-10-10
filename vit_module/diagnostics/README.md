@@ -6,6 +6,10 @@
 当前支持完整的 ViT_M2F2Det_Bridge stage-1 checkpoint；其他架构不能直接复用。
 这是一组预先固定的诊断条件，不根据目标域结果搜索提示词、超参数或阈值。
 
+## G30：改进 ViT 上的融合增量
+
+新的四组对照见 [INCREMENTAL_FUSION_EXPERIMENT.md](INCREMENTAL_FUSION_EXPERIMENT.md)。它把 `acc.txt` 对应的独立改进 ViT 与当前融合检测器严格分开，要求相同 ViT 权重、相同评测行、源域视频级选参，并保存逐样本分数。只有在修复 `LayerNorm(1)` 后重新训练并提取的 Bridge 特征，才可进入 `V_BRIDGE`；原 checkpoint 的 Bridge 常数输出不得复用。
+
 ## 输入与标签
 
 准备 CSV，列名为：
@@ -282,3 +286,19 @@ python vit_module/diagnostics/clip_readout.py `
 5. **λ 上边界 0/12 命中**（G27 为 7/12）→ G27 的角点解是网格截断假象，该限制关闭。
 6. G27 的 DFDCP 正线索**未复现**；ffpp 域内四个变体全为正（修正同域有用、跨域有害）。
 7. 不得按目标域 AUC 选 λ/alpha 部署；本轮默认**探索性**，非正式确认。运行前须按**路径身份**审计分组（裸 `video_id` 存在跨数据集同名巧合；`cd1 ⊂ cd2` 只由视频名全含体现，路径判据看不出）。
+
+### G29 标量向量组合验证（待真实运行）
+
+规格：[VECTOR_FUSION_EXPERIMENT.md](VECTOR_FUSION_EXPERIMENT.md)。独立脚本 `vector_fusion.py` 冻结 V/C 特征，仅训练 CLIP 的 1024→768 投影、标量 alpha 和分类头。V_MATCHED 与融合组使用同一 V 归一化及同形状/初始化分类头；FIXED(alpha=0.5) 与 LEARNED 仅相差一个门控参数。另有 normalized CONCAT、两组自身的 donor/噪声重训/固定噪声控制及相同 decay 的门控消融，避免把选参差异解释成 alpha 学习收益。alpha 不作为分支贡献比例。
+
+```powershell
+python vit_module/diagnostics/check_vector_fusion.py
+python vit_module/diagnostics/vector_fusion.py `
+  --input vit_module/_g25/diag_runs/extract_regions `
+  --output vit_module/_g29/vector_fusion_run01 `
+  --primary-domains cd2 dfdcp wild `
+  --seeds 20261030 20261031 20261032 --folds 3 --epochs 200 `
+  --weight-decays 0.0001 0.001 0.01 --bootstrap 1000 --repeats 5 --threads 1
+```
+
+新分类头不是残差修正，不保证原 ViT 判别保持不变。目标域不选参/阈值；历史探针只作参考，主要比较使用同轮 V_MATCHED。需要完整 clean_*.npz（仅 V/C+身份即可，无需区域），当前本地只有配置不能执行真实验证。全部逐样本分数、模型/标准化、alpha轨迹、内容控制、向量诊断及代码/输入/输出哈希均保存；不要覆盖旧 G27/G28 目录。

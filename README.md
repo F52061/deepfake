@@ -15,7 +15,7 @@ This repository contains the implementation and datasets for the paper: Rethinki
 
 ## 本地 ViT / CLIP 研究入口
 
-实验导航见 [G23–G28 索引](vit_module/diagnostics/EXPERIMENT_INDEX.md)，最新结果解读见 [G27 复核](vit_module/diagnostics/G27_REVIEW.md)，下一轮内容与读取失效验证见 [G28 设计](vit_module/diagnostics/CLIP_READOUT_EXPERIMENT.md)。完整过程保留在 [WORKLOG](WORKLOG.md)，实测证据汇总在 [FINDINGS](FINDINGS_问题验证数据.md)。索引区分正式/冒烟运行、纯 ViT/完整检测器基线，以及本 checkout 缺失的原始产物。
+实验导航见 [G23–G30 索引](vit_module/diagnostics/EXPERIMENT_INDEX.md)，当前核心是 [G30 改进 ViT 融合增量验证](vit_module/diagnostics/INCREMENTAL_FUSION_EXPERIMENT.md)。G29 的向量组合诊断仍保留。完整过程保留在 [WORKLOG](WORKLOG.md)，最新 G28 实测数据在 [FINDINGS P16](FINDINGS_问题验证数据.md)。索引区分正式/冒烟运行、纯 ViT/完整检测器基线，以及本 checkout 缺失的原始产物。
 
 The paper ([ArXiv](https://arxiv.org/pdf/2503.20188)) is presented in CVPR 2025 (Oral), and our [project page](https://m2f2-net.github.io/M2F2-Page/) is available. 
 

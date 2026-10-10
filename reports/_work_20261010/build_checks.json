@@ -1,0 +1,21 @@
+{
+  "output": "E:\\Cyber_Museum\\university\\Second\\研究内容\\New Folder\\deepfake\\跨域鉴伪_项目结题报告书_初稿.docx",
+  "reference_sha256": "8e9c2bb53e889db1a4143975103ddc31cd83b2d0cb222dd254439d4028e4ff5c",
+  "output_sha256": "756e9e66373a7c27ff7313bb0c4cdabd83cf80b475886bd7126b3fcc648a5c7f",
+  "preserved_parts": 22,
+  "new_parts": [
+    "word/media/image1.png",
+    "word/media/image2.png"
+  ],
+  "sections": 2,
+  "text_characters": 9374,
+  "pending_fields": [
+    "【待确认学院】",
+    "【待补充班级】",
+    "【待补充立项类别】",
+    "【待补充项目编号】",
+    "【待补学号】"
+  ],
+  "baseline_macro": 0.8328148148148148,
+  "pooled_macro": 0.8407407407407407
+}

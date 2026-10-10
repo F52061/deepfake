@@ -1,14 +1,14 @@
 # 本地实验索引与存档口径
 
-本索引整理 G23–G28 的入口，不移动历史结果目录、不改运行路径、不删除分数或权重。更早的架构排查仍以根目录 `WORKLOG.md` 和 `FINDINGS_问题验证数据.md` 为入口。
+本索引整理 G23–G29 的入口，不移动历史结果目录、不改运行路径、不删除分数或权重。更早的架构排查仍以根目录 `WORKLOG.md` 和 `FINDINGS_问题验证数据.md` 为入口。
 
 ## 先读什么
 
-1. 最新解释：[G27_REVIEW.md](G27_REVIEW.md)，包含从 JSON 核对的结果、文档更正及后续验证建议。
-2. 研究证据：根目录 [FINDINGS_问题验证数据.md](../../FINDINGS_问题验证数据.md)，最新为 P15。
-3. 完整过程：根目录 [WORKLOG.md](../../WORKLOG.md)，G27 为 D.66–D.68，本次复核和更正为 D.69。
+1. G27 历史复核：[G27_REVIEW.md](G27_REVIEW.md)，包含 JSON 核对结果与解释边界。
+2. 研究证据：根目录 [FINDINGS_问题验证数据.md](../../FINDINGS_问题验证数据.md)，最新运行结果为 G28 / P16；非显著不等于等价，多种控制不等于独立目标验证。
+3. 完整过程：根目录 [WORKLOG.md](../../WORKLOG.md)，G28 为 D.70–D.72，G29 设计为 D.73。
 4. 运行条件：[README.md](README.md)。实验规格记录设计，不自动代表实验已经成功。
-5. 下一轮设计：[CLIP_READOUT_EXPERIMENT.md](CLIP_READOUT_EXPERIMENT.md)，内容增量与局部读取失效分开验证；当前仅合成自检完成，尚无真实 G28 成绩。
+5. 下一轮设计：[VECTOR_FUSION_EXPERIMENT.md](VECTOR_FUSION_EXPERIMENT.md)，G29 按六组控制验证标量向量组合；尚无真实成绩。G28 规格仍保留在 [CLIP_READOUT_EXPERIMENT.md](CLIP_READOUT_EXPERIMENT.md)。
 
 ## 实验地图
 
@@ -19,10 +19,12 @@
 | G25 | CLIP 九区域和关系特征的可读性 | `extract.py --save-regions`、`local_analyze.py`；`LOCAL_EXPERIMENT.md` | `_g25/diag_runs/extract_regions/`、`_g25/local_run01/` | 已运行；为 G26/G27 提供同一冻结输入；见 P13.2、D.57 |
 | G26 run01 | 条件区域读取能否改善原完整检测器 | `conditional_clip.py`；`CONDITIONAL_CLIP_EXPERIMENT.md` | `_g26/conditional_clip_run01/` | 历史版本，选参标准化泄漏已登记；不作当前确认依据 |
 | G26 run02 | 修复选参隔离后，复核域条件性及跨域 donor | 同上 | `_g26/conditional_clip_run02_domain/` | 当前 G26 版本；仍以完整检测器为基线，不是纯 ViT；见 P14.8、D.64–D.65 |
-| G27 run01 | 相对纯 V 线性探针，自适应区域读取能否提供增量 | `pure_vit_clip.py`；`PURE_VIT_CLIP_EXPERIMENT.md` | `_g27/pure_vit_clip_run01/` | 最新；ADAPTIVE 未获支持，POOLED 有探索性正线索；见 P15、D.67–D.69 |
-| G28（待运行） | POOLED 自身内容控制、统一超参比较、冻结模型缩放/权重干预 | `clip_readout.py`、`check_clip_readout.py`；`CLIP_READOUT_EXPERIMENT.md` | 预定 `_g28/clip_readout_run01/` | 设计与实现完成，合成自检通过；真实实验需完整 clean 分片；见 D.70 |
+| G27 run01 | 相对纯 V 线性探针，自适应区域读取能否提供增量 | `pure_vit_clip.py`；`PURE_VIT_CLIP_EXPERIMENT.md` | `_g27/pure_vit_clip_run01/` | ADAPTIVE 未获支持，POOLED 有探索性正线索；见 P15、D.67–D.69 |
+| G28 run01 | POOLED 自身内容控制、统一超参比较、冻结模型缩放/权重干预 | `clip_readout.py`、`check_clip_readout.py`；`CLIP_READOUT_EXPERIMENT.md` | `_g28/clip_readout_run01/` | 已运行；全局内容控制较强，源选纯 V 增量仍未确认；见 P16、D.71–D.72 |
+| G29（待运行） | 同归一化纯 V、拼接、固定/学习标量组合与噪声/donor 对照 | `vector_fusion.py`、`check_vector_fusion.py`；`VECTOR_FUSION_EXPERIMENT.md` | 预定 `_g29/vector_fusion_run01/` | 独立实现；保留旧模型/结果；真实实验需完整 clean V/C 特征；见 D.73 |
+| G30（待运行） | 同一改进 ViT 权重下，V 原生/配平、全局 CLIP、有效 Bridge 的增量 | `incremental_fusion.py`、`check_incremental_fusion.py`；`INCREMENTAL_FUSION_EXPERIMENT.md` | 预定 `_g30/incremental_run01/` | 当前核心验证；需要逐样本 native score 和修复后 Bridge 特征；见 D.74 |
 
-结果路径均相对于 `vit_module/`。`smoke`、`extract_smoke`、`analysis_smoke`、`local_smoke` 是冒烟产物，不能合并到正式结果。`self_check.py`、`check_residual.py`、`check_conditional.py`、`check_pure_vit_clip.py`、`check_clip_readout.py` 使用合成数据，只验证程序。
+结果路径均相对于 `vit_module/`。`smoke`、`extract_smoke`、`analysis_smoke`、`local_smoke` 是冒烟产物，不能合并到正式结果。`self_check.py`、`check_residual.py`、`check_conditional.py`、`check_pure_vit_clip.py`、`check_clip_readout.py`、`check_vector_fusion.py` 使用合成数据，只验证程序。
 
 ## 三种基线不可混用
 
