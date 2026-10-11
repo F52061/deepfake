@@ -1,0 +1,872 @@
+{
+  "CONCAT|20261030_vs_V_MATCHED|20261030": [
+    "V_MATCHED|20261030",
+    "CONCAT|20261030",
+    "matched_baseline_increment"
+  ],
+  "FIXED|20261030_vs_V_MATCHED|20261030": [
+    "V_MATCHED|20261030",
+    "FIXED|20261030",
+    "matched_baseline_increment"
+  ],
+  "LEARNED|20261030_vs_V_MATCHED|20261030": [
+    "V_MATCHED|20261030",
+    "LEARNED|20261030",
+    "matched_baseline_increment"
+  ],
+  "LEARNED|20261030_vs_FIXED|20261030": [
+    "FIXED|20261030",
+    "LEARNED|20261030",
+    "learned_vs_fixed_weight"
+  ],
+  "LEARNED|20261030_vs_CONCAT|20261030": [
+    "CONCAT|20261030",
+    "LEARNED|20261030",
+    "learned_vs_normalized_concatenation"
+  ],
+  "FIXED|20261030_vs_CONCAT|20261030": [
+    "CONCAT|20261030",
+    "FIXED|20261030",
+    "fixed_vs_normalized_concatenation"
+  ],
+  "GRID|LEARNED|20261030|h0_vs_GRID|FIXED|20261030|h0": [
+    "GRID|FIXED|20261030|h0",
+    "GRID|LEARNED|20261030|h0",
+    "same_regularization_gate_ablation_not_target_selection"
+  ],
+  "GRID|LEARNED|20261030|h1_vs_GRID|FIXED|20261030|h1": [
+    "GRID|FIXED|20261030|h1",
+    "GRID|LEARNED|20261030|h1",
+    "same_regularization_gate_ablation_not_target_selection"
+  ],
+  "GRID|LEARNED|20261030|h2_vs_GRID|FIXED|20261030|h2": [
+    "GRID|FIXED|20261030|h2",
+    "GRID|LEARNED|20261030|h2",
+    "same_regularization_gate_ablation_not_target_selection"
+  ],
+  "V_MATCHED|20261030_vs_V_REFERENCE": [
+    "V_REFERENCE",
+    "V_MATCHED|20261030",
+    "historical_probe_reference_not_matched_primary"
+  ],
+  "CONCAT|20261030_vs_V_REFERENCE": [
+    "V_REFERENCE",
+    "CONCAT|20261030",
+    "historical_probe_reference_not_matched_primary"
+  ],
+  "FIXED|20261030_vs_V_REFERENCE": [
+    "V_REFERENCE",
+    "FIXED|20261030",
+    "historical_probe_reference_not_matched_primary"
+  ],
+  "LEARNED|20261030_vs_V_REFERENCE": [
+    "V_REFERENCE",
+    "LEARNED|20261030",
+    "historical_probe_reference_not_matched_primary"
+  ],
+  "LEARNED|20261030_vs_V_C_REFERENCE": [
+    "V_C_REFERENCE",
+    "LEARNED|20261030",
+    "historical_linear_fusion_reference"
+  ],
+  "FIXED|20261030_vs_CLIP_OFF|FIXED|20261030": [
+    "CLIP_OFF|FIXED|20261030",
+    "FIXED|20261030",
+    "fixed_model_clip_off_not_retrained_v_baseline"
+  ],
+  "LEARNED|20261030_vs_CLIP_OFF|LEARNED|20261030": [
+    "CLIP_OFF|LEARNED|20261030",
+    "LEARNED|20261030",
+    "fixed_model_clip_off_not_retrained_v_baseline"
+  ],
+  "CONCAT|20261031_vs_V_MATCHED|20261031": [
+    "V_MATCHED|20261031",
+    "CONCAT|20261031",
+    "matched_baseline_increment"
+  ],
+  "FIXED|20261031_vs_V_MATCHED|20261031": [
+    "V_MATCHED|20261031",
+    "FIXED|20261031",
+    "matched_baseline_increment"
+  ],
+  "LEARNED|20261031_vs_V_MATCHED|20261031": [
+    "V_MATCHED|20261031",
+    "LEARNED|20261031",
+    "matched_baseline_increment"
+  ],
+  "LEARNED|20261031_vs_FIXED|20261031": [
+    "FIXED|20261031",
+    "LEARNED|20261031",
+    "learned_vs_fixed_weight"
+  ],
+  "LEARNED|20261031_vs_CONCAT|20261031": [
+    "CONCAT|20261031",
+    "LEARNED|20261031",
+    "learned_vs_normalized_concatenation"
+  ],
+  "FIXED|20261031_vs_CONCAT|20261031": [
+    "CONCAT|20261031",
+    "FIXED|20261031",
+    "fixed_vs_normalized_concatenation"
+  ],
+  "GRID|LEARNED|20261031|h0_vs_GRID|FIXED|20261031|h0": [
+    "GRID|FIXED|20261031|h0",
+    "GRID|LEARNED|20261031|h0",
+    "same_regularization_gate_ablation_not_target_selection"
+  ],
+  "GRID|LEARNED|20261031|h1_vs_GRID|FIXED|20261031|h1": [
+    "GRID|FIXED|20261031|h1",
+    "GRID|LEARNED|20261031|h1",
+    "same_regularization_gate_ablation_not_target_selection"
+  ],
+  "GRID|LEARNED|20261031|h2_vs_GRID|FIXED|20261031|h2": [
+    "GRID|FIXED|20261031|h2",
+    "GRID|LEARNED|20261031|h2",
+    "same_regularization_gate_ablation_not_target_selection"
+  ],
+  "V_MATCHED|20261031_vs_V_REFERENCE": [
+    "V_REFERENCE",
+    "V_MATCHED|20261031",
+    "historical_probe_reference_not_matched_primary"
+  ],
+  "CONCAT|20261031_vs_V_REFERENCE": [
+    "V_REFERENCE",
+    "CONCAT|20261031",
+    "historical_probe_reference_not_matched_primary"
+  ],
+  "FIXED|20261031_vs_V_REFERENCE": [
+    "V_REFERENCE",
+    "FIXED|20261031",
+    "historical_probe_reference_not_matched_primary"
+  ],
+  "LEARNED|20261031_vs_V_REFERENCE": [
+    "V_REFERENCE",
+    "LEARNED|20261031",
+    "historical_probe_reference_not_matched_primary"
+  ],
+  "LEARNED|20261031_vs_V_C_REFERENCE": [
+    "V_C_REFERENCE",
+    "LEARNED|20261031",
+    "historical_linear_fusion_reference"
+  ],
+  "FIXED|20261031_vs_CLIP_OFF|FIXED|20261031": [
+    "CLIP_OFF|FIXED|20261031",
+    "FIXED|20261031",
+    "fixed_model_clip_off_not_retrained_v_baseline"
+  ],
+  "LEARNED|20261031_vs_CLIP_OFF|LEARNED|20261031": [
+    "CLIP_OFF|LEARNED|20261031",
+    "LEARNED|20261031",
+    "fixed_model_clip_off_not_retrained_v_baseline"
+  ],
+  "CONCAT|20261032_vs_V_MATCHED|20261032": [
+    "V_MATCHED|20261032",
+    "CONCAT|20261032",
+    "matched_baseline_increment"
+  ],
+  "FIXED|20261032_vs_V_MATCHED|20261032": [
+    "V_MATCHED|20261032",
+    "FIXED|20261032",
+    "matched_baseline_increment"
+  ],
+  "LEARNED|20261032_vs_V_MATCHED|20261032": [
+    "V_MATCHED|20261032",
+    "LEARNED|20261032",
+    "matched_baseline_increment"
+  ],
+  "LEARNED|20261032_vs_FIXED|20261032": [
+    "FIXED|20261032",
+    "LEARNED|20261032",
+    "learned_vs_fixed_weight"
+  ],
+  "LEARNED|20261032_vs_CONCAT|20261032": [
+    "CONCAT|20261032",
+    "LEARNED|20261032",
+    "learned_vs_normalized_concatenation"
+  ],
+  "FIXED|20261032_vs_CONCAT|20261032": [
+    "CONCAT|20261032",
+    "FIXED|20261032",
+    "fixed_vs_normalized_concatenation"
+  ],
+  "GRID|LEARNED|20261032|h0_vs_GRID|FIXED|20261032|h0": [
+    "GRID|FIXED|20261032|h0",
+    "GRID|LEARNED|20261032|h0",
+    "same_regularization_gate_ablation_not_target_selection"
+  ],
+  "GRID|LEARNED|20261032|h1_vs_GRID|FIXED|20261032|h1": [
+    "GRID|FIXED|20261032|h1",
+    "GRID|LEARNED|20261032|h1",
+    "same_regularization_gate_ablation_not_target_selection"
+  ],
+  "GRID|LEARNED|20261032|h2_vs_GRID|FIXED|20261032|h2": [
+    "GRID|FIXED|20261032|h2",
+    "GRID|LEARNED|20261032|h2",
+    "same_regularization_gate_ablation_not_target_selection"
+  ],
+  "V_MATCHED|20261032_vs_V_REFERENCE": [
+    "V_REFERENCE",
+    "V_MATCHED|20261032",
+    "historical_probe_reference_not_matched_primary"
+  ],
+  "CONCAT|20261032_vs_V_REFERENCE": [
+    "V_REFERENCE",
+    "CONCAT|20261032",
+    "historical_probe_reference_not_matched_primary"
+  ],
+  "FIXED|20261032_vs_V_REFERENCE": [
+    "V_REFERENCE",
+    "FIXED|20261032",
+    "historical_probe_reference_not_matched_primary"
+  ],
+  "LEARNED|20261032_vs_V_REFERENCE": [
+    "V_REFERENCE",
+    "LEARNED|20261032",
+    "historical_probe_reference_not_matched_primary"
+  ],
+  "LEARNED|20261032_vs_V_C_REFERENCE": [
+    "V_C_REFERENCE",
+    "LEARNED|20261032",
+    "historical_linear_fusion_reference"
+  ],
+  "FIXED|20261032_vs_CLIP_OFF|FIXED|20261032": [
+    "CLIP_OFF|FIXED|20261032",
+    "FIXED|20261032",
+    "fixed_model_clip_off_not_retrained_v_baseline"
+  ],
+  "LEARNED|20261032_vs_CLIP_OFF|LEARNED|20261032": [
+    "CLIP_OFF|LEARNED|20261032",
+    "LEARNED|20261032",
+    "fixed_model_clip_off_not_retrained_v_baseline"
+  ],
+  "FIXED|20261030_vs_DONOR|FIXED|20261030|0": [
+    "DONOR|FIXED|20261030|0",
+    "FIXED|20261030",
+    "current_image_content_control"
+  ],
+  "FIXED|20261030_vs_NOISE_FIXED|FIXED|20261030|0": [
+    "NOISE_FIXED|FIXED|20261030|0",
+    "FIXED|20261030",
+    "current_image_content_control"
+  ],
+  "FIXED|20261030_vs_NOISE_RETRAIN|FIXED|20261030|0": [
+    "NOISE_RETRAIN|FIXED|20261030|0",
+    "FIXED|20261030",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|FIXED|20261030|0_vs_V_MATCHED|20261030": [
+    "V_MATCHED|20261030",
+    "NOISE_RETRAIN|FIXED|20261030|0",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "LEARNED|20261030_vs_DONOR|LEARNED|20261030|0": [
+    "DONOR|LEARNED|20261030|0",
+    "LEARNED|20261030",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261030_vs_NOISE_FIXED|LEARNED|20261030|0": [
+    "NOISE_FIXED|LEARNED|20261030|0",
+    "LEARNED|20261030",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261030_vs_NOISE_RETRAIN|LEARNED|20261030|0": [
+    "NOISE_RETRAIN|LEARNED|20261030|0",
+    "LEARNED|20261030",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|LEARNED|20261030|0_vs_V_MATCHED|20261030": [
+    "V_MATCHED|20261030",
+    "NOISE_RETRAIN|LEARNED|20261030|0",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "FIXED|20261030_vs_DONOR|FIXED|20261030|1": [
+    "DONOR|FIXED|20261030|1",
+    "FIXED|20261030",
+    "current_image_content_control"
+  ],
+  "FIXED|20261030_vs_NOISE_FIXED|FIXED|20261030|1": [
+    "NOISE_FIXED|FIXED|20261030|1",
+    "FIXED|20261030",
+    "current_image_content_control"
+  ],
+  "FIXED|20261030_vs_NOISE_RETRAIN|FIXED|20261030|1": [
+    "NOISE_RETRAIN|FIXED|20261030|1",
+    "FIXED|20261030",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|FIXED|20261030|1_vs_V_MATCHED|20261030": [
+    "V_MATCHED|20261030",
+    "NOISE_RETRAIN|FIXED|20261030|1",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "LEARNED|20261030_vs_DONOR|LEARNED|20261030|1": [
+    "DONOR|LEARNED|20261030|1",
+    "LEARNED|20261030",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261030_vs_NOISE_FIXED|LEARNED|20261030|1": [
+    "NOISE_FIXED|LEARNED|20261030|1",
+    "LEARNED|20261030",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261030_vs_NOISE_RETRAIN|LEARNED|20261030|1": [
+    "NOISE_RETRAIN|LEARNED|20261030|1",
+    "LEARNED|20261030",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|LEARNED|20261030|1_vs_V_MATCHED|20261030": [
+    "V_MATCHED|20261030",
+    "NOISE_RETRAIN|LEARNED|20261030|1",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "FIXED|20261030_vs_DONOR|FIXED|20261030|2": [
+    "DONOR|FIXED|20261030|2",
+    "FIXED|20261030",
+    "current_image_content_control"
+  ],
+  "FIXED|20261030_vs_NOISE_FIXED|FIXED|20261030|2": [
+    "NOISE_FIXED|FIXED|20261030|2",
+    "FIXED|20261030",
+    "current_image_content_control"
+  ],
+  "FIXED|20261030_vs_NOISE_RETRAIN|FIXED|20261030|2": [
+    "NOISE_RETRAIN|FIXED|20261030|2",
+    "FIXED|20261030",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|FIXED|20261030|2_vs_V_MATCHED|20261030": [
+    "V_MATCHED|20261030",
+    "NOISE_RETRAIN|FIXED|20261030|2",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "LEARNED|20261030_vs_DONOR|LEARNED|20261030|2": [
+    "DONOR|LEARNED|20261030|2",
+    "LEARNED|20261030",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261030_vs_NOISE_FIXED|LEARNED|20261030|2": [
+    "NOISE_FIXED|LEARNED|20261030|2",
+    "LEARNED|20261030",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261030_vs_NOISE_RETRAIN|LEARNED|20261030|2": [
+    "NOISE_RETRAIN|LEARNED|20261030|2",
+    "LEARNED|20261030",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|LEARNED|20261030|2_vs_V_MATCHED|20261030": [
+    "V_MATCHED|20261030",
+    "NOISE_RETRAIN|LEARNED|20261030|2",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "FIXED|20261030_vs_DONOR|FIXED|20261030|3": [
+    "DONOR|FIXED|20261030|3",
+    "FIXED|20261030",
+    "current_image_content_control"
+  ],
+  "FIXED|20261030_vs_NOISE_FIXED|FIXED|20261030|3": [
+    "NOISE_FIXED|FIXED|20261030|3",
+    "FIXED|20261030",
+    "current_image_content_control"
+  ],
+  "FIXED|20261030_vs_NOISE_RETRAIN|FIXED|20261030|3": [
+    "NOISE_RETRAIN|FIXED|20261030|3",
+    "FIXED|20261030",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|FIXED|20261030|3_vs_V_MATCHED|20261030": [
+    "V_MATCHED|20261030",
+    "NOISE_RETRAIN|FIXED|20261030|3",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "LEARNED|20261030_vs_DONOR|LEARNED|20261030|3": [
+    "DONOR|LEARNED|20261030|3",
+    "LEARNED|20261030",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261030_vs_NOISE_FIXED|LEARNED|20261030|3": [
+    "NOISE_FIXED|LEARNED|20261030|3",
+    "LEARNED|20261030",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261030_vs_NOISE_RETRAIN|LEARNED|20261030|3": [
+    "NOISE_RETRAIN|LEARNED|20261030|3",
+    "LEARNED|20261030",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|LEARNED|20261030|3_vs_V_MATCHED|20261030": [
+    "V_MATCHED|20261030",
+    "NOISE_RETRAIN|LEARNED|20261030|3",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "FIXED|20261030_vs_DONOR|FIXED|20261030|4": [
+    "DONOR|FIXED|20261030|4",
+    "FIXED|20261030",
+    "current_image_content_control"
+  ],
+  "FIXED|20261030_vs_NOISE_FIXED|FIXED|20261030|4": [
+    "NOISE_FIXED|FIXED|20261030|4",
+    "FIXED|20261030",
+    "current_image_content_control"
+  ],
+  "FIXED|20261030_vs_NOISE_RETRAIN|FIXED|20261030|4": [
+    "NOISE_RETRAIN|FIXED|20261030|4",
+    "FIXED|20261030",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|FIXED|20261030|4_vs_V_MATCHED|20261030": [
+    "V_MATCHED|20261030",
+    "NOISE_RETRAIN|FIXED|20261030|4",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "LEARNED|20261030_vs_DONOR|LEARNED|20261030|4": [
+    "DONOR|LEARNED|20261030|4",
+    "LEARNED|20261030",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261030_vs_NOISE_FIXED|LEARNED|20261030|4": [
+    "NOISE_FIXED|LEARNED|20261030|4",
+    "LEARNED|20261030",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261030_vs_NOISE_RETRAIN|LEARNED|20261030|4": [
+    "NOISE_RETRAIN|LEARNED|20261030|4",
+    "LEARNED|20261030",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|LEARNED|20261030|4_vs_V_MATCHED|20261030": [
+    "V_MATCHED|20261030",
+    "NOISE_RETRAIN|LEARNED|20261030|4",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "FIXED|20261031_vs_DONOR|FIXED|20261031|0": [
+    "DONOR|FIXED|20261031|0",
+    "FIXED|20261031",
+    "current_image_content_control"
+  ],
+  "FIXED|20261031_vs_NOISE_FIXED|FIXED|20261031|0": [
+    "NOISE_FIXED|FIXED|20261031|0",
+    "FIXED|20261031",
+    "current_image_content_control"
+  ],
+  "FIXED|20261031_vs_NOISE_RETRAIN|FIXED|20261031|0": [
+    "NOISE_RETRAIN|FIXED|20261031|0",
+    "FIXED|20261031",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|FIXED|20261031|0_vs_V_MATCHED|20261031": [
+    "V_MATCHED|20261031",
+    "NOISE_RETRAIN|FIXED|20261031|0",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "LEARNED|20261031_vs_DONOR|LEARNED|20261031|0": [
+    "DONOR|LEARNED|20261031|0",
+    "LEARNED|20261031",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261031_vs_NOISE_FIXED|LEARNED|20261031|0": [
+    "NOISE_FIXED|LEARNED|20261031|0",
+    "LEARNED|20261031",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261031_vs_NOISE_RETRAIN|LEARNED|20261031|0": [
+    "NOISE_RETRAIN|LEARNED|20261031|0",
+    "LEARNED|20261031",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|LEARNED|20261031|0_vs_V_MATCHED|20261031": [
+    "V_MATCHED|20261031",
+    "NOISE_RETRAIN|LEARNED|20261031|0",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "FIXED|20261031_vs_DONOR|FIXED|20261031|1": [
+    "DONOR|FIXED|20261031|1",
+    "FIXED|20261031",
+    "current_image_content_control"
+  ],
+  "FIXED|20261031_vs_NOISE_FIXED|FIXED|20261031|1": [
+    "NOISE_FIXED|FIXED|20261031|1",
+    "FIXED|20261031",
+    "current_image_content_control"
+  ],
+  "FIXED|20261031_vs_NOISE_RETRAIN|FIXED|20261031|1": [
+    "NOISE_RETRAIN|FIXED|20261031|1",
+    "FIXED|20261031",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|FIXED|20261031|1_vs_V_MATCHED|20261031": [
+    "V_MATCHED|20261031",
+    "NOISE_RETRAIN|FIXED|20261031|1",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "LEARNED|20261031_vs_DONOR|LEARNED|20261031|1": [
+    "DONOR|LEARNED|20261031|1",
+    "LEARNED|20261031",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261031_vs_NOISE_FIXED|LEARNED|20261031|1": [
+    "NOISE_FIXED|LEARNED|20261031|1",
+    "LEARNED|20261031",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261031_vs_NOISE_RETRAIN|LEARNED|20261031|1": [
+    "NOISE_RETRAIN|LEARNED|20261031|1",
+    "LEARNED|20261031",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|LEARNED|20261031|1_vs_V_MATCHED|20261031": [
+    "V_MATCHED|20261031",
+    "NOISE_RETRAIN|LEARNED|20261031|1",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "FIXED|20261031_vs_DONOR|FIXED|20261031|2": [
+    "DONOR|FIXED|20261031|2",
+    "FIXED|20261031",
+    "current_image_content_control"
+  ],
+  "FIXED|20261031_vs_NOISE_FIXED|FIXED|20261031|2": [
+    "NOISE_FIXED|FIXED|20261031|2",
+    "FIXED|20261031",
+    "current_image_content_control"
+  ],
+  "FIXED|20261031_vs_NOISE_RETRAIN|FIXED|20261031|2": [
+    "NOISE_RETRAIN|FIXED|20261031|2",
+    "FIXED|20261031",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|FIXED|20261031|2_vs_V_MATCHED|20261031": [
+    "V_MATCHED|20261031",
+    "NOISE_RETRAIN|FIXED|20261031|2",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "LEARNED|20261031_vs_DONOR|LEARNED|20261031|2": [
+    "DONOR|LEARNED|20261031|2",
+    "LEARNED|20261031",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261031_vs_NOISE_FIXED|LEARNED|20261031|2": [
+    "NOISE_FIXED|LEARNED|20261031|2",
+    "LEARNED|20261031",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261031_vs_NOISE_RETRAIN|LEARNED|20261031|2": [
+    "NOISE_RETRAIN|LEARNED|20261031|2",
+    "LEARNED|20261031",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|LEARNED|20261031|2_vs_V_MATCHED|20261031": [
+    "V_MATCHED|20261031",
+    "NOISE_RETRAIN|LEARNED|20261031|2",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "FIXED|20261031_vs_DONOR|FIXED|20261031|3": [
+    "DONOR|FIXED|20261031|3",
+    "FIXED|20261031",
+    "current_image_content_control"
+  ],
+  "FIXED|20261031_vs_NOISE_FIXED|FIXED|20261031|3": [
+    "NOISE_FIXED|FIXED|20261031|3",
+    "FIXED|20261031",
+    "current_image_content_control"
+  ],
+  "FIXED|20261031_vs_NOISE_RETRAIN|FIXED|20261031|3": [
+    "NOISE_RETRAIN|FIXED|20261031|3",
+    "FIXED|20261031",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|FIXED|20261031|3_vs_V_MATCHED|20261031": [
+    "V_MATCHED|20261031",
+    "NOISE_RETRAIN|FIXED|20261031|3",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "LEARNED|20261031_vs_DONOR|LEARNED|20261031|3": [
+    "DONOR|LEARNED|20261031|3",
+    "LEARNED|20261031",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261031_vs_NOISE_FIXED|LEARNED|20261031|3": [
+    "NOISE_FIXED|LEARNED|20261031|3",
+    "LEARNED|20261031",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261031_vs_NOISE_RETRAIN|LEARNED|20261031|3": [
+    "NOISE_RETRAIN|LEARNED|20261031|3",
+    "LEARNED|20261031",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|LEARNED|20261031|3_vs_V_MATCHED|20261031": [
+    "V_MATCHED|20261031",
+    "NOISE_RETRAIN|LEARNED|20261031|3",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "FIXED|20261031_vs_DONOR|FIXED|20261031|4": [
+    "DONOR|FIXED|20261031|4",
+    "FIXED|20261031",
+    "current_image_content_control"
+  ],
+  "FIXED|20261031_vs_NOISE_FIXED|FIXED|20261031|4": [
+    "NOISE_FIXED|FIXED|20261031|4",
+    "FIXED|20261031",
+    "current_image_content_control"
+  ],
+  "FIXED|20261031_vs_NOISE_RETRAIN|FIXED|20261031|4": [
+    "NOISE_RETRAIN|FIXED|20261031|4",
+    "FIXED|20261031",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|FIXED|20261031|4_vs_V_MATCHED|20261031": [
+    "V_MATCHED|20261031",
+    "NOISE_RETRAIN|FIXED|20261031|4",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "LEARNED|20261031_vs_DONOR|LEARNED|20261031|4": [
+    "DONOR|LEARNED|20261031|4",
+    "LEARNED|20261031",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261031_vs_NOISE_FIXED|LEARNED|20261031|4": [
+    "NOISE_FIXED|LEARNED|20261031|4",
+    "LEARNED|20261031",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261031_vs_NOISE_RETRAIN|LEARNED|20261031|4": [
+    "NOISE_RETRAIN|LEARNED|20261031|4",
+    "LEARNED|20261031",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|LEARNED|20261031|4_vs_V_MATCHED|20261031": [
+    "V_MATCHED|20261031",
+    "NOISE_RETRAIN|LEARNED|20261031|4",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "FIXED|20261032_vs_DONOR|FIXED|20261032|0": [
+    "DONOR|FIXED|20261032|0",
+    "FIXED|20261032",
+    "current_image_content_control"
+  ],
+  "FIXED|20261032_vs_NOISE_FIXED|FIXED|20261032|0": [
+    "NOISE_FIXED|FIXED|20261032|0",
+    "FIXED|20261032",
+    "current_image_content_control"
+  ],
+  "FIXED|20261032_vs_NOISE_RETRAIN|FIXED|20261032|0": [
+    "NOISE_RETRAIN|FIXED|20261032|0",
+    "FIXED|20261032",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|FIXED|20261032|0_vs_V_MATCHED|20261032": [
+    "V_MATCHED|20261032",
+    "NOISE_RETRAIN|FIXED|20261032|0",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "LEARNED|20261032_vs_DONOR|LEARNED|20261032|0": [
+    "DONOR|LEARNED|20261032|0",
+    "LEARNED|20261032",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261032_vs_NOISE_FIXED|LEARNED|20261032|0": [
+    "NOISE_FIXED|LEARNED|20261032|0",
+    "LEARNED|20261032",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261032_vs_NOISE_RETRAIN|LEARNED|20261032|0": [
+    "NOISE_RETRAIN|LEARNED|20261032|0",
+    "LEARNED|20261032",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|LEARNED|20261032|0_vs_V_MATCHED|20261032": [
+    "V_MATCHED|20261032",
+    "NOISE_RETRAIN|LEARNED|20261032|0",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "FIXED|20261032_vs_DONOR|FIXED|20261032|1": [
+    "DONOR|FIXED|20261032|1",
+    "FIXED|20261032",
+    "current_image_content_control"
+  ],
+  "FIXED|20261032_vs_NOISE_FIXED|FIXED|20261032|1": [
+    "NOISE_FIXED|FIXED|20261032|1",
+    "FIXED|20261032",
+    "current_image_content_control"
+  ],
+  "FIXED|20261032_vs_NOISE_RETRAIN|FIXED|20261032|1": [
+    "NOISE_RETRAIN|FIXED|20261032|1",
+    "FIXED|20261032",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|FIXED|20261032|1_vs_V_MATCHED|20261032": [
+    "V_MATCHED|20261032",
+    "NOISE_RETRAIN|FIXED|20261032|1",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "LEARNED|20261032_vs_DONOR|LEARNED|20261032|1": [
+    "DONOR|LEARNED|20261032|1",
+    "LEARNED|20261032",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261032_vs_NOISE_FIXED|LEARNED|20261032|1": [
+    "NOISE_FIXED|LEARNED|20261032|1",
+    "LEARNED|20261032",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261032_vs_NOISE_RETRAIN|LEARNED|20261032|1": [
+    "NOISE_RETRAIN|LEARNED|20261032|1",
+    "LEARNED|20261032",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|LEARNED|20261032|1_vs_V_MATCHED|20261032": [
+    "V_MATCHED|20261032",
+    "NOISE_RETRAIN|LEARNED|20261032|1",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "FIXED|20261032_vs_DONOR|FIXED|20261032|2": [
+    "DONOR|FIXED|20261032|2",
+    "FIXED|20261032",
+    "current_image_content_control"
+  ],
+  "FIXED|20261032_vs_NOISE_FIXED|FIXED|20261032|2": [
+    "NOISE_FIXED|FIXED|20261032|2",
+    "FIXED|20261032",
+    "current_image_content_control"
+  ],
+  "FIXED|20261032_vs_NOISE_RETRAIN|FIXED|20261032|2": [
+    "NOISE_RETRAIN|FIXED|20261032|2",
+    "FIXED|20261032",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|FIXED|20261032|2_vs_V_MATCHED|20261032": [
+    "V_MATCHED|20261032",
+    "NOISE_RETRAIN|FIXED|20261032|2",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "LEARNED|20261032_vs_DONOR|LEARNED|20261032|2": [
+    "DONOR|LEARNED|20261032|2",
+    "LEARNED|20261032",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261032_vs_NOISE_FIXED|LEARNED|20261032|2": [
+    "NOISE_FIXED|LEARNED|20261032|2",
+    "LEARNED|20261032",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261032_vs_NOISE_RETRAIN|LEARNED|20261032|2": [
+    "NOISE_RETRAIN|LEARNED|20261032|2",
+    "LEARNED|20261032",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|LEARNED|20261032|2_vs_V_MATCHED|20261032": [
+    "V_MATCHED|20261032",
+    "NOISE_RETRAIN|LEARNED|20261032|2",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "FIXED|20261032_vs_DONOR|FIXED|20261032|3": [
+    "DONOR|FIXED|20261032|3",
+    "FIXED|20261032",
+    "current_image_content_control"
+  ],
+  "FIXED|20261032_vs_NOISE_FIXED|FIXED|20261032|3": [
+    "NOISE_FIXED|FIXED|20261032|3",
+    "FIXED|20261032",
+    "current_image_content_control"
+  ],
+  "FIXED|20261032_vs_NOISE_RETRAIN|FIXED|20261032|3": [
+    "NOISE_RETRAIN|FIXED|20261032|3",
+    "FIXED|20261032",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|FIXED|20261032|3_vs_V_MATCHED|20261032": [
+    "V_MATCHED|20261032",
+    "NOISE_RETRAIN|FIXED|20261032|3",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "LEARNED|20261032_vs_DONOR|LEARNED|20261032|3": [
+    "DONOR|LEARNED|20261032|3",
+    "LEARNED|20261032",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261032_vs_NOISE_FIXED|LEARNED|20261032|3": [
+    "NOISE_FIXED|LEARNED|20261032|3",
+    "LEARNED|20261032",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261032_vs_NOISE_RETRAIN|LEARNED|20261032|3": [
+    "NOISE_RETRAIN|LEARNED|20261032|3",
+    "LEARNED|20261032",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|LEARNED|20261032|3_vs_V_MATCHED|20261032": [
+    "V_MATCHED|20261032",
+    "NOISE_RETRAIN|LEARNED|20261032|3",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "FIXED|20261032_vs_DONOR|FIXED|20261032|4": [
+    "DONOR|FIXED|20261032|4",
+    "FIXED|20261032",
+    "current_image_content_control"
+  ],
+  "FIXED|20261032_vs_NOISE_FIXED|FIXED|20261032|4": [
+    "NOISE_FIXED|FIXED|20261032|4",
+    "FIXED|20261032",
+    "current_image_content_control"
+  ],
+  "FIXED|20261032_vs_NOISE_RETRAIN|FIXED|20261032|4": [
+    "NOISE_RETRAIN|FIXED|20261032|4",
+    "FIXED|20261032",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|FIXED|20261032|4_vs_V_MATCHED|20261032": [
+    "V_MATCHED|20261032",
+    "NOISE_RETRAIN|FIXED|20261032|4",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "LEARNED|20261032_vs_DONOR|LEARNED|20261032|4": [
+    "DONOR|LEARNED|20261032|4",
+    "LEARNED|20261032",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261032_vs_NOISE_FIXED|LEARNED|20261032|4": [
+    "NOISE_FIXED|LEARNED|20261032|4",
+    "LEARNED|20261032",
+    "current_image_content_control"
+  ],
+  "LEARNED|20261032_vs_NOISE_RETRAIN|LEARNED|20261032|4": [
+    "NOISE_RETRAIN|LEARNED|20261032|4",
+    "LEARNED|20261032",
+    "matched_parameter_noise_retraining"
+  ],
+  "NOISE_RETRAIN|LEARNED|20261032|4_vs_V_MATCHED|20261032": [
+    "V_MATCHED|20261032",
+    "NOISE_RETRAIN|LEARNED|20261032|4",
+    "noise_capacity_vs_matched_baseline"
+  ],
+  "CONCAT|ensemble_vs_V_MATCHED|ensemble": [
+    "V_MATCHED|ensemble",
+    "CONCAT|ensemble",
+    "ensemble_secondary"
+  ],
+  "FIXED|ensemble_vs_V_MATCHED|ensemble": [
+    "V_MATCHED|ensemble",
+    "FIXED|ensemble",
+    "ensemble_secondary"
+  ],
+  "LEARNED|ensemble_vs_V_MATCHED|ensemble": [
+    "V_MATCHED|ensemble",
+    "LEARNED|ensemble",
+    "ensemble_secondary"
+  ],
+  "LEARNED|ensemble_vs_FIXED|ensemble": [
+    "FIXED|ensemble",
+    "LEARNED|ensemble",
+    "ensemble_secondary"
+  ],
+  "LEARNED|ensemble_vs_CONCAT|ensemble": [
+    "CONCAT|ensemble",
+    "LEARNED|ensemble",
+    "ensemble_secondary"
+  ],
+  "V_MATCHED|ensemble_vs_V_REFERENCE": [
+    "V_REFERENCE",
+    "V_MATCHED|ensemble",
+    "normalization_reference"
+  ]
+}

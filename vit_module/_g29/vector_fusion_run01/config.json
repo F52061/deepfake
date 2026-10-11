@@ -1,0 +1,256 @@
+{
+  "arguments": {
+    "input": "vit_module/_g25/diag_runs/extract_regions",
+    "output": "vit_module/_g29/vector_fusion_run01",
+    "source": "ffpp",
+    "primary_domains": [
+      "cd2",
+      "dfdcp",
+      "wild"
+    ],
+    "evaluation_manifest": null,
+    "evaluation_status": "exploratory",
+    "seeds": [
+      20261030,
+      20261031,
+      20261032
+    ],
+    "folds": 3,
+    "epochs": 200,
+    "trace_every": 20,
+    "lr": 0.001,
+    "weight_decays": [
+      0.0001,
+      0.001,
+      0.01
+    ],
+    "baseline_c": 0.001,
+    "bootstrap": 1000,
+    "repeats": 5,
+    "threads": 1
+  },
+  "status": "complete",
+  "label": "1=fake, 0=real",
+  "feature_definition": {
+    "V": "frozen ViT CLS",
+    "C": "CLIP hidden_states[-2][:,0], 1024 in current project",
+    "fusion_dim": 768,
+    "clip_dim": 1024
+  },
+  "normalization": "source StandardScaler then non-affine LayerNorm; projected C normalized after Linear; no post-mixture normalization",
+  "alpha": "global sigmoid(logit), initial 0.5; no gate weight decay; not an information contribution percentage",
+  "training": "fresh classifier, not residual correction; encoders remain frozen",
+  "noise_selection": "reuse each real-source-selected weight decay; not independently tuned",
+  "checkpoint_selection": "inherited checkpoint; source-only reader selection does not remove prior FFIW selection",
+  "code_sha256": {
+    "vector_fusion.py": "f8ff62a79d6451682fc1ff80b4b42d4197d77f59bc1a5a4d869c168e83061632",
+    "VECTOR_FUSION_EXPERIMENT.md": "aa8bb8c81f3b5f51dc930d30da578adc9c745d99208b89d396021efcf0bd0986",
+    "clip_readout.py": "b6ea80f05aba340e05a1dc39984fc7437c61882173802e9428370683a0968b55",
+    "pure_vit_clip.py": "ad72e931413d017ced9afc58e964d6c99c57a7d075f80a70b30c42d3868bb0da",
+    "conditional_clip.py": "69e01c77c9776ee8a5ab9571a013e0cbe6ce4d012c60ee33ed95cc4ad03d704e",
+    "analyze.py": "19606b59d2eff4f16743aa97b461cf7d6a627061a41d55258ff630632553a8a6"
+  },
+  "input_config_sha256": "54d335fc4a866ba66afe14f26d7c0736957b67f6d5a07945e9eb3f92acd63aae",
+  "versions": {
+    "numpy": "1.26.4",
+    "sklearn": "1.7.2",
+    "torch": "2.2.2+cu118"
+  },
+  "selection": {
+    "V_MATCHED|20261030": {
+      "weight_decay": 0.01,
+      "grid_index": 2,
+      "cv_bce": 0.1338815116137266,
+      "grid_cv_bce": [
+        0.13413817696273328,
+        0.13411100987344982,
+        0.1338815116137266
+      ],
+      "at_upper_decay": true
+    },
+    "CONCAT|20261030": {
+      "weight_decay": 0.01,
+      "grid_index": 2,
+      "cv_bce": 0.16029843121767043,
+      "grid_cv_bce": [
+        0.168016262575984,
+        0.16716602705419065,
+        0.16029843121767043
+      ],
+      "at_upper_decay": true
+    },
+    "FIXED|20261030": {
+      "weight_decay": 0.01,
+      "grid_index": 2,
+      "cv_bce": 0.16655246324837208,
+      "grid_cv_bce": [
+        0.28039750292897225,
+        0.22680642299354076,
+        0.16655246324837208
+      ],
+      "at_upper_decay": true
+    },
+    "LEARNED|20261030": {
+      "weight_decay": 0.001,
+      "grid_index": 1,
+      "cv_bce": 0.22482225589454174,
+      "grid_cv_bce": [
+        0.274323451295495,
+        0.22482225589454174,
+        0.24020632408559323
+      ],
+      "at_upper_decay": false
+    },
+    "V_MATCHED|20261031": {
+      "weight_decay": 0.01,
+      "grid_index": 2,
+      "cv_bce": 0.1351265648752451,
+      "grid_cv_bce": [
+        0.13546043056994678,
+        0.1354283579811454,
+        0.1351265648752451
+      ],
+      "at_upper_decay": true
+    },
+    "CONCAT|20261031": {
+      "weight_decay": 0.01,
+      "grid_index": 2,
+      "cv_bce": 0.1624553146213293,
+      "grid_cv_bce": [
+        0.17126334391534329,
+        0.1703128507733345,
+        0.1624553146213293
+      ],
+      "at_upper_decay": true
+    },
+    "FIXED|20261031": {
+      "weight_decay": 0.001,
+      "grid_index": 1,
+      "cv_bce": 0.24379102788865567,
+      "grid_cv_bce": [
+        0.29754393056035044,
+        0.24379102788865567,
+        0.4386260896921158
+      ],
+      "at_upper_decay": false
+    },
+    "LEARNED|20261031": {
+      "weight_decay": 0.01,
+      "grid_index": 2,
+      "cv_bce": 0.23879578918218614,
+      "grid_cv_bce": [
+        0.29193976409733297,
+        0.3198200476169586,
+        0.23879578918218614
+      ],
+      "at_upper_decay": true
+    },
+    "V_MATCHED|20261032": {
+      "weight_decay": 0.01,
+      "grid_index": 2,
+      "cv_bce": 0.13817850917577743,
+      "grid_cv_bce": [
+        0.13883894607424735,
+        0.13877560380846263,
+        0.13817850917577743
+      ],
+      "at_upper_decay": true
+    },
+    "CONCAT|20261032": {
+      "weight_decay": 0.01,
+      "grid_index": 2,
+      "cv_bce": 0.1631028752028942,
+      "grid_cv_bce": [
+        0.17184759426862,
+        0.17092801906168462,
+        0.1631028752028942
+      ],
+      "at_upper_decay": true
+    },
+    "FIXED|20261032": {
+      "weight_decay": 0.01,
+      "grid_index": 2,
+      "cv_bce": 0.17506951987743377,
+      "grid_cv_bce": [
+        0.2854224704951048,
+        0.23586418196558953,
+        0.17506951987743377
+      ],
+      "at_upper_decay": true
+    },
+    "LEARNED|20261032": {
+      "weight_decay": 0.01,
+      "grid_index": 2,
+      "cv_bce": 0.20721765160560607,
+      "grid_cv_bce": [
+        0.2794343664497137,
+        0.24329274922609329,
+        0.20721765160560607
+      ],
+      "at_upper_decay": true
+    }
+  },
+  "parameter_counts": {
+    "V_MATCHED": 769,
+    "CONCAT": 1793,
+    "FIXED": 787969,
+    "LEARNED": 787970
+  },
+  "alpha_values": {
+    "GRID|FIXED|20261030|h0": 0.5,
+    "GRID|FIXED|20261030|h1": 0.5,
+    "GRID|FIXED|20261030|h2": 0.5,
+    "FIXED|20261030": 0.5,
+    "GRID|LEARNED|20261030|h0": 0.49282756447792053,
+    "GRID|LEARNED|20261030|h1": 0.49111443758010864,
+    "GRID|LEARNED|20261030|h2": 0.4886350929737091,
+    "LEARNED|20261030": 0.49111443758010864,
+    "GRID|FIXED|20261031|h0": 0.5,
+    "GRID|FIXED|20261031|h1": 0.5,
+    "GRID|FIXED|20261031|h2": 0.5,
+    "FIXED|20261031": 0.5,
+    "GRID|LEARNED|20261031|h0": 0.49481531977653503,
+    "GRID|LEARNED|20261031|h1": 0.49230313301086426,
+    "GRID|LEARNED|20261031|h2": 0.48939675092697144,
+    "LEARNED|20261031": 0.48939675092697144,
+    "GRID|FIXED|20261032|h0": 0.5,
+    "GRID|FIXED|20261032|h1": 0.5,
+    "GRID|FIXED|20261032|h2": 0.5,
+    "FIXED|20261032": 0.5,
+    "GRID|LEARNED|20261032|h0": 0.49236172437667847,
+    "GRID|LEARNED|20261032|h1": 0.4907921850681305,
+    "GRID|LEARNED|20261032|h2": 0.4877137243747711,
+    "LEARNED|20261032": 0.4877137243747711,
+    "NOISE_RETRAIN|FIXED|20261030|0": 0.5,
+    "NOISE_RETRAIN|LEARNED|20261030|0": 0.47868308424949646,
+    "NOISE_RETRAIN|FIXED|20261030|1": 0.5,
+    "NOISE_RETRAIN|LEARNED|20261030|1": 0.4794972538948059,
+    "NOISE_RETRAIN|FIXED|20261030|2": 0.5,
+    "NOISE_RETRAIN|LEARNED|20261030|2": 0.47916820645332336,
+    "NOISE_RETRAIN|FIXED|20261030|3": 0.5,
+    "NOISE_RETRAIN|LEARNED|20261030|3": 0.47865042090415955,
+    "NOISE_RETRAIN|FIXED|20261030|4": 0.5,
+    "NOISE_RETRAIN|LEARNED|20261030|4": 0.4794754981994629,
+    "NOISE_RETRAIN|FIXED|20261031|0": 0.5,
+    "NOISE_RETRAIN|LEARNED|20261031|0": 0.47886475920677185,
+    "NOISE_RETRAIN|FIXED|20261031|1": 0.5,
+    "NOISE_RETRAIN|LEARNED|20261031|1": 0.48034220933914185,
+    "NOISE_RETRAIN|FIXED|20261031|2": 0.5,
+    "NOISE_RETRAIN|LEARNED|20261031|2": 0.4800620377063751,
+    "NOISE_RETRAIN|FIXED|20261031|3": 0.5,
+    "NOISE_RETRAIN|LEARNED|20261031|3": 0.4769129157066345,
+    "NOISE_RETRAIN|FIXED|20261031|4": 0.5,
+    "NOISE_RETRAIN|LEARNED|20261031|4": 0.4781554341316223,
+    "NOISE_RETRAIN|FIXED|20261032|0": 0.5,
+    "NOISE_RETRAIN|LEARNED|20261032|0": 0.47747063636779785,
+    "NOISE_RETRAIN|FIXED|20261032|1": 0.5,
+    "NOISE_RETRAIN|LEARNED|20261032|1": 0.47679564356803894,
+    "NOISE_RETRAIN|FIXED|20261032|2": 0.5,
+    "NOISE_RETRAIN|LEARNED|20261032|2": 0.4770517647266388,
+    "NOISE_RETRAIN|FIXED|20261032|3": 0.5,
+    "NOISE_RETRAIN|LEARNED|20261032|3": 0.4775666296482086,
+    "NOISE_RETRAIN|FIXED|20261032|4": 0.5,
+    "NOISE_RETRAIN|LEARNED|20261032|4": 0.47446760535240173
+  },
+  "noise_generator": "per(domain,split): default_rng(cell_seed(noise_seed,domain,split)).normal(shape).astype(float32)*noise_std+noise_mean"
+}

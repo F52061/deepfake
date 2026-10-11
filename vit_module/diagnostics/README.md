@@ -287,7 +287,7 @@ python vit_module/diagnostics/clip_readout.py `
 6. G27 的 DFDCP 正线索**未复现**；ffpp 域内四个变体全为正（修正同域有用、跨域有害）。
 7. 不得按目标域 AUC 选 λ/alpha 部署；本轮默认**探索性**，非正式确认。运行前须按**路径身份**审计分组（裸 `video_id` 存在跨数据集同名巧合；`cd1 ⊂ cd2` 只由视频名全含体现，路径判据看不出）。
 
-### G29 标量向量组合验证（待真实运行）
+### G29 标量向量组合验证（**已于 2026-10-11 真实运行，见 §D.76 / FINDINGS P17**）
 
 规格：[VECTOR_FUSION_EXPERIMENT.md](VECTOR_FUSION_EXPERIMENT.md)。独立脚本 `vector_fusion.py` 冻结 V/C 特征，仅训练 CLIP 的 1024→768 投影、标量 alpha 和分类头。V_MATCHED 与融合组使用同一 V 归一化及同形状/初始化分类头；FIXED(alpha=0.5) 与 LEARNED 仅相差一个门控参数。另有 normalized CONCAT、两组自身的 donor/噪声重训/固定噪声控制及相同 decay 的门控消融，避免把选参差异解释成 alpha 学习收益。alpha 不作为分支贡献比例。
 
@@ -301,4 +301,15 @@ python vit_module/diagnostics/vector_fusion.py `
   --weight-decays 0.0001 0.001 0.01 --bootstrap 1000 --repeats 5 --threads 1
 ```
 
-新分类头不是残差修正，不保证原 ViT 判别保持不变。目标域不选参/阈值；历史探针只作参考，主要比较使用同轮 V_MATCHED。需要完整 clean_*.npz（仅 V/C+身份即可，无需区域），当前本地只有配置不能执行真实验证。全部逐样本分数、模型/标准化、alpha轨迹、内容控制、向量诊断及代码/输入/输出哈希均保存；不要覆盖旧 G27/G28 目录。
+新分类头不是残差修正，不保证原 ViT 判别保持不变。目标域不选参/阈值；历史探针只作参考，主要比较使用同轮 V_MATCHED。需要完整 clean_*.npz（仅 V/C+身份即可，无需区域）。全部逐样本分数、模型/标准化、alpha轨迹、内容控制、向量诊断及代码/输入/输出哈希均保存；不要覆盖旧 G27/G28 目录。
+
+**实测结果（`vit_module/_g29/vector_fusion_run01`，121.9 分钟，纯 CPU 单线程，未用显卡；174 比较全部 `valid_bootstraps=1000`）**
+
+1. 管线自洽：`V_REFERENCE` 主宏 **0.832815** 与 G16/G27/G28 锚点**逐位相同**；参数 FIXED 787969 / LEARNED 787970（恰多 1）；83/83 哈希一致。
+2. **三项主问题全部未达门槛，点估计全为负（9/9 区间含零）**：CLIP 增量（LEARNED vs V_MATCHED）−0.0172/−0.0165/−0.0219；学权重（vs FIXED）−0.0071/+0.0024/−0.0095；优于拼接（vs CONCAT）−0.0210/−0.0206/−0.0279。
+3. **门控惰性**：alpha 200 epoch 只从 0.5 漂到 0.4877–0.4911（跨度 0.013），方向偏向更少 CLIP。
+4. **但 CLIP 内容确实在被使用**：真实组对自身三类控制 **FIXED 45/45、LEARNED 45/45 全部排除零**（vs DONOR +0.110、vs NOISE_FIXED +0.139、vs NOISE_RETRAIN +0.079，FIXED）；噪声重训版主宏掉到 0.72，低于 V_MATCHED 0.813。
+5. **"内容有效"与"无增量"并存**：真实融合组 0.794–0.805 < 不用 CLIP 的 V_MATCHED 0.813 < 768 维 LR 探针 0.833；四种新头无一达到任一 LR 探针。
+6. 机制：投影后两路 cosine ≈ 0（近乎**正交**，但正交不构成冗余或互补证据）；头分量比 0.88–1.21（**头并未忽略 CLIP**）；CLIP_OFF 六次全不显著。
+7. 负点估计集中在 cd2/cd1，dfdcp/wild 持平 → 不得作全域结论。`decay` 上边界命中 10/12；源域 CV 偏好纯 V、目标宏偏好 CONCAT，属选参迁移错配。
+8. 结论限定：本轮否掉的是**"非仿射 LN + 单一全局标量混合 + 线性头"这一读取形式**，不是"CLIP 在纯 ViT 之上永远无增量"；换读取器家族须重做同一套内容控制。
