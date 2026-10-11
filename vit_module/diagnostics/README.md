@@ -10,6 +10,8 @@
 
 新的四组对照见 [INCREMENTAL_FUSION_EXPERIMENT.md](INCREMENTAL_FUSION_EXPERIMENT.md)。它把 `acc.txt` 对应的独立改进 ViT 与当前融合检测器严格分开，要求相同 ViT 权重、相同评测行、源域视频级选参，并保存逐样本分数。只有在修复 `LayerNorm(1)` 后重新训练并提取的 Bridge 特征，才可进入 `V_BRIDGE`；原 checkpoint 的 Bridge 常数输出不得复用。
 
+**本机不具备运行条件（未运行，无结果）**：加载器要求每个分片含 `B` 键，而本机唯一的特征输入（G25 `clean_*.npz`）没有 `B`，`load()` 直接抛 `ValueError`，因此连规格允许的 `V_MATCHED`/`V_CLIP` 降级路径也进不去——该降级路径在实现里并不存在。规格禁止伪造 `V_BRIDGE`，故不绕行。用户 2026-10-11 决定维持此状态，不改运行器。详见根目录 `WORKLOG.md` §D.77（含 §D.77.4）。
+
 ## 输入与标签
 
 准备 CSV，列名为：
