@@ -8,7 +8,7 @@
 2. 研究证据：根目录 [FINDINGS_问题验证数据.md](../../FINDINGS_问题验证数据.md)，最新运行结果为 G29 + G29-A / P17；非显著不等于等价，多种控制不等于独立目标验证。**注意**：`split_donors` 系列 donor 控制只保证"同 (domain, split)、异 `video_id`"——**既不保证同类**（实测一致率约 0.50），**也不保证异视频**（该列在 cd1/cd2/dfdcp/ffpp 是人物 id、在 wild 是帧号），故 donor 下降须按 donor 标签分层解读、视频身份须改按路径派生（P17.4/P17.4.2/P17.4.3）。
 3. 完整过程：根目录 [WORKLOG.md](../../WORKLOG.md)，G28 为 D.70–D.72，G29 设计与运行前为 D.73/D.75、结果为 D.76、独立复核与更正为 D.78，G29-A 预注册与运行前修订为 D.79、结果为 D.80。
 4. 运行条件：[README.md](README.md)。实验规格记录设计，不自动代表实验已经成功。
-5. 已完成：[VECTOR_FUSION_EXPERIMENT.md](VECTOR_FUSION_EXPERIMENT.md)，G29 按六组控制验证标量向量组合，2026-10-11 真实运行（见 D.76 / P17）；其追加的 donor 标签控制见 [DONOR_LABEL_CONTROL_EXPERIMENT.md](DONOR_LABEL_CONTROL_EXPERIMENT.md)（G29-A，2026-10-11 运行，见 D.79/D.80 / P17.4.2）。G28 规格仍保留在 [CLIP_READOUT_EXPERIMENT.md](CLIP_READOUT_EXPERIMENT.md)。
+5. G29 文档和目录仅作历史草稿/核对材料；按用户决定不再执行，也不把未完成或未经确认的 G29 目录作为当前证据。G28 规格仍保留在 [CLIP_READOUT_EXPERIMENT.md](CLIP_READOUT_EXPERIMENT.md)。
 
 ## 实验地图
 
@@ -21,8 +21,8 @@
 | G26 run02 | 修复选参隔离后，复核域条件性及跨域 donor | 同上 | `_g26/conditional_clip_run02_domain/` | 当前 G26 版本；仍以完整检测器为基线，不是纯 ViT；见 P14.8、D.64–D.65 |
 | G27 run01 | 相对纯 V 线性探针，自适应区域读取能否提供增量 | `pure_vit_clip.py`；`PURE_VIT_CLIP_EXPERIMENT.md` | `_g27/pure_vit_clip_run01/` | ADAPTIVE 未获支持，POOLED 有探索性正线索；见 P15、D.67–D.69 |
 | G28 run01 | POOLED 自身内容控制、统一超参比较、冻结模型缩放/权重干预 | `clip_readout.py`、`check_clip_readout.py`；`CLIP_READOUT_EXPERIMENT.md` | `_g28/clip_readout_run01/` | 已运行；全局内容控制较强，源选纯 V 增量仍未确认；见 P16、D.71–D.72 |
-| G29 run01 | 同归一化纯 V、拼接、固定/学习标量组合与噪声/donor 对照 | `vector_fusion.py`、`check_vector_fusion.py`；`VECTOR_FUSION_EXPERIMENT.md` | `_g29/vector_fusion_run01/` | **已运行**（2026-10-11，121.9 分钟，纯 CPU）；三项主问题全部未达门槛且点估计全为负。内容控制 45/45 区间排除零，但**按 donor 标签分层后同标签 donor 无损（+0.009）、损失全在异标签（−0.245）** → 只能证明"C 的类别级信息被读取"，"当前图像内容被使用"不成立；见 P17、D.75–D.76、**复核更正 D.78** |
-| G29-A | G29 的 donor 控制按**标签**分层：同标签/异标签 donor，事前预注册、全样本 | `donor_label_control.py`、`check_donor_label.py`；`DONOR_LABEL_CONTROL_EXPERIMENT.md` | `_g29/donor_label_run01/` | **已运行**（2026-10-11，纯 CPU 单线程，**不训练**：只对 G29 已训练权重换输入）。SAME 同标签异视频 donor **0/18 显著、均值 −0.008**；CROSS 异标签 donor（正对照）**18/18 显著、均值 +0.235** → "C 的类别级信息被读、当前图像内容未被使用"由事前全样本确认。同轮登记：`video_id` 不是视频身份（见 D.79.2 / P17.4.3） |
+| G29 run01 | 同归一化纯 V、拼接、固定/学习标量组合与噪声/donor 对照 | `vector_fusion.py`、`check_vector_fusion.py`；`VECTOR_FUSION_EXPERIMENT.md` | `_g29/vector_fusion_run01/`（若存在） | **停止执行/不作为当前结果**：用户确认本轮不继续 G29；目录和文档不等于已完成、有效验证，不能据此写融合增量结论 |
+| G29-A | G29 的 donor 控制按**标签**分层 | `donor_label_control.py`、`check_donor_label.py`；`DONOR_LABEL_CONTROL_EXPERIMENT.md` | `_g29/donor_label_run01/`（若存在） | **随 G29 一并停止**：不继续读取或扩展其结论 |
 | G30（未运行，本机不可运行） | 同一改进 ViT 权重下，V 原生/配平、全局 CLIP、有效 Bridge 的增量 | `incremental_fusion.py`、`check_incremental_fusion.py`；`INCREMENTAL_FUSION_EXPERIMENT.md` | 预定 `_g30/incremental_run01/`（**不存在**） | **本机不具备运行条件，且用户 2026-10-11 决定维持此状态（不补降级路径、不改运行器）**：加载器硬要求每个分片含 `B` 键（`load()` 抛 `ValueError`），G25 分片实测无 `B`，因此连 `V_MATCHED`/`V_CLIP` 也进不去——规格允许的降级路径**实现里不存在**；规格禁止伪造 `V_BRIDGE`，故不绕行。另：`--bootstrap` 解析后未使用、全文无 donor/noise 控制、规格 §运行 的 `--folds` 参数在解析器里不存在。见 D.74、**D.77（含 D.77.4）** |
 
 结果路径均相对于 `vit_module/`。`smoke`、`extract_smoke`、`analysis_smoke`、`local_smoke` 是冒烟产物，不能合并到正式结果。`self_check.py`、`check_residual.py`、`check_conditional.py`、`check_pure_vit_clip.py`、`check_clip_readout.py`、`check_vector_fusion.py` 使用合成数据，只验证程序。

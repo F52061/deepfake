@@ -42,7 +42,13 @@
 
 原生 ViT 头分数通过 `--native-score-npz` 提供，数组必须与 `row_id` 逐行一致。只有 `acc.txt` 而没有逐样本 native score 时，`V_NATIVE` 只能在报告中作为历史参考。
 
-## 运行
+## 当前状态与禁止执行
+
+G30 当前不可运行，且本轮不补写降级路径。加载器要求每个 `clean_*.npz` 同时包含 `V/C/B`，但现有 G25 分片没有 `B`，所以连 `V_MATCHED` 与 `V_CLIP` 也无法单独启动；不能用常数 Bridge、G29 的结果或 `acc.txt` 汇总值伪造 `B`。
+
+此外，现有脚本尚未实现本规格需要的配对 bootstrap、donor/noise 内容控制和 Bridge 联合训练；规格命令包含不存在的 `--folds` 参数。因此不要在服务器上执行下面的旧命令。只有重新预注册并产出同一改进 ViT checkpoint 的逐样本 `V_NATIVE`、修复后 Bridge 重训/提取的 `B`，才可重新设计运行器。
+
+## 旧命令（保留作审计，不可执行）
 
 ```powershell
 python vit_module/diagnostics/check_incremental_fusion.py

@@ -6,11 +6,13 @@
 当前支持完整的 ViT_M2F2Det_Bridge stage-1 checkpoint；其他架构不能直接复用。
 这是一组预先固定的诊断条件，不根据目标域结果搜索提示词、超参数或阈值。
 
-## G30：改进 ViT 上的融合增量
+## G30：改进 ViT 上的融合增量（当前阻塞，不执行）
 
 新的四组对照见 [INCREMENTAL_FUSION_EXPERIMENT.md](INCREMENTAL_FUSION_EXPERIMENT.md)。它把 `acc.txt` 对应的独立改进 ViT 与当前融合检测器严格分开，要求相同 ViT 权重、相同评测行、源域视频级选参，并保存逐样本分数。只有在修复 `LayerNorm(1)` 后重新训练并提取的 Bridge 特征，才可进入 `V_BRIDGE`；原 checkpoint 的 Bridge 常数输出不得复用。
 
 **本机不具备运行条件（未运行，无结果）**：加载器要求每个分片含 `B` 键，而本机唯一的特征输入（G25 `clean_*.npz`）没有 `B`，`load()` 直接抛 `ValueError`，因此连规格允许的 `V_MATCHED`/`V_CLIP` 降级路径也进不去——该降级路径在实现里并不存在。规格禁止伪造 `V_BRIDGE`，故不绕行。用户 2026-10-11 决定维持此状态，不改运行器。详见根目录 `WORKLOG.md` §D.77（含 §D.77.4）。
+
+不要执行文档中旧的 G30 示例命令。它包含解析器不存在的 `--folds`，输入目录 `_g30/features` 也不存在；而且当前脚本未实现 bootstrap、donor/noise 控制和真正的 Bridge 训练。因此即使手工补齐输入，输出也不能回答“架构是否提供融合增量”。
 
 ## 输入与标签
 
@@ -289,7 +291,9 @@ python vit_module/diagnostics/clip_readout.py `
 6. G27 的 DFDCP 正线索**未复现**；ffpp 域内四个变体全为正（修正同域有用、跨域有害）。
 7. 不得按目标域 AUC 选 λ/alpha 部署；本轮默认**探索性**，非正式确认。运行前须按**路径身份**审计分组（裸 `video_id` 存在跨数据集同名巧合；`cd1 ⊂ cd2` 只由视频名全含体现，路径判据看不出）。
 
-### G29 标量向量组合验证（**已于 2026-10-11 真实运行，见 §D.76；同日独立复核见 §D.78 / FINDINGS P17**）
+### G29 标量向量组合验证（**已停止，不作为当前验证**）
+
+G29 的规格、脚本和可能存在的目录均保留作历史材料，但当前不运行、不补跑、不据此声称融合增量已经验证。下一步只在重新设计并确认新的同一改进 ViT 基线后进行。
 
 规格：[VECTOR_FUSION_EXPERIMENT.md](VECTOR_FUSION_EXPERIMENT.md)。独立脚本 `vector_fusion.py` 冻结 V/C 特征，仅训练 CLIP 的 1024→768 投影、标量 alpha 和分类头。V_MATCHED 与融合组使用同一 V 归一化及同形状/初始化分类头；FIXED(alpha=0.5) 与 LEARNED 仅相差一个门控参数。另有 normalized CONCAT、两组自身的 donor/噪声重训/固定噪声控制及相同 decay 的门控消融，避免把选参差异解释成 alpha 学习收益。alpha 不作为分支贡献比例。
 
