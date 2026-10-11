@@ -1,0 +1,14 @@
+{
+  "code_snapshot/analyze.py": "19606b59d2eff4f16743aa97b461cf7d6a627061a41d55258ff630632553a8a6",
+  "code_snapshot/clip_readout.py": "b6ea80f05aba340e05a1dc39984fc7437c61882173802e9428370683a0968b55",
+  "code_snapshot/conditional_clip.py": "69e01c77c9776ee8a5ab9571a013e0cbe6ce4d012c60ee33ed95cc4ad03d704e",
+  "code_snapshot/donor_label_control.py": "a7b1d140023a46c0ca1de84df399d47eb65b785955b94296e3945b5ed6ec49c0",
+  "code_snapshot/DONOR_LABEL_CONTROL_EXPERIMENT.md": "ffafcfa3fd7811c1d66d01d4bfe54df6a1ddb4a882dc45191546178a8aa7b027",
+  "code_snapshot/pure_vit_clip.py": "ad72e931413d017ced9afc58e964d6c99c57a7d075f80a70b30c42d3868bb0da",
+  "code_snapshot/vector_fusion.py": "f8ff62a79d6451682fc1ff80b4b42d4197d77f59bc1a5a4d869c168e83061632",
+  "comparisons.json": "581772f2051bd23f3f701f36254fc0473ca73058e93f63c4795e311c01334763",
+  "config.json": "4850ec303825fb1165a2c834d0a61d0f8e6ec0c42b476f3622b7729d7d319fee",
+  "controls.npz": "66cf1ec0f42101cff27382d228543d86e8519e7eedd12f77a53189e53d03dc2e",
+  "scores.npz": "3a56c5a368a858418ed8f027bbb47578f57cdbe2748f542625f56abad540c659",
+  "summary.json": "08f6078d45e93153ff2d69db1b7d06112578917b3a73fe866f86d29c7968466c"
+}

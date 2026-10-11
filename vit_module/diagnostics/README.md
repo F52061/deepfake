@@ -314,3 +314,15 @@ python vit_module/diagnostics/vector_fusion.py `
 7. 负点估计集中在 cd2/cd1，dfdcp/wild 持平 → 不得作全域结论。`decay` 上边界命中 10/12；源域 CV 偏好纯 V、目标宏偏好 CONCAT，属选参迁移错配。
 8. 结论限定：本轮否掉的是**"非仿射 LN + 单一全局标量混合 + 线性头"这一读取形式**，不是"CLIP 在纯 ViT 之上永远无增量"；换读取器家族须重做同一套内容控制，且 **donor 控制须按 donor 标签分层报告**。
 9. **产物已独立复核**（§D.78）：1740 个逐域 AUC、174 个宏平均比较从原始分数重算**全为 0 差**；12 个全源模型从 `features.npz`+`scalers.npz`+`.pt` 重跑前向一致（≤3.8e−6）；`clip_controls` 重新生成 donor 行号与噪声参数**完全相同**、控制分数列 0 差；输入分片抽查 12/12 哈希一致。
+10. **追加的 donor 标签控制已运行**（G29-A，2026-10-11，见 §D.79 预注册 / §D.80 结果 / FINDINGS §17.4.2）：不重训、只换输入，事前预注册两组控制。SAME（同标签、异视频 donor）**0/18 显著、均值 −0.008**；CROSS（异标签 donor，正对照）**18/18 显著、均值 +0.235**（与事后分层的 +0.245 独立吻合）。→ "类别级"读法由**事前、全样本**确认。**同时更正一条口径**：`video_id` 列在 cd1/cd2/dfdcp/ffpp 是人物 id、在 wild 是帧号，故 `split_donors` 的"异视频"比字面弱（G29 候选池实测仅 0.05% 落在行自身视频上，wild/test SAME 池 2.97%，结论不变）；G29-A 已改用**路径派生视频身份**（见 §17.4.3）。
+
+```powershell
+python vit_module/diagnostics/check_donor_label.py
+python vit_module/diagnostics/donor_label_control.py `
+  --reference vit_module/_g29/vector_fusion_run01 `
+  --output vit_module/_g29/donor_label_run01 `
+  --primary-domains cd2 dfdcp wild `
+  --seeds 20261030 20261031 20261032 --repeats 3 --bootstrap 1000 --threads 1
+```
+
+规格：[DONOR_LABEL_CONTROL_EXPERIMENT.md](DONOR_LABEL_CONTROL_EXPERIMENT.md)（含运行前修订 §0）。对 G29 目录**只读**（逐文件 sha256 校验），产物写独立目录，**不训练任何模型**。
