@@ -1,0 +1,28 @@
+{
+  "source": "ffpp",
+  "label_definition": "1=fake",
+  "video_identity_audited": false,
+  "evaluation_status": "exploratory",
+  "vit": {
+    "kind": "native",
+    "higher_score": "fake",
+    "checkpoint_sha256": "REPLACE_WITH_ACTUAL_CHECKPOINT_HASH",
+    "preprocessing": "REPLACE_WITH_ACTUAL_RESIZE_NORMALIZATION",
+    "training_description": "REPLACE_WITH_TRAINING_AND_VIDEO_SPLIT_HISTORY",
+    "score_definition": "REPLACE_WITH_VERIFIED_FAKE_LOGIT_DIFFERENCE",
+    "selection_history": "REPLACE_WITH_CHECKPOINT_SELECTION_HISTORY_INCLUDING_ANY_TARGET_USE",
+    "evaluation_labels_used_for_training": false,
+    "validation_groups_excluded_from_training": false
+  },
+  "clip": {
+    "kind": "clip_only_probe",
+    "higher_score": "fake",
+    "checkpoint_sha256": "REPLACE_WITH_ACTUAL_CHECKPOINT_HASH",
+    "preprocessing": "REPLACE_WITH_ACTUAL_RESIZE_NORMALIZATION_AND_FEATURE_LAYER",
+    "training_description": "REPLACE_WITH_SOURCE_ONLY_READER_FITTING_AND_SELECTION",
+    "score_definition": "REPLACE_WITH_CLIP_ONLY_READER_SCORE_DEFINITION",
+    "selection_history": "REPLACE_WITH_SOURCE_ONLY_SELECTION_HISTORY",
+    "evaluation_labels_used_for_training": false,
+    "validation_groups_excluded_from_training": false
+  }
+}

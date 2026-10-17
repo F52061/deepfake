@@ -200,3 +200,11 @@ dataset/
 utils/DDVQA_images/
 utils/DDVQA_split/
 utils/DDVQA_eval/
+
+# Archived implementation-audit outputs and downloaded source snapshots
+legacy_integration/archive_20261017/snapshot/vit_module/_audit_20261016/
+
+# Fresh integration outputs; keep new model/training/config source tracked
+integration/runs/
+integration/outputs/
+integration/.cache/

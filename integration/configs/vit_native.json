@@ -1,0 +1,17 @@
+{
+  "deepfake_model_name": "vit_native",
+  "native_checkpoint": "E:/Cross-domain_authentication_verification/PDI/results/Ama1_aps1_1/net_050.pth",
+  "native_checkpoint_sha256": "d571b301cf8c10f056d837bb5b484e5c7666c38ee212f4489a29bfc307918c9f",
+  "native_vit_fake_logit_index": 0,
+  "native_vit_preprocessing": {
+    "size": 224,
+    "mean": [0.5, 0.5, 0.5],
+    "std": [0.5, 0.5, 0.5]
+  },
+  "preprocessing_verified_against_pdi": false,
+  "native_label_order_verified_against_pdi": false,
+  "smoke_images": [
+    "F:/zhj/data/FaceForensic++_raw/original_sequences/c23/faces23/102/127.png",
+    "F:/zhj/data/FaceForensic++_raw/manipulated_sequences/Deepfakes/c23/faces23/376_381/435.png"
+  ]
+}

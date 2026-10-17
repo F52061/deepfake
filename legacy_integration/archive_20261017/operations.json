@@ -1,0 +1,192 @@
+[
+  {
+    "action": "copy_reference",
+    "source": "asset",
+    "destination": "snapshot/asset"
+  },
+  {
+    "action": "copy_reference",
+    "source": "eval",
+    "destination": "snapshot/eval"
+  },
+  {
+    "action": "copy_reference",
+    "source": "llava",
+    "destination": "snapshot/llava"
+  },
+  {
+    "action": "move",
+    "source": "paper",
+    "destination": "snapshot/paper"
+  },
+  {
+    "action": "move",
+    "source": "reports",
+    "destination": "snapshot/reports"
+  },
+  {
+    "action": "move",
+    "source": "scripts",
+    "destination": "snapshot/scripts"
+  },
+  {
+    "action": "copy_reference",
+    "source": "sequence",
+    "destination": "snapshot/sequence"
+  },
+  {
+    "action": "copy_reference",
+    "source": "utils",
+    "destination": "snapshot/utils"
+  },
+  {
+    "action": "move",
+    "source": "vit_module",
+    "destination": "snapshot/vit_module"
+  },
+  {
+    "action": "copy_reference",
+    "source": ".gitignore",
+    "destination": "snapshot/.gitignore"
+  },
+  {
+    "action": "copy_reference",
+    "source": "附件2.参赛作品信息暨立项项目结题报告书(1).docx",
+    "destination": "snapshot/附件2.参赛作品信息暨立项项目结题报告书(1).docx"
+  },
+  {
+    "action": "copy_reference",
+    "source": "红字批注版附件2.参赛作品信息暨立项项目结题报告书.docx",
+    "destination": "snapshot/红字批注版附件2.参赛作品信息暨立项项目结题报告书.docx"
+  },
+  {
+    "action": "copy_reference",
+    "source": "跨域鉴伪_项目结题报告书.docx",
+    "destination": "snapshot/跨域鉴伪_项目结题报告书.docx"
+  },
+  {
+    "action": "copy_reference",
+    "source": "跨域鉴伪——面向社媒的人脸深度伪造检测系统.docx",
+    "destination": "snapshot/跨域鉴伪——面向社媒的人脸深度伪造检测系统.docx"
+  },
+  {
+    "action": "move",
+    "source": "acc.txt",
+    "destination": "snapshot/acc.txt"
+  },
+  {
+    "action": "move",
+    "source": "describe.md",
+    "destination": "snapshot/describe.md"
+  },
+  {
+    "action": "copy_reference",
+    "source": "environment_windows.yml",
+    "destination": "snapshot/environment_windows.yml"
+  },
+  {
+    "action": "copy_reference",
+    "source": "environment.yml",
+    "destination": "snapshot/environment.yml"
+  },
+  {
+    "action": "move",
+    "source": "FINDINGS_问题验证数据.md",
+    "destination": "snapshot/FINDINGS_问题验证数据.md"
+  },
+  {
+    "action": "copy_reference",
+    "source": "LICENSE",
+    "destination": "snapshot/LICENSE"
+  },
+  {
+    "action": "copy_reference",
+    "source": "pyproject.toml",
+    "destination": "snapshot/pyproject.toml"
+  },
+  {
+    "action": "move",
+    "source": "README.md",
+    "destination": "snapshot/README.md"
+  },
+  {
+    "action": "move",
+    "source": "run_eval_bridge.bat",
+    "destination": "snapshot/run_eval_bridge.bat"
+  },
+  {
+    "action": "move",
+    "source": "run_train_bridge.bat",
+    "destination": "snapshot/run_train_bridge.bat"
+  },
+  {
+    "action": "move",
+    "source": "run.bat",
+    "destination": "snapshot/run.bat"
+  },
+  {
+    "action": "copy_reference",
+    "source": "stage_1_detection_inference.py",
+    "destination": "snapshot/stage_1_detection_inference.py"
+  },
+  {
+    "action": "copy_reference",
+    "source": "stage_1_detection.py",
+    "destination": "snapshot/stage_1_detection.py"
+  },
+  {
+    "action": "copy_reference",
+    "source": "stage_1_inference.sh",
+    "destination": "snapshot/stage_1_inference.sh"
+  },
+  {
+    "action": "copy_reference",
+    "source": "stage_1_train.sh",
+    "destination": "snapshot/stage_1_train.sh"
+  },
+  {
+    "action": "move",
+    "source": "stage_2_train.sh",
+    "destination": "snapshot/stage_2_train.sh"
+  },
+  {
+    "action": "move",
+    "source": "stage_3_inference_det.sh",
+    "destination": "snapshot/stage_3_inference_det.sh"
+  },
+  {
+    "action": "move",
+    "source": "stage_3_inference_exp.sh",
+    "destination": "snapshot/stage_3_inference_exp.sh"
+  },
+  {
+    "action": "move",
+    "source": "stage_3_train.sh",
+    "destination": "snapshot/stage_3_train.sh"
+  },
+  {
+    "action": "move",
+    "source": "WORKLOG.md",
+    "destination": "snapshot/WORKLOG.md"
+  },
+  {
+    "action": "move_document",
+    "source": "附件2.参赛作品信息暨立项项目结题报告书(1).docx",
+    "destination": "../../documents/附件2.参赛作品信息暨立项项目结题报告书(1).docx"
+  },
+  {
+    "action": "move_document",
+    "source": "红字批注版附件2.参赛作品信息暨立项项目结题报告书.docx",
+    "destination": "../../documents/红字批注版附件2.参赛作品信息暨立项项目结题报告书.docx"
+  },
+  {
+    "action": "move_document",
+    "source": "跨域鉴伪_项目结题报告书.docx",
+    "destination": "../../documents/跨域鉴伪_项目结题报告书.docx"
+  },
+  {
+    "action": "move_document",
+    "source": "跨域鉴伪——面向社媒的人脸深度伪造检测系统.docx",
+    "destination": "../../documents/跨域鉴伪——面向社媒的人脸深度伪造检测系统.docx"
+  }
+]

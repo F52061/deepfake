@@ -1,5 +1,7 @@
 # 本地实验索引与存档口径
 
+**2026-10-16 当前入口**：[工作整理与服务器架构核查](../../reports/RESEARCH_STATUS_20261016.md)。新增 `architecture_audit.py`、`real_image_layout_audit.py` 和进程内候选修复 `bridge_layout_candidate.py`；只验证实现与样本隔离，不训练，不产生 AUC 增益结论。G29/G29-A 的停止状态沿用下表，未重启 G30。
+
 本索引整理 G23–G29 的入口，不移动历史结果目录、不改运行路径、不删除分数或权重。更早的架构排查仍以根目录 `WORKLOG.md` 和 `FINDINGS_问题验证数据.md` 为入口。
 
 ## 先读什么

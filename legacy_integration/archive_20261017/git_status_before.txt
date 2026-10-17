@@ -1,0 +1,17 @@
+ M .gitignore
+ M "FINDINGS_\351\227\256\351\242\230\351\252\214\350\257\201\346\225\260\346\215\256.md"
+ M WORKLOG.md
+ M vit_module/BRIDGE_ADAPTER_DESIGN.md
+ M vit_module/diagnostics/EXPERIMENT_INDEX.md
+ D "\350\267\250\345\237\237\351\211\264\344\274\252_\351\241\271\347\233\256\347\273\223\351\242\230\346\212\245\345\221\212\344\271\246_\345\210\235\347\250\277.docx"
+?? reports/RESEARCH_STATUS_20261016.md
+?? vit_module/diagnostics/architecture_audit.py
+?? vit_module/diagnostics/bridge_layout_candidate.py
+?? vit_module/diagnostics/real_image_layout_audit.py
+?? vit_module/exp_1/analyze.py
+?? vit_module/exp_1/check_exp_1.py
+?? vit_module/exp_1/provenance.example.json
+?? "vit_module/exp_1/\345\256\236\351\252\214\350\257\264\346\230\216.md"
+?? "vit_module/exp_1/\347\273\237\350\256\241\350\256\260\345\275\225.md"
+?? "\350\267\250\345\237\237\351\211\264\344\274\252_\351\241\271\347\233\256\347\273\223\351\242\230\346\212\245\345\221\212\344\271\246.docx"
+?? "\351\231\204\344\273\2662.\345\217\202\350\265\233\344\275\234\345\223\201\344\277\241\346\201\257\346\232\250\347\253\213\351\241\271\351\241\271\347\233\256\347\273\223\351\242\230\346\212\245\345\221\212\344\271\246(1).docx"

@@ -1,0 +1,22 @@
+{
+  "original_snapshot_files_verified": 501,
+  "retained_core_files_byte_identical": 64,
+  "documents_byte_identical": true,
+  "compatibility_aliases_verified": {
+    "vit_module.vit_m2f2_detector": "legacy_integration.archive_20261017.snapshot.vit_module.vit_m2f2_detector",
+    "vit_module.vit_m2f2_detector_bridge": "legacy_integration.archive_20261017.snapshot.vit_module.vit_m2f2_detector_bridge",
+    "vit_module.vit_m2f2_detector_unified": "legacy_integration.archive_20261017.snapshot.vit_module.vit_m2f2_detector_unified"
+  },
+  "retained_direct_imports_resolved": [
+    {
+      "caller": "llava\\model\\language_model\\llava_llama.py",
+      "target": "vit_module.vit_m2f2_detector_unified"
+    }
+  ],
+  "new_integration_has_legacy_code": false,
+  "no_model_construction_or_training": true,
+  "runtime_limit": "Local Python lacks sklearn; full model import/inference not claimed.",
+  "full_restore_to_new_directory_verified": true,
+  "restored_original_files": 501,
+  "restore_verification_copy": "D:\\AppData\\Temp\\deepfake_restore_check_20261017_84f207fc0d2f40e984f469152cd7a634"
+}

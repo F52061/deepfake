@@ -30,7 +30,6 @@ from transformers.generation.utils import GenerateOutput
 from ..llava_arch import LlavaMetaModel, LlavaMetaForCausalLM
 from ..multimodal_projector.builder import build_multimodal_projector
 from ..deepfake.encoder import DenseNet_Deepfake, EfficientNet_Deepfake, CLIP_DenseNet_Deepfake
-from vit_module.vit_m2f2_detector_unified import ViT_M2F2Det_Unified as ViT_M2F2Det
 
 from llava.constants import IGNORE_INDEX, IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_PATCH_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN, DEEPFAKE_TOKEN_INDEX
 from llava.mm_utils import get_anyres_image_grid_shape, process_images
@@ -170,11 +169,21 @@ def build_deepfake_encoder(
     text_dtype: torch.dtype = torch.float16,
     deepfake_dtype: torch.dtype = torch.float32,
     load_vision_encoder: bool = True,
-    pretrained: bool = False
+    pretrained: bool = False,
+    native_fake_logit_index: Optional[int] = None,
+    native_preprocessing: Optional[dict] = None,
 ):
-    """Build the deepfake encoder using ViT backbone + BridgeAdapter fusion (方案B).
-    CLIP models are loaded from local cache to avoid HuggingFace network calls.
-    """
+    """Explicit native ViT option; legacy configs retain the old Bridge path."""
+    if deepfake_encoder_name == 'vit_native':
+        from integration.models.vit_native import NativeViTDetector
+        return NativeViTDetector(
+            fake_logit_index=native_fake_logit_index,
+            preprocessing=native_preprocessing,
+        )
+    # Non-native names were historically ignored by this factory. Preserve that
+    # behavior for existing checkpoints; only vit_native opts into the new path.
+    # Keep the legacy dependency lazy: vit_native never imports archived fusion.
+    from vit_module.vit_m2f2_detector_unified import ViT_M2F2Det_Unified as ViT_M2F2Det
     import os
     _script_dir = os.path.dirname(os.path.abspath(__file__))
     _project_root = os.path.dirname(os.path.dirname(os.path.dirname(_script_dir)))
@@ -621,28 +630,44 @@ class LlavaLlamaForCausalLMDeepfake(LlamaForCausalLM, LlavaMetaForCausalLM):
         self.lm_head = nn.Linear(config.hidden_size, config.vocab_size, bias=False)
         self.deepfake_replicate = False
         self.deepfake_encoder = build_deepfake_encoder(
-            # deepfake_encoder_name=config.deepfake_model_name,
-            vision_model_name=config.mm_vision_tower,
-            text_model_name=config.mm_vision_tower,
+            deepfake_encoder_name=getattr(config, 'deepfake_model_name', 'vit'),
+            vision_model_name=getattr(config, 'mm_vision_tower', 'openai/clip-vit-large-patch14-336'),
+            text_model_name=getattr(config, 'mm_vision_tower', 'openai/clip-vit-large-patch14-336'),
             vision_dtype=torch.float16,
             text_dtype=torch.float16,
             deepfake_dtype=torch.float16,
             load_vision_encoder=True,
-            pretrained=False
+            pretrained=False,
+            native_fake_logit_index=getattr(config, 'native_vit_fake_logit_index', None),
+            native_preprocessing=getattr(config, 'native_vit_preprocessing', None),
         )
         for p in self.deepfake_encoder.parameters():
             p.requires_grad = False
-        for p in self.model.vision_tower.parameters():
-            p.requires_grad = False
+        vision_tower = self.get_vision_tower()
+        if vision_tower is not None:
+            for p in vision_tower.parameters():
+                p.requires_grad = False
         self.deepfake_projector = build_multimodal_projector(config, projector_type='mlp2x_gelu', multimodal_hidden_size=2)
         # Initialize weights and apply final processing
         self.processors = None
-        if self.config.mm_vision_select_feature != "cls_patch":
+        if getattr(self.config, 'mm_vision_select_feature', 'cls_patch') != "cls_patch":
             print(f'[INFO] mm_vision_select_feature is "{self.config.mm_vision_select_feature}", '
                   f'forcing to "cls_patch" for compatibility.')
             self.config.mm_vision_select_feature = "cls_patch"
         
     def load_deepfake_encoder(self, model_path, verbose=True):
+        if getattr(self.deepfake_encoder, 'uses_clip_features', True) is False:
+            # Load AFTER from_pretrained: HF can initialize missing detector
+            # parameters while loading a base LLaVA checkpoint. Preserve native
+            # fp32 precision and its original head, independent of LLM dtype.
+            self.deepfake_encoder.float()
+            report = self.deepfake_encoder.load_checkpoint(
+                model_path,
+                expected_sha256=getattr(self.config, 'native_checkpoint_sha256', None),
+            )
+            if verbose:
+                print(f'Native ViT loaded, including original head: {report}')
+            return report
         if verbose:
             print('Loading ViT backbone weights into ViT_M2F2Det...')
         missing_keys, unexpected_keys = self.deepfake_encoder.load_vit_backbone(model_path, verbose=verbose)
@@ -659,6 +684,14 @@ class LlavaLlamaForCausalLMDeepfake(LlamaForCausalLM, LlavaMetaForCausalLM):
 
     def _ensure_processors(self):
         """Lazily initialize image processors (needed after CLIPVisionTower is loaded)."""
+        if getattr(self.deepfake_encoder, 'uses_clip_features', True) is False:
+            vision_tower = self.get_vision_tower()
+            if self.processors is None:
+                self.processors = {'clip_processor': getattr(vision_tower, 'image_processor', None)}
+            elif getattr(vision_tower, 'image_processor', None) is not None:
+                self.processors['clip_processor'] = vision_tower.image_processor
+            self.processors['deepfake_processor'] = self.deepfake_encoder.image_processor
+            return
         if self.processors is not None:
             return
         from llava.mm_utils import process_images as _proc
@@ -673,10 +706,16 @@ class LlavaLlamaForCausalLMDeepfake(LlamaForCausalLM, LlavaMetaForCausalLM):
         # --- [新增] 存储分类 logits 供 compute_loss 使用 ---
         self._deepfake_logits_for_loss = out    # [B, 2], 保留梯度图
         # --- [新增结束] ---
+        if getattr(self.deepfake_encoder, 'uses_clip_features', True) is False:
+            out = self.deepfake_encoder.token_logits(out)
         out = out.unsqueeze(1)    # [B, 1, 2]
         out = F.softmax(out, dim=-1)
 
-        out = out.to(self.deepfake_projector[0].weight.dtype)
+        if getattr(self.deepfake_encoder, 'uses_clip_features', True) is False:
+            out = out.to(device=self.deepfake_projector[0].weight.device,
+                         dtype=self.deepfake_projector[0].weight.dtype)
+        else:
+            out = out.to(self.deepfake_projector[0].weight.dtype)
         if self.deepfake_replicate:
             out = torch.repeat_interleave(out, 200, dim=1)
         # print(f'Prob: {out}')
@@ -834,7 +873,10 @@ class LlavaLlamaForCausalLMDeepfake(LlamaForCausalLM, LlavaMetaForCausalLM):
         images=None, image_sizes=None, deepfake_inputs=None
     ):
         vision_tower = self.get_vision_tower()
-        if vision_tower is None or input_ids.shape[1] == 1 or (images is None and deepfake_inputs is None):
+        native_only = getattr(self.deepfake_encoder, 'uses_clip_features', True) is False
+        # Native detection tokens can be tested without constructing CLIP.
+        # Legacy paths keep their original vision-tower requirement.
+        if (vision_tower is None and (not native_only or images is not None)) or input_ids.shape[1] == 1 or (images is None and deepfake_inputs is None):
             return input_ids, position_ids, attention_mask, past_key_values, None, labels
         
         if images is not None:
@@ -890,7 +932,9 @@ class LlavaLlamaForCausalLMDeepfake(LlamaForCausalLM, LlavaMetaForCausalLM):
                 vision_input = images.to(self.device, dtype=self.get_model().mm_projector[0].weight.dtype)
                 v_image_features, image_features = self.encode_images_multimodal_features(vision_input)
         image_cls = None
-        if self.config.mm_vision_select_feature == 'cls_patch':
+        if images is None and native_only:
+            pass
+        elif self.config.mm_vision_select_feature == 'cls_patch':
             v_image_cls = v_image_features[:, 0, :]
             v_image_features = v_image_features[:, 1:, :]
             image_features = image_features[:, 1:, :]
@@ -901,7 +945,9 @@ class LlavaLlamaForCausalLMDeepfake(LlamaForCausalLM, LlavaMetaForCausalLM):
             # Otherwise, pass pre-computed CLIP features from LLaVA's vision tower.
             has_internal_clip = hasattr(self.deepfake_encoder, 'clip_vision_encoder') and \
                                 self.deepfake_encoder.clip_vision_encoder is not None
-            if has_internal_clip:
+            if getattr(self.deepfake_encoder, 'uses_clip_features', True) is False:
+                deepfake_kwargs = {"images": deepfake_inputs}
+            elif has_internal_clip:
                 deepfake_kwargs = {
                     "images": deepfake_inputs,
                     "use_cached_clip_text_features": True,

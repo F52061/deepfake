@@ -1,5 +1,7 @@
 # ViT_M2F2Det BridgeAdapter 改造设计
 
+> **2026-10-16 核对说明**：本文是历史设计，不代表当前实现已正确训练。`train_bridge_phase1.py` 实际冻结 ViT 与 CLIP；ViT 原生分类头未加载。当前 Bridge 还存在标量 LayerNorm、注意力 batch/序列轴颠倒、展平跨样本混排三处问题。服务器隔离验证及后续方案见 [当前研究整理](../reports/RESEARCH_STATUS_20261016.md)。旧权重不能通过运行时修复直接变成已训练的新模型。
+
 ## 目标
 
 将当前 ViT_M2F2Det 的简单 cosine-similarity 融合方案，升级为与原始 EfficientNet M2F2Det 一致的 BridgeAdapter 跨模态/跨尺度递进融合方案。
